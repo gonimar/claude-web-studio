@@ -103,7 +103,7 @@ tokens or references to private projects.
 
 ## 6. Pull requests
 
-1. Branch from `main`: `feat/…`, `fix/…`, `docs/…`, `chore/…`.
+1. Branch from `master`: `feat/…`, `fix/…`, `docs/…`, `chore/…`.
 2. Commits follow Conventional Commits (`feat(skills): add /example`); the repository's own
    `validate-commit` hook enforces this when you work through Claude Code.
 3. `tests/run-all.sh` passes locally; CI runs the same suite plus shellcheck and `claude plugin validate`.

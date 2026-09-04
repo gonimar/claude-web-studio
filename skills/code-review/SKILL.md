@@ -12,7 +12,7 @@ model: sonnet
 Read-only plus running checks; fixes only on a separate request from the user.
 
 ## Phase 1: Target
-Argument: paths or `--diff` (`git diff --name-only main...HEAD` + unstaged). Optional story path — extract ADR/criteria. Read CLAUDE.md, technical-preferences, applicable `.claude/rules/*.md`, the story's ADRs.
+Argument: paths or `--diff` (`git diff --name-only <default-branch>...HEAD` (`master` or `main`) + unstaged). Optional story path — extract ADR/criteria. Read CLAUDE.md, technical-preferences, applicable `.claude/rules/*.md`, the story's ADRs.
 
 ## Phase 2: Routing (in parallel via Task)
 By extension/path: `*.go` → `go-engineer` (+ `backend-lead`); `*.php` → `php-engineer`; `*.graphql`/resolvers → `graphql-engineer`; Angular → `angular-engineer`; `*.vue` → `vue-engineer`; `*.css/scss` → `css-engineer`; `game/`, three.js → `threejs-engineer`/`web-game-engineer`; migrations/SQL → `database-engineer`; workflows/Docker → `devops-engineer`; tests → `test-engineer`.
