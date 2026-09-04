@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "statusLine": { "type": "command", "command": "bash .claude/statusline.sh" },
+  "permissions": {
+    "allow": [
+      "Bash(git status*)", "Bash(git diff*)", "Bash(git log*)", "Bash(git branch*)", "Bash(git rev-parse*)", "Bash(ls *)", "Bash(cat *)",
+      "Bash(go build*)", "Bash(go test*)", "Bash(go vet*)", "Bash(gofmt*)", "Bash(govulncheck*)", "Bash(golangci-lint*)",
+      "Bash(npm run *)", "Bash(npm test*)", "Bash(npx vitest*)", "Bash(npx playwright*)", "Bash(npx eslint*)", "Bash(npx prettier*)", "Bash(npx tsc*)", "Bash(npm audit*)", "Bash(pnpm *)", "Bash(ng test*)", "Bash(ng build*)", "Bash(ng lint*)",
+      "Bash(composer audit*)", "Bash(composer validate*)", "Bash(vendor/bin/phpunit*)", "Bash(vendor/bin/psalm*)", "Bash(vendor/bin/phpstan*)", "Bash(vendor/bin/php-cs-fixer*)", "Bash(php -l *)",
+      "Bash(docker compose config*)", "Bash(docker compose ps*)", "Bash(docker compose logs*)",
+      "WebFetch(domain:angular.dev)", "WebFetch(domain:material.angular.dev)", "WebFetch(domain:taiga-ui.dev)",
+      "WebFetch(domain:vuejs.org)", "WebFetch(domain:vite.dev)", "WebFetch(domain:nuxt.com)", "WebFetch(domain:vitest.dev)",
+      "WebFetch(domain:go.dev)", "WebFetch(domain:pkg.go.dev)", "WebFetch(domain:www.php.net)", "WebFetch(domain:www.yiiframework.com)",
+      "WebFetch(domain:github.com)", "WebFetch(domain:threejs.org)", "WebFetch(domain:spec.graphql.org)", "WebFetch(domain:owasp.org)", "WebFetch(domain:cheatsheetseries.owasp.org)",
+      "WebFetch(domain:developer.mozilla.org)", "WebFetch(domain:web.dev)", "WebFetch(domain:www.w3.org)", "WebFetch(domain:playwright.dev)",
+      "WebFetch(domain:www.npmjs.com)", "WebFetch(domain:packagist.org)", "WebFetch(domain:endoflife.date)",
+      "WebSearch"
+    ],
+    "deny": [
+      "Bash(rm -rf *)", "Bash(git push --force*)", "Bash(git push -f *)", "Bash(git reset --hard*)", "Bash(git clean -f*)", "Bash(chmod 777*)",
+      "Bash(*>.env*)", "Bash(cat *.env*)", "Read(**/.env)", "Read(**/.env.*)", "Read(**/*.pem)", "Read(**/*.key)", "Read(**/id_rsa*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [{ "matcher": "", "hooks": [ { "type": "command", "command": "bash .claude/hooks/session-start.sh", "timeout": 10 } ] }],
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [ { "type": "command", "command": "bash .claude/hooks/validate-commit.sh", "timeout": 20 }, { "type": "command", "command": "bash .claude/hooks/validate-push.sh", "timeout": 10 } ] },
+      { "matcher": "Write|Edit", "hooks": [ { "type": "command", "command": "bash .claude/hooks/secret-guard.sh", "timeout": 10 } ] }
+    ],
+    "PostToolUse": [{ "matcher": "Write|Edit", "hooks": [ { "type": "command", "command": "bash .claude/hooks/post-edit-check.sh", "timeout": 60 }, { "type": "command", "command": "bash .claude/hooks/validate-skill-change.sh", "timeout": 5 } ] }],
+    "Notification": [{ "matcher": "", "hooks": [ { "type": "command", "command": "bash .claude/hooks/notify.sh", "timeout": 10 } ] }],
+    "PreCompact": [{ "matcher": "", "hooks": [ { "type": "command", "command": "bash .claude/hooks/pre-compact.sh", "timeout": 10 } ] }],
+    "Stop": [{ "matcher": "", "hooks": [ { "type": "command", "command": "bash .claude/hooks/session-stop.sh", "timeout": 10 } ] }],
+    "SubagentStart": [{ "matcher": "", "hooks": [ { "type": "command", "command": "bash .claude/hooks/log-agent.sh", "timeout": 5 } ] }],
+    "SubagentStop": [{ "matcher": "", "hooks": [ { "type": "command", "command": "bash .claude/hooks/log-agent.sh", "timeout": 5 } ] }]
+  }
+}

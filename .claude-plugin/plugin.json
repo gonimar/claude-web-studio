@@ -1,0 +1,9 @@
+{
+  "name": "web-studio",
+  "displayName": "Web Studio",
+  "version": "0.2.0",
+  "description": "A full web studio for Claude Code: tiered agents, pipeline skills, hooks, rules, a dated stack reference (Go, PHP/Yii3, TypeScript, Angular, Vue, GraphQL, three.js), security baseline and an agent testing framework. For web apps and browser games.",
+  "author": { "name": "Web Studio contributors" },
+  "license": "MIT",
+  "keywords": ["web", "studio", "agents", "go", "php", "yii3", "typescript", "angular", "vue", "graphql", "threejs", "security", "games"]
+}

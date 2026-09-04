@@ -1,0 +1,8 @@
+# local development history and notes — never published
+dev/
+# per-user Claude Code state
+.claude/settings.local.json
+.claude/agent-memory-local/
+testing/results/*
+!testing/results/.gitkeep
+*.log

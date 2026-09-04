@@ -1,0 +1,21 @@
+#!/bin/bash
+# PreToolUse(Bash): block force-push, warn on direct push to protected branches
+INPUT=$(cat)
+# --- json helper: jq -> python3 -> grep ---
+jget() {
+  if command -v jq >/dev/null 2>&1; then echo "$INPUT" | jq -r "$1 // empty" 2>/dev/null; return; fi
+  if command -v python3 >/dev/null 2>&1; then
+    echo "$INPUT" | python3 -c 'import sys,json
+p=sys.argv[1].strip(".").split(".");d=json.load(sys.stdin)
+for k in p:
+  d=d.get(k) if isinstance(d,dict) else None
+print(d if isinstance(d,str) else ("" if d is None else json.dumps(d)))' "$1" 2>/dev/null; return
+  fi
+  key="${1##*.}"; echo "$INPUT" | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"" | head -1 | sed -E "s/^\"$key\"[[:space:]]*:[[:space:]]*\"//;s/\"$//;s/\\\\\"/\"/g"
+}
+CMD=$(jget .tool_input.command)
+echo "$CMD" | grep -qE '(^|[;&|][[:space:]]*)git[[:space:]]+push' || exit 0
+echo "$CMD" | grep -qE -- '--force|[[:space:]]-f([[:space:]]|$)' && { echo "BLOCKED: force-push is not allowed by studio rules." >&2; exit 2; }
+BR=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+case "$BR" in main|master|production|release) echo "WARNING: pushing directly to '$BR'. Studio rule: open a PR from a feature branch." >&2;; esac
+exit 0

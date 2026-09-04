@@ -1,0 +1,79 @@
+version: 1
+last_updated: ""
+kit_version: 0.2.0
+skills:
+  - {name: init, category: onboarding, priority: critical, spec: testing/skills/onboarding/init.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: start, category: onboarding, priority: high, spec: testing/skills/onboarding/start.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: help, category: onboarding, priority: critical, spec: testing/skills/onboarding/help.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: adopt, category: onboarding, priority: critical, spec: testing/skills/onboarding/adopt.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: setup-stack, category: onboarding, priority: critical, spec: testing/skills/onboarding/setup-stack.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: stack-update, category: onboarding, priority: critical, spec: testing/skills/onboarding/stack-update.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: update, category: onboarding, priority: high, spec: testing/skills/onboarding/update.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: skill-test, category: onboarding, priority: high, spec: testing/skills/onboarding/skill-test.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: skill-improve, category: onboarding, priority: medium, spec: testing/skills/onboarding/skill-improve.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: brainstorm, category: authoring, priority: medium, spec: testing/skills/authoring/brainstorm.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: product-spec, category: authoring, priority: critical, spec: testing/skills/authoring/product-spec.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: feature-spec, category: authoring, priority: critical, spec: testing/skills/authoring/feature-spec.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: ux-spec, category: authoring, priority: high, spec: testing/skills/authoring/ux-spec.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: design-system, category: authoring, priority: high, spec: testing/skills/authoring/design-system.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: game-concept, category: authoring, priority: critical, spec: testing/skills/authoring/game-concept.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: architecture-decision, category: authoring, priority: critical, spec: testing/skills/authoring/architecture-decision.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: api-contract, category: authoring, priority: critical, spec: testing/skills/authoring/api-contract.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: data-model, category: authoring, priority: high, spec: testing/skills/authoring/data-model.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: threat-model, category: authoring, priority: critical, spec: testing/skills/authoring/threat-model.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: test-setup, category: authoring, priority: critical, spec: testing/skills/authoring/test-setup.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: architecture-review, category: review, priority: critical, spec: testing/skills/review/architecture-review.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: code-review, category: review, priority: critical, spec: testing/skills/review/code-review.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: create-stories, category: pipeline, priority: critical, spec: testing/skills/pipeline/create-stories.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: dev-story, category: pipeline, priority: critical, spec: testing/skills/pipeline/dev-story.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: story-done, category: pipeline, priority: critical, spec: testing/skills/pipeline/story-done.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: sprint-plan, category: sprint, priority: high, spec: testing/skills/sprint/sprint-plan.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: sprint-status, category: sprint, priority: high, spec: testing/skills/sprint/sprint-status.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: changelog, category: sprint, priority: medium, spec: testing/skills/sprint/changelog.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: release-checklist, category: sprint, priority: critical, spec: testing/skills/sprint/release-checklist.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: qa-plan, category: sprint, priority: high, spec: testing/skills/sprint/qa-plan.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: security-audit, category: analysis, priority: critical, spec: testing/skills/analysis/security-audit.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: dependency-audit, category: analysis, priority: high, spec: testing/skills/analysis/dependency-audit.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: perf-audit, category: analysis, priority: critical, spec: testing/skills/analysis/perf-audit.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: a11y-audit, category: analysis, priority: critical, spec: testing/skills/analysis/a11y-audit.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: tech-debt, category: analysis, priority: medium, spec: testing/skills/analysis/tech-debt.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: pentest, category: analysis, priority: high, spec: testing/skills/analysis/pentest.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: harden, category: analysis, priority: critical, spec: testing/skills/analysis/harden.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: team-feature, category: team, priority: critical, spec: testing/skills/team/team-feature.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: team-security, category: team, priority: critical, spec: testing/skills/team/team-security.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: team-release, category: team, priority: critical, spec: testing/skills/team/team-release.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: team-game, category: team, priority: high, spec: testing/skills/team/team-game.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: deploy, category: ops, priority: critical, spec: testing/skills/ops/deploy.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: hotfix, category: ops, priority: high, spec: testing/skills/ops/hotfix.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+  - {name: incident, category: ops, priority: high, spec: testing/skills/ops/incident.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: "", last_category: "", last_category_result: ""}
+agents:
+  - {name: technical-director, tier: directors, spec: testing/agents/directors/technical-director.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: product-director, tier: directors, spec: testing/agents/directors/product-director.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: backend-lead, tier: leads, spec: testing/agents/leads/backend-lead.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: frontend-lead, tier: leads, spec: testing/agents/leads/frontend-lead.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: design-lead, tier: leads, spec: testing/agents/leads/design-lead.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: security-lead, tier: leads, spec: testing/agents/leads/security-lead.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: qa-lead, tier: leads, spec: testing/agents/leads/qa-lead.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: devops-lead, tier: leads, spec: testing/agents/leads/devops-lead.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: game-lead, tier: leads, spec: testing/agents/leads/game-lead.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: go-engineer, tier: backend, spec: testing/agents/backend/go-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: php-engineer, tier: backend, spec: testing/agents/backend/php-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: node-engineer, tier: backend, spec: testing/agents/backend/node-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: database-engineer, tier: backend, spec: testing/agents/backend/database-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: api-designer, tier: backend, spec: testing/agents/backend/api-designer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: graphql-engineer, tier: backend, spec: testing/agents/backend/graphql-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: angular-engineer, tier: frontend, spec: testing/agents/frontend/angular-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: vue-engineer, tier: frontend, spec: testing/agents/frontend/vue-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: typescript-engineer, tier: frontend, spec: testing/agents/frontend/typescript-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: css-engineer, tier: frontend, spec: testing/agents/frontend/css-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: accessibility-specialist, tier: frontend, spec: testing/agents/frontend/accessibility-specialist.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: seo-specialist, tier: frontend, spec: testing/agents/frontend/seo-specialist.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: threejs-engineer, tier: game, spec: testing/agents/game/threejs-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: web-game-engineer, tier: game, spec: testing/agents/game/web-game-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: multiplayer-engineer, tier: game, spec: testing/agents/game/multiplayer-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: appsec-engineer, tier: security, spec: testing/agents/security/appsec-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: network-security-engineer, tier: security, spec: testing/agents/security/network-security-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: test-engineer, tier: quality-ops, spec: testing/agents/quality-ops/test-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: performance-engineer, tier: quality-ops, spec: testing/agents/quality-ops/performance-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: devops-engineer, tier: quality-ops, spec: testing/agents/quality-ops/devops-engineer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}
+  - {name: tech-writer, tier: quality-ops, spec: testing/agents/quality-ops/tech-writer.md, last_static: "", last_static_result: "", last_spec: "", last_spec_result: ""}

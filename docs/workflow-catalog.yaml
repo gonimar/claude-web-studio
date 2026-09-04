@@ -1,0 +1,70 @@
+# Web Studio pipeline catalog. Used by /help and /start.
+# artifact.glob marks a step as done; required blocks phase advancement (advisory).
+phases:
+  discovery:
+    label: "Discovery"
+    description: "Understand what we build and for whom"
+    next_phase: specification
+    steps:
+      - {id: init, command: /init, required: true, artifact: {glob: ".claude/docs/technical-preferences.md"}, description: "Scaffold studio files, choose conversation language and review mode"}
+      - {id: brainstorm, command: /brainstorm, required: false, description: "Explore the idea, audience, competitors, constraints"}
+      - {id: setup-stack, command: /setup-stack, required: true, artifact: {glob: ".claude/docs/technical-preferences.md", pattern: "Type\\*\\*: (?!\\[TO BE)"}, description: "Choose and pin the stack, versions, layout"}
+      - {id: product-spec, command: /product-spec, required: true, artifact: {glob: "docs/specs/product-spec.md"}, description: "Product spec: goals, users, scope, metrics"}
+      - {id: game-concept, command: /game-concept, required: false, artifact: {glob: "docs/specs/game-concept.md"}, description: "Games: concept, core loop, technical feasibility"}
+  specification:
+    label: "Specification"
+    description: "Break the product into features and UX"
+    next_phase: architecture
+    steps:
+      - {id: feature-specs, command: /feature-spec, required: true, repeatable: true, artifact: {glob: "docs/specs/features/*.md"}, description: "Per-feature spec: scenarios, rules, edge cases, acceptance criteria"}
+      - {id: ux-spec, command: /ux-spec, required: false, repeatable: true, artifact: {glob: "docs/specs/ux/*.md"}, description: "Flows, screens, states, accessibility"}
+      - {id: design-system, command: /design-system, required: false, artifact: {glob: "docs/specs/design-system.md"}, description: "Tokens, typography, components, themes"}
+  architecture:
+    label: "Architecture"
+    description: "Record decisions before code"
+    next_phase: build
+    steps:
+      - {id: threat-model, command: /threat-model, required: true, artifact: {glob: "docs/architecture/threat-model.md"}, description: "STRIDE threat model per attack surface"}
+      - {id: adrs, command: /architecture-decision, required: true, repeatable: true, artifact: {glob: "docs/architecture/adr-*.md"}, description: "An ADR for every significant decision"}
+      - {id: api-contract, command: /api-contract, required: false, artifact: {glob: "docs/architecture/api/*"}, description: "GraphQL SDL / OpenAPI / AsyncAPI contract"}
+      - {id: data-model, command: /data-model, required: false, artifact: {glob: "docs/architecture/data-model.md"}, description: "Data schema and migration strategy"}
+      - {id: architecture-review, command: /architecture-review, required: false, description: "Cross-check ADRs, contracts and specs for consistency"}
+      - {id: test-setup, command: /test-setup, required: true, artifact: {glob: "docs/architecture/test-strategy.md"}, description: "Test infrastructure and strategy"}
+  build:
+    label: "Build"
+    description: "Iterate: stories → code → review"
+    next_phase: hardening
+    steps:
+      - {id: stories, command: /create-stories, required: true, repeatable: true, artifact: {glob: "production/stories/**/*.md"}, description: "Stories with acceptance criteria from feature specs"}
+      - {id: sprint, command: /sprint-plan, required: false, repeatable: true, artifact: {glob: "production/sprints/*.md"}, description: "Sprint plan"}
+      - {id: dev, command: /dev-story, required: true, repeatable: true, description: "Implement a story with specs and tests"}
+      - {id: review, command: /code-review, required: true, repeatable: true, description: "Lead review plus security"}
+      - {id: done, command: /story-done, required: true, repeatable: true, description: "Verify acceptance criteria, close"}
+  hardening:
+    label: "Hardening"
+    description: "Security, performance, accessibility"
+    next_phase: release
+    steps:
+      - {id: security-audit, command: /security-audit, required: true, artifact: {glob: "docs/security/security-audit-*.md"}, description: "OWASP Top 10:2025 audit"}
+      - {id: dependency-audit, command: /dependency-audit, required: true, description: "Dependency and supply-chain audit"}
+      - {id: harden, command: /harden, required: true, artifact: {glob: "docs/security/hardening-checklist.md"}, description: "Headers, TLS, proxy, containers"}
+      - {id: pentest, command: /pentest, required: false, artifact: {glob: "docs/security/pentest-*.md"}, description: "Dynamic testing of the project's own app"}
+      - {id: perf-audit, command: /perf-audit, required: true, artifact: {glob: "docs/ops/perf-audit-*.md"}, description: "Core Web Vitals, bundle, API latency"}
+      - {id: a11y-audit, command: /a11y-audit, required: true, description: "WCAG 2.2 AA"}
+  release:
+    label: "Release"
+    description: "Ship"
+    next_phase: operate
+    steps:
+      - {id: release-checklist, command: /release-checklist, required: true, artifact: {glob: "production/releases/*.md"}, description: "Release checklist"}
+      - {id: changelog, command: /changelog, required: true, artifact: {glob: "CHANGELOG.md"}, description: "Changelog from Conventional Commits"}
+      - {id: deploy, command: /deploy, required: true, description: "Deploy (delegating to a deploy skill if installed)"}
+  operate:
+    label: "Operate"
+    description: "Run and evolve"
+    next_phase: build
+    steps:
+      - {id: incident, command: /incident, required: false, repeatable: true, description: "Incident response and postmortem"}
+      - {id: hotfix, command: /hotfix, required: false, repeatable: true, description: "Urgent fix with an expedited gate"}
+      - {id: tech-debt, command: /tech-debt, required: false, description: "Tech-debt inventory"}
+      - {id: stack-update, command: /stack-update, required: false, description: "Refresh the stack reference and check upgrades"}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "claude-web-studio",
+  "owner": { "name": "Web Studio contributors" },
+  "description": "Marketplace for the Web Studio plugin",
+  "plugins": [
+    {
+      "name": "web-studio",
+      "displayName": "Web Studio",
+      "source": "./",
+      "description": "Tiered agents, pipeline skills, hooks and a dated stack reference for web apps and browser games",
+      "category": "development",
+      "tags": ["web", "agents", "graphql", "angular", "vue", "go", "php", "threejs"]
+    }
+  ]
+}

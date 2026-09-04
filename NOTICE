@@ -1,0 +1,15 @@
+Web Studio for Claude Code
+Copyright (c) 2026 Web Studio contributors
+Licensed under the MIT License (see LICENSE).
+
+Attributions
+- Structure inspired by the Claude Code Game Studios template
+  (https://github.com/Donchitos/Claude-Code-Game-Studios), MIT License. No code or text copied.
+- docs/stack-reference/ summarises public documentation and standards and links to the originals,
+  which remain under their own licences (OWASP: CC BY-SA 4.0; W3C: W3C Document Licence;
+  MDN Web Docs: CC BY-SA 2.5, code samples MIT/CC0; vendor documentation: as published).
+- Claude Code, Claude and the Claude Agent SDK are products of Anthropic; this project is an
+  independent community plugin and is not affiliated with or endorsed by Anthropic.
+- Product and project names (Go, PHP, Yii, Angular, Vue, Nuxt, Vite, three.js, PixiJS, Phaser,
+  Babylon.js, PostgreSQL, Redis, GraphQL, OWASP, Playwright, Vitest, Docker, GitHub) are
+  trademarks of their respective owners and are referenced for identification only.

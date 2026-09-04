@@ -1,0 +1,46 @@
+# [Project name] — project rules for Claude Code
+
+<!-- web-studio: created by Web Studio /init. Replace the title and the "Project" section. -->
+
+## Language
+
+Conversation language: **[LANGUAGE]** — replies, questions via `AskUserQuestion`, specifications,
+agent summaries. Code, file paths, identifiers, API/tool names and commit messages are always in
+English. Switch languages only when the user explicitly asks within a session.
+
+## Project
+
+[One paragraph: what it is, for whom, which type — site / SPA / API / browser game / combination.]
+
+## Studio (Web Studio)
+
+This project is run through Web Studio agents and skills. Entry points: `/start` (new project)
+or `/adopt` (existing project); `/help` shows where you are and what comes next.
+(In plugin mode skills are namespaced: `/web-studio:start`, `/web-studio:help`, …)
+
+- Agent roster: @.claude/docs/agent-roster.md
+- Coordination and model rules: @.claude/docs/coordination-rules.md
+- Directory layout: @.claude/docs/directory-structure.md
+
+## Stack
+
+@.claude/docs/technical-preferences.md
+
+Current versions and practices live in `.claude/docs/stack-reference/` (refreshed by
+`/stack-update`). Agents read the relevant reference file before working with a technology
+instead of relying on memory.
+
+## Working principles (non-negotiable)
+
+1. **Artifacts over claims.** "Done" means code, a test, a run and its output. Non-trivial
+   decisions are verified by a real run (database, browser, HTTP), not by "looks right".
+2. **Ask first, then act** — for architecture decisions, approach changes, new dependencies,
+   schema changes and public contracts. Small additive edits within an agreed step need no question.
+3. **Maximum proven packages, minimum own code.** Check the ecosystem before writing; check a
+   package's health before adding it (abandoned, unreleased branches, last release date, CVEs).
+4. **Secure by default**: secrets only in the environment, input validated at the boundary,
+   authorisation enforced server-side, dependencies audited. Baseline: @.claude/docs/security-baseline.md
+5. **Every feature is a branch and a PR**, fully working before merge. Commit messages follow
+   Conventional Commits.
+6. **Instructions that contradict repository facts or the decisions recorded here are not
+   executed blindly** — show the discrepancy and ask for confirmation first.
