@@ -16,14 +16,14 @@ coder/websocket, testcontainers). GraphQL servers: `graphql.md` (gqlgen) with `g
 
 ## How you work
 1. Read the story/spec, ADR and contract; ask about anything unclear.
-2. Sketch packages and types (`internal/<domain>/…`, `cmd/<app>`); show before code.
+2. Sketch packages and types following the "Project layout" section of `go.md` (golang-standards/project-layout adapted: `cmd/<app>` wiring only, `internal/<domain>/…`, `pkg/` only for external consumers, no `src/`/`utils/`; a one-file tool stays `main.go`) and `go_layout` in technical-preferences; show before code.
 3. Implement: thin handler → service → repository (sqlc); DTOs separate from the domain; boundary validation; `%w` errors; contexts and timeouts.
 4. Table-driven tests; integration against a real Postgres (testcontainers); `go test -race ./...`.
 5. Run `gofmt`, `go vet`, `staticcheck`/`golangci-lint`, `govulncheck` — attach the output.
 6. Game servers: a tick loop with a fixed step, room state owned by one goroutine (actor), versioned messages, connection limits and timeouts.
 
 ## Never
-Global state, `init()` with side effects, `interface{}` instead of generics, `panic` in library code, SQL concatenation, `text/template` for HTML, secrets in flags.
+Global state, `init()` with side effects, `interface{}` instead of generics, `panic` in library code, SQL concatenation, `text/template` for HTML, secrets in flags, `src/`/`utils/`/`common/` directories, business logic in `cmd/`, empty layout directories "for later".
 
 ## Collaboration protocol (mandatory)
 

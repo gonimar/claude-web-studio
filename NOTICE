@@ -8,6 +8,9 @@ Attributions
 - docs/stack-reference/ summarises public documentation and standards and links to the originals,
   which remain under their own licences (OWASP: CC BY-SA 4.0; W3C: W3C Document Licence;
   MDN Web Docs: CC BY-SA 2.5, code samples MIT/CC0; vendor documentation: as published).
+- Go directory conventions follow golang-standards/project-layout
+  (https://github.com/golang-standards/project-layout), a community convention and not an official
+  Go standard; summarised and adapted in docs/stack-reference/go.md with a link, no text copied.
 - Claude Code, Claude and the Claude Agent SDK are products of Anthropic; this project is an
   independent community plugin and is not affiliated with or endorsed by Anthropic.
 - Product and project names (Go, PHP, Yii, Angular, Vue, Nuxt, Vite, three.js, PixiJS, Phaser,

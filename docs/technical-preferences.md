@@ -42,6 +42,7 @@
 
 ## Layout
 - **backend_root**: [./backend | ./ | …]
+- **go_layout**: [project-layout (cmd/, internal/, pkg/ only when exported, api/, configs/, scripts/, build/, deployments/, test/) | minimal (main.go + go.mod) | none — see stack-reference/go.md "Project layout"]
 - **frontend_root**: [./frontend | ./web | …]
 - **game_root**: [./game | none]
 - **shared_packages**: [./packages | none]

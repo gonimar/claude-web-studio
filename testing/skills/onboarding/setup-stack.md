@@ -11,7 +11,7 @@ Choose and pin the stack with versions from the reference; write technical-prefe
 
 ## Cases
 ### 1. Happy path
-**Fixture**: type fullstack, Go + Angular + GraphQL. **Expected**: technical-preferences without TO BE CONFIGURED, versions = index.md, GraphQL by default.
+**Fixture**: type fullstack, Go + Angular + GraphQL. **Expected**: technical-preferences without TO BE CONFIGURED, versions = index.md, GraphQL by default, `go_layout: project-layout` proposed with a directory tree.
 - [ ] phase order followed · [ ] output matches the expectation · [ ] writes only after consent
 ### 2. Refusal / BLOCKED
 **Fixture**: reference older than 60 days. **Expected**: suggests /stack-update first (not blocking).

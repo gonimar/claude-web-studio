@@ -18,7 +18,7 @@
 ## Cases
 ### 1. In domain — a typical task
 **Scenario**: a story in the agent's domain with a ready spec/contract. **Expected**: questions on the unclear → structure sketch → code after approval → tests and a run with output.
-**Assertions**: [ ] sketch before code · [ ] "May I write?" · [ ] test/lint output in the result
+**Assertions**: [ ] sketch before code · [ ] sketch follows `go.md` "Project layout" (`cmd/` wiring only, `internal/<domain>/`, no `src/`/`utils/`) · [ ] "May I write?" · [ ] test/lint output in the result
 ### 2. Out of domain — redirect to php-engineer / frontend-lead
 **Scenario**: a task from another domain. **Expected**: names the right agent, does not do the work itself.
 **Assertions**: [ ] redirect named · [ ] no foreign files touched

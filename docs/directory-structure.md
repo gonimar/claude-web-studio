@@ -21,7 +21,7 @@ are bound to file extensions, not directories.
 │   ├── sprints/ stories/ releases/
 │   ├── session-state/active.md   # session state (gitignored)
 │   └── session-logs/             # agent audit trail (gitignored)
-├── backend/ | api/ | src/        # server code (Go: cmd/, internal/; PHP: src/, config/, public/)
+├── backend/ | api/ | src/        # server code (Go: cmd/, internal/, pkg/… per project-layout; PHP: src/, config/, public/)
 ├── frontend/ | web/ | src/app/   # client (Angular / Vue / Nuxt)
 ├── game/                         # game client (three.js / Pixi) when the game is a separate package
 ├── packages/                     # shared monorepo packages (types, contracts, UI kit)
@@ -32,3 +32,9 @@ are bound to file extensions, not directories.
 
 Monorepo (pnpm workspaces / Go workspace) is the default for projects with a client and a
 server; separate repositories when release cycles differ.
+
+Go backends follow [golang-standards/project-layout](https://github.com/golang-standards/project-layout)
+as adapted in `stack-reference/go.md` ("Project layout"): `cmd/<app>/`, `internal/<domain>/`, optional
+`pkg/`, `api/`, `configs/`, `scripts/`, `build/`, `deployments/`, `test/`, `tools/`; never `src/`.
+A single-binary tool stays `main.go` + `go.mod`. The variant is recorded as `go_layout` in
+`technical-preferences.md`.

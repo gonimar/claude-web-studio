@@ -25,7 +25,7 @@ Check the environment: `go version`, `php -v`, `node -v`, `pnpm -v`, `docker --v
 5. Game (type game): three.js r185 (3D) | PixiJS 8 (2D) | Phaser | Babylon 8; networking: none | server-authoritative.
 6. Data: PostgreSQL 18 (+ Redis 8) — confirm; auth: sessions | OIDC | JWT+BFF.
 7. Infra: Docker + compose, GitHub Actions, deployment (compose on a server / container platform / cloud; a deploy skill if installed) — confirm.
-8. Layout: monorepo (`apps/`, `packages/`) | current structure — show a proposal.
+8. Layout: monorepo (`apps/`, `packages/`) | current structure — show a proposal. For a Go backend also `go_layout`: **project-layout** (golang-standards/project-layout adapted in `go.md`: `cmd/`, `internal/<domain>/`, `pkg/` only when exported, `api/`, `configs/`, `scripts/`, `build/`, `deployments/`, `test/`) — recommended for services | **minimal** (`main.go` + `go.mod`) for a single tool/PoC; show the directory tree.
 `--quick` — accept all recommendations without questions, show the summary.
 
 ## Phase 3: Draft

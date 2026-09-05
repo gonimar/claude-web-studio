@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0 — 2026-09-05
+- Go project layout: golang-standards/project-layout adopted as an adapted convention — "Project layout" section in `docs/stack-reference/go.md` (directory table, size rule, never-list, monorepo mapping), `go_layout` field in technical-preferences, `/setup-stack` proposes it for Go backends, `/adopt` reports deviations, `go-engineer` / `backend-lead` / `rules/go-code.md` follow it.
+
 ## 0.2.0 — 2026-09-05
 - Restructured as a Claude Code plugin (`.claude-plugin/plugin.json` + marketplace); copy-mode `install.sh` kept as an alternative.
 - All content in English; `/init` asks for the conversation language and writes it to the project's CLAUDE.md.

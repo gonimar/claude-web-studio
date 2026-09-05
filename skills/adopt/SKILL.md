@@ -16,6 +16,7 @@ Writes only after "May I write?". If `.claude/docs/` is missing, run `/init` fir
 Say "Scanning the project…", then read:
 - `go.mod` (Go version, router, pgx/sqlc, gqlgen), `composer.json` (PHP, `yiisoft/*`, Symfony/Laravel, graphql-php), `package.json` (Angular/Vue/Nuxt/Vite versions, TS, three, pixi, GraphQL clients), `angular.json`, `nuxt.config.*`, `vite.config.*`, `gqlgen.yml`, `*.graphql`, `openapi*.yaml`, `compose*.yaml`, `Dockerfile*`, `.github/workflows/*`, existing deploy/advisor skills in `.claude/skills`.
 - Compare versions with `.claude/docs/stack-reference/index.md`: outdated majors → a table "now → current → upgrade path (reference section)".
+- Go projects: compare the tree with `go.md` "Project layout" (golang-standards/project-layout adapted) — `src/`, `utils/`/`common/`, logic in `cmd/`, an unused `pkg/` → INFO/MEDIUM findings with a migration note; record the actual variant as `go_layout` in technical-preferences (never restructure during adoption).
 Draft `technical-preferences.md` from facts; ask the unknowns in one `AskUserQuestion` (project type, API style, layout).
 
 ## Phase 2: Artefact audit (`docs` / `full`)
