@@ -21,7 +21,7 @@ messages stay in English.
 
 ### Option A — Claude Code plugin (recommended)
 ```bash
-claude plugin marketplace add <owner>/claude-web-studio   # private repo: gh auth login && gh auth setup-git
+claude plugin marketplace add gonimar/claude-web-studio
 claude plugin install web-studio@claude-web-studio        # --scope user (default) | project | local
 ```
 Agents, skills and hooks are now available in every project. Skills are namespaced:
@@ -29,7 +29,7 @@ Agents, skills and hooks are now available in every project. Skills are namespac
 
 ### Option B — vendored copy inside the project
 ```bash
-git clone <this repo> ~/tools/claude-web-studio
+git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ~/tools/claude-web-studio/install.sh /path/to/project            # add --with-testing for the agent test framework
 ```
 Everything lives in the project's `.claude/` directory, no plugin dependency, skills without a

@@ -18,7 +18,7 @@ Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.
 
 ### 方式 A — Claude Code 插件（推荐）
 ```bash
-claude plugin marketplace add <owner>/claude-web-studio   # 私有仓库：gh auth login && gh auth setup-git
+claude plugin marketplace add gonimar/claude-web-studio
 claude plugin install web-studio@claude-web-studio        # --scope user（默认）| project | local
 ```
 代理、技能和钩子在所有项目中可用。技能带命名空间前缀：`/web-studio:init`、`/web-studio:help` ……
@@ -26,7 +26,7 @@ claude plugin install web-studio@claude-web-studio        # --scope user（默�
 
 ### 方式 B — 复制到项目内部
 ```bash
-git clone <本仓库> ~/tools/claude-web-studio
+git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ~/tools/claude-web-studio/install.sh /path/to/project            # 加 --with-testing 同时安装代理测试框架
 ```
 一切都放在项目的 `.claude/` 目录中，不依赖插件，技能无前缀（`/init`、`/help`）。

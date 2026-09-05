@@ -21,7 +21,7 @@ Commit-Nachrichten bleiben auf Englisch.
 
 ### Option A — Claude-Code-Plugin (empfohlen)
 ```bash
-claude plugin marketplace add <owner>/claude-web-studio   # privates Repository: gh auth login && gh auth setup-git
+claude plugin marketplace add gonimar/claude-web-studio
 claude plugin install web-studio@claude-web-studio        # --scope user (Standard) | project | local
 ```
 Agenten, Skills und Hooks stehen in jedem Projekt zur Verfügung. Skills haben ein Präfix:
@@ -29,7 +29,7 @@ Agenten, Skills und Hooks stehen in jedem Projekt zur Verfügung. Skills haben e
 
 ### Option B — Kopie im Projekt
 ```bash
-git clone <dieses Repository> ~/tools/claude-web-studio
+git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ~/tools/claude-web-studio/install.sh /pfad/zum/projekt            # --with-testing ergänzt das Agenten-Testframework
 ```
 Alles liegt im `.claude/`-Verzeichnis des Projekts, ohne Plugin-Abhängigkeit, Skills ohne Präfix

@@ -21,7 +21,7 @@ PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP T
 
 ### Вариант A — плагин Claude Code (рекомендуется)
 ```bash
-claude plugin marketplace add <owner>/claude-web-studio   # приватный репозиторий: gh auth login && gh auth setup-git
+claude plugin marketplace add gonimar/claude-web-studio
 claude plugin install web-studio@claude-web-studio        # --scope user (по умолчанию) | project | local
 ```
 Агенты, скилы и хуки доступны во всех проектах. Скилы вызываются с префиксом:
@@ -29,7 +29,7 @@ claude plugin install web-studio@claude-web-studio        # --scope user (по �
 
 ### Вариант B — копия внутри проекта
 ```bash
-git clone <этот репозиторий> ~/tools/claude-web-studio
+git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ~/tools/claude-web-studio/install.sh /path/to/project            # добавьте --with-testing для тест-фреймворка агентов
 ```
 Всё лежит в `.claude/` проекта, без зависимости от плагина, скилы без префикса (`/init`, `/help`).
