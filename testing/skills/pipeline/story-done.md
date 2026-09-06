@@ -25,6 +25,9 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 ### 5. Gate / protocol
 **Fixture**: status changes with consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+### 6. Git workflow
+**Fixture**: DONE, PR #7 open, `gh` available. **Expected**: `docs: close S-NNN — Done, PR #7` commit, `gh pr merge --merge --delete-branch`, switch to the default branch and pull, session state cleared — each after consent; on NOT DONE nothing is merged.
+- [ ] merge only on DONE · [ ] default branch synced after merge · [ ] session state cleared
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

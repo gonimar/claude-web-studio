@@ -25,6 +25,9 @@ Review with routing by file type and security for sensitive paths.
 ### 5. Gate / protocol
 **Fixture**: fixes only after "yes". **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+### 6. Fix commit
+**Fixture**: BLOCKING fixed after "yes" on `feat/S-004-…`. **Expected**: checks re-run, then a `fix(S-004): apply /code-review findings` commit and push after consent; the review never commits by itself.
+- [ ] checks re-run before the commit · [ ] commit scope is the story ID · [ ] no commit without fixes
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

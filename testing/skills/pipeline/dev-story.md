@@ -25,6 +25,9 @@ Implement a story through engineers with tests and criteria checks.
 ### 5. Gate / protocol
 **Fixture**: session state updated; next /code-review. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+### 6. Git workflow
+**Fixture**: current branch `feat/S-002-…` already merged into origin/master. **Expected**: switch to the default branch, pull, create `feat/S-003-slug`; at the end a `feat(S-003): …` commit and push, each after consent (`docs/git-workflow.md`).
+- [ ] merged branch detected, new branch from the default · [ ] commit scope is the story ID · [ ] no commit on the default branch
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

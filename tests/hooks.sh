@@ -16,6 +16,13 @@ expect "commit allows with warnings" 0 $code; echo "$out" | grep -q 'Conventiona
 echo '{"tool_input":{"command":"git commit -m \"feat(api): add users\""}}' | bash "$H/validate-commit.sh" 2>&1 | grep -q 'COMMIT:' && { failn=$((failn+1)); echo "FAIL commit: false positive on valid message"; } || pass=$((pass+1))
 echo '{"tool_input":{"command":"git push --force origin main"}}' | bash "$H/validate-push.sh" >/dev/null 2>&1; expect "push blocks --force" 2 $?
 echo '{"tool_input":{"command":"git push origin feat/x"}}' | bash "$H/validate-push.sh" >/dev/null 2>&1; expect "push allows feature branch" 0 $?
+echo '{"tool_input":{"command":"git push -f origin feat/x"}}' | bash "$H/validate-push.sh" >/dev/null 2>&1; expect "push blocks -f" 2 $?
+printf '%s' '{"tool_input":{"command":"cat > doc.md <<EOF\nrun: git push --force origin main\nEOF\nrm -f tmp && git push origin feat/x"}}' | bash "$H/validate-push.sh" >/dev/null 2>&1; expect "push ignores heredoc text and rm -f" 0 $?
+git checkout -q -b master 2>/dev/null || git checkout -q master; printf 'x\n' > d.txt; git add d.txt
+out=$(echo '{"tool_input":{"command":"git commit -m \"feat: y\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: no warning on default branch"; }
+git commit -q -m "feat: y"; git checkout -q -b feat/merged; git update-ref refs/remotes/origin/master HEAD; printf 'y\n' > e.txt; git add e.txt
+out=$(echo '{"tool_input":{"command":"git commit -m \"feat: z\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'already merged into origin/master' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: no warning on merged branch"; }
+git rm -q --cached e.txt; rm -f e.txt
 echo '{"tool_input":{"file_path":"/x/.env","content":"A=1"}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard blocks .env" 2 $?
 echo '{"tool_input":{"file_path":"/x/.env.example","content":"A="}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard allows .env.example" 0 $?
 echo '{"tool_input":{"file_path":"/x/a.ts","new_string":"-----BEGIN RSA PRIVATE KEY-----"}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard blocks private key" 2 $?
