@@ -31,6 +31,12 @@ echo '{bad' > c.json
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/c.json\"}}" | bash "$H/post-edit-check.sh" 2>&1); code=$?
 expect "post-edit never blocks" 0 $code; echo "$out" | grep -q 'Invalid JSON' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: invalid JSON not reported"; }
 echo '{"hook_event_name":"SubagentStart","agent_type":"go-engineer"}' | bash "$H/log-agent.sh"; grep -q 'SubagentStart | go-engineer' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent"; }
+# Hooks must resolve the project root, not the session cwd (a subdirectory after `cd backend && …`).
+mkdir -p sub; (cd sub && echo '{"hook_event_name":"SubagentStart","agent_type":"vue-engineer"}' | CLAUDE_PROJECT_DIR="$T" bash "$H/log-agent.sh")
+[ -e sub/production ] && { failn=$((failn+1)); echo "FAIL log-agent: wrote relative to cwd despite CLAUDE_PROJECT_DIR"; } || { grep -q 'SubagentStart | vue-engineer' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent: no entry at the project root (CLAUDE_PROJECT_DIR)"; }; }
+(cd sub && echo '{"hook_event_name":"SubagentStop","agent_type":"vue-engineer"}' | env -u CLAUDE_PROJECT_DIR bash "$H/log-agent.sh")
+[ -e sub/production ] && { failn=$((failn+1)); echo "FAIL log-agent: wrote relative to cwd without CLAUDE_PROJECT_DIR"; } || { grep -q 'SubagentStop | vue-engineer' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent: git-toplevel fallback did not reach the root"; }; }
+out=$(cd sub && CLAUDE_PLUGIN_ROOT="$ROOT" bash "$H/session-start.sh" 2>&1); echo "$out" | grep -q "Plugin root: $ROOT" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-start: fails from a subdirectory"; }
 out=$(CLAUDE_PLUGIN_ROOT="$ROOT" bash "$H/session-start.sh" 2>&1); echo "$out" | grep -q "Plugin root: $ROOT" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-start: plugin root not printed"; }
 bash "$H/pre-compact.sh" >/dev/null 2>&1; expect "pre-compact runs" 0 $?
 bash "$H/session-stop.sh" >/dev/null 2>&1; expect "session-stop runs" 0 $?

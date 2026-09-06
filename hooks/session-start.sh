@@ -1,5 +1,7 @@
 #!/bin/bash
 # SessionStart: project context, branch hygiene vs origin, stack-reference freshness, plugin root for /init
+# Work from the project root: the session cwd may be a subdirectory.
+cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
 echo "=== Web Studio — session context ==="
 [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && echo "Plugin root: $CLAUDE_PLUGIN_ROOT"
 BRANCH=$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)

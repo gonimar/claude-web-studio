@@ -15,6 +15,8 @@ print(d if isinstance(d,str) else ("" if d is None else json.dumps(d)))' "$1" 2>
 }
 EV=$(jget .hook_event_name); [ -z "$EV" ] && EV="?"
 AG=$(jget .agent_type); [ -z "$AG" ] && AG=unknown
+# Always log at the project root: the session cwd may be a subdirectory (cd backend && …).
+cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
 mkdir -p production/session-logs 2>/dev/null
 echo "$(date '+%F %T') | $EV | $AG" >> production/session-logs/agent-audit.log 2>/dev/null
 exit 0

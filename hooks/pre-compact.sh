@@ -1,4 +1,6 @@
 #!/bin/bash
+# Work from the project root: the session cwd may be a subdirectory.
+cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
 echo "=== SESSION STATE BEFORE COMPACTION ($(date '+%F %T')) ==="
 S=production/session-state/active.md
 if [ -f "$S" ]; then echo "## $S"; head -100 "$S"; else echo "## No $S — keep it to recover context after compaction."; fi
