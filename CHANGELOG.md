@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.0 — 2026-09-06
 - Git workflow for stories (`docs/git-workflow.md`, seeded into `.claude/docs/`): one story = one branch = one PR. `/dev-story` starts from a fresh default branch (never on a merged branch) and commits `feat(S-NNN): …`; `/code-review` commits its fixes as `fix(S-NNN): apply /code-review findings`; `/story-done` commits the close, opens the PR if missing, merges it on DONE, syncs the default branch and clears the session state. CLAUDE.md template principle 5, story and session-state templates and review-workflow updated.
 - Hooks: `validate-commit.sh` warns when committing on the default branch or on a branch already merged into origin's default branch; `session-start.sh` fetches origin and prints ahead/behind, merged-branch and unpushed-branch warnings plus a CLAUDE.md placeholder reminder; `validate-push.sh` inspects only real `git push` command segments (heredoc text and `rm -f` in the same command no longer trigger the force-push block).
 - Testing framework: rubric metrics P6 (git workflow) and R6 (fix commit); case 6 in the dev-story, story-done and code-review specs; hook smoke tests for the new warnings and the heredoc false positive.
