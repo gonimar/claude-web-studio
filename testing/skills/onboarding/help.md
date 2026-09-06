@@ -23,8 +23,8 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: reference older than 60 days → a /stack-update line. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: no file writes at all. **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: no file writes at all. **Expected**: the user decides; stage/statuses never change automatically; the next step is one `AskUserQuestion` (the "Next" command Recommended · up to two alternatives · nothing now), not a text line to retype.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] next step is an `AskUserQuestion` with a Recommended option and alternatives
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -6,7 +6,7 @@
 4. **Cross-cutting changes** (API contract, DB schema, design tokens) are coordinated by the owning lead, who notifies affected leads.
 5. **No unilateral edits outside your directories** without delegation.
 6. **Security is cross-cutting**: `security-lead` may veto a merge on blocking findings.
-7. **One collaboration protocol for all agents**: ask → propose 2–3 options with costs → the user decides → draft → explicit approval before writing files (except small additive edits within an agreed step).
+7. **One collaboration protocol for all agents**: ask → propose 2–3 options with costs → the user decides → draft → explicit approval before writing files (except small additive edits within an agreed step). **The question is a choice, not a prompt for "yes"**: every consent gate and every hand-off to the next skill is one `AskUserQuestion` — the recommended action first, marked "(Recommended)", then the real alternatives (do something first · show the draft/diff · stop); the harness adds "Other". A plain-text question only when there is no alternative. Subagents without the tool (Tier 3 specialists) return the choice to the caller instead of deciding.
 8. **Stack reference first**: before working, an agent reads `.claude/docs/stack-reference/<technology>.md`. If it is older than 60 days, the agent says so and suggests `/stack-update`.
 9. **Language**: reply in the conversation language set in the project's CLAUDE.md (default English); code, identifiers, file paths and commit messages stay in English.
 

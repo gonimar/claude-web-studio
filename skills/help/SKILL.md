@@ -3,7 +3,7 @@ name: help
 description: "Shows where you are in the Web Studio pipeline and what to do next. Use when the user asks 'what now', 'what should I do next', or is stuck."
 argument-hint: "[optional: what you just finished]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep
+allowed-tools: Read, Glob, Grep, AskUserQuestion
 context: |
   !echo "stage: $(cat production/stage.txt 2>/dev/null || echo 'not set') | review-mode: $(cat production/review-mode.txt 2>/dev/null || echo 'lean') | studio: $(cat .claude/.web-studio-version 2>/dev/null || echo '?') | stack-ref: $(sed -n 's/^updated: *//p' .claude/docs/stack-reference/index.md 2>/dev/null)"
 model: haiku
@@ -35,4 +35,4 @@ Also available: /stack-update, /team-feature …
 If the stack reference is older than 60 days — one line recommending `/stack-update`.
 If `production/session-state/active.md` exists — show its `Task:`/`Next:`.
 
-Verdict: `READY`. Next step: the command on the "Next" line.
+Verdict: `READY`. Next step — one `AskUserQuestion`: the "Next" command (Recommended) · up to two "Also available" commands relevant to the phase · nothing now. Run nothing without that answer.

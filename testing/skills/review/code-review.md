@@ -23,8 +23,8 @@ Review with routing by file type and security for sensitive paths.
 **Fixture**: auth/ path without the flag → appsec anyway. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: fixes only after "yes". **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: fixes only after "yes". **Expected**: the user decides; stage/statuses never change automatically; the fix offer and the hand-off are `AskUserQuestion`s (fix BLOCKING · fix BLOCKING and WARNING · report only; `/story-done` · re-review · stop), not text yes/no prompts.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] fix offer and hand-off are `AskUserQuestion`s with a Recommended option and alternatives
 ### 6. Fix commit
 **Fixture**: BLOCKING fixed after "yes" on `feat/S-004-…`. **Expected**: checks re-run, then a `fix(S-004): apply /code-review findings` commit and push after consent; the review never commits by itself.
 - [ ] checks re-run before the commit · [ ] commit scope is the story ID · [ ] no commit without fixes
