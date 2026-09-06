@@ -36,6 +36,8 @@ instead of relying on memory.
    decisions are verified by a real run (database, browser, HTTP), not by "looks right".
 2. **Ask first, then act** — for architecture decisions, approach changes, new dependencies,
    schema changes and public contracts. Small additive edits within an agreed step need no question.
+   Questions are choices, not prompts for "yes": consent gates and hand-offs come as `AskUserQuestion`
+   with the recommended option first, then the real alternatives (coordination-rules, rule 7).
 3. **Maximum proven packages, minimum own code.** Check the ecosystem before writing; check a
    package's health before adding it (abandoned, unreleased branches, last release date, CVEs).
 4. **Secure by default**: secrets only in the environment, input validated at the boundary,

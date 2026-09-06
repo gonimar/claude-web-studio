@@ -23,8 +23,8 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: new dependency → health check. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: session state updated; next /code-review. **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: session state updated; next /code-review. **Expected**: the user decides; stage/statuses never change automatically; the hand-off is one `AskUserQuestion` (`/code-review --diff` Recommended · commit first · show the diff · stop), not a text "run /code-review?".
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] gates and the hand-off are `AskUserQuestion`s with a Recommended option and alternatives
 ### 6. Git workflow
 **Fixture**: current branch `feat/S-002-…` already merged into origin/master. **Expected**: switch to the default branch, pull, create `feat/S-003-slug`; at the end a `feat(S-003): …` commit and push, each after consent (`docs/git-workflow.md`).
 - [ ] merged branch detected, new branch from the default · [ ] commit scope is the story ID · [ ] no commit on the default branch

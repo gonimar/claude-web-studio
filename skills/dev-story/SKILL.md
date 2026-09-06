@@ -9,7 +9,7 @@ model: sonnet
 
 # Dev Story
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7); delegated agents follow the same protocol.
 
 ```
 /create-stories → /dev-story (this) → /code-review → /story-done
@@ -22,7 +22,7 @@ Argument or `production/session-state/active.md` (`Task:`); none — ask. Status
 The story; the feature spec (relevant sections); the contract (`schema.graphql`/openapi) — if the story changes the contract, run `/api-contract` first; ADRs; the data model; applicable `.claude/rules/*.md`; the stack reference for the story's languages; the test strategy. A missing ADR/contract for a story that needs one → `BLOCKED` naming what to run.
 
 ## Phase 3: Plan and branch
-Files to create/change, order, tests per criterion (table). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update `session-state/active.md` (Task/Branch/Next). Show the plan — "continue?".
+Files to create/change, order, tests per criterion (table). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update `session-state/active.md` (Task/Branch/Next). Show the plan, then one `AskUserQuestion`: continue (Recommended) · change the plan (say what) · stop.
 
 ## Phase 4: Implementation (via Task to the right engineers, by layer)
 - Backend: `go-engineer` / `php-engineer` / `node-engineer`; GraphQL — `graphql-engineer`; DB — `database-engineer`.
@@ -36,6 +36,6 @@ Independent layers in parallel; dependent ones sequentially (contract → backen
 Table "criterion → test → result (output)". Unmet ones explicitly. Lint/typecheck/dependency audit (if packages were added — health verified).
 
 ## Phase 6: Wrap-up and commit
-Update the story status (`Review`), session state (`Next: /code-review`). Then, with consent (`git-workflow.md`, step "Implement"): stage the story's files, `git commit -m "feat(S-NNN): <story title>"`, `git push -u origin feat/S-NNN-slug`. Never commit on the default branch.
+Update the story status (`Review`), session state (`Next: /code-review`). Then, with consent as one `AskUserQuestion` — commit and push (Recommended) · commit only · not now (`git-workflow.md`, step "Implement"): stage the story's files, `git commit -m "feat(S-NNN): <story title>"`, `git push -u origin feat/S-NNN-slug`. Never commit on the default branch.
 
-Verdict: `COMPLETE` | `PARTIAL (open: …)` | `BLOCKED`. Next step: `/code-review --diff <story-path>`.
+Verdict: `COMPLETE` | `PARTIAL (open: …)` | `BLOCKED`. Next step — one `AskUserQuestion`, never a bare "run /code-review?": `/code-review --diff <story-path>` (Recommended on COMPLETE) · commit first (when Phase 6 was declined) · show the diff · stop here. Run the next skill only on that answer.

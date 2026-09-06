@@ -3,7 +3,7 @@ name: code-review
 description: "Reviews code (files, directory, or current diff) for correctness, standards compliance, ADR adherence, security (OWASP), performance, testability; routes to the right lead and specialist by file type (Go/PHP/TS/Angular/Vue/GraphQL/three.js) and to appsec-engineer for sensitive paths. Read-only findings with BLOCKING/WARNING/INFO."
 argument-hint: "[paths | --diff] [story-path] [--security]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Task
+allowed-tools: Read, Glob, Grep, Bash, Task, AskUserQuestion
 model: sonnet
 ---
 
@@ -26,6 +26,6 @@ Give each the files, ADRs and rules; ask for findings as `severity | file:line |
 Deviation from an accepted ADR: ARCHITECTURAL VIOLATION (BLOCKING) / DRIFT (WARNING) / MINOR (INFO).
 
 ## Phase 5: Report and fix commit
-BLOCKING/WARNING/INFO summary, findings table, verdict `APPROVED` / `NEEDS CHANGES`. Offer: "fix BLOCKING now?" — edits only after "yes" (through the relevant specialist). After fixes: re-run Phase 3 checks, then with consent `git commit -m "fix(S-NNN): apply /code-review findings"` and `git push` on the story branch (`.claude/docs/git-workflow.md`, step "Review"). The review itself never commits or changes the branch.
+BLOCKING/WARNING/INFO summary, findings table, verdict `APPROVED` / `NEEDS CHANGES`. Then one `AskUserQuestion`: fix BLOCKING now (Recommended on NEEDS CHANGES) · fix BLOCKING and WARNING · report only — edits only after that answer (through the relevant specialist). After fixes: re-run Phase 3 checks, then with consent `git commit -m "fix(S-NNN): apply /code-review findings"` and `git push` on the story branch (`.claude/docs/git-workflow.md`, step "Review"). The review itself never commits or changes the branch.
 
-Next step: `/story-done` on APPROVED.
+Next step — one `AskUserQuestion`, never a bare "run /story-done?": `/story-done` (Recommended on APPROVED) · re-review after manual fixes · stop here.

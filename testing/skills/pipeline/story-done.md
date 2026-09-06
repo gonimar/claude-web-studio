@@ -23,8 +23,8 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: new packages → audit. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: status changes with consent. **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: status changes with consent. **Expected**: the user decides; stage/statuses never change automatically; the Phase 4 and Phase 5 questions are `AskUserQuestion`s with a Recommended option and alternatives.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] Phase 4/5 gates are `AskUserQuestion`s, not text yes/no
 ### 6. Git workflow
 **Fixture**: DONE, PR #7 open, `gh` available. **Expected**: `docs: close S-NNN — Done, PR #7` commit after the Phase 4 question; then a *separate* merge question; only after its own "yes" — `gh pr merge --merge --delete-branch`, switch to the default branch and pull, session state cleared. "yes" to Phase 4 alone → no merge, PR left open, `Branch:` kept, how to merge later printed. On NOT DONE nothing is merged.
 - [ ] merge only on DONE · [ ] merge has its own question (Phase 4's "yes" never merges) · [ ] declined merge: PR open, `Branch:` kept, how-to printed · [ ] default branch synced after merge · [ ] session state cleared
