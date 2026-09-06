@@ -26,8 +26,8 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: status changes with consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 ### 6. Git workflow
-**Fixture**: DONE, PR #7 open, `gh` available. **Expected**: `docs: close S-NNN — Done, PR #7` commit, `gh pr merge --merge --delete-branch`, switch to the default branch and pull, session state cleared — each after consent; on NOT DONE nothing is merged.
-- [ ] merge only on DONE · [ ] default branch synced after merge · [ ] session state cleared
+**Fixture**: DONE, PR #7 open, `gh` available. **Expected**: `docs: close S-NNN — Done, PR #7` commit after the Phase 4 question; then a *separate* merge question; only after its own "yes" — `gh pr merge --merge --delete-branch`, switch to the default branch and pull, session state cleared. "yes" to Phase 4 alone → no merge, PR left open, `Branch:` kept, how to merge later printed. On NOT DONE nothing is merged.
+- [ ] merge only on DONE · [ ] merge has its own question (Phase 4's "yes" never merges) · [ ] declined merge: PR open, `Branch:` kept, how-to printed · [ ] default branch synced after merge · [ ] session state cleared
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
