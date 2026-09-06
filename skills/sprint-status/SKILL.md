@@ -3,7 +3,7 @@ name: sprint-status
 description: "Read-only sprint status from artifacts — story states, tests/CI evidence, blockers, burn, risk to the sprint goal. Use for 'where are we' during a sprint."
 argument-hint: "[sprint number]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash
+allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
 model: haiku
 ---
 
@@ -24,4 +24,4 @@ In progress now: S-NNN (branch, last commit, tests: ✅/❌)
 ```
 Discrepancies "Done without a test/PR" on a separate line.
 
-Verdict: `ON TRACK` | `AT RISK` | `OFF TRACK`. Next step: `/dev-story` for the next story or `/help`.
+Verdict: `ON TRACK` | `AT RISK` | `OFF TRACK`. Next step — one `AskUserQuestion`: `/dev-story <next story>` (Recommended) · `/help` · nothing now.

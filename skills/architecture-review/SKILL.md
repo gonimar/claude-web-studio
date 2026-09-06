@@ -3,7 +3,7 @@ name: architecture-review
 description: "Cross-checks ADRs, API contracts, data model, threat model and feature specs for consistency and feasibility before build; verifies stack facts against the stack reference. Read-only report with PASS / CONCERNS / FAIL. Run at the architecture→build gate."
 argument-hint: "[full | adrs | contracts]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Task
+allowed-tools: Read, Glob, Grep, Task, AskUserQuestion
 model: opus
 agent: technical-director
 ---
@@ -25,4 +25,4 @@ All `docs/architecture/adr-*.md`, `docs/architecture/api/*`, `data-model.md`, `t
 ## Phase 3: Report
 Table "document → status → findings (BLOCKING/WARNING/INFO)", then the verdict `PASS` / `CONCERNS` / `FAIL` with reasons. Never change `stage.txt` — only recommend.
 
-Next step: on PASS — `/create-stories`; otherwise the specific `/architecture-decision retrofit …` / `/api-contract`.
+Next step — one `AskUserQuestion`: on PASS `/create-stories` (Recommended) · re-run the review after fixes · stop here; otherwise the specific `/architecture-decision retrofit …` / `/api-contract` (Recommended) · proceed with the CONCERNS recorded · stop here.

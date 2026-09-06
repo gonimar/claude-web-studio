@@ -23,8 +23,8 @@ Cross-check of ADRs/contracts/data/threats; read-only.
 **Fixture**: a stack fact contradicts the reference → WARNING. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: stage unchanged. **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: stage unchanged. **Expected**: the user decides; stage/statuses never change automatically; the hand-off is an `AskUserQuestion` with a Recommended option and alternatives.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] hand-off is an `AskUserQuestion`, not text
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

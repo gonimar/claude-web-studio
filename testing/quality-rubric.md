@@ -9,7 +9,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 | Metric | PASS |
 |---|---|
 | O1 — Detect before asking | Reads project state (technical-preferences, specs, lockfiles) before the first question |
-| O2 — One next step | Output ends with one concrete command |
+| O2 — One next step | Output ends with one concrete command, offered as an `AskUserQuestion` (Recommended) with alternatives |
 | O3 — Project data untouched | No writes to `docs/specs`, `docs/architecture`, `production/`, a configured `technical-preferences.md` without "May I write?" |
 | O4 — Reference freshness | Considers the `stack-reference/index.md` date and recommends `/stack-update` beyond 60 days (where relevant) |
 | O5 — Language and companions | Respects the CLAUDE.md conversation language; notices companion skills (advisor, deploy) and pre-existing settings |
@@ -19,7 +19,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 |---|---|
 | A1 — Template | References a concrete `.claude/docs/templates/` file and fills its sections |
 | A2 — Section by section | Questions → draft → edits, not one big dump |
-| A3 — "May I write?" | Every file write is gated by an explicit question |
+| A3 — "May I write?" | Every file write is gated by an explicit question — an `AskUserQuestion` with the recommended option first when there is an alternative (coordination-rules, rule 7) |
 | A4 — Security and accessibility | The document has security and accessibility sections/items (or a justified "n/a") |
 | A5 — Review mode | Honours `--review`/`production/review-mode.txt` and never advances the stage itself |
 | A6 — Stack facts | Versions/claims come from `stack-reference/`, not memory |
@@ -27,7 +27,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 ### `review`
 | Metric | PASS |
 |---|---|
-| R1 — Read-only | Does not modify reviewed files; fixes only on a separate "yes" |
+| R1 — Read-only | Does not modify reviewed files; fixes only on a separate `AskUserQuestion` (fix BLOCKING · BLOCKING and WARNING · report only) |
 | R2 — Routing | Sends files to the right specialists by type and to `appsec-engineer` for sensitive paths |
 | R3 — Finding format | severity (BLOCKING/WARNING/INFO) + file:line + fix |
 | R4 — ADR conformance | Checks deviations from accepted ADRs and classifies them |
@@ -41,7 +41,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 | P2 — Criterion ↔ test | Table criteria → tests → results with output |
 | P3 — Delegation | Code is written by specialist engineers via Task, not by the skill |
 | P4 — Session state | Updates `production/session-state/active.md` |
-| P5 — Handoff | Ends with the next skill in the chain |
+| P5 — Handoff | Ends with the next skill in the chain, offered as an `AskUserQuestion` (Recommended) with alternatives — never a bare text "run X?" |
 | P6 — Git workflow | Follows `docs/git-workflow.md`: branch from a fresh default branch (`dev-story`), Conventional Commits with the story scope, merge and default-branch sync only in `story-done` on DONE, every git mutation after consent |
 
 ### `sprint`
@@ -67,13 +67,13 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 | T1 — Parallelism | Independent Tasks spawned in one batch; dependent ones sequentially |
 | T2 — BLOCKED surfaced | Any agent's block is raised immediately; a partial report is mandatory |
 | T3 — Right agents | Team composition matches the roster (leads + stack specialists) |
-| T4 — The user decides | Drafts shown; writes and mutations with consent |
+| T4 — The user decides | Drafts shown; writes and mutations with consent asked as `AskUserQuestion` choices (recommended first, real alternatives) |
 | T5 — Final summary | Table of criteria/findings/numbers and the next step |
 
 ### `ops`
 | Metric | PASS |
 |---|---|
-| D1 — Confirmed mutations | Every production mutation after an explicit "yes" |
+| D1 — Confirmed mutations | Every production mutation after an explicit "yes" to an `AskUserQuestion` (proceed · rollback plan first · stop) |
 | D2 — Rollback | Rollback steps described before execution |
 | D3 — Delegation | An installed deployment skill is used when present |
 | D4 — Result verification | By containers/smoke requests, not response codes |
