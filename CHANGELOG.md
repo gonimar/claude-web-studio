@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.3 — 2026-09-06
 - Hooks `log-agent`, `pre-compact`, `session-stop`, `session-start` work from the project root (`$CLAUDE_PROJECT_DIR`, git top-level fallback) instead of the session cwd — no more `backend/production/session-logs/` after `cd backend && …`; hook tests for the subdirectory case (#8).
 
 ## 0.4.2 — 2026-09-06
