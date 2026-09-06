@@ -115,10 +115,12 @@ tokens or references to private projects.
 ## 7. Releases
 
 1. Bump `version` in `.claude-plugin/plugin.json`, move the "Unreleased" changelog section under
-   the new version with the date, commit `chore(release): vX.Y.Z`, tag `vX.Y.Z`.
-2. Plugin users receive the update only when the version changes (`claude plugin update web-studio`);
+   the new version with the date, commit `chore(release): vX.Y.Z`, tag `vX.Y.Z`, push with `--tags`.
+2. Create the GitHub release on that tag — the tag alone is invisible on the Releases page:
+   `gh release create vX.Y.Z --title vX.Y.Z --notes-file <the CHANGELOG section for X.Y.Z> --verify-tag`.
+3. Plugin users receive the update only when the version changes (`claude plugin update web-studio`);
    copy-mode users re-run `install.sh` or `/update`.
-3. Refresh the stack reference (`/stack-update` in this repository) at least every 60 days or before a release.
+4. Refresh the stack reference (`/stack-update` in this repository) at least every 60 days or before a release.
 
 ## 8. Licences
 
