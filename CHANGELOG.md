@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.1 — 2026-09-06
 - `/story-done`: the merge gets its own question in Phase 5 — the Phase 4 "close" answer never merges; declining leaves the PR open and keeps `Branch:` in the session state, re-running `/story-done S-NNN` merges later. `docs/git-workflow.md`, the story template and spec case 6 updated (#2).
 
 ## 0.4.0 — 2026-09-06
