@@ -3,7 +3,7 @@ name: tech-debt
 description: "Inventories technical debt — outdated dependencies vs the stack reference, TODO/FIXME, skipped tests, lint suppressions, ADR drift, missing docs, security/perf shortcuts; scores by impact/effort and proposes stories. Read-only report in docs/ops/tech-debt-<date>.md on approval."
 argument-hint: "[area or 'full']"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, Task
+allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
 model: sonnet
 agent: technical-director
 ---
@@ -17,6 +17,6 @@ Dependencies: `go list -m -u all` / `composer outdated` / `pnpm outdated` vs `st
 Table "debt → impact (security/velocity/risk) → effort → priority → proposed story".
 
 ## Phase 3: Report
-Show; "May I write `docs/ops/tech-debt-<date>.md` and add the top 5 to the roadmap?"
+Show; "May I write `docs/ops/tech-debt-<date>.md` and add the top 5 to the roadmap?" as one `AskUserQuestion`: report and roadmap (Recommended) · report only · not now.
 
-Verdict: `COMPLETE (N items, M critical)`. Next step: `/create-stories` for critical items or `/stack-update` for outdated majors.
+Verdict: `COMPLETE (N items, M critical)`. Next step — one `AskUserQuestion`: `/create-stories` for critical items (Recommended when any) · `/stack-update` for outdated majors · stop here.

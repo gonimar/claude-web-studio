@@ -2,6 +2,7 @@
 
 ## Unreleased
 - Dialogue protocol: consent gates and hand-offs are `AskUserQuestion` choices (recommended action first, then real alternatives), not text yes/no prompts — coordination-rules rule 7, CLAUDE.md template principle 2, `/dev-story`, `/code-review`, `/story-done`, `/help` (tool added to `code-review` and `help`), spec case 5 of the four (#4).
+- Rubric (O2, A3, R1, P5, T4, D1) and `/skill-test` static checks 4–5 name the `AskUserQuestion` form; the tool and choice-form gates/hand-offs for `architecture-review`, `changelog`, `skill-improve`, `skill-test`, `sprint-status`, `tech-debt` and their spec case 5 (closes #4).
 
 ## 0.4.1 — 2026-09-06
 - `/story-done`: the merge gets its own question in Phase 5 — the Phase 4 "close" answer never merges; declining leaves the PR open and keeps `Branch:` in the session state, re-running `/story-done S-NNN` merges later. `docs/git-workflow.md`, the story template and spec case 6 updated (#2).

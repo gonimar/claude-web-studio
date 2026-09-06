@@ -23,8 +23,8 @@ Debt inventory across code, dependencies, ADRs, audits.
 **Fixture**: outdated major → /stack-update. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: written with consent. **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: written with consent. **Expected**: the user decides; stage/statuses never change automatically; the write gate and the hand-off are `AskUserQuestion`s with a Recommended option and alternatives.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] gate and hand-off are `AskUserQuestion`s, not text
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

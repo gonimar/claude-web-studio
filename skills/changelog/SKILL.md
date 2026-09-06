@@ -3,7 +3,7 @@ name: changelog
 description: "Generates or updates CHANGELOG.md from Conventional Commits since the last tag (Keep a Changelog format, SemVer bump proposal). Use before a release."
 argument-hint: "[version | --unreleased]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit
+allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion
 model: haiku
 agent: tech-writer
 ---
@@ -17,6 +17,6 @@ agent: tech-writer
 Propose the bump (breaking → major, feat → minor, else patch); the argument's version wins.
 
 ## Phase 3: Write
-Draft the `## [X.Y.Z] — YYYY-MM-DD` section in Keep a Changelog format; "May I write `CHANGELOG.md`?" No tag is created here.
+Draft the `## [X.Y.Z] — YYYY-MM-DD` section in Keep a Changelog format; "May I write `CHANGELOG.md`?" as one `AskUserQuestion`: write (Recommended) · adjust the draft first · not now. No tag is created here.
 
-Verdict: `COMPLETE`. Next step: `/release-checklist X.Y.Z`.
+Verdict: `COMPLETE`. Next step — one `AskUserQuestion`: `/release-checklist X.Y.Z` (Recommended) · stop here.

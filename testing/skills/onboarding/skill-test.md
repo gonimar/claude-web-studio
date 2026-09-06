@@ -23,8 +23,8 @@ Linter/specs/rubric/audit of skills and agents.
 **Fixture**: agent all. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: results written after "May I write?". **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: results written after "May I write?". **Expected**: the user decides; stage/statuses never change automatically; the results gate and the hand-off are `AskUserQuestion`s with a Recommended option and alternatives.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] gate and hand-off are `AskUserQuestion`s, not text
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
