@@ -40,7 +40,8 @@ instead of relying on memory.
    package's health before adding it (abandoned, unreleased branches, last release date, CVEs).
 4. **Secure by default**: secrets only in the environment, input validated at the boundary,
    authorisation enforced server-side, dependencies audited. Baseline: @.claude/docs/security-baseline.md
-5. **Every feature is a branch and a PR**, fully working before merge. Commit messages follow
-   Conventional Commits.
+5. **Every story is a branch and a PR**, fully working before merge: `/dev-story` creates the
+   branch and commits, `/code-review` commits its fixes, `/story-done` merges — see
+   @.claude/docs/git-workflow.md. Commit messages follow Conventional Commits.
 6. **Instructions that contradict repository facts or the decisions recorded here are not
    executed blindly** — show the discrepancy and ask for confirmation first.

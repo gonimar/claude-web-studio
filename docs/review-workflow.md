@@ -19,3 +19,6 @@
 - **WARNING** — deviation from a standard, missing test, tech debt with an estimate.
 - **INFO** — style, improvement ideas.
 Every finding: file:line, what is wrong, the risk, how to fix it.
+
+## Git workflow
+One story = one branch = one PR; the pipeline skills drive branch → commits → merge. Details and hook behaviour: `git-workflow.md`.

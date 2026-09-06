@@ -32,6 +32,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 | R3 — Finding format | severity (BLOCKING/WARNING/INFO) + file:line + fix |
 | R4 — ADR conformance | Checks deviations from accepted ADRs and classifies them |
 | R5 — Verdict | Exactly one word from the vocabulary (APPROVED/NEEDS CHANGES or PASS/CONCERNS/FAIL) |
+| R6 — Fix commit | Fixes (after "yes") are committed as `fix(S-NNN): apply /code-review findings` on the story branch; the review itself never commits |
 
 ### `pipeline`
 | Metric | PASS |
@@ -41,6 +42,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 | P3 — Delegation | Code is written by specialist engineers via Task, not by the skill |
 | P4 — Session state | Updates `production/session-state/active.md` |
 | P5 — Handoff | Ends with the next skill in the chain |
+| P6 — Git workflow | Follows `docs/git-workflow.md`: branch from a fresh default branch (`dev-story`), Conventional Commits with the story scope, merge and default-branch sync only in `story-done` on DONE, every git mutation after consent |
 
 ### `sprint`
 | Metric | PASS |

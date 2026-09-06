@@ -1,5 +1,6 @@
 #!/bin/bash
-# PreToolUse(Bash): git commit checks — secret files, secret-like strings, lockfiles, TODO owners, Conventional Commits
+# PreToolUse(Bash): git commit checks — secret files, secret-like strings, lockfiles, TODO owners,
+# Conventional Commits, branch hygiene (default branch, already-merged branch — docs/git-workflow.md)
 INPUT=$(cat)
 # --- json helper: jq -> python3 -> grep ---
 jget() {
@@ -35,6 +36,15 @@ done
 MSG=$(echo "$CMD" | grep -oE -- "-m[[:space:]]+[\"'][^\"']*" | head -1 | sed -E "s/^-m[[:space:]]+[\"']//")
 if [ -n "$MSG" ] && ! echo "$MSG" | grep -qE '^(feat|fix|perf|refactor|docs|test|build|ci|chore|style|revert)(\([a-z0-9/_-]+\))?!?: .+'; then
   WARN="$WARN\nCOMMIT: message is not Conventional Commits: '$MSG'"
+fi
+# Branch hygiene (docs/git-workflow.md): one story = one branch; never commit on the default
+# branch or on a branch that origin's default branch already contains (the commit would strand).
+BR=$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
+case "$BR" in main|master|production|release) WARN="$WARN\nBRANCH: committing directly to '$BR' — studio rule: one story = one branch (feat/S-NNN-slug), see .claude/docs/git-workflow.md.";; esac
+DEF=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')
+if [ -z "$DEF" ]; then for b in master main; do git show-ref -q --verify "refs/remotes/origin/$b" && { DEF=$b; break; }; done; fi
+if [ -n "$DEF" ] && [ -n "$BR" ] && [ "$BR" != "$DEF" ] && git merge-base --is-ancestor "$BR" "origin/$DEF" 2>/dev/null; then
+  WARN="$WARN\nBRANCH: '$BR' is already merged into origin/$DEF — this commit will strand; start a new branch from $DEF (git switch $DEF && git pull --ff-only && git switch -c feat/S-NNN-slug)."
 fi
 [ -n "$WARN" ] && echo -e "=== Commit warnings ===$WARN\n=======================" >&2
 exit 0

@@ -25,7 +25,7 @@ Give each the files, ADRs and rules; ask for findings as `severity | file:line |
 ## Phase 4: ADR conformance
 Deviation from an accepted ADR: ARCHITECTURAL VIOLATION (BLOCKING) / DRIFT (WARNING) / MINOR (INFO).
 
-## Phase 5: Report
-BLOCKING/WARNING/INFO summary, findings table, verdict `APPROVED` / `NEEDS CHANGES`. Offer: "fix BLOCKING now?" — edits only after "yes" (through the relevant specialist).
+## Phase 5: Report and fix commit
+BLOCKING/WARNING/INFO summary, findings table, verdict `APPROVED` / `NEEDS CHANGES`. Offer: "fix BLOCKING now?" — edits only after "yes" (through the relevant specialist). After fixes: re-run Phase 3 checks, then with consent `git commit -m "fix(S-NNN): apply /code-review findings"` and `git push` on the story branch (`.claude/docs/git-workflow.md`, step "Review"). The review itself never commits or changes the branch.
 
 Next step: `/story-done` on APPROVED.
