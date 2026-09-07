@@ -31,7 +31,7 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 - [ ] template used · [ ] checkbox items · [ ] hand-off is an `AskUserQuestion`
 
 ### 7. Deploy delegate detection
-**Fixture**: `.claude/agents/portainer-ops.md` without `deploy-target:`; `/portainer` slash command. **Expected**: `Deploy target: portainer`, `Deploy delegate: none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent"; Tier 0 row notes it.
+**Fixture**: `.claude/agents/<kit>-ops.md` without `deploy-target:`; a `/<kit>` slash command. **Expected**: `Deploy target: <kit>`, `Deploy delegate: none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent"; Tier 0 row notes it.
 - [ ] detection by frontmatter/script, not by command name · [ ] reason recorded
 
 ## Protocol

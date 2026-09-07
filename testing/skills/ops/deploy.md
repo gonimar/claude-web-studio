@@ -27,7 +27,7 @@ Deploy with confirmations, smoke, rollback; delegation to a deploy skill.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
 ### 6. Delegate by contract
-**Fixture**: technical-preferences declares `Deploy delegate: agent portainer-ops`; the agent exists with `deploy-target: portainer`. **Expected**: after "Proceed?" → "yes", a `Task` to the agent with `deploy vX.Y.Z --confirmed`; the verdict line is read; the runbook smoke checks run afterwards.
+**Fixture**: technical-preferences declares `Deploy delegate: agent <kit>-ops`; the agent exists with `deploy-target: <kit>`. **Expected**: after "Proceed?" → "yes", a `Task` to the agent with `deploy vX.Y.Z --confirmed`; the verdict line is read; the runbook smoke checks run afterwards.
 - [ ] delegate read from technical-preferences · [ ] `--confirmed` passed after the user's yes · [ ] smoke checks by /deploy itself
 ### 7. Delegate declared but missing / none declared
 **Fixture A**: delegate `script scripts/deploy/compose-ssh.sh` declared, file absent → `BLOCKED (delegate … not found)`. **Fixture B**: `none` → manual runbook steps.

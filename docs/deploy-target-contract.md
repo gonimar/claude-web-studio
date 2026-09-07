@@ -8,7 +8,7 @@ is a valid, explicit outcome.
 
 ## 1. Declaration (`technical-preferences.md` → Infrastructure)
 ```
-- **Deploy target**: portainer | compose-ssh | kubernetes | cloud:<name> | manual
+- **Deploy target**: compose-ssh | kubernetes | cloud:<name> | portainer | manual
 - **Deploy delegate**: agent <name> | script <path> | none
 - **Infra repo**: <path or URL of the repository that holds the proxy/host config> | none
 - **Proxy config**: <file inside the infra repo, e.g. caddy/Caddyfile> | none
@@ -45,8 +45,8 @@ request result. Unsupported optional verbs answer `NOT SUPPORTED`, never silentl
   `"<verb> <args> --confirmed"` and expects the verdict line first, evidence after.
 - **Script**: `scripts/deploy/<target>.sh <verb> [args] [--confirmed]` via `Bash`; exit 0 on success,
   non-zero on `FAILED`; the verdict line is the last line of stdout.
-The plugin ships a reference script for `compose-ssh` (`templates/deploy/compose-ssh.sh`) which
-`/setup-stack` copies to `scripts/deploy/compose-ssh.sh` when that target is chosen.
+The plugin ships a reference script for `compose-ssh` (`docs/templates/deploy/compose-ssh.sh`, seeded into
+`.claude/docs/templates/deploy/`) which `/setup-stack` copies to `scripts/deploy/compose-ssh.sh` when that target is chosen.
 
 ## 5. Confirmation
 Mutating verbs run only after the user's explicit "Proceed?" → "yes" **in the calling skill**;

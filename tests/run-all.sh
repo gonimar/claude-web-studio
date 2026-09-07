@@ -2,7 +2,7 @@
 # Runs every local test. Usage: tests/run-all.sh
 cd "$(dirname "$0")/.." || exit 1
 rc=0
-echo "== syntax"; for f in hooks/*.sh templates/statusline.sh templates/deploy/*.sh install.sh tests/*.sh; do bash -n "$f" || { echo "syntax error: $f"; rc=1; }; done
+echo "== syntax"; for f in hooks/*.sh templates/statusline.sh docs/templates/deploy/*.sh install.sh tests/*.sh; do bash -n "$f" || { echo "syntax error: $f"; rc=1; }; done
 echo "== structure"; python3 tests/validate-structure.py || rc=1
 echo "== hooks"; bash tests/hooks.sh || rc=1
 echo "== installer"; bash tests/installer.sh || rc=1

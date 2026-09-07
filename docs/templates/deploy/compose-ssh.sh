@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Reference deploy delegate for the `compose-ssh` target (docs/deploy-target-contract.md).
-# Copied by /setup-stack to scripts/deploy/compose-ssh.sh. Configuration: docs/deploy/compose-ssh.md
+# Seeded into .claude/docs/templates/deploy/ by /init or install.sh; /setup-stack copies it to scripts/deploy/compose-ssh.sh. Configuration: docs/deploy/compose-ssh.md
 # (parsed below: Host, Path, Compose file, Healthz) — no secrets; ssh uses the user's keys.
 #   compose-ssh.sh status | create | deploy <tag> [--confirmed] | rollback [tag] [--confirmed] | logs [service] [--since 1h]
 # The verdict line is the LAST line of stdout; exit 0 on success, 1 on FAILED.
