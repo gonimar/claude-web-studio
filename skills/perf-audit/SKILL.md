@@ -10,7 +10,7 @@ agent: performance-engineer
 
 # Perf Audit
 
-Budgets — `technical-preferences.md`; references `web-platform.md`, `database.md`, `graphql.md`, `threejs-webgames.md`.
+Budgets — `technical-preferences.md`; references `stack-reference/web-platform.md`, `database.md`, `graphql.md`, `threejs-webgames.md`.
 
 ## Phase 1: Baseline (Bash, whatever is available)
 Web: `lighthouse --preset=perf --form-factor=mobile` / Lighthouse CI; `ng build --stats-json` / `vite build` + visualizer; API: `k6 run` scenario (create with consent); DB: `EXPLAIN (ANALYZE, BUFFERS)` on top queries, `pg_stat_statements`; Go `pprof`, PHP Blackfire/Xdebug; game: `renderer.info`, a Performance trace, memory.

@@ -10,7 +10,7 @@ agent: accessibility-specialist
 
 # A11y Audit
 
-`web-platform.md` ("Accessibility").
+`stack-reference/web-platform.md` ("Accessibility").
 
 ## Phase 1: Scope
 Routes/pages (from UX specs or the argument); is the dev server running? (offer to start it).

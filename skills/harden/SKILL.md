@@ -10,7 +10,7 @@ agent: network-security-engineer
 
 # Harden
 
-`security-baseline.md` (headers, network), `security-standards.md`, rules `ci-docker.md`, `security-sensitive.md`.
+`stack-reference/security-standards.md`, `security-baseline.md` (headers, network), rules `rules/ci-docker.md`, `rules/security-sensitive.md`.
 
 ## Phase 1: Inventory
 Proxy configs — in this repository or in the **Infra repo / Proxy config** from `technical-preferences.md` (Infrastructure) when the proxy lives elsewhere; compose/Dockerfile, workflows, where TLS terminates, current headers (`curl -sI <url>` on dev/staging/prod with consent). No infra repo declared and no proxy config here → say so: the checklist can only be verified live, not fixed, and `/setup-stack`/`/adopt` records the field.

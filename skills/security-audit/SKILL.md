@@ -10,7 +10,7 @@ agent: security-lead
 
 # Security Audit
 
-Templates `security-audit-report.md`, `findings.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security).
+Templates `templates/security-audit-report.md`, `findings.md`; `stack-reference/security-standards.md`, `security-baseline.md`, `graphql.md` (security).
 
 ## Phase 1: Scope
 Mode from the argument (`full` by default): `quick` = HIGH/BLOCKING classes only (auth, authorisation/IDOR, injection, secrets, dependency CVEs) without the network and GraphQL deep passes; `api`/`auth`/`infra`/`<path>` narrow the scope. Surfaces from the threat model; no `docs/architecture/threat-model.md` → continue from technical-preferences and the code, say so in the report and propose `/threat-model` as a follow-up — never a silent full pass. Stack from technical-preferences.

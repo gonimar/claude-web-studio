@@ -10,7 +10,7 @@ agent: qa-lead
 
 # Test Setup
 
-Template `test-strategy.md`; reference `testing.md`; rules `tests.md`.
+Template `templates/test-strategy.md`; reference `stack-reference/testing.md`; rules `rules/tests.md`.
 
 ## Phase 1: Stack and current state
 technical-preferences; what exists (`vitest.config`, `playwright.config`, `phpunit.xml`, `_test.go`, workflows); gaps.
