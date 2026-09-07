@@ -41,7 +41,7 @@ For upgrades: path (e.g. `ng update`, three.js Migration Guide rNNN→rMMM, Go t
 
 ## Phase 4: Write
 Show the reference changes (updated lines, `updated:` and `sources:` in the header, new practices in the right section).
-"May I write [files]?" After "yes" also update `index.md` (table, the "latest on date" column and the date). Outdated statements are removed, not left beside new ones.
+"May I write [files]?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After "yes" also update `index.md` (table, the "latest on date" column and the date). Outdated statements are removed, not left beside new ones.
 
 ## Phase 5: Project upgrade plan (optional)
 If upgrades exist — propose stories (`/create-stories`) or ADRs for majors; for each — how to verify (tests, build). Do not perform upgrades in this skill.

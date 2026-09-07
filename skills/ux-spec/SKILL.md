@@ -24,6 +24,6 @@ Copy table; focus order and aria; behaviour at 320–400 px; reduced motion.
 `accessibility-specialist` via Task — a quick check of section 6 (Haiku).
 
 ## Phase 4: Write
-"May I write `docs/specs/ux/UX-NNN-<slug>.md`?"
+"May I write `docs/specs/ux/UX-NNN-<slug>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
 
 Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/create-stories F-NNN` (Recommended) · `/dev-story` · revise the spec.

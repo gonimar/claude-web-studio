@@ -30,4 +30,4 @@ Only on `DONE` and only after Phase 4 is finished, ask a separate `AskUserQuesti
 - "no" (or no answer) → leave the PR open, keep `Branch:` in the session state, and say how to merge later: re-run `/story-done S-NNN` (a story already Done with an open PR goes straight to this question), or merge on GitHub and run `git switch <default> && git pull --ff-only`.
 Without `gh`: the same, by hand. `NOT DONE` → nothing is merged.
 
-Verdict: `DONE` | `NOT DONE (reasons)`. Next step: the next story (`/dev-story S-NNN` from the fresh default branch) or `/sprint-status`.
+Verdict: `DONE` | `NOT DONE (reasons)`. Next step — one `AskUserQuestion`: the next story — `/dev-story S-NNN` from the fresh default branch (Recommended) · `/sprint-status` · stop here.

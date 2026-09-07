@@ -10,7 +10,7 @@ agent: qa-lead
 
 # Team: Release
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Parallel checks
 `/perf-audit full` ‖ `/a11y-audit all` ‖ `/security-audit quick` ‖ `/dependency-audit`. Any FAIL → stop with a partial report.

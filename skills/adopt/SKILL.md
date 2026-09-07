@@ -25,7 +25,7 @@ Frontend (framework, build, styles; `vanilla` or `none` when there is none), Tes
 `phpunit.xml`, `vitest.config`, `go test`, lint configs), Infrastructure (containers, CI, deploy from
 compose/workflows/deploy skills — **Deploy target and delegate** by `docs/deploy-target-contract.md`: an agent `.claude/agents/*-ops.md` with `deploy-target:` in its frontmatter or a `scripts/deploy/*.sh`; a kit that only ships a slash command is noted as `none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent or a `scripts/deploy/<target>.sh`"; **Infra repo / Proxy config** asked when the host is shared), Layout (`backend_root`, `frontend_root`, `go_layout`). `[TO BE CONFIGURED]`
 may remain only for fields no file answers; ask those in one `AskUserQuestion` (project type, API style,
-layout — whatever is still unknown), then write the file under "May I write?". Do not defer to
+layout — whatever is still unknown), then write the file under "May I write?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Do not defer to
 `/setup-stack`: after `/adopt` the stack counts as chosen, and the template's note "while
 [TO BE CONFIGURED] remains, skills treat the stack as not chosen" is exactly why.
 

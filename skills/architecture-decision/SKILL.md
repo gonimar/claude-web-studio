@@ -27,6 +27,6 @@ Read technical-preferences, the product spec, related feature specs, existing AD
 Draft Decision/Consequences/Verification (how we will check: metric, spike, test; when we revisit). Review per mode: `full` — `backend-lead`/`frontend-lead`/`security-lead` for affected areas via Task; `lean` — `security-lead` when auth/data/network are affected; `solo` — none.
 
 ## Phase 4: Write
-"May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" Status is `Proposed` until the user says `Accepted`.
+"May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Status is `Proposed` until the user says `Accepted`.
 
 Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/api-contract` (Recommended) · `/data-model` · `/create-stories`.

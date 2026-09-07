@@ -24,6 +24,6 @@ Per story: goal, tasks, criteria (from the feature spec, none lost — show the 
 Show the list (ID, title, size, dependencies) and the criteria-coverage matrix; edits.
 
 ## Phase 4: Write
-"May I write `production/stories/F-NNN/S-NNN-<slug>.md` (N files), add lines to `production/roadmap.md` and set `story: S-NNN` on the findings covered in `production/findings.md`?" (roadmap format: `- [ ] S-NNN · Title`).
+"May I write `production/stories/F-NNN/S-NNN-<slug>.md` (N files), add lines to `production/roadmap.md` and set `story: S-NNN` on the findings covered in `production/findings.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now (roadmap format: `- [ ] S-NNN · Title`).
 
 Verdict: `READY (N stories)`. Next step — one `AskUserQuestion`: `/sprint-plan` (Recommended) · `/dev-story S-NNN` directly · revise the stories.

@@ -9,7 +9,7 @@ model: sonnet
 
 # Hotfix
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Reproduce
 Branch `hotfix/<slug>` from the production tag; a failing test reproducing the bug (mandatory); impact assessment (data? security? → `security-lead` via Task).

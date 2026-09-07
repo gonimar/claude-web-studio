@@ -10,7 +10,7 @@ agent: devops-lead
 
 # Deploy
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Readiness
 `production/releases/vX.Y.Z.md` (missing → `/release-checklist`); the tag exists; CI green on the tag (`gh run`); the image is built/available; runbook `docs/ops/deploy.md`; the deploy target and delegate from `technical-preferences.md` (Infrastructure) and `docs/deploy/<target>.md` — contract: `docs/deploy-target-contract.md`.

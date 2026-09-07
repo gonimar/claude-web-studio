@@ -10,7 +10,7 @@ agent: game-lead
 
 # Team: Game
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Readiness
 `docs/specs/game-concept.md` (missing → `/game-concept`); the engine ADR (missing → `/architecture-decision`); budgets in technical-preferences.

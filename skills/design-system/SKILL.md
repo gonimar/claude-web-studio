@@ -23,6 +23,6 @@ Show a `tokens.css` draft (`@layer base { :root { --ds-… } }`, `light-dark()`)
 Inventory from the needs of the product spec/feature specs; per component — states and aria pattern (WAI-ARIA APG); patterns for forms/tables/empty states/dialogs.
 
 ## Phase 4: Write
-"May I write `docs/specs/design-system.md` and `[frontend_root]/src/styles/tokens.css`?" — the CSS is written by `css-engineer` via Task after consent.
+"May I write `docs/specs/design-system.md` and `[frontend_root]/src/styles/tokens.css`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now — the CSS is written by `css-engineer` via Task after consent.
 
 Verdict: `COMPLETE`. Next step — one `AskUserQuestion`: `/ux-spec` for the first flow (Recommended) · `/feature-spec` · revise the tokens.
