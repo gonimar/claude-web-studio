@@ -1,6 +1,6 @@
 ---
 name: adopt
-description: "Brownfield onboarding — detects the real stack of an existing project (Go/PHP/Node, Angular/Vue/Nuxt, GraphQL/REST, three.js), audits existing artifacts against studio formats, merges settings/CLAUDE.md, and produces a numbered adoption plan. Run when installing the studio into an existing project."
+description: "Brownfield onboarding — detects the real stack of an existing project (Go/PHP/Node, Angular/Vue/Nuxt, GraphQL/REST, three.js), fills technical-preferences from the facts, audits existing artifacts against studio formats, merges settings/CLAUDE.md, and produces a numbered adoption plan. Run when installing the studio into an existing project."
 argument-hint: "[full | stack | docs | settings]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
@@ -17,7 +17,17 @@ Say "Scanning the project…", then read:
 - `go.mod` (Go version, router, pgx/sqlc, gqlgen), `composer.json` (PHP, `yiisoft/*`, Symfony/Laravel, graphql-php), `package.json` (Angular/Vue/Nuxt/Vite versions, TS, three, pixi, GraphQL clients), `angular.json`, `nuxt.config.*`, `vite.config.*`, `gqlgen.yml`, `*.graphql`, `openapi*.yaml`, `compose*.yaml`, `Dockerfile*`, `.github/workflows/*`, existing deploy/advisor skills in `.claude/skills`.
 - Compare versions with `.claude/docs/stack-reference/index.md`: outdated majors → a table "now → current → upgrade path (reference section)".
 - Go projects: compare the tree with `go.md` "Project layout" (golang-standards/project-layout adapted) — `src/`, `utils/`/`common/`, logic in `cmd/`, an unused `pkg/` → INFO/MEDIUM findings with a migration note; record the actual variant as `go_layout` in technical-preferences (never restructure during adoption).
-Draft `technical-preferences.md` from facts; ask the unknowns in one `AskUserQuestion` (project type, API style, layout).
+
+**Fill `technical-preferences.md` in this run.** Every field the files answer is written from the facts:
+Project type and Rendering (from the framework and routes), Backend (language/runtime, framework,
+database and cache from compose, API style from schema/openapi/routes, authentication if visible),
+Frontend (framework, build, styles; `vanilla` or `none` when there is none), Tests and quality (from
+`phpunit.xml`, `vitest.config`, `go test`, lint configs), Infrastructure (containers, CI, deploy from
+compose/workflows/deploy skills), Layout (`backend_root`, `frontend_root`, `go_layout`). `[TO BE CONFIGURED]`
+may remain only for fields no file answers; ask those in one `AskUserQuestion` (project type, API style,
+layout — whatever is still unknown), then write the file under "May I write?". Do not defer to
+`/setup-stack`: after `/adopt` the stack counts as chosen, and the template's note "while
+[TO BE CONFIGURED] remains, skills treat the stack as not chosen" is exactly why.
 
 ## Phase 2: Artefact audit (`docs` / `full`)
 | Artefact | Where | Format check |
@@ -30,7 +40,8 @@ Draft `technical-preferences.md` from facts; ask the unknowns in one `AskUserQue
 | test strategy | `docs/architecture/test-strategy.md` | tools per level |
 | roadmap/stories | `production/roadmap.md`, `production/stories/` | checkbox format |
 | CLAUDE.md | root | studio block (`web-studio`), Language section, @-includes |
-Classify: BLOCKING (a skill would fail or lie), HIGH (traceability lost), MEDIUM, INFO.
+Classify: BLOCKING (a skill would fail or lie), HIGH (traceability lost), MEDIUM, INFO. A roadmap kept
+by a companion advisor skill in its own format is INFO ("not migrated"), never a migration item.
 
 ## Phase 3: Settings (`settings` / `full`)
 - `.claude/settings.web-studio.json` present → show a diff with `settings.json` for `hooks`, `permissions`, `statusLine`; propose a merge (never drop foreign hooks; merge arrays).
@@ -39,6 +50,10 @@ Classify: BLOCKING (a skill would fail or lie), HIGH (traceability lost), MEDIUM
 - Companion skills detected (advisor, deploy) → note them in the roster's Tier 0 row.
 
 ## Phase 4: Adoption plan
-Write `docs/adoption-plan-<date>.md`: numbered steps with priority, command (`/architecture-decision retrofit …`, `/threat-model`, `/test-setup`, `/stack-update`) and resulting artefact. Propose `production/stage.txt` from the facts.
+Write `docs/adoption-plan-<date>.md` from `.claude/docs/templates/adoption-plan.md`: verdict, the facts
+table, the artefact audit and a numbered plan where every item is a checkbox `- [ ] N. <priority> — <command> → <artefact>`
+(`/help` reads the open items and offers the first one; tick items `[x]` when done). Propose `production/stage.txt`
+from the facts (`build` / `operate`) if `/init` has not already set it.
 
-Verdict: `COMPLIANT` | `NEEDS MIGRATION (N blocking)`. Next step: the plan's first item; usually `/help`.
+Verdict: `COMPLIANT` | `NEEDS MIGRATION (N blocking)`. Next step — one `AskUserQuestion`: the plan's first
+open item (Recommended) · `/help` · stop here.

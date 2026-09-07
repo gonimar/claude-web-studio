@@ -26,5 +26,12 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: no file writes at all. **Expected**: the user decides; stage/statuses never change automatically; the next step is one `AskUserQuestion` (the "Next" command Recommended · up to two alternatives · nothing now), not a text line to retype.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] next step is an `AskUserQuestion` with a Recommended option and alternatives
 
+### 6. Adopted project in operate
+**Fixture**: `stage.txt = operate`, `docs/adoption-plan-2026-09-08.md` with 3 open items, no unmet required step. **Expected**: output shows `Adoption plan: 3 open — first: …`; NEXT is the first open plan item, Recommended in the `AskUserQuestion`.
+- [ ] adoption plan read · [ ] first open item is NEXT · [ ] still read-only
+### 7. Initialised but not adopted
+**Fixture**: code in the repo, `technical-preferences.md` all `[TO BE CONFIGURED]`. **Expected**: NEXT is `/adopt full`, with the reason.
+- [ ] the placeholder is detected · [ ] `/adopt full` Recommended
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

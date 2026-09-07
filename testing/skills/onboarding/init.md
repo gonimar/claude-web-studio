@@ -26,5 +26,9 @@ Scaffolds studio files, asks the conversation language and review mode, updates 
 **Fixture**: no writes before "May I write?". **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Brownfield hand-off
+**Fixture**: `composer.json` with sources, `docker-compose.prod.yml`, 40 commits in git. **Expected**: the plan proposes the stage from the facts (`operate`), never writes `discovery` over a running project; the hand-off is one `AskUserQuestion` with `/adopt full` Recommended (`/start` · `/help` · stop as alternatives), not a text line.
+- [ ] brownfield detected before the plan · [ ] stage proposed from facts and confirmed · [ ] hand-off is an `AskUserQuestion` with `/adopt full` Recommended
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

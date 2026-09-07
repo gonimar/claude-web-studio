@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+- Brownfield onboarding: `/init` detects existing code, proposes the stage from the facts (`build` / `operate`) instead of writing `discovery` over a running project, and hands off with an `AskUserQuestion` (`/adopt full` Recommended for brownfield); its statusline smoke check feeds a `cwd` JSON.
+- `/adopt` fills `technical-preferences.md` from the detected facts in the same run (only unanswerable fields stay `[TO BE CONFIGURED]` and are asked in one question — never deferred to `/setup-stack`), classifies a companion advisor's roadmap as INFO, writes the plan from the new `templates/adoption-plan.md` with checkbox items and hands off to the first open item.
+- `/help` reads the newest `docs/adoption-plan-*.md` (open items, first one is NEXT when the phase has no unmet required step) and sends an initialised-but-not-adopted project to `/adopt full`.
+- Specs: init case 6, adopt cases 1/6, help cases 6–7.
+
 ## 0.4.3 — 2026-09-06
 - Hooks `log-agent`, `pre-compact`, `session-stop`, `session-start` work from the project root (`$CLAUDE_PROJECT_DIR`, git top-level fallback) instead of the session cwd — no more `backend/production/session-logs/` after `cd backend && …`; hook tests for the subdirectory case (#8).
 
