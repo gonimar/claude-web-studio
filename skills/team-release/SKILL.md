@@ -10,7 +10,7 @@ agent: qa-lead
 
 # Team: Release
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Parallel checks
 `/perf-audit full` ‖ `/a11y-audit all` ‖ `/security-audit quick` ‖ `/dependency-audit`. Any FAIL → stop with a partial report.
@@ -19,9 +19,9 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 `/changelog <version>` → `/release-checklist <version>`.
 
 ## Phase 3: Deploy
-`/deploy <version>` (confirmations inside) → smoke → monitoring.
+`/deploy <version>` (confirmations inside; the delegate by `docs/deploy-target-contract.md`, manual runbook when none is declared) → smoke → monitoring.
 
 ## Phase 4: Summary
 Version, what shipped, post-deploy metrics, known issues; `production/stage.txt` → `operate` with consent.
 
-Verdict: `RELEASED` | `ABORTED (stage …)`. Next step: `/sprint-plan` for the next cycle.
+Verdict: `RELEASED` | `ABORTED (stage …)`. Next step — one `AskUserQuestion`: `/sprint-plan` for the next cycle (Recommended) · `/incident` if the post-deploy checks fail · stop here.

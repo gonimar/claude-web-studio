@@ -10,7 +10,7 @@ agent: security-lead
 
 # Team: Security
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Threat model
 `/threat-model` (refresh for new surfaces).
@@ -24,4 +24,4 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 ## Phase 4: Consolidation
 One deduplicated findings list, priorities, stories for BLOCKING/High; threat-model statuses updated; the release-gate verdict.
 
-Verdict: `PASS` | `CONCERNS` | `FAIL`. Next step: `/create-stories` for fixes → a repeated `/security-audit quick`.
+Verdict: `PASS` | `CONCERNS` | `FAIL`. Next step — one `AskUserQuestion`: `/create-stories` for the fixes (Recommended) · a repeated `/security-audit quick` · report only.

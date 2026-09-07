@@ -22,6 +22,6 @@ Blockers: …
 Risk to the goal: low | medium | high (why)
 In progress now: S-NNN (branch, last commit, tests: ✅/❌)
 ```
-Discrepancies "Done without a test/PR" on a separate line.
+Discrepancies "Done without a test/PR" on a separate line. `Open BLOCKING findings: N (production/findings.md)` — with the story or "no story" per finding.
 
 Verdict: `ON TRACK` | `AT RISK` | `OFF TRACK`. Next step — one `AskUserQuestion`: `/dev-story <next story>` (Recommended) · `/help` · nothing now.

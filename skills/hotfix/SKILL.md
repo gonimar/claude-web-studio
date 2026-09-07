@@ -9,7 +9,7 @@ model: sonnet
 
 # Hotfix
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Reproduce
 Branch `hotfix/<slug>` from the production tag; a failing test reproducing the bug (mandatory); impact assessment (data? security? → `security-lead` via Task).
@@ -18,9 +18,9 @@ Branch `hotfix/<slug>` from the production tag; a failing test reproducing the b
 Through the relevant engineer; only what is needed; test green; lint/typecheck; for sensitive paths — `appsec-engineer` review.
 
 ## Phase 3: Expedited gate
-Package tests + e2e smoke; `/changelog` patch version; `/deploy` with confirmation; backport to the default branch (`master`/`main`, PR).
+Package tests + e2e smoke; `/changelog` patch version; `/deploy` with confirmation (delegate verbs `deploy`/`rollback` by `docs/deploy-target-contract.md`); backport to the default branch (`master`/`main`, PR).
 
 ## Phase 4: Postmortem note
 A short entry in `docs/ops/incidents/` (or `/incident` if there was an incident).
 
-Verdict: `FIXED` | `BLOCKED`. Next step: `/incident` for root-cause analysis.
+Verdict: `FIXED` | `BLOCKED`. Next step — one `AskUserQuestion`: `/incident` for root-cause analysis (Recommended) · backport to main · stop here.

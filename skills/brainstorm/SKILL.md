@@ -10,6 +10,9 @@ agent: product-director
 
 # Brainstorm
 
+Reference: `stack-reference/index.md` (what the studio builds and with which versions); the brief feeds the
+`product-spec.md` / `game-concept.md` templates that follow.
+
 ## Phase 1: Conversation
 Clarify via `AskUserQuestion` (one at a time): for whom; which pain/desire; what already exists on the market
 (allow `WebSearch` for 3–5 comparable products); constraints (time, budget, stack, platforms);
@@ -21,6 +24,6 @@ Propose success metrics and "what must be true" for the idea to work (hypotheses
 
 ## Phase 3: Concept brief
 Draft `docs/specs/concept-brief.md`: essence, personas, pain, differentiation, MVP candidate, hypotheses and how to validate them
-(landing page/prototype/interviews), risks, next step. "May I write it?"
+(landing page/prototype/interviews), risks, next step. "May I write it?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
 
-Verdict: `COMPLETE`. Next step: `/setup-stack`, then `/product-spec` (or `/game-concept`).
+Verdict: `COMPLETE`. Next step — one `AskUserQuestion`: `/setup-stack` (Recommended) · `/product-spec` or `/game-concept` directly · revise the brief.

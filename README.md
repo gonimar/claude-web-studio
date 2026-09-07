@@ -92,7 +92,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/init` — scaffolds the studio files in the project, asks the conversation language and review mode, merges settings.
 - `/start` — onboarding for a new project: asks where you are and routes to the right first steps.
 - `/help` — shows the current phase, which steps are done and the single next command.
-- `/adopt` — attaches the studio to an existing project: detects the stack, audits documents, produces an adoption plan.
+- `/adopt` — attaches the studio to an existing project: detects the stack, audits documents, produces an adoption plan — fills `technical-preferences.md` from the detected facts and writes a checkbox adoption plan that `/help` follows.
 - `/setup-stack` — chooses and pins the stack (backend, frontend, API style, engine, database, tests, CI) with exact versions.
 - `/stack-update` — refreshes the stack reference from official sources with dates and proposes an upgrade plan for the project.
 - `/update` — updates the studio itself in the project (plugin update or copy-mode reinstall) while keeping local edits.
@@ -105,7 +105,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/feature-spec` — writes one feature's specification with scenarios, rules, contract, states, edge cases, security and acceptance criteria.
 - `/ux-spec` — specifies a flow or screen with every state, copy, accessibility and responsive behaviour.
 - `/design-system` — defines design tokens, themes and the component inventory, mapped onto Material, Taiga or a Vue kit.
-- `/game-concept` — writes a browser-game concept with core loop, mechanics, economy, feasibility budgets and a prototype plan.
+- `/game-concept` — writes a browser-game concept with core loop, mechanics, economy, feasibility budgets and a prototype plan; `/game-concept gate` records the prototype go/no-go.
 
 **Architecture**
 - `/architecture-decision` — creates or retrofits an ADR with options, decision, consequences and verification.
@@ -126,7 +126,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/tech-debt` — inventories technical debt and proposes prioritised stories.
 
 **Hardening**
-- `/security-audit` — audits code and configuration against OWASP Top 10:2025 with tools, CVSS-scored findings and fixes.
+- `/security-audit` — audits code and configuration against OWASP Top 10:2025 with tools, CVSS-scored findings and fixes; BLOCKING findings go to `production/findings.md`, which `/create-stories` and `/sprint-plan` read.
 - `/dependency-audit` — audits the supply chain: vulnerabilities, abandoned packages, outdated majors, licences, pinning.
 - `/harden` — hardens headers, TLS, proxy, containers and CI, verifying with live requests.
 - `/pentest` — runs authorised dynamic testing against the project's own application within a recorded scope.
@@ -136,7 +136,7 @@ Plugin mode prefixes each with `web-studio:`.
 **Release and operations**
 - `/changelog` — generates the changelog from Conventional Commits and proposes the version bump.
 - `/release-checklist` — runs the release gate from evidence and writes the release file with rollback steps.
-- `/deploy` — plans and executes a deployment with confirmations, smoke checks and rollback, delegating to a deploy skill if one is installed.
+- `/deploy` — plans and executes a deployment with confirmations, smoke checks and rollback, handing the stack mutation to the declared deploy delegate by the deploy target contract (`docs/deploy-target-contract.md`) or producing runbook steps when none is declared.
 - `/hotfix` — fast-tracks an urgent production fix from a failing test to deploy and backport.
 - `/incident` — coordinates incident response and writes a blameless postmortem.
 
@@ -220,7 +220,7 @@ in this repository or in a project installed with `--with-testing`. Details: [te
 ```
 .claude-plugin/   plugin.json + marketplace.json (this repository is both the marketplace and the plugin)
 agents/           30 agents        skills/     44 skills        hooks/      hooks.json + 10 scripts
-rules/            13 path-scoped rules          docs/       stack-reference/, templates/, roster, workflow catalog, security baseline
+rules/            13 path-scoped rules          docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, roster, workflow catalog, security baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          agent and skill testing framework      install.sh  copy-mode / new-project installer
 ```

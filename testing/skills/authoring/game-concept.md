@@ -26,5 +26,9 @@ Game concept: loop, MDA, mechanics, economy, feasibility, accessibility, prototy
 **Fixture**: engine ADR proposed. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Prototype gate
+**Fixture**: `/game-concept gate` after the first playable slice; §11 criterion "3 of 4 testers replay". **Expected**: asks for the measured result, records `GO | NO-GO | PIVOT` with evidence in `production/releases/gate-prototype.md` and under §11 after "May I write?"; `NO-GO`/`PIVOT` → concept revision is the next step, not the next feature.
+- [ ] measurable criterion required · [ ] artefact written after consent · [ ] NO-GO changes the next step
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

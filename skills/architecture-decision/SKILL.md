@@ -10,6 +10,8 @@ agent: technical-director
 
 # Architecture Decision Record
 
+Versions come from `stack-reference/`; when the recommended version there is a major behind the registry's "latest on the date", the ADR states why the older one is chosen (or proposes `/stack-update` first).
+
 Template `.claude/docs/templates/adr.md`; files `docs/architecture/adr-NNNN-<slug>.md`.
 
 ## Phase 0: Mode
@@ -25,6 +27,6 @@ Read technical-preferences, the product spec, related feature specs, existing AD
 Draft Decision/Consequences/Verification (how we will check: metric, spike, test; when we revisit). Review per mode: `full` — `backend-lead`/`frontend-lead`/`security-lead` for affected areas via Task; `lean` — `security-lead` when auth/data/network are affected; `solo` — none.
 
 ## Phase 4: Write
-"May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" Status is `Proposed` until the user says `Accepted`.
+"May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Status is `Proposed` until the user says `Accepted`.
 
-Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION`. Next step: `/api-contract` / `/data-model` / `/create-stories`.
+Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/api-contract` (Recommended) · `/data-model` · `/create-stories`.

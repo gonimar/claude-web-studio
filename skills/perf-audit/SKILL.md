@@ -10,7 +10,7 @@ agent: performance-engineer
 
 # Perf Audit
 
-Budgets — `technical-preferences.md`; references `web-platform.md`, `database.md`, `graphql.md`, `threejs-webgames.md`.
+Budgets — `technical-preferences.md`; references `stack-reference/web-platform.md`, `database.md`, `graphql.md`, `threejs-webgames.md`.
 
 ## Phase 1: Baseline (Bash, whatever is available)
 Web: `lighthouse --preset=perf --form-factor=mobile` / Lighthouse CI; `ng build --stats-json` / `vite build` + visualizer; API: `k6 run` scenario (create with consent); DB: `EXPLAIN (ANALYZE, BUFFERS)` on top queries, `pg_stat_statements`; Go `pprof`, PHP Blackfire/Xdebug; game: `renderer.info`, a Performance trace, memory.
@@ -23,6 +23,6 @@ Table "metric → value → budget → status"; findings with estimated gain and
 Through the relevant engineers; re-measure with the same method — before/after.
 
 ## Phase 4: Write
-"May I write `docs/ops/perf-audit-<date>.md`?"
+"May I write `docs/ops/perf-audit-<date>.md`?" For every `OVER BUDGET` metric one `AskUserQuestion`: record it in `production/findings.md` (`PERF-NNN`, template `findings.md`) (Recommended) · improvement stories now · report only — so the budget miss reaches `/create-stories` and `/sprint-plan`.
 
-Verdict: `WITHIN BUDGET` | `OVER BUDGET (metrics: …)`. Next step: improvement stories; `/release-checklist`.
+Verdict: `WITHIN BUDGET` | `OVER BUDGET (metrics: …)`. Next step — one `AskUserQuestion`: improvement stories (Recommended) · `/release-checklist` · re-run `/perf-audit` after fixes.

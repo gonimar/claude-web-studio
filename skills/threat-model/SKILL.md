@@ -13,7 +13,7 @@ agent: security-lead
 Template `.claude/docs/templates/threat-model.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security).
 
 ## Phase 1: System
-Read the product spec (data, jurisdiction), technical-preferences, the API contract, compose/infra, the existing threat model. Draw the DFD (mermaid) with trust boundaries; ask about the non-obvious (external integrations, admin access, payments).
+Read the product spec (data, jurisdiction), technical-preferences (including Deploy target, Infra repo and Proxy config — proxy requirements need an owner and a file), the API contract, compose/infra, the existing threat model. Draw the DFD (mermaid) with trust boundaries; ask about the non-obvious (external integrations, admin access, payments).
 
 ## Phase 2: Surfaces and threats
 Per surface — STRIDE threats with likelihood/impact; mitigations referencing the baseline; status (exists/planned/none). GraphQL separately: introspection, complexity, batching, field authorisation, persisted ops. Games — anti-cheat, modified clients, chat spam, room DoS.
@@ -23,6 +23,6 @@ Per surface — STRIDE threats with likelihood/impact; mitigations referencing t
 Top 5 unmitigated threats → stories/ADRs; residual risks explicitly accepted by the user.
 
 ## Phase 4: Write
-"May I write `docs/architecture/threat-model.md`?" Add a "Security" section to affected feature specs with consent.
+"May I write `docs/architecture/threat-model.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Add a "Security" section to affected feature specs with consent.
 
-Verdict: `COMPLETE` | `HIGH RISK (N unmitigated)`. Next step: `/create-stories` for mitigations, `/security-audit` after implementation.
+Verdict: `COMPLETE` | `HIGH RISK (N unmitigated)`. Next step — one `AskUserQuestion`: `/create-stories` for the mitigations (Recommended) · `/security-audit` after implementation · revise the model.

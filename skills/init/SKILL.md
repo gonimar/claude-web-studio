@@ -19,6 +19,10 @@ plugin/kit directory. Seed layout: `<root>/docs` → `.claude/docs`, `<root>/rul
 `<root>/templates/CLAUDE.md.template`, `<root>/templates/settings.plugin-mode.json`, `<root>/templates/statusline.sh`,
 `<root>/docs/PROJECT-README.md` → `docs/web-studio/README.md`.
 
+Detect whether code already exists (brownfield): a manifest with sources (`composer.json`, `go.mod`,
+`package.json`), deploy files (`compose*.yaml`, `Dockerfile*`, `.github/workflows/*`) or a git history with
+more than a handful of commits. Remember the answer — it decides the stage in Phase 3 and the hand-off.
+
 ## Phase 2: Language and review mode
 `AskUserQuestion`: "Which language should we use for conversation and documents?" (options: English,
 the user's message language if different, Other). Then review mode: `lean` (recommended for solo),
@@ -32,11 +36,15 @@ Show what will be created or changed:
 - `.claude/docs/` (stack-reference, templates, roster, coordination, workflow catalog, technical-preferences with `[TO BE CONFIGURED]`) — copy only files that do not exist; list existing ones that differ.
 - `.claude/rules/` — same policy.
 - `.claude/settings.json`: create from `settings.plugin-mode.json` (permissions + statusline) or show a diff of `permissions.allow/deny` and `statusLine` to merge; hooks are provided by the plugin (copy mode: hooks already in `settings.json`).
-- `.claude/statusline.sh`, `docs/web-studio/README.md`, `docs/{specs,architecture,security,ops}`, `production/{sprints,stories,releases,session-state,session-logs}`, `production/review-mode.txt`, `production/stage.txt` = `discovery`, `.gitignore` entries (`production/session-state/`, `production/session-logs/`, `.claude/settings.local.json`, `.claude/agent-memory-local/`).
-"May I write these files?"
+- `.claude/statusline.sh`, `docs/web-studio/README.md`, `docs/{specs,architecture,security,ops}`, `production/{sprints,stories,releases,session-state,session-logs}`, `production/review-mode.txt`, `.gitignore` entries (`production/session-state/`, `production/session-logs/`, `.claude/settings.local.json`, `.claude/agent-memory-local/`).
+- `production/stage.txt`: `discovery` for an empty project. For brownfield propose the stage from the facts — `build` (code, no release) or `operate` (deployed: release files, compose.prod, a deploy skill) — and confirm it in the "May I write?" question; never write `discovery` over a project that is already running.
+"May I write these files?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
 
 ## Phase 4: Write and verify
-Apply; print the tree of created files; run `bash .claude/statusline.sh </dev/null` as a smoke check.
+Apply; print the tree of created files; run `echo '{"cwd":"'"$PWD"'"}' | bash .claude/statusline.sh` as a smoke check.
 Record the version in `.claude/.web-studio-version` (from `plugin.json`).
 
-Verdict: `INITIALISED` | `ALREADY INITIALISED (N files differ)`. Next step: `/start` (new project) or `/adopt` (existing code).
+Verdict: `INITIALISED` | `ALREADY INITIALISED (N files differ)`. Next step — one `AskUserQuestion`:
+`/adopt full` (Recommended for brownfield — the stack, artefacts and settings are audited and
+`technical-preferences.md` is filled from the facts) · `/start` (Recommended for an empty project) ·
+`/help` · stop here. Never hand off with a plain text line.

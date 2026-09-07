@@ -26,5 +26,12 @@ Slice a feature into vertical stories with a criteria matrix.
 **Fixture**: written after consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Open BLOCKING findings
+**Fixture**: `production/findings.md` has SEC-001 (BLOCKING, touches F-002's resolver). **Expected**: it becomes an acceptance criterion of the affected story (or a dedicated story); the matrix shows `finding → story`; after writing, the finding carries `story: S-NNN`.
+- [ ] findings read · [ ] criterion or story created · [ ] finding linked to the story
+### 7. Deploy artefacts story
+**Fixture**: technical-preferences Deploy = compose on a server, no `docs/ops/deploy.md`, first feature. **Expected**: a "Deploy artefacts" story is added (Dockerfile, production compose, release workflow, healthz, runbook from `templates/deploy-runbook.md`) with the three criteria.
+- [ ] story added on the first feature · [ ] runbook template referenced · [ ] criteria present
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

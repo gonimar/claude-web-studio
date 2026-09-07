@@ -31,18 +31,19 @@ list current versions and `updated:`. Read the project lockfiles (`go.mod`, `com
 | Security | `owasp.org/Top10`, ASVS releases, Mozilla guidelines |
 | Web platform | `web-features` Baseline, `web.dev` CWV, W3C WCAG |
 For each: latest stable version and date, next expected, EOL, key changes (breaking!), new best practices.
+**Registry check, mandatory for packages**: `npm view <pkg> dist-tags` (and `version`), packagist `https://repo.packagist.org/p2/<vendor>/<pkg>.json` (highest stable), `go list -m -versions <module>` — the registry's `latest` on the date is recorded next to the recommended version; when the recommendation is a major behind `latest`, the reference states why (LTS, breaking changes, ecosystem support) — never an unexplained older version.
 `WebSearch` only to clarify, never as the primary source.
 
 ## Phase 3: Diff and proposal
-Table "technology → in the reference → now (date, source) → in the project → action (update reference / propose upgrade / none)".
+Table "technology → in the reference → latest (registry, date) → recommended (why) → in the project → action (update reference / propose upgrade / none)".
 For upgrades: path (e.g. `ng update`, three.js Migration Guide rNNN→rMMM, Go toolchain), risks, order.
 `--check-only` — stop here.
 
 ## Phase 4: Write
 Show the reference changes (updated lines, `updated:` and `sources:` in the header, new practices in the right section).
-"May I write [files]?" After "yes" also update `index.md` (table and date). Outdated statements are removed, not left beside new ones.
+"May I write [files]?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After "yes" also update `index.md` (table, the "latest on date" column and the date). Outdated statements are removed, not left beside new ones.
 
 ## Phase 5: Project upgrade plan (optional)
 If upgrades exist — propose stories (`/create-stories`) or ADRs for majors; for each — how to verify (tests, build). Do not perform upgrades in this skill.
 
-Verdict: `UPDATED (N files)` | `UP TO DATE` | `CHECK ONLY`. Next step: `/help`.
+Verdict: `UPDATED (N files)` | `UP TO DATE` | `CHECK ONLY`. Next step — one `AskUserQuestion`: `/help` (Recommended) · upgrade stories for the outdated majors · stop here.

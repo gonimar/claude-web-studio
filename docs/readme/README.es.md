@@ -91,7 +91,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/init` — crea los archivos del estudio en el proyecto, pregunta idioma y modo de revisión y fusiona la configuración.
 - `/start` — incorporación de un proyecto nuevo: pregunta dónde estás y te lleva a los primeros pasos.
 - `/help` — muestra la fase actual, los pasos hechos y el único comando siguiente.
-- `/adopt` — conecta el estudio a un proyecto existente: detecta el stack, audita documentos y produce un plan de adopción.
+- `/adopt` — conecta el estudio a un proyecto existente: detecta el stack, audita documentos y produce un plan de adopción — rellena `technical-preferences.md` con los hechos detectados y escribe un plan de adopción con casillas que `/help` sigue.
 - `/setup-stack` — elige y fija el stack (backend, frontend, estilo de API, motor, base de datos, pruebas, CI) con versiones exactas.
 - `/stack-update` — refresca la referencia del stack desde fuentes oficiales con fechas y propone un plan de actualización.
 - `/update` — actualiza el propio estudio en el proyecto (plugin o reinstalación de la copia) conservando los cambios locales.
@@ -104,7 +104,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/feature-spec` — escribe la especificación de una funcionalidad: escenarios, reglas, contrato, estados, casos límite, seguridad y criterios de aceptación.
 - `/ux-spec` — especifica un flujo o pantalla con todos sus estados, textos, accesibilidad y comportamiento responsive.
 - `/design-system` — define tokens de diseño, temas e inventario de componentes, mapeados a Material, Taiga o un kit de Vue.
-- `/game-concept` — escribe el concepto de un juego de navegador: bucle principal, mecánicas, economía, presupuestos de viabilidad y plan de prototipo.
+- `/game-concept` — escribe el concepto de un juego de navegador: bucle principal, mecánicas, economía, presupuestos de viabilidad y plan de prototipo; `/game-concept gate` registra el go/no-go del prototipo.
 
 **Arquitectura**
 - `/architecture-decision` — crea o completa un ADR con opciones, decisión, consecuencias y verificación.
@@ -125,7 +125,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/tech-debt` — inventaría la deuda técnica y propone historias priorizadas.
 
 **Endurecimiento**
-- `/security-audit` — audita código y configuración según OWASP Top 10:2025 con herramientas, hallazgos con CVSS y correcciones.
+- `/security-audit` — audita código y configuración según OWASP Top 10:2025 con herramientas, hallazgos con CVSS y correcciones; los hallazgos BLOCKING van a `production/findings.md`, que leen `/create-stories` y `/sprint-plan`.
 - `/dependency-audit` — audita la cadena de suministro: vulnerabilidades, paquetes abandonados, versiones mayores obsoletas, licencias, fijación.
 - `/harden` — endurece cabeceras, TLS, proxy, contenedores y CI verificando con peticiones reales.
 - `/pentest` — ejecuta pruebas dinámicas autorizadas contra la propia aplicación del proyecto dentro de un alcance registrado.
@@ -135,7 +135,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 **Release y operación**
 - `/changelog` — genera el changelog a partir de Conventional Commits y propone el salto de versión.
 - `/release-checklist` — pasa la puerta de release con evidencias y escribe el archivo de release con pasos de reversión.
-- `/deploy` — planifica y ejecuta un despliegue con confirmaciones, smoke checks y reversión, delegando en un skill de despliegue si existe.
+- `/deploy` — planifica y ejecuta un despliegue con confirmaciones, smoke checks y reversión; entrega la mutación del stack al delegado de despliegue declarado según el contrato (`docs/deploy-target-contract.md`) o produce los pasos del runbook si no hay delegado.
 - `/hotfix` — acelera una corrección urgente en producción desde la prueba que falla hasta el despliegue y el backport.
 - `/incident` — coordina la respuesta a incidentes y escribe un postmortem sin culpables.
 
@@ -220,7 +220,7 @@ Ejecuta `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent
 ```
 .claude-plugin/   plugin.json + marketplace.json (este repositorio es a la vez marketplace y plugin)
 agents/           30 agentes       skills/     44 skills        hooks/      hooks.json + 10 scripts
-rules/            13 reglas por ruta            docs/       stack-reference/, templates/, plantilla de agentes, catálogo de flujo, línea base de seguridad
+rules/            13 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          marco de pruebas de agentes y skills      install.sh  instalador de copia / proyecto nuevo
 ```

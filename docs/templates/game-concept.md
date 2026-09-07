@@ -33,4 +33,6 @@ Remapping, subtitles, UI scale, colour-blind mode, pause, pacing.
 Retention D1/D7, session length, first-level funnel.
 
 ## 11. Prototype
-What we validate by playability first, timeline, the "is it fun" criterion.
+What we validate by playability first, timeline, the "is it fun" criterion — measurable (e.g. "3 of 4 testers play a second session unprompted", "median session ≥ 4 min").
+
+**Result** (filled by `/game-concept gate`, also in `production/releases/gate-prototype.md`): date · `GO | NO-GO | PIVOT` · evidence · what changes.

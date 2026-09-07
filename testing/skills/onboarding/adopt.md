@@ -11,8 +11,8 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 
 ## Cases
 ### 1. Happy path
-**Fixture**: PHP/Yii3 project with an existing deploy skill. **Expected**: technical-preferences from composer.json facts; companion skill noted; prioritised adoption plan.
-- [ ] phase order followed · [ ] output matches the expectation · [ ] writes only after consent
+**Fixture**: PHP/Yii3 project with an existing deploy skill. **Expected**: `technical-preferences.md` filled from composer.json / compose / CI facts in this run; companion skill noted; prioritised adoption plan with checkbox items.
+- [ ] phase order followed · [ ] output matches the expectation · [ ] writes only after consent · [ ] no `[TO BE CONFIGURED]` left for fields the files answer · [ ] the unknown fields asked in one `AskUserQuestion`
 ### 2. Refusal / BLOCKED
 **Fixture**: not a git repository. **Expected**: stops.
 - [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] writes no files
@@ -25,6 +25,14 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 ### 5. Gate / protocol
 **Fixture**: plan written after "May I write?". **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+
+### 6. Plan and hand-off
+**Fixture**: plan written. **Expected**: `docs/adoption-plan-<date>.md` follows `templates/adoption-plan.md`, items are `- [ ]` checkboxes; hand-off is one `AskUserQuestion` with the first open item Recommended (`/help` · stop).
+- [ ] template used · [ ] checkbox items · [ ] hand-off is an `AskUserQuestion`
+
+### 7. Deploy delegate detection
+**Fixture**: `.claude/agents/<kit>-ops.md` without `deploy-target:`; a `/<kit>` slash command. **Expected**: `Deploy target: <kit>`, `Deploy delegate: none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent"; Tier 0 row notes it.
+- [ ] detection by frontmatter/script, not by command name · [ ] reason recorded
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

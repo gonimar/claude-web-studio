@@ -27,11 +27,11 @@ If code/specs already exist → suggest `/adopt` instead of `/start`.
 ## Phase 3: Project type and review mode
 Second question: type (site | spa | api | fullstack | game | game+backend) and review mode
 (`full` — all gates; `lean` — lead + security on sensitive work (default for solo); `solo`).
-Write `production/review-mode.txt` and `production/stage.txt` = `discovery` after "May I write?".
+Write `production/review-mode.txt` and `production/stage.txt` = `discovery` after "May I write?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now.
 
 ## Phase 4: Route
 Show the next 3 steps from `.claude/docs/workflow-catalog.yaml` with commands.
 If `production/roadmap.md` is missing, offer to create it (checkbox list) or, if an external advisor skill is installed, suggest its init command.
 If `.claude/settings.web-studio.json` exists (settings.json pre-dated the install) — offer to merge hooks/permissions (show the diff, ask).
 
-Verdict: `READY` — stack and mode chosen, next step named. Next step: `/setup-stack`.
+Verdict: `READY` — stack and mode chosen, next step named. Next step — one `AskUserQuestion`: `/setup-stack` (Recommended) · `/brainstorm` first (idea still vague) · stop here.

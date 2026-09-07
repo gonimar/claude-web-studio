@@ -9,7 +9,7 @@ model: opus
 
 # Team: Feature
 
-Orchestration. File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol. A partial report on BLOCKED at any stage is mandatory.
+Orchestration. File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol. A partial report on BLOCKED at any stage is mandatory.
 
 ## Phase 1: Readiness
 A feature spec with criteria (missing → run `/feature-spec`); technical-preferences; review mode.
@@ -26,4 +26,4 @@ Backend (`go-engineer`/`php-engineer`/`node-engineer` + `graphql-engineer`) → 
 ## Phase 5: Summary
 Table criteria ↔ tests ↔ results; open findings; propose `/story-done` per story and the PR.
 
-Verdict: `COMPLETE` | `PARTIAL` | `BLOCKED (stage …)`. Next step: `/story-done` / `/release-checklist`.
+Verdict: `COMPLETE` | `PARTIAL` | `BLOCKED (stage …)`. Next step — one `AskUserQuestion`: `/story-done` per story (Recommended) · `/release-checklist` · fix the open findings first.

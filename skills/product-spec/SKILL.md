@@ -29,6 +29,6 @@ Mode (`--review` or `production/review-mode.txt`, default `lean`):
 CONCERNS/FAIL — show, propose edits, never advance the stage automatically.
 
 ## Phase 4: Write
-"May I write `docs/specs/product-spec.md`?" → write; propose `production/stage.txt` = `specification`.
+"May I write `docs/specs/product-spec.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now; propose `production/stage.txt` = `specification`.
 
-Verdict: `APPROVED` | `NEEDS REVISION`. Next step: `/feature-spec` for Must features (or `/game-concept`).
+Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/feature-spec` for the Must features (Recommended) · `/game-concept` (game) · revise the spec.

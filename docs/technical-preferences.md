@@ -37,7 +37,9 @@
 
 ## Infrastructure
 - **Containers**: [Docker, compose v2]  **CI**: [GitHub Actions]
-- **Deploy**: [compose on a server | container platform | cloud]  **Environments**: [dev, staging, prod]
+- **Deploy target**: [compose-ssh | kubernetes | cloud:<name> | portainer | manual]  **Environments**: [dev, staging, prod]
+- **Deploy delegate**: [agent <name> | script <path> | none] — see `deploy-target-contract.md`
+- **Infra repo**: [path or URL of the repository holding the proxy/host config | none]  **Proxy config**: [file inside it, e.g. caddy/Caddyfile | none]
 - **Observability**: [JSON logs, /healthz, Prometheus metrics, OpenTelemetry]
 
 ## Layout

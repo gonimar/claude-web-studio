@@ -16,12 +16,12 @@ Template `incident-postmortem.md`.
 Severity; what users see; immediate measures (rollback via `/deploy`/the deployment skill, feature kill switch, rate limit) — with confirmation. Security (leak/breach?) → `security-lead` immediately: isolate, rotate secrets, preserve logs.
 
 ## Phase 2: Diagnosis
-Logs (deployment skill / `docker compose logs`), metrics, recent deploys/migrations, `git log`; hypotheses → verification.
+Logs (delegate verb `logs [service] [--since]` by `docs/deploy-target-contract.md`, or `docker compose logs`), metrics, recent deploys/migrations, `git log`; hypotheses → verification.
 
 ## Phase 3: Fix
 `/hotfix` or rollback; verify by metrics.
 
 ## Phase 4: Postmortem
-Timeline, root cause (system/process, blameless), what worked/did not, actions (fix/prevent/detect) with owners and dates. "May I write `docs/ops/incidents/INC-NNN.md`?" Actions → roadmap.
+Timeline, root cause (system/process, blameless), what worked/did not, actions (fix/prevent/detect) with owners and dates. "May I write `docs/ops/incidents/INC-NNN.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Actions → roadmap.
 
-Verdict: `RESOLVED` | `MITIGATED` | `OPEN`. Next step: stories for prevent/detect actions.
+Verdict: `RESOLVED` | `MITIGATED` | `OPEN`. Next step — one `AskUserQuestion`: stories for the prevent/detect actions (Recommended) · `/hotfix` · close the incident.

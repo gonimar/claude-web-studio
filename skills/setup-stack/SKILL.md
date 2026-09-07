@@ -24,17 +24,17 @@ Check the environment: `go version`, `php -v`, `node -v`, `pnpm -v`, `docker --v
 4. Frontend: **Angular 22** (+ Material 22 | Taiga UI 5) | **Vue 3.5 / Nuxt 4** (+ UI kit) | vanilla TS (a game without a UI framework).
 5. Game (type game): three.js r185 (3D) | PixiJS 8 (2D) | Phaser | Babylon 8; networking: none | server-authoritative.
 6. Data: PostgreSQL 18 (+ Redis 8) — confirm; auth: sessions | OIDC | JWT+BFF.
-7. Infra: Docker + compose, GitHub Actions, deployment (compose on a server / container platform / cloud; a deploy skill if installed) — confirm.
+7. Infra: Docker + compose, GitHub Actions — confirm. **Deploy target** (one `AskUserQuestion`): `compose-ssh` (reference script shipped — recommended for a single server) · `kubernetes` · `cloud:<name>` · a container-platform kit if one is installed (e.g. `portainer`) · `manual`; the delegate follows (`agent <name>` from `.claude/agents/*-ops.md` with `deploy-target:`, `script scripts/deploy/<target>.sh`, or `none`) — contract `docs/deploy-target-contract.md`; `compose-ssh` copies `.claude/docs/templates/deploy/compose-ssh.sh` to `scripts/deploy/compose-ssh.sh` and creates `docs/deploy/compose-ssh.md`. Shared host with its own proxy repository → also `Infra repo` and `Proxy config`.
 8. Layout: monorepo (`apps/`, `packages/`) | current structure — show a proposal. For a Go backend also `go_layout`: **project-layout** (golang-standards/project-layout adapted in `go.md`: `cmd/`, `internal/<domain>/`, `pkg/` only when exported, `api/`, `configs/`, `scripts/`, `build/`, `deployments/`, `test/`) — recommended for services | **minimal** (`main.go` + `go.mod`) for a single tool/PoC; show the directory tree.
 `--quick` — accept all recommendations without questions, show the summary.
 
 ## Phase 3: Draft
 The full `technical-preferences.md` with exact versions from the reference, naming conventions for the chosen languages
-(Angular file style v20+ without suffixes or classic — ask), performance budgets. Show it whole. "May I write `.claude/docs/technical-preferences.md`?"
+(Angular file style v20+ without suffixes or classic — ask), performance budgets. Show it whole. "May I write `.claude/docs/technical-preferences.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
 
 ## Phase 4: Consequences
 - Propose ADRs for non-trivial forks (GraphQL vs REST, Angular vs Vue, game engine) — `/architecture-decision`.
 - Propose `/test-setup` and `/threat-model` as the next mandatory architecture steps.
 - Update `production/stage.txt` → `specification` if the product spec exists.
 
-Verdict: `COMPLETE` | `BLOCKED (missing tools: …)`. Next step: `/product-spec` or `/game-concept`.
+Verdict: `COMPLETE` | `BLOCKED (missing tools: …)`. Next step — one `AskUserQuestion`: `/product-spec` (Recommended) · `/game-concept` · revise the stack.

@@ -78,7 +78,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/init` — 在项目中搭建工作室文件，询问对话语言和评审模式，合并设置。
 - `/start` — 新项目引导：询问你所处的阶段并引导到正确的第一步。
 - `/help` — 显示当前阶段、已完成的步骤和唯一的下一条命令。
-- `/adopt` — 把工作室接入已有项目：识别技术栈，审核文档，生成接入计划。
+- `/adopt` — 把工作室接入已有项目：识别技术栈，审核文档，生成接入计划。；根据识别到的事实填写 `technical-preferences.md`，并写出带复选框的接入计划，`/help` 据此推进。
 - `/setup-stack` — 选择并固定技术栈（后端、前端、API 风格、引擎、数据库、测试、CI）及精确版本。
 - `/stack-update` — 从官方来源刷新技术栈参考并标注日期，为项目提出升级计划。
 - `/update` — 更新项目中的工作室本身（插件更新或副本重装），保留本地修改。
@@ -91,7 +91,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/feature-spec` — 编写单个功能规格：场景、规则、契约、状态、边界情况、安全、验收标准。
 - `/ux-spec` — 描述一个流程或页面的全部状态、文案、无障碍与响应式行为。
 - `/design-system` — 定义设计令牌、主题和组件清单，并映射到 Material、Taiga 或 Vue 组件库。
-- `/game-concept` — 编写浏览器游戏概念：核心循环、机制、经济、可行性预算、原型计划。
+- `/game-concept` — 编写浏览器游戏概念：核心循环、机制、经济、可行性预算、原型计划。；`/game-concept gate` 记录原型的 go/no-go。
 
 **架构**
 - `/architecture-decision` — 创建或补全 ADR：方案、决策、后果、验证。
@@ -112,7 +112,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/tech-debt` — 盘点技术债务并提出按优先级排序的故事。
 
 **加固**
-- `/security-audit` — 依据 OWASP Top 10:2025 用工具审计代码与配置，给出 CVSS 评分的发现与修复。
+- `/security-audit` — 依据 OWASP Top 10:2025 用工具审计代码与配置，给出 CVSS 评分的发现与修复。；BLOCKING 发现写入 `production/findings.md`，供 `/create-stories` 与 `/sprint-plan` 读取。
 - `/dependency-audit` — 审计供应链：漏洞、废弃包、过时主版本、许可证、版本锁定。
 - `/harden` — 加固响应头、TLS、代理、容器和 CI，并用真实请求验证。
 - `/pentest` — 在记录的范围内对项目自身应用做授权的动态测试。
@@ -122,7 +122,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 **发布与运维**
 - `/changelog` — 由 Conventional Commits 生成变更日志并建议版本号。
 - `/release-checklist` — 依据证据通过发布关卡，写出含回滚步骤的发布文件。
-- `/deploy` — 规划并执行部署：确认、冒烟检查、回滚，若已安装部署技能则委托给它。
+- `/deploy` — 规划并执行部署：确认、冒烟检查、回滚；按部署目标契约（`docs/deploy-target-contract.md`）把栈变更交给已声明的部署委托，未声明时给出 runbook 步骤。
 - `/hotfix` — 快速处理紧急生产修复：从失败测试到部署再到回合并。
 - `/incident` — 协调事故响应并撰写不追责的事后复盘。
 
@@ -200,7 +200,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ```
 .claude-plugin/   plugin.json + marketplace.json（本仓库同时是 marketplace 和插件）
 agents/           30 个代理        skills/     44 个技能        hooks/      hooks.json + 10 个脚本
-rules/            13 条路径规则                   docs/       stack-reference/、templates/、名册、流水线目录、安全基线
+rules/            13 条路径规则                   docs/       stack-reference/、templates/（findings、adoption-plan、deploy-runbook、deploy/）、deploy-target-contract、、名册、流水线目录、安全基线
 templates/        CLAUDE.md、settings.json、settings.plugin-mode.json、statusline.sh
 testing/          代理与技能测试框架                install.sh  副本 / 新项目安装脚本
 ```
