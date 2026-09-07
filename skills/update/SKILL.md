@@ -9,6 +9,8 @@ model: haiku
 
 # Update the studio
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 ## Phase 1: Detect the mode and versions
 Plugin mode: `claude plugin list --json` shows `web-studio` → current plugin version and install path.
 Copy mode: `.claude/.web-studio-version` exists and `.claude/agents/technical-director.md` is present → kit path from `--kit`, or ask.

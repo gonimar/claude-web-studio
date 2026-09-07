@@ -10,6 +10,8 @@ agent: technical-director
 
 # Architecture Review
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Read-only; writes nothing. The report goes to the chat.
 
 ## Phase 1: Collect

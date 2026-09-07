@@ -10,6 +10,8 @@ agent: api-designer
 
 # API Contract
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `.claude/docs/templates/api-contract.md`; references `graphql.md`, `web-platform.md` (REST conventions), rules `api-contracts.md`.
 
 ## Phase 1: Scope and style

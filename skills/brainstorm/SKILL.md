@@ -10,6 +10,8 @@ agent: product-director
 
 # Brainstorm
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Reference: `stack-reference/index.md` (what the studio builds and with which versions); the brief feeds the
 `product-spec.md` / `game-concept.md` templates that follow.
 

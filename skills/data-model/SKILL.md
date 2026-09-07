@@ -10,6 +10,8 @@ agent: database-engineer
 
 # Data Model
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `.claude/docs/templates/data-model.md`; reference `database.md`; rules `database.md`.
 
 ## Phase 1: Context

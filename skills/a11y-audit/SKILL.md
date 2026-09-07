@@ -10,6 +10,8 @@ agent: accessibility-specialist
 
 # A11y Audit
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 `stack-reference/web-platform.md` ("Accessibility").
 
 ## Phase 1: Scope

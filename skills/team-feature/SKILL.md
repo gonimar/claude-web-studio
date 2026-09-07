@@ -9,6 +9,8 @@ model: opus
 
 # Team: Feature
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Orchestration. File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol. A partial report on BLOCKED at any stage is mandatory.
 
 ## Phase 1: Readiness

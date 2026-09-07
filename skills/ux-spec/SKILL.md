@@ -10,6 +10,8 @@ agent: design-lead
 
 # UX Spec
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `.claude/docs/templates/ux-spec.md`.
 
 ## Phase 1: Context

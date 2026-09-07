@@ -34,5 +34,9 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: `.claude/agents/<kit>-ops.md` without `deploy-target:`; a `/<kit>` slash command. **Expected**: `Deploy target: <kit>`, `Deploy delegate: none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent"; Tier 0 row notes it.
 - [ ] detection by frontmatter/script, not by command name · [ ] reason recorded
 
+### 8. Preferences are gated
+**Fixture**: stack detected. **Expected**: the filled draft is shown and `technical-preferences.md` is written only after the `AskUserQuestion` answer — never before; a write-then-ask is a protocol violation even if reverted.
+- [ ] draft shown · [ ] AskUserQuestion before the write · [ ] no write before the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

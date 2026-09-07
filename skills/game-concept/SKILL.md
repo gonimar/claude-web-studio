@@ -10,6 +10,8 @@ agent: game-lead
 
 # Game Concept
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `.claude/docs/templates/game-concept.md`. Reference `threejs-webgames.md`.
 
 ## Phase 1: Pitch and loop

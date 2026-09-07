@@ -9,6 +9,8 @@ model: sonnet
 
 # Setup Stack
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Result: `.claude/docs/technical-preferences.md` without `[TO BE CONFIGURED]` plus a decision-log line.
 Big forks are recorded as ADRs via `/architecture-decision`.
 

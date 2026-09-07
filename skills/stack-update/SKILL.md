@@ -9,6 +9,8 @@ model: sonnet
 
 # Stack Update
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Web technology moves fast; the reference is a dated snapshot. This skill refreshes it on request:
 facts only from official sources, with a date and a link.
 

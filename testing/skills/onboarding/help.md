@@ -40,5 +40,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: type game, all F-001 stories Done, no `production/releases/gate-prototype.md`. **Expected**: NEXT is `/game-concept gate`.
 - [ ] gate detected · [ ] Recommended option is the gate
 
+### 10. External signal
+**Fixture**: CI on the default branch red for two days (billing), tech-debt report with one CRITICAL. **Expected**: one `Attention:` line each with where to fix; no `gh run`/log investigation; the closing `AskUserQuestion` offers pipeline steps only.
+- [ ] Attention lines · [ ] no investigation · [ ] question about the pipeline only
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -10,6 +10,8 @@ agent: devops-lead
 
 # Incident
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `incident-postmortem.md`.
 
 ## Phase 1: Containment

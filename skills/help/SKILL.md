@@ -39,7 +39,8 @@ Also available: /stack-update, /team-feature …
 If the stack reference is older than 60 days — one line recommending `/stack-update`.
 If `production/session-state/active.md` exists — show its `Task:`/`Next:`.
 If `production/findings.md` has open BLOCKING findings without a story — one line `Open BLOCKING findings: N without a story → /create-stories` (they take precedence over the next feature).
+External signals (a red CI, a failed deploy, a billing or access problem seen in `session-state`, a tech-debt CRITICAL) are **one `Attention:` line each** with the command or place that fixes them — never the subject of the closing question and never investigated here (no `gh run`, no log reading: help is orientation, not diagnosis).
 Build phase with a Deploy target in technical-preferences and no `docs/ops/deploy.md` — one line: the "Deploy artefacts" story is missing (`/create-stories` adds it).
 Game project (technical-preferences type game / game+backend): when every story of the first feature is Done and `production/releases/gate-prototype.md` is missing — NEXT is `/game-concept gate`, not the next feature.
 
-Verdict: `READY`. Next step — one `AskUserQuestion`: the "Next" command (Recommended) · up to two "Also available" commands relevant to the phase · nothing now. Run nothing without that answer.
+Verdict: `READY`. Next step — one `AskUserQuestion` about the pipeline only: the "Next" command (Recommended) · up to two "Also available" commands relevant to the phase · nothing now. Run nothing without that answer; `Attention:` items are not options here.

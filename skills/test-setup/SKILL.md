@@ -10,6 +10,8 @@ agent: qa-lead
 
 # Test Setup
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `templates/test-strategy.md`; reference `stack-reference/testing.md`; rules `rules/tests.md`.
 
 ## Phase 1: Stack and current state
