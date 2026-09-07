@@ -21,4 +21,4 @@ Manifests and lockfiles (`go.mod/go.sum`, `composer.lock`, `pnpm-lock.yaml`/`pac
 ## Phase 3: Report
 Table "package → version → problem (CVE/abandoned/outdated/licence) → action (upgrade/replace/accept risk) → effort". `--fix-safe`: propose applying only patch/minor updates without breaking changes (after "yes", with a test run).
 
-Verdict: `CLEAN` | `ACTION REQUIRED (N high)`. Next step: stories for replacements/upgrades; `/stack-update` for outdated majors.
+Verdict: `CLEAN` | `ACTION REQUIRED (N high)`. Next step — one `AskUserQuestion`: stories for the replacements/upgrades (Recommended) · `/stack-update` for outdated majors · report only.

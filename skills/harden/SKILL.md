@@ -24,4 +24,4 @@ Show config diffs; "May I write [files]?"; validate with `nginx -t`/`caddy valid
 ## Phase 4: Write
 "May I write `docs/security/hardening-checklist.md`?"
 
-Verdict: `HARDENED` | `PARTIAL (open: …)`. Next step: `/security-audit quick`, `/pentest` (optional).
+Verdict: `HARDENED` | `PARTIAL (open: …)`. Next step — one `AskUserQuestion`: `/security-audit quick` (Recommended) · `/pentest` (optional) · stop here.

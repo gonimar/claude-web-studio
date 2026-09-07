@@ -23,4 +23,4 @@ Copy mode: `install.sh <project> --dry-run`; the same diff for locally edited fi
 After "yes": copies → update/install → `git status` → summary of changed files.
 Project data (`docs/specs`, `docs/architecture`, `production/`, a configured `technical-preferences.md`, `CLAUDE.md`) is never touched — verify and state it in the output.
 
-Verdict: `UPDATED` | `UP TO DATE` | `DRY RUN`. Next step: commit; `/skill-test static all` if the testing framework is installed.
+Verdict: `UPDATED` | `UP TO DATE` | `DRY RUN`. Next step — one `AskUserQuestion`: commit the update (Recommended) · `/skill-test static all` (if the testing framework is installed) · stop here.

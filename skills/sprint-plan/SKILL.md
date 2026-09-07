@@ -21,4 +21,4 @@ The sprint goal as one verifiable statement. Stories by priority and dependencie
 ## Phase 3: Write
 Show the plan; "May I write `production/sprints/sprint-NN.md` and mark priorities in the roadmap?" Propose `/qa-plan NN`.
 
-Verdict: `READY`. Next step: `/qa-plan`, then `/dev-story`.
+Verdict: `READY`. Next step — one `AskUserQuestion`: `/qa-plan` (Recommended) · `/dev-story` directly · revise the sprint.

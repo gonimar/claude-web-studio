@@ -26,4 +26,4 @@ Copy table; focus order and aria; behaviour at 320–400 px; reduced motion.
 ## Phase 4: Write
 "May I write `docs/specs/ux/UX-NNN-<slug>.md`?"
 
-Verdict: `APPROVED` | `NEEDS REVISION`. Next step: `/create-stories F-NNN` or `/dev-story`.
+Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/create-stories F-NNN` (Recommended) · `/dev-story` · revise the spec.

@@ -25,4 +25,4 @@ Through the relevant engineers; re-measure with the same method — before/after
 ## Phase 4: Write
 "May I write `docs/ops/perf-audit-<date>.md`?"
 
-Verdict: `WITHIN BUDGET` | `OVER BUDGET (metrics: …)`. Next step: improvement stories; `/release-checklist`.
+Verdict: `WITHIN BUDGET` | `OVER BUDGET (metrics: …)`. Next step — one `AskUserQuestion`: improvement stories (Recommended) · `/release-checklist` · re-run `/perf-audit` after fixes.

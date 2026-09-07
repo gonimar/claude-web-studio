@@ -24,4 +24,4 @@ A table of tools per level and language; the `test` environment (compose profile
 ## Phase 4: Write
 "May I write `docs/architecture/test-strategy.md` and the configs [list]?"
 
-Verdict: `COMPLETE` | `PARTIAL (missing tool: …)`. Next step: `/create-stories` / `/qa-plan`.
+Verdict: `COMPLETE` | `PARTIAL (missing tool: …)`. Next step — one `AskUserQuestion`: `/create-stories` (Recommended) · `/qa-plan` · revise the strategy.

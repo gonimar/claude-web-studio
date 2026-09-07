@@ -26,4 +26,4 @@ Deduplicate, severity (CVSS 4.0), BLOCKING/WARNING/INFO, fix and regression test
 ## Phase 4: Write
 "May I write `docs/security/security-audit-<date>.md`?" Propose stories for BLOCKING (`/create-stories`) and a threat-model update.
 
-Verdict: `PASS` | `CONCERNS (N warnings)` | `FAIL (N blocking)`. Next step: fixes → a repeated `quick`; then `/harden`.
+Verdict: `PASS` | `CONCERNS (N warnings)` | `FAIL (N blocking)`. Next step — one `AskUserQuestion`: fixes, then a repeated `/security-audit quick` (Recommended) · `/harden` · report only.

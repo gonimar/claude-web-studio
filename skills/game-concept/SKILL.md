@@ -28,4 +28,4 @@ Accessibility settings; retention metrics; prototype plan: what playability vali
 ## Phase 5: Write
 "May I write `docs/specs/game-concept.md`?" Propose an engine ADR (`/architecture-decision`).
 
-Verdict: `APPROVED` | `NEEDS REVISION`. Next step: `/product-spec` (light) → `/architecture-decision` (engine) → prototype via `/dev-story`.
+Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/product-spec` (light) (Recommended) · `/architecture-decision` (engine) · prototype via `/dev-story`.

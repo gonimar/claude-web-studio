@@ -24,4 +24,4 @@ Logs (deployment skill / `docker compose logs`), metrics, recent deploys/migrati
 ## Phase 4: Postmortem
 Timeline, root cause (system/process, blameless), what worked/did not, actions (fix/prevent/detect) with owners and dates. "May I write `docs/ops/incidents/INC-NNN.md`?" Actions → roadmap.
 
-Verdict: `RESOLVED` | `MITIGATED` | `OPEN`. Next step: stories for prevent/detect actions.
+Verdict: `RESOLVED` | `MITIGATED` | `OPEN`. Next step — one `AskUserQuestion`: stories for the prevent/detect actions (Recommended) · `/hotfix` · close the incident.

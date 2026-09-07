@@ -37,4 +37,4 @@ The full `technical-preferences.md` with exact versions from the reference, nami
 - Propose `/test-setup` and `/threat-model` as the next mandatory architecture steps.
 - Update `production/stage.txt` → `specification` if the product spec exists.
 
-Verdict: `COMPLETE` | `BLOCKED (missing tools: …)`. Next step: `/product-spec` or `/game-concept`.
+Verdict: `COMPLETE` | `BLOCKED (missing tools: …)`. Next step — one `AskUserQuestion`: `/product-spec` (Recommended) · `/game-concept` · revise the stack.

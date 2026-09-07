@@ -27,4 +27,4 @@ Draft Decision/Consequences/Verification (how we will check: metric, spike, test
 ## Phase 4: Write
 "May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" Status is `Proposed` until the user says `Accepted`.
 
-Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION`. Next step: `/api-contract` / `/data-model` / `/create-stories`.
+Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/api-contract` (Recommended) · `/data-model` · `/create-stories`.

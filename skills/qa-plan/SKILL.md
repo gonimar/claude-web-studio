@@ -21,4 +21,4 @@ Criterion → level (unit/integration/contract/e2e/security/a11y/perf) → tool 
 ## Phase 3: Write
 "May I write `production/sprints/qa-plan-NN.md`?"
 
-Verdict: `READY`. Next step: `/dev-story`.
+Verdict: `READY`. Next step — one `AskUserQuestion`: `/dev-story` (Recommended) · `/sprint-plan` adjustments · stop here.

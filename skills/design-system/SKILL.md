@@ -25,4 +25,4 @@ Inventory from the needs of the product spec/feature specs; per component — st
 ## Phase 4: Write
 "May I write `docs/specs/design-system.md` and `[frontend_root]/src/styles/tokens.css`?" — the CSS is written by `css-engineer` via Task after consent.
 
-Verdict: `COMPLETE`. Next step: `/ux-spec` for the first flow.
+Verdict: `COMPLETE`. Next step — one `AskUserQuestion`: `/ux-spec` for the first flow (Recommended) · `/feature-spec` · revise the tokens.

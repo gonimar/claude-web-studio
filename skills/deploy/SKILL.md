@@ -24,4 +24,4 @@ If a deployment skill/agent is installed in the project (check `.claude/skills`,
 ## Phase 4: Record
 Update `production/releases/vX.Y.Z.md` (time, result, who); `docs/ops/deploy.md` when the procedure changed.
 
-Verdict: `DEPLOYED` | `ROLLED BACK` | `PLAN`. Next step: monitoring; `/incident` on problems.
+Verdict: `DEPLOYED` | `ROLLED BACK` | `PLAN`. Next step — one `AskUserQuestion`: monitor the release (`/incident` on problems) (Recommended) · `/deploy rollback` · `/sprint-plan` for the next cycle.

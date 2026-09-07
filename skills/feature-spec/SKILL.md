@@ -32,4 +32,4 @@ existing `docs/specs/features/*.md` (F-NNN numbering, overlaps), `technical-pref
 ## Phase 4: Write
 "May I write `docs/specs/features/F-NNN-<slug>.md`?" Update the feature index in the product spec (section 5) with consent.
 
-Verdict: `APPROVED` | `NEEDS REVISION`. Next step: `/api-contract` (if the contract changes), `/ux-spec`, then `/create-stories F-NNN`.
+Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/create-stories F-NNN` (Recommended) · `/api-contract` (if the contract changes) · `/ux-spec`.

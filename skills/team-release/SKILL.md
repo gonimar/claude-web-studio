@@ -24,4 +24,4 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 ## Phase 4: Summary
 Version, what shipped, post-deploy metrics, known issues; `production/stage.txt` → `operate` with consent.
 
-Verdict: `RELEASED` | `ABORTED (stage …)`. Next step: `/sprint-plan` for the next cycle.
+Verdict: `RELEASED` | `ABORTED (stage …)`. Next step — one `AskUserQuestion`: `/sprint-plan` for the next cycle (Recommended) · `/incident` if the post-deploy checks fail · stop here.

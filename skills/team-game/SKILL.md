@@ -24,4 +24,4 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 ## Phase 4: Review and summary
 `/code-review --diff`; the "fun" criterion from the concept — the user plays and decides; a summary of numbers.
 
-Verdict: `PLAYABLE` | `PARTIAL` | `BLOCKED`. Next step: `/story-done` / the next slice.
+Verdict: `PLAYABLE` | `PARTIAL` | `BLOCKED`. Next step — one `AskUserQuestion`: `/story-done` (Recommended) · the next slice · fix the open findings first.

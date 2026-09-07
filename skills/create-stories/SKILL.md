@@ -25,4 +25,4 @@ Show the list (ID, title, size, dependencies) and the criteria-coverage matrix; 
 ## Phase 4: Write
 "May I write `production/stories/F-NNN/S-NNN-<slug>.md` (N files) and add lines to `production/roadmap.md`?" (roadmap format: `- [ ] S-NNN · Title`).
 
-Verdict: `READY (N stories)`. Next step: `/sprint-plan` or directly `/dev-story S-NNN`.
+Verdict: `READY (N stories)`. Next step — one `AskUserQuestion`: `/sprint-plan` (Recommended) · `/dev-story S-NNN` directly · revise the stories.

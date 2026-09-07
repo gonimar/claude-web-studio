@@ -25,4 +25,4 @@ Top 5 unmitigated threats → stories/ADRs; residual risks explicitly accepted b
 ## Phase 4: Write
 "May I write `docs/architecture/threat-model.md`?" Add a "Security" section to affected feature specs with consent.
 
-Verdict: `COMPLETE` | `HIGH RISK (N unmitigated)`. Next step: `/create-stories` for mitigations, `/security-audit` after implementation.
+Verdict: `COMPLETE` | `HIGH RISK (N unmitigated)`. Next step — one `AskUserQuestion`: `/create-stories` for the mitigations (Recommended) · `/security-audit` after implementation · revise the model.

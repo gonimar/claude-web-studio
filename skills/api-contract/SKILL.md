@@ -27,4 +27,4 @@ Show the table operations → permissions → errors; ask about contentious poin
 ## Phase 4: Write
 "May I write `docs/architecture/api/…` and update the api-contract document?" Propose the codegen task (`graphql-codegen`/`gqlgen generate`/`openapi-typescript`) as part of the first story.
 
-Verdict: `APPROVED` | `BREAKING (N)` | `NEEDS REVISION`. Next step: `/data-model` or `/create-stories`.
+Verdict: `APPROVED` | `BREAKING (N)` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/data-model` (Recommended) · `/create-stories` · revise the contract.

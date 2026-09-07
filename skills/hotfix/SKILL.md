@@ -23,4 +23,4 @@ Package tests + e2e smoke; `/changelog` patch version; `/deploy` with confirmati
 ## Phase 4: Postmortem note
 A short entry in `docs/ops/incidents/` (or `/incident` if there was an incident).
 
-Verdict: `FIXED` | `BLOCKED`. Next step: `/incident` for root-cause analysis.
+Verdict: `FIXED` | `BLOCKED`. Next step — one `AskUserQuestion`: `/incident` for root-cause analysis (Recommended) · backport to main · stop here.

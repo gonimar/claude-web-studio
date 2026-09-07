@@ -22,4 +22,4 @@ Every item ✅/❌ with a link to evidence. Any ❌ in the gates → `NOT READY`
 ## Phase 3: Write
 "May I write `production/releases/vX.Y.Z.md` (with deploy/rollback steps)?" Tag with consent: `git tag -a vX.Y.Z`.
 
-Verdict: `READY` | `NOT READY (…)`. Next step: `/deploy vX.Y.Z`.
+Verdict: `READY` | `NOT READY (…)`. Next step — one `AskUserQuestion`: `/deploy vX.Y.Z` (Recommended) · fix the NOT READY items · stop here.

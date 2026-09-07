@@ -45,4 +45,4 @@ Show the reference changes (updated lines, `updated:` and `sources:` in the head
 ## Phase 5: Project upgrade plan (optional)
 If upgrades exist — propose stories (`/create-stories`) or ADRs for majors; for each — how to verify (tests, build). Do not perform upgrades in this skill.
 
-Verdict: `UPDATED (N files)` | `UP TO DATE` | `CHECK ONLY`. Next step: `/help`.
+Verdict: `UPDATED (N files)` | `UP TO DATE` | `CHECK ONLY`. Next step — one `AskUserQuestion`: `/help` (Recommended) · upgrade stories for the outdated majors · stop here.

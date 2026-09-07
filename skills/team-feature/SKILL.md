@@ -26,4 +26,4 @@ Backend (`go-engineer`/`php-engineer`/`node-engineer` + `graphql-engineer`) → 
 ## Phase 5: Summary
 Table criteria ↔ tests ↔ results; open findings; propose `/story-done` per story and the PR.
 
-Verdict: `COMPLETE` | `PARTIAL` | `BLOCKED (stage …)`. Next step: `/story-done` / `/release-checklist`.
+Verdict: `COMPLETE` | `PARTIAL` | `BLOCKED (stage …)`. Next step — one `AskUserQuestion`: `/story-done` per story (Recommended) · `/release-checklist` · fix the open findings first.

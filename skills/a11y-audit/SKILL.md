@@ -24,4 +24,4 @@ Keyboard, focus (2.4.11/2.4.13), names, ARIA, contrast, target size (2.5.8), for
 ## Phase 4: Report
 Table "finding → WCAG criterion → severity → file → fix". "May I write `docs/ops/a11y-audit-<date>.md` and an axe regression test?"
 
-Verdict: `PASS` | `FAIL (N critical)`. Next step: fixes via `angular-engineer`/`vue-engineer`/`css-engineer`.
+Verdict: `PASS` | `FAIL (N critical)`. Next step — one `AskUserQuestion`: fix the critical findings via `angular-engineer`/`vue-engineer`/`css-engineer` (Recommended) · re-run `/a11y-audit` after fixes · `/release-checklist`.

@@ -24,4 +24,4 @@ DDL with CHECK/UNIQUE/FK/indexes (each index justified by a query); migrations i
 ## Phase 4: Write
 "May I write `docs/architecture/data-model.md` and the migration files?" Update the backup section when valuable data is added.
 
-Verdict: `APPROVED` | `NEEDS REVISION`. Next step: `/create-stories` (repository implementation).
+Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/create-stories` (Recommended) · `/api-contract` (if the contract changes) · revise the model.
