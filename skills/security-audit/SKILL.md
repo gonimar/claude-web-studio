@@ -13,10 +13,10 @@ agent: security-lead
 Templates `security-audit-report.md`, `findings.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security).
 
 ## Phase 1: Scope
-Mode from the argument (`full` by default); surfaces from the threat model; stack from technical-preferences.
+Mode from the argument (`full` by default): `quick` = HIGH/BLOCKING classes only (auth, authorisation/IDOR, injection, secrets, dependency CVEs) without the network and GraphQL deep passes; `api`/`auth`/`infra`/`<path>` narrow the scope. Surfaces from the threat model; no `docs/architecture/threat-model.md` → continue from technical-preferences and the code, say so in the report and propose `/threat-model` as a follow-up — never a silent full pass. Stack from technical-preferences.
 
 ## Phase 2: In parallel via Task
-- `appsec-engineer`: code review A01–A10 for the scope (auth/sessions/JWT, object and GraphQL field authorisation, injection/XSS surfaces, SSRF, files, webhooks, errors/logs); run `govulncheck`/`composer audit`/`pnpm audit`/`gitleaks`/`semgrep` when available — with output.
+- `appsec-engineer`: code review A01–A10 for the scope (auth/sessions/JWT, object and GraphQL field authorisation, injection/XSS surfaces, SSRF, files, webhooks, errors/logs); run `govulncheck`/`composer audit`/`pnpm audit`/`gitleaks`/`semgrep` when available — with output; a tool that is not installed is listed in the report as "not run: <tool> missing" with the install hint, never skipped silently.
 - `network-security-engineer` (`full`/`infra`): proxy/headers/TLS/compose/Dockerfile/CI permissions.
 - `graphql-engineer` (if GraphQL): introspection, limits, persisted ops, DataLoader/DoS, batching.
 
