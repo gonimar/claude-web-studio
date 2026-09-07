@@ -9,6 +9,8 @@ model: sonnet
 
 # Skill Test
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Tests the studio's own skills and agents (not the project). Framework directory — the first found of:
 `./testing` (kit repository), `./web-studio-testing` (project copy), the plugin root's `testing/`
 (from the session-start "Plugin root:" line or `claude plugin list --json`). Without a framework only `static` works.
@@ -16,7 +18,7 @@ Skill sources: `./skills/*/SKILL.md` (kit repo), `.claude/skills/*/SKILL.md` (co
 
 | Mode | What | Cost |
 |---|---|---|
-| `static [name\|all]` | 8 structural checks of SKILL.md | low |
+| `static [name\|all]` | 9 structural checks of SKILL.md | low |
 | `spec [name]` | evaluate a skill against its behavioural spec | medium |
 | `category [name\|all]` | category rubric metrics | low |
 | `agent [name\|all]` | agent static checks + agent spec evaluation | medium |
@@ -25,7 +27,7 @@ Skill sources: `./skills/*/SKILL.md` (kit repo), `.claude/skills/*/SKILL.md` (co
 ## Phase 1: Arguments
 Parse mode and target; unknown → usage and stop. Read the framework's `catalog.yaml` (categories, spec paths, dates).
 
-## Phase 2A: static — 8 SKILL.md checks
+## Phase 2A: static — 9 SKILL.md checks
 1. Frontmatter starts on line 1 with `---`; fields `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools` — FAIL if missing.
 2. ≥ 2 phases (`## Phase N` or ≥ 2 `##`) — FAIL.
 3. A verdict word (`PASS|FAIL|CONCERNS|APPROVED|ACCEPTED|PROPOSED|NEEDS REVISION|NEEDS CHANGES|BLOCKED|COMPLETE|READY|DONE|UPDATED|CLEAN|RELEASED|DEPLOYED|HARDENED|PLAYABLE|COMPLIANT|INITIALISED|RESOLVED|MITIGATED|WITHIN BUDGET|OVER BUDGET|ON TRACK|AT RISK|OFF TRACK|FIXED|IMPROVED`) — FAIL.
@@ -34,6 +36,7 @@ Parse mode and target; unknown → usage and stop. Read the framework's `catalog
 6. A reference/template/rules link (`stack-reference/`, `templates/`, `rules/`) for authoring/analysis skills — WARN.
 7. `argument-hint` non-empty and consistent with the argument-parsing phase — WARN.
 8. Language: body in English, no project-specific or personal references (hostnames, names, private repo names) — WARN.
+9. A "Reply in the project conversation language" line (the skill honours CLAUDE.md → Language regardless of its own English text) — WARN.
 Output: a table of checks, `COMPLIANT | WARNINGS | NON-COMPLIANT`; for `all` — a summary table.
 
 ## Phase 2B: spec — behavioural evaluation

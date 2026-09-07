@@ -10,6 +10,8 @@ agent: performance-engineer
 
 # Perf Audit
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Budgets — `technical-preferences.md`; references `stack-reference/web-platform.md`, `database.md`, `graphql.md`, `threejs-webgames.md`.
 
 ## Phase 1: Baseline (Bash, whatever is available)

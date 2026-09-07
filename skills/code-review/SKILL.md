@@ -9,6 +9,8 @@ model: sonnet
 
 # Code Review
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Read-only plus running checks; fixes only on a separate request from the user.
 
 ## Phase 1: Target

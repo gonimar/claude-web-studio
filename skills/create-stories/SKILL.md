@@ -10,6 +10,8 @@ agent: product-director
 
 # Create Stories
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Templates `story.md`, `deploy-runbook.md`, `findings.md`. Writes after "May I write?".
 
 ## Phase 1: Context

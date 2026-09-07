@@ -10,6 +10,8 @@ agent: security-lead
 
 # Threat Model
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `.claude/docs/templates/threat-model.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security).
 
 ## Phase 1: System

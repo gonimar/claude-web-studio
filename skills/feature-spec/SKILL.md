@@ -9,6 +9,8 @@ model: sonnet
 
 # Feature Spec
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `.claude/docs/templates/feature-spec.md`. Section by section; written after "May I write?".
 
 ## Phase 1: Context

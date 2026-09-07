@@ -10,6 +10,8 @@ agent: network-security-engineer
 
 # Harden
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 `stack-reference/security-standards.md`, `security-baseline.md` (headers, network), rules `rules/ci-docker.md`, `rules/security-sensitive.md`.
 
 ## Phase 1: Inventory

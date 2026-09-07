@@ -10,6 +10,8 @@ agent: tech-writer
 
 # Changelog
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 ## Phase 1: Commits
 `git describe --tags --abbrev=0` → `git log <tag>..HEAD --pretty=format:'%h %s'`; group by type (feat → Added, fix → Fixed, perf → Changed, `!`/BREAKING → Breaking, security fixes → Security). Non-standard messages go to "Other" with a note.
 

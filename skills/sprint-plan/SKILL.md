@@ -10,6 +10,8 @@ agent: product-director
 
 # Sprint Plan
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `sprint-plan.md`.
 
 ## Phase 1: State

@@ -9,6 +9,8 @@ model: sonnet
 
 # Start
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Entry point for a new project. Assumes nothing — asks, then routes. Writes files only after "May I write?" → "yes".
 
 ## Phase 1: Silent state detection

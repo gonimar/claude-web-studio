@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+- Every skill carries "Reply in the project conversation language (CLAUDE.md → Language)" — on a Russian-language project `/adopt` answered in English while `/help` (which had the line) answered in Russian; `/skill-test static` check 9 warns when the line is missing.
+- `/adopt` shows the filled `technical-preferences.md` draft and writes it only after the `AskUserQuestion` answer (it wrote first and asked afterwards once).
+- `/help` keeps to one pipeline step: a red CI, a failed deploy, a billing problem or a tech-debt CRITICAL become one `Attention:` line each with where to fix, never the closing question and never investigated inside help.
+
 ## 0.5.0 — 2026-09-08
 - Brownfield onboarding: `/init` detects existing code, proposes the stage from the facts (`build` / `operate`) instead of writing `discovery` over a running project, and hands off with an `AskUserQuestion` (`/adopt full` Recommended for brownfield); its statusline smoke check feeds a `cwd` JSON.
 - `/adopt` fills `technical-preferences.md` from the detected facts in the same run (only unanswerable fields stay `[TO BE CONFIGURED]` and are asked in one question — never deferred to `/setup-stack`), classifies a companion advisor's roadmap as INFO, writes the plan from the new `templates/adoption-plan.md` with checkbox items and hands off to the first open item.

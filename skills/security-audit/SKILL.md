@@ -10,6 +10,8 @@ agent: security-lead
 
 # Security Audit
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Templates `templates/security-audit-report.md`, `findings.md`; `stack-reference/security-standards.md`, `security-baseline.md`, `graphql.md` (security).
 
 ## Phase 1: Scope

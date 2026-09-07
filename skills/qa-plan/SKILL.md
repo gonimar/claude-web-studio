@@ -10,6 +10,8 @@ agent: qa-lead
 
 # QA Plan
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `test-plan.md`; the project's `test-strategy.md` (missing → `/test-setup` first).
 
 ## Phase 1: Stories

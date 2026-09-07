@@ -10,6 +10,8 @@ agent: qa-lead
 
 # Release Checklist
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `release-checklist.md`.
 
 ## Phase 1: Evidence

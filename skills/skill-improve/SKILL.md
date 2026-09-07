@@ -9,6 +9,8 @@ model: sonnet
 
 # Skill Improve
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 ## Phase 1: Target
 `<name>` → the skill's `SKILL.md` (kit `skills/<name>/`, copy mode `.claude/skills/<name>/`); `agent:<name>` → the agent file. Missing → stop.
 

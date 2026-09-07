@@ -10,6 +10,8 @@ agent: technical-director
 
 # Tech Debt
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 ## Phase 1: Collect (Bash + Grep)
 Dependencies: `go list -m -u all` / `composer outdated` / `pnpm outdated` vs `stack-reference/index.md`; `TODO|FIXME|HACK`; `skip|xit|@group skip|t.Skip`; `eslint-disable|@psalm-suppress|nolint`; ADRs in Proposed older than 30 days; feature specs without stories; Done stories without tests; missing runbooks; open findings from the last audits (security/perf/a11y).
 

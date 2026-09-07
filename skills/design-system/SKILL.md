@@ -10,6 +10,8 @@ agent: design-lead
 
 # Design System
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template `.claude/docs/templates/design-system.md`. References: `web-platform.md` (WCAG, CSS Baseline), `angular.md`/`vue.md` (UI-kit themes).
 
 ## Phase 1: Base and principles

@@ -9,6 +9,8 @@ model: haiku
 
 # Sprint Status
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Read-only. Source: artefacts (story files, git log, CI), not claims.
 
 ## Phase 1: Data

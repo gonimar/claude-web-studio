@@ -10,6 +10,8 @@ agent: product-director
 
 # Product Spec
 
+Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+
 Template: `.claude/docs/templates/product-spec.md`. Section by section: questions → section draft → edits → next.
 The file is written once at the end (or per section, the user's choice), always after "May I write?".
 
