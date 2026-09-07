@@ -10,7 +10,7 @@ The stack-reference file an agent reads first is listed in its description
 | Role | When |
 |---|---|
 | External strategic advisor skill (if installed) | Whole-project audits, scope arbitration, roadmap curation. Sits outside the hierarchy: advises, never owns a domain. |
-| Deployment operator skill (container platform / Kubernetes / cloud, if installed) | `/deploy` delegates the actual stack mutation to it. |
+| Deployment delegate (agent `<target>-ops` or `scripts/deploy/<target>.sh`, if declared) | `/deploy` delegates the actual stack mutation to it by `deploy-target-contract.md` (verbs `status · create · deploy · rollback · logs`, `--confirmed`). A kit's slash command alone is not a delegate. |
 
 ## Tier 1 — directors (Opus)
 | Agent | Domain | When |

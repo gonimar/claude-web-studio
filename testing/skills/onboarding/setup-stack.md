@@ -26,5 +26,9 @@ Choose and pin the stack with versions from the reference; write technical-prefe
 **Fixture**: ADRs proposed for forks; stage changes with consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Deploy target
+**Fixture**: single VPS, no kit. **Expected**: one `AskUserQuestion` for the target with `compose-ssh` recommended; `templates/deploy/compose-ssh.sh` copied to `scripts/deploy/`, `docs/deploy/compose-ssh.md` created, `Deploy target`/`Deploy delegate` written; shared host → `Infra repo`/`Proxy config` asked.
+- [ ] question with options · [ ] script copied · [ ] fields written
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

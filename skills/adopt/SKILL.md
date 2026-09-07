@@ -23,7 +23,7 @@ Project type and Rendering (from the framework and routes), Backend (language/ru
 database and cache from compose, API style from schema/openapi/routes, authentication if visible),
 Frontend (framework, build, styles; `vanilla` or `none` when there is none), Tests and quality (from
 `phpunit.xml`, `vitest.config`, `go test`, lint configs), Infrastructure (containers, CI, deploy from
-compose/workflows/deploy skills), Layout (`backend_root`, `frontend_root`, `go_layout`). `[TO BE CONFIGURED]`
+compose/workflows/deploy skills — **Deploy target and delegate** by `docs/deploy-target-contract.md`: an agent `.claude/agents/*-ops.md` with `deploy-target:` in its frontmatter or a `scripts/deploy/*.sh`; a kit that only ships a slash command is noted as `none` with the reason; **Infra repo / Proxy config** asked when the host is shared), Layout (`backend_root`, `frontend_root`, `go_layout`). `[TO BE CONFIGURED]`
 may remain only for fields no file answers; ask those in one `AskUserQuestion` (project type, API style,
 layout — whatever is still unknown), then write the file under "May I write?". Do not defer to
 `/setup-stack`: after `/adopt` the stack counts as chosen, and the template's note "while

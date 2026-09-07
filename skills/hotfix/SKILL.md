@@ -18,7 +18,7 @@ Branch `hotfix/<slug>` from the production tag; a failing test reproducing the b
 Through the relevant engineer; only what is needed; test green; lint/typecheck; for sensitive paths — `appsec-engineer` review.
 
 ## Phase 3: Expedited gate
-Package tests + e2e smoke; `/changelog` patch version; `/deploy` with confirmation; backport to the default branch (`master`/`main`, PR).
+Package tests + e2e smoke; `/changelog` patch version; `/deploy` with confirmation (delegate verbs `deploy`/`rollback` by `docs/deploy-target-contract.md`); backport to the default branch (`master`/`main`, PR).
 
 ## Phase 4: Postmortem note
 A short entry in `docs/ops/incidents/` (or `/incident` if there was an incident).

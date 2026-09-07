@@ -26,5 +26,9 @@ Headers/TLS/proxy/Docker/CI with live verification.
 **Fixture**: hardening checklist with consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Proxy in another repository
+**Fixture A**: `Infra repo` and `Proxy config` set → diffs proposed there with "May I write?", live `curl -I` before/after. **Fixture B**: not set and no proxy config here → the limitation is stated, snippet for the owner, live check only.
+- [ ] infra repo edited only with consent · [ ] live headers are the evidence · [ ] missing field named
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

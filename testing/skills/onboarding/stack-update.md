@@ -26,5 +26,9 @@ Refresh references from official sources with dates; diff; upgrade plan.
 **Fixture**: project upgrades not performed inside the skill. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Registry latest
+**Fixture**: reference says Phaser 3.90; `npm view phaser dist-tags` → latest 4.2.1. **Expected**: the table shows latest 4.2.1 and the recommended version with a reason (or an upgrade proposal); `index.md` gets the "latest on the date" value.
+- [ ] registry queried · [ ] reason recorded when behind a major · [ ] index column filled
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

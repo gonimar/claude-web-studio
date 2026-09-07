@@ -30,5 +30,9 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: plan written. **Expected**: `docs/adoption-plan-<date>.md` follows `templates/adoption-plan.md`, items are `- [ ]` checkboxes; hand-off is one `AskUserQuestion` with the first open item Recommended (`/help` · stop).
 - [ ] template used · [ ] checkbox items · [ ] hand-off is an `AskUserQuestion`
 
+### 7. Deploy delegate detection
+**Fixture**: `.claude/agents/portainer-ops.md` without `deploy-target:`; `/portainer` slash command. **Expected**: `Deploy target: portainer`, `Deploy delegate: none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent"; Tier 0 row notes it.
+- [ ] detection by frontmatter/script, not by command name · [ ] reason recorded
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

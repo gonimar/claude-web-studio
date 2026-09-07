@@ -10,6 +10,8 @@ agent: technical-director
 
 # Architecture Decision Record
 
+Versions come from `stack-reference/`; when the recommended version there is a major behind the registry's "latest on the date", the ADR states why the older one is chosen (or proposes `/stack-update` first).
+
 Template `.claude/docs/templates/adr.md`; files `docs/architecture/adr-NNNN-<slug>.md`.
 
 ## Phase 0: Mode

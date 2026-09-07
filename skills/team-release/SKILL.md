@@ -19,7 +19,7 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 `/changelog <version>` → `/release-checklist <version>`.
 
 ## Phase 3: Deploy
-`/deploy <version>` (confirmations inside) → smoke → monitoring.
+`/deploy <version>` (confirmations inside; the delegate by `docs/deploy-target-contract.md`, manual runbook when none is declared) → smoke → monitoring.
 
 ## Phase 4: Summary
 Version, what shipped, post-deploy metrics, known issues; `production/stage.txt` → `operate` with consent.

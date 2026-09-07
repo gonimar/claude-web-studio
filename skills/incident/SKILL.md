@@ -16,7 +16,7 @@ Template `incident-postmortem.md`.
 Severity; what users see; immediate measures (rollback via `/deploy`/the deployment skill, feature kill switch, rate limit) — with confirmation. Security (leak/breach?) → `security-lead` immediately: isolate, rotate secrets, preserve logs.
 
 ## Phase 2: Diagnosis
-Logs (deployment skill / `docker compose logs`), metrics, recent deploys/migrations, `git log`; hypotheses → verification.
+Logs (delegate verb `logs [service] [--since]` by `docs/deploy-target-contract.md`, or `docker compose logs`), metrics, recent deploys/migrations, `git log`; hypotheses → verification.
 
 ## Phase 3: Fix
 `/hotfix` or rollback; verify by metrics.

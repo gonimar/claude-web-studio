@@ -13,15 +13,15 @@ agent: devops-lead
 File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes"; delegated agents follow the same protocol.
 
 ## Phase 1: Readiness
-`production/releases/vX.Y.Z.md` (missing → `/release-checklist`); the tag exists; CI green on the tag (`gh run`); the image is built/available; runbook `docs/ops/deploy.md`.
+`production/releases/vX.Y.Z.md` (missing → `/release-checklist`); the tag exists; CI green on the tag (`gh run`); the image is built/available; runbook `docs/ops/deploy.md`; the deploy target and delegate from `technical-preferences.md` (Infrastructure) and `docs/deploy/<target>.md` — contract: `docs/deploy-target-contract.md`.
 
 ## Phase 2: Plan
 Steps: DB backup → migrations (migrate service/command) → stack redeploy → smoke (healthz, key journey, GraphQL `{ __typename }`/REST ping) → 30 min monitoring; rollback: previous tag + migration reversibility. `--plan-only` — stop.
 
 ## Phase 3: Execute
-If a deployment skill/agent is installed in the project (check `.claude/skills`, `.claude/agents`, installed plugins) — invoke it with the version; otherwise commands for the user/`devops-engineer` from the runbook. **Every production mutation after an explicit "yes".** Verify by containers and smoke requests, not by response codes.
+By the declared delegate (`docs/deploy-target-contract.md`): `agent <name>` → `Task` to that agent with the prompt `deploy <tag> --confirmed` (after the user's "Proceed?" → "yes" here — the delegate never asks itself); `script <path>` → `Bash` `<path> deploy <tag> --confirmed`; `none`/`manual` → the runbook steps for the user/`devops-engineer`. A delegate declared but not found (no agent file, no script) → `BLOCKED (delegate <name> not found — fix technical-preferences or run /setup-stack)`, never a guess. A companion slash command alone (`/<kit> deploy`) is not a delegate: skills cannot call skills. Read the verdict line (`DEPLOYED <tag>` | `FAILED (…)`) and the evidence; then run the runbook smoke checks yourself (`/healthz`, key journey) — the delegate's verdict is necessary, not sufficient. **Every production mutation after an explicit "yes".** Verify by containers and smoke requests, not by response codes.
 
 ## Phase 4: Record
 Update `production/releases/vX.Y.Z.md` (time, result, who); `docs/ops/deploy.md` when the procedure changed.
 
-Verdict: `DEPLOYED` | `ROLLED BACK` | `PLAN`. Next step — one `AskUserQuestion`: monitor the release (`/incident` on problems) (Recommended) · `/deploy rollback` · `/sprint-plan` for the next cycle.
+Verdict: `DEPLOYED` | `ROLLED BACK` | `PLAN` | `BLOCKED (delegate …)`. Next step — one `AskUserQuestion`: monitor the release (`/incident` on problems) (Recommended) · `/deploy rollback` · `/sprint-plan` for the next cycle.
