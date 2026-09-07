@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.1 — 2026-09-08
 - Every skill carries "Reply in the project conversation language (CLAUDE.md → Language)" — on a Russian-language project `/adopt` answered in English while `/help` (which had the line) answered in Russian; `/skill-test static` check 9 warns when the line is missing.
 - `/adopt` shows the filled `technical-preferences.md` draft and writes it only after the `AskUserQuestion` answer (it wrote first and asked afterwards once).
 - `/help` keeps to one pipeline step: a red CI, a failed deploy, a billing problem or a tech-debt CRITICAL become one `Attention:` line each with where to fix, never the closing question and never investigated inside help.
