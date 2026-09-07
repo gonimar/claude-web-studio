@@ -23,6 +23,6 @@ Table "metric → value → budget → status"; findings with estimated gain and
 Through the relevant engineers; re-measure with the same method — before/after.
 
 ## Phase 4: Write
-"May I write `docs/ops/perf-audit-<date>.md`?"
+"May I write `docs/ops/perf-audit-<date>.md`?" For every `OVER BUDGET` metric one `AskUserQuestion`: record it in `production/findings.md` (`PERF-NNN`, template `findings.md`) (Recommended) · improvement stories now · report only — so the budget miss reaches `/create-stories` and `/sprint-plan`.
 
 Verdict: `WITHIN BUDGET` | `OVER BUDGET (metrics: …)`. Next step — one `AskUserQuestion`: improvement stories (Recommended) · `/release-checklist` · re-run `/perf-audit` after fixes.

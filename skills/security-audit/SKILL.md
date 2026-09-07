@@ -10,7 +10,7 @@ agent: security-lead
 
 # Security Audit
 
-Template `security-audit-report.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security).
+Templates `security-audit-report.md`, `findings.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security).
 
 ## Phase 1: Scope
 Mode from the argument (`full` by default); surfaces from the threat model; stack from technical-preferences.
@@ -24,6 +24,6 @@ Mode from the argument (`full` by default); surfaces from the threat model; stac
 Deduplicate, severity (CVSS 4.0), BLOCKING/WARNING/INFO, fix and regression test per finding; A01–A10 checklist with statuses.
 
 ## Phase 4: Write
-"May I write `docs/security/security-audit-<date>.md`?" Propose stories for BLOCKING (`/create-stories`) and a threat-model update.
+"May I write `docs/security/security-audit-<date>.md`?" Then, for every BLOCKING (and WARNING that needs a decision), one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `SEC-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. A BLOCKING that is neither recorded nor turned into a story is reported as such in the verdict line — it must not silently stay in the report (`/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`). Propose a threat-model update.
 
 Verdict: `PASS` | `CONCERNS (N warnings)` | `FAIL (N blocking)`. Next step — one `AskUserQuestion`: fixes, then a repeated `/security-audit quick` (Recommended) · `/harden` · report only.

@@ -36,6 +36,8 @@ phases:
     next_phase: hardening
     steps:
       - {id: stories, command: /create-stories, required: true, repeatable: true, artifact: {glob: "production/stories/**/*.md"}, description: "Stories with acceptance criteria from feature specs"}
+      - {id: deploy-artefacts, command: /create-stories, required: false, artifact: {glob: "docs/ops/deploy.md"}, description: "Deploy artefacts story (Dockerfile, production compose, release workflow, healthz, runbook) — when a Deploy target is set"}
+      - {id: prototype-gate, command: "/game-concept gate", required: false, only_for: [game, game+backend], artifact: {glob: "production/releases/gate-prototype.md"}, description: "Go/no-go on the first playable slice against the concept's fun criterion — before backend or multiplayer investment"}
       - {id: sprint, command: /sprint-plan, required: false, repeatable: true, artifact: {glob: "production/sprints/*.md"}, description: "Sprint plan"}
       - {id: dev, command: /dev-story, required: true, repeatable: true, description: "Implement a story with specs and tests"}
       - {id: review, command: /code-review, required: true, repeatable: true, description: "Lead review plus security"}

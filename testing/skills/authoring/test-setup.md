@@ -26,5 +26,9 @@ Test strategy and configs per stack.
 **Fixture**: written after consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. CI references a compose profile
+**Fixture**: the generated ci.yml runs `docker compose --profile test up -d --wait`; compose.yaml has no such profile. **Expected**: the compose fragment (profile + services with healthchecks) is created in the same run, or the skill stops with `BLOCKED` naming the story; `docker compose --profile test config` is run when docker exists; every service in test-strategy exists in compose.
+- [ ] fragment created or BLOCKED · [ ] self-check named · [ ] no CI that cannot pass
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

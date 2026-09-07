@@ -26,5 +26,9 @@ Sprint plan by capacity and dependencies.
 **Fixture**: written after consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Open BLOCKING finding
+**Fixture**: `production/findings.md` has one open BLOCKING with story S-014 not in the candidate list. **Expected**: S-014 is in the sprint or deferred with a written reason in the plan — never absent.
+- [ ] findings read · [ ] in sprint or deferred with reason
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

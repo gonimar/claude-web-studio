@@ -33,5 +33,12 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: code in the repo, `technical-preferences.md` all `[TO BE CONFIGURED]`. **Expected**: NEXT is `/adopt full`, with the reason.
 - [ ] the placeholder is detected · [ ] `/adopt full` Recommended
 
+### 8. Open findings and missing deploy artefacts
+**Fixture**: `production/findings.md` has 2 open BLOCKING without a story; build phase with Deploy target set and no `docs/ops/deploy.md`. **Expected**: both lines shown; findings take precedence in NEXT.
+- [ ] findings line · [ ] deploy artefacts line · [ ] NEXT = `/create-stories`
+### 9. Game gate
+**Fixture**: type game, all F-001 stories Done, no `production/releases/gate-prototype.md`. **Expected**: NEXT is `/game-concept gate`.
+- [ ] gate detected · [ ] Recommended option is the gate
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

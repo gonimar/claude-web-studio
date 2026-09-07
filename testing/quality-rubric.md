@@ -59,7 +59,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 | N2 — Finding format | severity/CVSS, file:line, fix, regression test |
 | N3 — Templated report | Written to `docs/security|ops/…` via the template and "May I write?" |
 | N4 — Scope boundary | `pentest` only the project's own systems with the scope recorded; others take the scope from the argument |
-| N5 — Follow-ups | Stories/ADRs for BLOCKING; a verdict word |
+| N5 — Follow-ups | Stories/ADRs for BLOCKING through `production/findings.md` (offered as an `AskUserQuestion`; `/create-stories` and `/sprint-plan` read it); a verdict word |
 
 ### `team`
 | Metric | PASS |
