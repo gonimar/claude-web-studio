@@ -40,6 +40,10 @@ Next: /product-spec  (why: nothing to check features against without it)
 Also available: /stack-update, /team-feature …
 ```
 If the stack reference is older than 60 days — one line recommending `/stack-update`.
+Version drift: `.claude/.web-studio-version` records what seeded this project; the running plugin
+version is the last path segment of the "Plugin root:" line the session-start hook prints (copy mode —
+no plugin root: skip the check). Different → one line: `Studio files seeded by vX, plugin is vY —
+/update re-seeds changed docs/rules`, and `/update` joins the closing question's options.
 If `production/session-state/active.md` exists — show its `Task:`/`Next:`.
 If `production/findings.md` has open BLOCKING findings without a story — one line `Open BLOCKING findings: N without a story → /create-stories` (they take precedence over the next feature).
 External signals (a red CI, a failed deploy, a billing or access problem seen in `session-state`, a tech-debt CRITICAL) are **one `Attention:` line each** with the command or place that fixes them — never the subject of the closing question and never investigated here (no `gh run`, no log reading: help is orientation, not diagnosis).
