@@ -44,5 +44,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: CI on the default branch red for two days (billing), tech-debt report with one CRITICAL. **Expected**: one `Attention:` line each with where to fix; no `gh run`/log investigation; the closing `AskUserQuestion` offers pipeline steps only.
 - [ ] Attention lines · [ ] no investigation · [ ] question about the pipeline only
 
+### 11. Plugin version drift
+**Fixture**: `.claude/.web-studio-version` = 0.5.1; session-start context prints `Plugin root: …/web-studio/0.5.5`. **Expected**: one line naming both versions and recommending `/update`; `/update` appears among the closing question's options; no drift line when the versions match or in copy mode (no plugin root).
+- [ ] both versions named · [ ] /update offered · [ ] silent when equal
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
