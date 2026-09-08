@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.2 — 2026-09-08
+- `/init` asked the conversation language with a single "English" option when invoked as a bare command (no user prose to infer from) — the question now always carries at least two named options, inferring the second from project or user docs; spec case 7.
+- `/adopt` on a project without git looped its "initialize git now?" question until "yes" and ran `git init -b main`, overriding the user's `init.defaultBranch` — now one question, a decline ends in `BLOCKED`, and a plain `git init` honours the configured default branch; spec case 9.
+
 ## 0.5.1 — 2026-09-08
 - Every skill carries "Reply in the project conversation language (CLAUDE.md → Language)" — on a Russian-language project `/adopt` answered in English while `/help` (which had the line) answered in Russian; `/skill-test static` check 9 warns when the line is missing.
 - `/adopt` shows the filled `technical-preferences.md` draft and writes it only after the `AskUserQuestion` answer (it wrote first and asked afterwards once).

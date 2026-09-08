@@ -30,5 +30,9 @@ Scaffolds studio files, asks the conversation language and review mode, updates 
 **Fixture**: `composer.json` with sources, `docker-compose.prod.yml`, 40 commits in git. **Expected**: the plan proposes the stage from the facts (`operate`), never writes `discovery` over a running project; the hand-off is one `AskUserQuestion` with `/adopt full` Recommended (`/start` · `/help` · stop as alternatives), not a text line.
 - [ ] brownfield detected before the plan · [ ] stage proposed from facts and confirmed · [ ] hand-off is an `AskUserQuestion` with `/adopt full` Recommended
 
+### 7. Bare command, no prose
+**Fixture**: `/init` invoked as a bare slash command — no user messages to infer a language from; project README in a non-English language. **Expected**: the language question still offers at least two named options (English plus the README/CLAUDE.md language); a single-option language question is a failure even though the UI adds its own free-text escape.
+- [ ] ≥ 2 named options in the language question · [ ] inferred option comes from project/user docs, not a hardcoded default
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
