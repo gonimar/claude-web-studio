@@ -10,6 +10,8 @@ model: sonnet
 # Init — scaffold the studio in this project
 
 Writes files only after "May I write …?" → "yes".
+Reply in the project conversation language (CLAUDE.md → Language); until CLAUDE.md exists, the
+language chosen in Phase 2 binds instead. Code, identifiers, paths and commit messages stay in English.
 
 ## Phase 1: Locate the studio files
 Source of seed files, in order: `--plugin-root`; the "Plugin root:" line printed by the session-start
@@ -31,6 +33,11 @@ of the user's global `~/.claude/CLAUDE.md`. The question always carries at least
 a single-option question is a railroad, not a choice; when nothing can be inferred, name the two or
 three languages most plausible for this user's environment. Then review mode: `lean` (recommended
 for solo), `full`, `solo`. `--language`/`--review` skip the questions.
+
+From the moment the language answer arrives — an `AskUserQuestion` option, a `--language` argument,
+or a language stated in the user's reply text — conduct the rest of `/init` in that language: every
+question, the plan, the write summary and the hand-off. CLAUDE.md not existing yet is no excuse;
+the whole session that follows inherits the tone `/init` sets.
 
 ## Phase 3: Plan
 Show what will be created or changed:

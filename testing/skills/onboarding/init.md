@@ -34,5 +34,8 @@ Scaffolds studio files, asks the conversation language and review mode, updates 
 **Fixture**: `/init` invoked as a bare slash command — no user messages to infer a language from; project README in a non-English language. **Expected**: the language question still offers at least two named options (English plus the README/CLAUDE.md language); a single-option language question is a failure even though the UI adds its own free-text escape.
 - [ ] ≥ 2 named options in the language question · [ ] inferred option comes from project/user docs, not a hardcoded default
 
-## Protocol
+### 8. Chosen language binds immediately
+**Fixture**: the user answers the Phase 2 question with a non-English language (option or reply text). **Expected**: every subsequent /init output — the stage question, the write plan, "May I write?", the hand-off — is in that language, even though CLAUDE.md is not written yet; a later skill in the same session must not inherit an English tone from /init.
+- [ ] first post-answer question already in the chosen language · [ ] write plan and hand-off in the chosen language
+
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
