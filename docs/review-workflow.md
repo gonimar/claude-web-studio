@@ -3,7 +3,10 @@
 ## Review mode (`production/review-mode.txt`)
 - `full` — every significant artefact passes a director/lead plus security (team).
 - `lean` — lead plus security only for auth/data/network-touching work (default for solo work).
-- `solo` — reviews on request; phase gates are advisory.
+- `solo` — reviews on request; phase gates are advisory. **Scope: reviews only.** No review mode
+  skips the pipeline itself: `/start` (or `/adopt`), the specs and the catalog's required steps
+  (threat model, test strategy, game concept for a game) still run — solo means nobody blocks the
+  merge, not "code straight after /init".
 
 ## Phase gates (advisory — the user decides)
 | Transition | Who | Checks |
