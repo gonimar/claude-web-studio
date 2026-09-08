@@ -6,3 +6,5 @@ dev/
 testing/results/*
 !testing/results/.gitkeep
 *.log
+__pycache__/
+*.pyc
