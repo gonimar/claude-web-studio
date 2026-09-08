@@ -19,7 +19,10 @@ Read `.claude/docs/workflow-catalog.yaml`: phases, steps, `artifact.glob`. Missi
 
 ## Phase 2: Where we are
 Stage from `production/stage.txt`; otherwise infer from artefacts (the first phase with an unmet required step).
-For the current phase check every step by glob: ✅ done / ⬜ missing / 🔁 repeatable. Take the user's argument into account ("just finished X"): find step X in the catalog and take the next step of its phase (or the first step of `next_phase`) as NEXT — e.g. "finished security-audit" → `/dependency-audit`/`/harden` in hardening.
+For the current phase check every step by glob: ✅ done / ⬜ missing / 🔁 repeatable. A project that
+entered its phase directly (brownfield starts at `build`/`operate`) still owes the **required** steps
+of every earlier phase: check their artifact globs too, and an unmet one (e.g. no
+`docs/architecture/test-strategy.md`) becomes NEXT ahead of the current phase's own steps. Take the user's argument into account ("just finished X"): find step X in the catalog and take the next step of its phase (or the first step of `next_phase`) as NEXT — e.g. "finished security-audit" → `/dependency-audit`/`/harden` in hardening.
 If `docs/adoption-plan-*.md` exists (the newest one), count its open items (`- [ ]`): show `Adoption plan: N open`;
 when the phase has no unmet required step (typical for `operate`), the first open plan item is NEXT.
 

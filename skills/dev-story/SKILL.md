@@ -21,7 +21,15 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 Argument or `production/session-state/active.md` (`Task:`); none — ask. Status must be Ready/In Progress.
 
 ## Phase 2: Context (read everything before starting)
-The story; the feature spec (relevant sections); the contract (`schema.graphql`/openapi) — if the story changes the contract, run `/api-contract` first; ADRs; the data model; applicable `.claude/rules/*.md`; the stack reference for the story's languages; the test strategy. A missing ADR/contract for a story that needs one → `BLOCKED` naming what to run.
+**Architecture prerequisites first** — regardless of how the project entered `build` (brownfield
+projects start there with the architecture phase unwalked): `docs/architecture/threat-model.md` and
+`docs/architecture/test-strategy.md` must exist — the catalog marks both `required`. Either missing →
+`BLOCKED (architecture prerequisites unmet — run /threat-model | /test-setup first)`; name only the
+missing ones, never loop a question about it. Then read: the story; the feature spec (relevant
+sections); the contract (`schema.graphql`/openapi) — if the story changes the contract, run
+`/api-contract` first; ADRs; the data model; applicable `.claude/rules/*.md`; the stack reference for
+the story's languages; the test strategy. A missing ADR/contract for a story that needs one →
+`BLOCKED` naming what to run.
 
 ## Phase 3: Plan and branch
 Files to create/change, order, tests per criterion (table). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update `session-state/active.md` (Task/Branch/Next). Show the plan, then one `AskUserQuestion`: continue (Recommended) · change the plan (say what) · stop.
