@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.7 — 2026-09-09
+- A documents lane in the git workflow: every authoring skill ends with a commit gate (`docs:` staging exactly the written files); pipeline-wide documents go to the default branch, and on a story branch the skill names it and asks where the document belongs; `validate-commit` exempts `docs:`-scoped commits touching only document paths. Hook test, test-setup spec case 7.
+- `/dev-story` offers `/sprint-plan` when no sprint covers the story (>3 Ready stories) — the sprint layer was reachable only by the owner's memory. Spec case 8.
+- Catalog artifacts are produced by their commands, never inline: CLAUDE.md template principle 7 and coordination-rules rule 9 — a session that authors ADRs/specs/stories in the main conversation bypasses the steps' gates, templates and hand-offs.
+
 ## 0.5.6 — 2026-09-08
 - `/help` flags plugin version drift: when `.claude/.web-studio-version` (what seeded the project) is older than the running plugin, one line names both versions and `/update` joins the closing question's options; silent when they match and in copy mode. Spec case 11.
 
