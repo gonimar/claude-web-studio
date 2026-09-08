@@ -35,7 +35,7 @@ the story's languages; the test strategy. A missing ADR/contract for a story tha
 `BLOCKED` naming what to run.
 
 ## Phase 3: Plan and branch
-Files to create/change, order, tests per criterion (table). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update `session-state/active.md` (Task/Branch/Next). Show the plan, then one `AskUserQuestion`: continue (Recommended) · change the plan (say what) · stop.
+Files to create/change, order, tests per criterion — **the table rendered in the chat message** before the plan question (rule 7: readable rendering, on updates too). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update `session-state/active.md` (Task/Branch/Next). Show the plan, then one `AskUserQuestion`: continue (Recommended) · change the plan (say what) · stop.
 
 ## Phase 4: Implementation (via Task to the right engineers, by layer)
 - Backend: `go-engineer` / `php-engineer` / `node-engineer`; GraphQL — `graphql-engineer`; DB — `database-engineer`.
