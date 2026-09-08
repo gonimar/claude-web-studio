@@ -53,4 +53,6 @@ instead of relying on memory.
    (`/architecture-decision`, `/feature-spec`, `/api-contract`, `/create-stories`, …) via an
    `AskUserQuestion` hand-off instead of authoring the document in the main conversation.
    Inline authoring bypasses the step's gates, templates and hand-offs — that is how required
-   steps get skipped (workflow-catalog knows the command for every artifact).
+   steps get skipped (workflow-catalog knows the command for every artifact). This covers product
+   code too: on a fresh project the first code is reached through `/start` and the build pipeline,
+   not written directly after `/init` because the goal "looks trivial".
