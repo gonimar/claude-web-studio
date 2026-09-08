@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.8 — 2026-09-09
+- Executable e2e layer (`testing/e2e/` + `tests/e2e.sh`): synthetic brownfield fixture, multi-turn headless driver, tool-event checker, branched pipeline scenario B1–B15 — one branch per closed behavioural defect class; deliberately outside `run-all.sh` (each branch spends real model turns). Smoke: B9 PASS.
+- Structured roadmap format (`templates/roadmap.md`): one line per story with inline markers — ⛔ dependencies, ~estimate, ⏱ actual, 📅 sprint, 🏷 layer; sprints as dated subheadings, backlog below; prose ordering paragraphs are banned (the order derives from dependencies). `create-stories`, `sprint-plan` and `story-done` reference it.
+
 ## 0.5.7 — 2026-09-09
 - A documents lane in the git workflow: every authoring skill ends with a commit gate (`docs:` staging exactly the written files); pipeline-wide documents go to the default branch, and on a story branch the skill names it and asks where the document belongs; `validate-commit` exempts `docs:`-scoped commits touching only document paths. Hook test, test-setup spec case 7.
 - `/dev-story` offers `/sprint-plan` when no sprint covers the story (>3 Ready stories) — the sprint layer was reachable only by the owner's memory. Spec case 8.
