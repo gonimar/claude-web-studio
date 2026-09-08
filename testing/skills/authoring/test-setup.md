@@ -30,5 +30,9 @@ Test strategy and configs per stack.
 **Fixture**: the generated ci.yml runs `docker compose --profile test up -d --wait`; compose.yaml has no such profile. **Expected**: the compose fragment (profile + services with healthchecks) is created in the same run, or the skill stops with `BLOCKED` naming the story; `docker compose --profile test config` is run when docker exists; every service in test-strategy exists in compose.
 - [ ] fragment created or BLOCKED · [ ] self-check named · [ ] no CI that cannot pass
 
+### 7. Documents lane (commit after write)
+**Fixture**: strategy written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write gate one commit gate offers `docs: test strategy` staging exactly the written files, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
