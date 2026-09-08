@@ -26,5 +26,9 @@ STRIDE per surface, DFD, mitigations, priorities.
 **Fixture**: written after consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 7. Write gate order
+**Fixture**: STRIDE analysis complete. **Expected**: the draft appears in the chat message, the consent question follows, and `docs/architecture/threat-model.md` is written only after the "write" answer; asking "the file is already written — keep it?" is a failure even if the content is correct.
+- [ ] draft before the question · [ ] no Write/Edit before the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

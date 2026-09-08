@@ -25,6 +25,6 @@ Per surface — STRIDE threats with likelihood/impact; mitigations referencing t
 Top 5 unmitigated threats → stories/ADRs; residual risks explicitly accepted by the user.
 
 ## Phase 4: Write
-"May I write `docs/architecture/threat-model.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Add a "Security" section to affected feature specs with consent.
+The gate follows coordination-rules rule 7's exact order: the draft (or a tight summary of it) in the chat message first, then "May I write `docs/architecture/threat-model.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now — and `Write` only after that answer, never write-then-ask. Add a "Security" section to affected feature specs with consent.
 
 Verdict: `COMPLETE` | `HIGH RISK (N unmitigated)`. Next step — one `AskUserQuestion`: `/create-stories` for the mitigations (Recommended) · `/security-audit` after implementation · revise the model.
