@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.4 — 2026-09-08
+- `/init` carries the conversation-language line (it was the only skill without one) and binds the chosen language from the moment the answer arrives — a non-English choice no longer leaves the session English-toned; spec case 8.
+- `/init` never proposes stage `operate` from a README-claimed live URL alone: `operate` needs deploy artefacts in the repository; a detached copy of a deployed service is still `build`.
+- `/adopt` hand-off solicits the owner's goal in their own words and reorders the adoption plan around it; spec case 10.
+
 ## 0.5.3 — 2026-09-08
 - `/adopt` wrote `technical-preferences.md` before asking, again ("the file is already written as a draft — confirm?") — the 0.5.1 gate sentence was buried at the end of a long paragraph. The gate is now a numbered three-step protocol: draft in the chat message → `AskUserQuestion` → only then Write/Edit, with the write-then-ask anti-pattern named explicitly.
 
