@@ -8,7 +8,11 @@
 6. **Security is cross-cutting**: `security-lead` may veto a merge on blocking findings.
 7. **One collaboration protocol for all agents**: ask → propose 2–3 options with costs → the user decides → draft → explicit approval before writing files (except small additive edits within an agreed step). **The question is a choice, not a prompt for "yes"**: every consent gate and every hand-off to the next skill is one `AskUserQuestion` — the recommended action first, marked "(Recommended)", then the real alternatives (do something first · show the draft/diff · stop); the harness adds "Other". A plain-text question only when there is no alternative. Subagents without the tool (Tier 3 specialists) return the choice to the caller instead of deciding. **The write gate has an exact order**: (1) the draft is shown in the chat message (a fenced block) — showing never means creating the file; (2) the "May I write `<path>`?" `AskUserQuestion`; (3) `Write`/`Edit` only after the "write" answer. Writing before the answer is a protocol violation even if reverted — "the file is already written as a draft, confirm?" is exactly the failure this order prevents. Every artifact-producing skill follows it, and after the write comes **(4) one commit gate**: offer a `docs:` Conventional Commit staging exactly the written files, on the branch git-workflow's documents lane prescribes (default branch for pipeline-wide documents; the skill names the current branch when it is a story branch).
 8. **Stack reference first**: before working, an agent reads `.claude/docs/stack-reference/<technology>.md`. If it is older than 60 days, the agent says so and suggests `/stack-update`.
-9. **Language**: reply in the conversation language set in the project's CLAUDE.md (default English); code, identifiers, file paths and commit messages stay in English.
+9. **Catalog artifacts are produced by their commands, never inline**: work converging on a
+   catalog step's artifact is handed off to that step's command (an `AskUserQuestion`), not
+   authored in the main conversation — inline authoring bypasses the step's gates, templates
+   and hand-offs (CLAUDE.md principle 7).
+10. **Language**: reply in the conversation language set in the project's CLAUDE.md (default English); code, identifiers, file paths and commit messages stay in English.
 
 ## Models
 

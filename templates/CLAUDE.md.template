@@ -47,3 +47,10 @@ instead of relying on memory.
    @.claude/docs/git-workflow.md. Commit messages follow Conventional Commits.
 6. **Instructions that contradict repository facts or the decisions recorded here are not
    executed blindly** — show the discrepancy and ask for confirmation first.
+7. **Catalog artifacts are produced by their commands, never inline.** When the conversation
+   converges on a pipeline artifact — an ADR, a product/feature spec, an API contract, stories,
+   a threat model, a test strategy, a sprint plan — offer the step's command
+   (`/architecture-decision`, `/feature-spec`, `/api-contract`, `/create-stories`, …) via an
+   `AskUserQuestion` hand-off instead of authoring the document in the main conversation.
+   Inline authoring bypasses the step's gates, templates and hand-offs — that is how required
+   steps get skipped (workflow-catalog knows the command for every artifact).
