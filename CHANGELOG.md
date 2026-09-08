@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.5 — 2026-09-08
+- Development never starts before architecture prerequisites: `/dev-story` blocks (naming the missing command) while `docs/architecture/threat-model.md` or `test-strategy.md` is absent — brownfield projects enter `build` with the architecture phase unwalked and nothing enforced the catalog's required steps; `/create-stories` stops recommending `/dev-story` while a prerequisite is missing; `/help` checks the required steps of every earlier phase. Dev-story spec case 7.
+- The write gate's exact order (draft in the chat message → the "May I write?" question → Write only after the answer) lives in coordination-rules rule 7 for every artifact-producing skill — write-then-ask recurred across skills; `/threat-model` references it. Threat-model spec case 7.
+
 ## 0.5.4 — 2026-09-08
 - `/init` carries the conversation-language line (it was the only skill without one) and binds the chosen language from the moment the answer arrives — a non-English choice no longer leaves the session English-toned; spec case 8.
 - `/init` never proposes stage `operate` from a README-claimed live URL alone: `operate` needs deploy artefacts in the repository; a detached copy of a deployed service is still `build`.
