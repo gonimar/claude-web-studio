@@ -10,6 +10,9 @@ agent: devops-lead
 
 # Deploy
 
+Prerequisites & secrets per `docs/deploy-target-contract.md`: verify registry access, exact image names and the stack method before the first mutation; secrets never through the chat — offer the env/file channel yourself; a refused path stays refused.
+
+
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.

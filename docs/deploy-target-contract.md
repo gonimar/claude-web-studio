@@ -62,3 +62,20 @@ A kit that wants to be a delegate adds the `deploy-target:` frontmatter to its a
 script), implements the verbs with `--confirmed`, documents `docs/deploy/<target>.md`, and
 registers itself through `/setup-stack`'s question. Companion kits keep their own slash commands
 for interactive use; the contract is only for skill-to-delegate calls.
+
+## Prerequisites & secrets (learned from the first live deploy)
+
+Before the first stack mutation the delegate (or the runbook) verifies, and the plan names each item:
+- **Registry access**: private images need a registry entry (e.g. Portainer + ghcr.io with a
+  read-only token) — created before the deploy, not discovered mid-flight.
+- **Exact image names** come from the release workflow (`images:` in metadata-action), never guessed
+  from the repo name (`owner/repo-web` vs `owner/repo/web` are different registries paths).
+- **Stack creation method**: `string` (compose content in the request body) is the default for
+  private repositories; `git-based` only with a stated reason — it needs a repo-read token and a
+  server-side checkout. A prod compose must not reference repository paths (bind mounts of
+  `./dirs`) — everything ships in images or named volumes.
+- **Secrets are never requested in the chat** — a user message with a secret lands in the transcript
+  verbatim. The skill offers the channel itself: environment variables set in the platform UI, or a
+  `~/.config/<project>/*.env` file read with `set -a; . file; set +a` and never printed.
+- The user's refusal of a path (e.g. "no git-based") is final for the run — no re-asking, no
+  retrying the refused mode.

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.9 — 2026-09-10
+- Greenfield `/init` never writes product code inline — it hands off to `/start`; a trivial-looking goal is `/start`'s call, not init's (e2e branch B1b).
+- Review mode scopes **reviews only**: no mode (solo included) skips `/start`/`/adopt`, the specs or the catalog's required steps; persona runs confirmed solo now walks the pipeline.
+- Agent audit log carries `session_id`/`agent_id`/`tool_use_id` — Start/Stop pair up, per-session agent stats become measurable.
+- Persona-driven e2e testing: five character profiles (agreeable, hasty, refusenik, inventor, clueless), a driver, and the result-storage/report convention under `testing/e2e/personas/`.
+- Drafts render readably in chat — tables as tables, on updates too (rule 7); dev-story renders its plan table, story-done its criteria table.
+- Deploy contract gains **Prerequisites & secrets**: registry access, exact image names and the stack method verified before the first mutation; secrets never through the chat; a refused path stays refused.
+- Hand-offs return to the interrupted intent after a detour; a detour never overwrites session-state `Next:`.
+- New hooks: `validate-deps` (dry-run resolver after a manifest edit — invented versions surface immediately) and `consent-guard` (warn-only sentinel for pipeline-document writes without a fresh consent marker; rule 7 adds the marker step).
+
 ## 0.5.8 — 2026-09-09
 - Executable e2e layer (`testing/e2e/` + `tests/e2e.sh`): synthetic brownfield fixture, multi-turn headless driver, tool-event checker, branched pipeline scenario B1–B15 — one branch per closed behavioural defect class; deliberately outside `run-all.sh` (each branch spends real model turns). Smoke: B9 PASS.
 - Structured roadmap format (`templates/roadmap.md`): one line per story with inline markers — ⛔ dependencies, ~estimate, ⏱ actual, 📅 sprint, 🏷 layer; sprints as dated subheadings, backlog below; prose ordering paragraphs are banned (the order derives from dependencies). `create-stories`, `sprint-plan` and `story-done` reference it.

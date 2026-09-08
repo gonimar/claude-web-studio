@@ -20,6 +20,13 @@ echo '{"tool_input":{"command":"git push -f origin feat/x"}}' | bash "$H/validat
 printf '%s' '{"tool_input":{"command":"cat > doc.md <<EOF\nrun: git push --force origin main\nEOF\nrm -f tmp && git push origin feat/x"}}' | bash "$H/validate-push.sh" >/dev/null 2>&1; expect "push ignores heredoc text and rm -f" 0 $?
 git checkout -q -b master 2>/dev/null || git checkout -q master; printf 'x\n' > d.txt; git add d.txt
 out=$(echo '{"tool_input":{"command":"git commit -m \"feat: y\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: no warning on default branch"; }
+# consent-guard: protected doc without fresh marker -> warning; with marker -> silent
+out=$(echo '{"tool_input":{"file_path":"docs/architecture/adr-0001-x.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent: no warning without marker"; }
+mkdir -p .claude && touch .claude/.write-consent
+out=$(echo '{"tool_input":{"file_path":"docs/architecture/adr-0001-x.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent: warned despite fresh marker"; } || pass=$((pass+1))
+rm -f .claude/.write-consent
+# validate-deps: non-manifest path -> silent exit 0
+echo '{"tool_input":{"file_path":"docs/readme.md"}}' | bash "$H/validate-deps.sh" >/dev/null 2>&1; expect "deps hook ignores non-manifests" 0 $?
 # docs lane: docs: commit touching only pipeline documents on the default branch → no BRANCH warning
 git commit -q -m "feat: y"; mkdir -p docs; printf 'd\n' > docs/note.md; git add docs/note.md
 out=$(echo '{"tool_input":{"command":"git commit -m \"docs: threat model refresh\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH:' && { failn=$((failn+1)); echo "FAIL commit: docs-lane commit warned on default branch"; } || pass=$((pass+1))
