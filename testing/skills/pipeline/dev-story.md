@@ -33,5 +33,9 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: stories and ADRs exist, stage `build` (brownfield entry), but `docs/architecture/test-strategy.md` is missing. **Expected**: `BLOCKED (architecture prerequisites unmet — run /test-setup first)` before any planning, branching or code; the same for a missing `threat-model.md`; no question loop about it, and no code is written.
 - [ ] BLOCKED before Phase 3 · [ ] only the missing commands named · [ ] no files written
 
+### 8. Sprint layer offered
+**Fixture**: 10 Ready stories, `production/sprints/` empty, first `/dev-story` of the backlog. **Expected**: before the plan question one line notes no sprint covers the story, and `/sprint-plan` appears among the options (Recommended for a fresh backlog); with a covering sprint file the line and option are absent.
+- [ ] sprint absence named · [ ] /sprint-plan among options · [ ] silent when a sprint covers the story
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
