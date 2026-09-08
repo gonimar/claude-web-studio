@@ -26,6 +26,6 @@ Per story: goal, tasks, criteria (from the feature spec, none lost — show the 
 Show the list (ID, title, size, dependencies) and the criteria-coverage matrix; edits.
 
 ## Phase 4: Write
-"May I write `production/stories/F-NNN/S-NNN-<slug>.md` (N files), add lines to `production/roadmap.md` and set `story: S-NNN` on the findings covered in `production/findings.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now (roadmap format: `- [ ] S-NNN · Title`).
+"May I write `production/stories/F-NNN/S-NNN-<slug>.md` (N files), add lines to `production/roadmap.md` and set `story: S-NNN` on the findings covered in `production/findings.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now (roadmap format per `templates/roadmap.md`: `- [ ] S-NNN · Title ⛔ S-NNN[,S-NNN] ~Nh 🏷 layer` — dependencies, estimate and layer inline; never a prose ordering paragraph below the list, the order is derivable from ⛔; sprints are subheadings, the rest lives under Backlog).
 
 Verdict: `READY (N stories)`. Next step — one `AskUserQuestion`: `/sprint-plan` (Recommended) · `/dev-story S-NNN` directly · revise the stories. When `docs/architecture/test-strategy.md` or `docs/architecture/threat-model.md` is missing, the Recommended option becomes the missing command (`/test-setup` / `/threat-model`) and `/dev-story` is not offered — stories are ready, but development is not.
