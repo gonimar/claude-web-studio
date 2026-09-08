@@ -27,9 +27,21 @@ Frontend (framework, build, styles; `vanilla` or `none` when there is none), Tes
 `phpunit.xml`, `vitest.config`, `go test`, lint configs), Infrastructure (containers, CI, deploy from
 compose/workflows/deploy skills — **Deploy target and delegate** by `docs/deploy-target-contract.md`: an agent `.claude/agents/*-ops.md` with `deploy-target:` in its frontmatter or a `scripts/deploy/*.sh`; a kit that only ships a slash command is noted as `none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent or a `scripts/deploy/<target>.sh`"; **Infra repo / Proxy config** asked when the host is shared), Layout (`backend_root`, `frontend_root`, `go_layout`). `[TO BE CONFIGURED]`
 may remain only for fields no file answers; ask those in one `AskUserQuestion` (project type, API style,
-layout — whatever is still unknown). Show the filled draft, then "May I write `.claude/docs/technical-preferences.md`?" — one `AskUserQuestion`: write (Recommended) · adjust first · not now — and write only after that answer, never before. Do not defer to
-`/setup-stack`: after `/adopt` the stack counts as chosen, and the template's note "while
-[TO BE CONFIGURED] remains, skills treat the stack as not chosen" is exactly why.
+layout — whatever is still unknown).
+
+The write is gated, in this exact order:
+1. Show the filled draft **in the chat message** (fenced block). Showing the draft never means
+   creating the file — at this point `technical-preferences.md` is still the untouched init
+   placeholder version.
+2. Ask "May I write `.claude/docs/technical-preferences.md`?" — one `AskUserQuestion`:
+   write (Recommended) · adjust first · not now.
+3. Only after the "write" answer call Write/Edit. Calling Write/Edit on this file before the
+   answer is a protocol violation even if you revert afterwards (spec case 8) — asking
+   "the file is already written as a draft, confirm?" is exactly the failure this order exists
+   to prevent.
+
+Do not defer to `/setup-stack`: after `/adopt` the stack counts as chosen, and the template's note
+"while [TO BE CONFIGURED] remains, skills treat the stack as not chosen" is exactly why.
 
 ## Phase 2: Artefact audit (`docs` / `full`)
 | Artefact | Where | Format check |
