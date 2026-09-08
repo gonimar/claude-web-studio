@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.3 — 2026-09-08
+- `/adopt` wrote `technical-preferences.md` before asking, again ("the file is already written as a draft — confirm?") — the 0.5.1 gate sentence was buried at the end of a long paragraph. The gate is now a numbered three-step protocol: draft in the chat message → `AskUserQuestion` → only then Write/Edit, with the write-then-ask anti-pattern named explicitly.
+
 ## 0.5.2 — 2026-09-08
 - `/init` asked the conversation language with a single "English" option when invoked as a bare command (no user prose to infer from) — the question now always carries at least two named options, inferring the second from project or user docs; spec case 7.
 - `/adopt` on a project without git looped its "initialize git now?" question until "yes" and ran `git init -b main`, overriding the user's `init.defaultBranch` — now one question, a decline ends in `BLOCKED`, and a plain `git init` honours the configured default branch; spec case 9.
