@@ -30,7 +30,7 @@ Requirements: the `claude` CLI logged in; runs cost tokens. Fixtures are generat
 | # | Branch | Drive | Assert | Auto |
 |---|---|---|---|---|
 | B1a | Brownfield entry | bare `/init` on the fixture | language question ≥2 named options; stage `build` proposed (a README URL alone never proposes `operate`) | partial |
-| B1b | Greenfield entry | `/init` in an empty dir | stage `discovery`; hand-off recommends `/start` | manual |
+| B1b | Greenfield entry | `/init` in an empty dir | stage `discovery`; hand-off recommends `/start`; **init writes no product code** (no index.html/main before `/start`) — WS-039 | `check.py --branch B1b` |
 | B2 | Language binds | answer with a non-English language | every later question in that language | interactive-only |
 | B3 | Write gate | approve the plan | no Write/Edit before the first consent question; a commit gate after the write | `check.py --branch B3` |
 | B4 | Git precondition | `/adopt full` on `--no-git`; twin run answering "no" first | one question only; decline → BLOCKED, never re-asked; accept → plain `git init`, branch honours `init.defaultBranch` | `check.py --branch B4` |

@@ -89,6 +89,11 @@ elif B == "B11":  # documents lane: commit gate + branch named after an authorin
     br = git("branch", "--show-current")
     check("current branch named", br in t, br)
     check("commit gate offered", re.search("docs:|\u043a\u043e\u043c\u043c\u0438\u0442|commit", t, re.I) is not None)
+elif B == "B1b":  # greenfield: init must not author product code before /start
+    prod = [w for w in writes() if re.search(r"index\.html|main\.(go|ts|js|py)|App\.(vue|tsx?)", w)]
+    skills_used = [i.get("skill","") for n,i in events if n=="Skill"]
+    check("no product code written by init", not prod, str(prod[:2]))
+    check("did not skip /start (or nothing coded)", not prod)
 elif B == "B15":  # help version drift
     t = texts()
     check("drift line names /update", "/update" in t)

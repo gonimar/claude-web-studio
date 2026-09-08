@@ -62,3 +62,10 @@ Verdict: `INITIALISED` | `ALREADY INITIALISED (N files differ)`. Next step — o
 `/adopt full` (Recommended for brownfield — the stack, artefacts and settings are audited and
 `technical-preferences.md` is filled from the facts) · `/start` (Recommended for an empty project) ·
 `/help` · stop here. Never hand off with a plain text line.
+
+`/init` scaffolds the studio and stops there — it never writes product code (`index.html`, a
+`main`, a component) itself, however trivial the goal looks. A greenfield project's first product
+artifact is authored through `/start` → the stack and spec steps, which for a genuinely tiny goal
+may choose the shortest path — but that choice belongs to `/start`, not to init coding it inline.
+Answering the hand-off with anything other than a pipeline command is the user's call; init does
+not pre-empt it with code.
