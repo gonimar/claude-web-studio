@@ -69,5 +69,11 @@ table, the artefact audit and a numbered plan where every item is a checkbox `- 
 (`/help` reads the open items and offers the first one; tick items `[x]` when done). Propose `production/stage.txt`
 from the facts (`build` / `operate`) if `/init` has not already set it.
 
-Verdict: `COMPLIANT` | `NEEDS MIGRATION (N blocking)`. Next step — one `AskUserQuestion`: the plan's first
-open item (Recommended) · `/help` · stop here.
+Verdict: `COMPLIANT` | `NEEDS MIGRATION (N blocking)`.
+
+The plan so far reflects only the artefact gaps — nobody has asked the owner what they actually want.
+The hand-off asks exactly that: one `AskUserQuestion` — the plan's first open item (Recommended) ·
+"describe your goal for this project in your own words" (free text; reorder the plan around the
+answer — goal items first — and only then recommend a command) · `/help` · stop here. An owner who
+installs the studio on a working project always has an intent (tidy it up, a new feature, security,
+an upgrade); the plan must not pretend the artefact audit is that intent.

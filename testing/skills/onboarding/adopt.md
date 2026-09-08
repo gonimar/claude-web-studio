@@ -42,5 +42,9 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: sources without `.git`; the user's global git config sets `init.defaultBranch=master`. **Expected**: one `AskUserQuestion` (initialize git now Recommended · stop); on "stop" the skill ends with `BLOCKED (not a git repository — adoption relies on history and branches)` and never asks again in the same run; on "yes" it runs plain `git init` — the resulting branch is `master` (the user's configured default), never a hardcoded `-b main`.
 - [ ] exactly one question, no re-ask after a decline · [ ] decline ends in BLOCKED · [ ] plain `git init`, branch honours `init.defaultBranch`
 
+### 10. Owner's goal is solicited
+**Fixture**: adoption plan produced with N open items. **Expected**: the hand-off question offers, alongside the first open item, an explicit "describe your goal in your own words" option; a stated goal ("modernise versions and swap the HTTP layer, don't break behaviour") reorders the plan — goal-serving items first — before any command is recommended.
+- [ ] goal option present in the hand-off · [ ] stated goal visibly reorders the plan
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
