@@ -12,7 +12,7 @@ model: sonnet
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 Answers not "what exists?" but "will what exists work with the studio's skills?".
-Writes only after "May I write?". If `.claude/docs/` is missing, run `/init` first. Not a git repository (`git rev-parse --show-toplevel` fails) → stop with `BLOCKED (not a git repository — run git init first)`: adoption relies on history and branches.
+Writes only after "May I write?". If `.claude/docs/` is missing, run `/init` first. Not a git repository (`git rev-parse --show-toplevel` fails) → one `AskUserQuestion`: initialize git now (Recommended) · stop. On "stop" — `BLOCKED (not a git repository — adoption relies on history and branches)`, never re-asked in the same run. On "yes" — plain `git init` (it honours the user's `init.defaultBranch`); never pass `-b`/`--initial-branch`.
 
 ## Phase 1: Stack detection (`stack` / `full`)
 Say "Scanning the project…", then read:

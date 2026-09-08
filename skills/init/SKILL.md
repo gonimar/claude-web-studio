@@ -24,9 +24,13 @@ Detect whether code already exists (brownfield): a manifest with sources (`compo
 more than a handful of commits. Remember the answer — it decides the stage in Phase 3 and the hand-off.
 
 ## Phase 2: Language and review mode
-`AskUserQuestion`: "Which language should we use for conversation and documents?" (options: English,
-the user's message language if different, Other). Then review mode: `lean` (recommended for solo),
-`full`, `solo`. `--language`/`--review` skip the questions.
+`AskUserQuestion`: "Which language should we use for conversation and documents?". Options: English
+plus the language of the user's own words when it differs — their messages in this session, or, on a
+bare `/init` with no prose, the non-English language of existing project docs (README, CLAUDE.md) or
+of the user's global `~/.claude/CLAUDE.md`. The question always carries at least two named options —
+a single-option question is a railroad, not a choice; when nothing can be inferred, name the two or
+three languages most plausible for this user's environment. Then review mode: `lean` (recommended
+for solo), `full`, `solo`. `--language`/`--review` skip the questions.
 
 ## Phase 3: Plan
 Show what will be created or changed:

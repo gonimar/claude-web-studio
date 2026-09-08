@@ -38,5 +38,9 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: stack detected. **Expected**: the filled draft is shown and `technical-preferences.md` is written only after the `AskUserQuestion` answer — never before; a write-then-ask is a protocol violation even if reverted.
 - [ ] draft shown · [ ] AskUserQuestion before the write · [ ] no write before the answer
 
+### 9. No git repository
+**Fixture**: sources without `.git`; the user's global git config sets `init.defaultBranch=master`. **Expected**: one `AskUserQuestion` (initialize git now Recommended · stop); on "stop" the skill ends with `BLOCKED (not a git repository — adoption relies on history and branches)` and never asks again in the same run; on "yes" it runs plain `git init` — the resulting branch is `master` (the user's configured default), never a hardcoded `-b main`.
+- [ ] exactly one question, no re-ask after a decline · [ ] decline ends in BLOCKED · [ ] plain `git init`, branch honours `init.defaultBranch`
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
