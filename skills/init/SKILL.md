@@ -32,7 +32,8 @@ bare `/init` with no prose, the non-English language of existing project docs (R
 of the user's global `~/.claude/CLAUDE.md`. The question always carries at least two named options —
 a single-option question is a railroad, not a choice; when nothing can be inferred, name the two or
 three languages most plausible for this user's environment. Then review mode: `lean` (recommended
-for solo), `full`, `solo`. `--language`/`--review` skip the questions.
+for solo), `full`, `solo` — the mode scopes **reviews only**: no mode skips `/start`/`/adopt`, the
+specs or the catalog's required steps (review-workflow.md). `--language`/`--review` skip the questions.
 
 From the moment the language answer arrives — an `AskUserQuestion` option, a `--language` argument,
 or a language stated in the user's reply text — conduct the rest of `/init` in that language: every
