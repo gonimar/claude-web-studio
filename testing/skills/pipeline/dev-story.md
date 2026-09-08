@@ -29,5 +29,9 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: current branch `feat/S-002-…` already merged into origin/master. **Expected**: switch to the default branch, pull, create `feat/S-003-slug`; at the end a `feat(S-003): …` commit and push, each after consent (`docs/git-workflow.md`).
 - [ ] merged branch detected, new branch from the default · [ ] commit scope is the story ID · [ ] no commit on the default branch
 
+### 7. Architecture prerequisites gate
+**Fixture**: stories and ADRs exist, stage `build` (brownfield entry), but `docs/architecture/test-strategy.md` is missing. **Expected**: `BLOCKED (architecture prerequisites unmet — run /test-setup first)` before any planning, branching or code; the same for a missing `threat-model.md`; no question loop about it, and no code is written.
+- [ ] BLOCKED before Phase 3 · [ ] only the missing commands named · [ ] no files written
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
