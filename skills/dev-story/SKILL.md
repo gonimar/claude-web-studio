@@ -19,6 +19,9 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 
 ## Phase 1: Story
 Argument or `production/session-state/active.md` (`Task:`); none — ask. Status must be Ready/In Progress.
+No `production/sprints/sprint-*.md` covers this story while the backlog holds more than three Ready
+stories → say so before the plan question and include `/sprint-plan` in its options (Recommended for
+the first story of a fresh backlog): the sprint layer must not be reachable only by the owner's memory.
 
 ## Phase 2: Context (read everything before starting)
 **Architecture prerequisites first** — regardless of how the project entered `build` (brownfield
