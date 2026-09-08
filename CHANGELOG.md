@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.6 — 2026-09-08
+- `/help` flags plugin version drift: when `.claude/.web-studio-version` (what seeded the project) is older than the running plugin, one line names both versions and `/update` joins the closing question's options; silent when they match and in copy mode. Spec case 11.
+
 ## 0.5.5 — 2026-09-08
 - Development never starts before architecture prerequisites: `/dev-story` blocks (naming the missing command) while `docs/architecture/threat-model.md` or `test-strategy.md` is absent — brownfield projects enter `build` with the architecture phase unwalked and nothing enforced the catalog's required steps; `/create-stories` stops recommending `/dev-story` while a prerequisite is missing; `/help` checks the required steps of every earlier phase. Dev-story spec case 7.
 - The write gate's exact order (draft in the chat message → the "May I write?" question → Write only after the answer) lives in coordination-rules rule 7 for every artifact-producing skill — write-then-ask recurred across skills; `/threat-model` references it. Threat-model spec case 7.
