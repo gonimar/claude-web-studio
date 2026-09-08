@@ -40,7 +40,9 @@ fi
 # Branch hygiene (docs/git-workflow.md): one story = one branch; never commit on the default
 # branch or on a branch that origin's default branch already contains (the commit would strand).
 BR=$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
-case "$BR" in main|master|production|release) WARN="$WARN\nBRANCH: committing directly to '$BR' — studio rule: one story = one branch (feat/S-NNN-slug), see .claude/docs/git-workflow.md.";; esac
+DOCS_LANE=0
+if echo "$MSG" | grep -qE '^docs(\([a-z0-9/_-]+\))?!?: ' && ! echo "$STAGED" | grep -qvE '^(docs/|production/|CLAUDE\.md$|\.claude/docs/|README)'; then DOCS_LANE=1; fi
+case "$BR" in main|master|production|release) [ "$DOCS_LANE" = 1 ] || WARN="$WARN\nBRANCH: committing directly to '$BR' — studio rule: one story = one branch (feat/S-NNN-slug); pipeline documents use the docs: lane (git-workflow.md).";; esac
 DEF=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')
 if [ -z "$DEF" ]; then for b in master main; do git show-ref -q --verify "refs/remotes/origin/$b" && { DEF=$b; break; }; done; fi
 if [ -n "$DEF" ] && [ -n "$BR" ] && [ "$BR" != "$DEF" ] && git merge-base --is-ancestor "$BR" "origin/$DEF" 2>/dev/null; then

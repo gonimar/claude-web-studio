@@ -13,9 +13,11 @@ force-pushes.
 | Close | `/story-done` Phase 4 | `git commit -m "docs: close S-NNN — Done, PR #N"` (story status, roadmap `[x]`); `gh pr create` when no PR exists yet. |
 | Merge | `/story-done` Phase 5 | Only on `DONE` and after a separate "merge?" question (the Close answer never covers the merge): `gh pr merge --merge --delete-branch` (merge commit; `--squash` only when the project's CLAUDE.md says so); `git switch <default> && git pull --ff-only`; delete the local branch; clear `session-state/active.md`. Declined → PR stays open, `Branch:` stays; re-run `/story-done S-NNN` to merge later. |
 
+| Documents | every authoring skill (`/threat-model`, `/test-setup`, `/architecture-decision`, `/api-contract`, `/data-model`, specs, `/create-stories`, `/sprint-plan`, audits) | Right after the write gate, one commit gate: `docs: <what>` staging exactly the written files. On the **default branch** when no story work is in progress. When HEAD is a story branch, the skill says so and asks: commit here (the document belongs to this story) · switch to the default branch and commit there (pipeline-wide document — default Recommended) · leave uncommitted. Pipeline documents must not silently ride a story branch: master falls behind and every next story branches from stale docs. |
+
 ## Rules
 - Conventional Commits with the story ID as scope: `feat(S-012): …`, `fix(S-012): …`, `docs: close S-012 …`.
-- No commits on the default branch (the commit hook warns). No force-push (the push hook blocks).
+- No **code** commits on the default branch (the commit hook warns). `docs:`-scoped commits that touch only pipeline documents (`docs/**`, `production/**`, `CLAUDE.md`, `.claude/docs/**`) are the documented exception — that is the documents lane above. No force-push (the push hook blocks).
 - No work on a branch that is already merged: the commit hook warns "already merged into origin/<default>", the session-start hook prints ahead/behind.
 - Solo projects still open the PR: CI runs on it and the merge records the review; `story-done` merges it on request.
 - Hotfixes follow `/hotfix` (branch from the release tag, backport to the default branch).
