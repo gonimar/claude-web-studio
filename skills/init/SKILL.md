@@ -10,6 +10,8 @@ model: sonnet
 # Init — scaffold the studio in this project
 
 Writes files only after "May I write …?" → "yes".
+Reply in the project conversation language (CLAUDE.md → Language); until CLAUDE.md exists, the
+language chosen in Phase 2 binds instead. Code, identifiers, paths and commit messages stay in English.
 
 ## Phase 1: Locate the studio files
 Source of seed files, in order: `--plugin-root`; the "Plugin root:" line printed by the session-start
@@ -32,6 +34,11 @@ a single-option question is a railroad, not a choice; when nothing can be inferr
 three languages most plausible for this user's environment. Then review mode: `lean` (recommended
 for solo), `full`, `solo`. `--language`/`--review` skip the questions.
 
+From the moment the language answer arrives — an `AskUserQuestion` option, a `--language` argument,
+or a language stated in the user's reply text — conduct the rest of `/init` in that language: every
+question, the plan, the write summary and the hand-off. CLAUDE.md not existing yet is no excuse;
+the whole session that follows inherits the tone `/init` sets.
+
 ## Phase 3: Plan
 Show what will be created or changed:
 - `CLAUDE.md`: create from the template with the language filled in, or (if it exists) insert the
@@ -42,6 +49,9 @@ Show what will be created or changed:
 - `.claude/settings.json`: create from `settings.plugin-mode.json` (permissions + statusline) or show a diff of `permissions.allow/deny` and `statusLine` to merge; hooks are provided by the plugin (copy mode: hooks already in `settings.json`).
 - `.claude/statusline.sh`, `docs/web-studio/README.md`, `docs/{specs,architecture,security,ops}`, `production/{sprints,stories,releases,session-state,session-logs}`, `production/review-mode.txt`, `.gitignore` entries (`production/session-state/`, `production/session-logs/`, `.claude/settings.local.json`, `.claude/agent-memory-local/`).
 - `production/stage.txt`: `discovery` for an empty project. For brownfield propose the stage from the facts — `build` (code, no release) or `operate` (deployed: release files, compose.prod, a deploy skill) — and confirm it in the "May I write?" question; never write `discovery` over a project that is already running.
+  `operate` needs deploy artefacts **in the repository**; a README claiming a live URL alone is a
+  signal to ask ("is it actually live, and is this working copy connected to that deployment?"),
+  never to propose `operate` on its own — a detached copy of a deployed service is still `build`.
 "May I write these files?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
 
 ## Phase 4: Write and verify
