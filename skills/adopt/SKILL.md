@@ -56,6 +56,11 @@ Do not defer to `/setup-stack`: after `/adopt` the stack counts as chosen, and t
 | CLAUDE.md | root | studio block (`web-studio`), Language section, @-includes |
 Classify: BLOCKING (a skill would fail or lie), HIGH (traceability lost), MEDIUM, INFO. A roadmap kept
 by a companion advisor skill in its own format is INFO ("not migrated"), never a migration item.
+Every BLOCKING and HIGH gets a sink, not only a row in the plan: one `AskUserQuestion` per item — record it in
+`production/findings.md` (template `findings.md`; id `ADOPT-NNN`, severity, area, the decision needed) (Recommended) ·
+story stubs now via `/create-stories` · plan only. A BLOCKING that is neither recorded nor turned into a story is
+named as such in the verdict line (`/help`, `/create-stories` and `/sprint-plan` read `production/findings.md`;
+the adoption plan is read only by `/help` and only for its first open item).
 
 ## Phase 3: Settings (`settings` / `full`)
 - `.claude/settings.web-studio.json` present → show a diff with `settings.json` for `hooks`, `permissions`, `statusLine`; propose a merge (never drop foreign hooks; merge arrays).

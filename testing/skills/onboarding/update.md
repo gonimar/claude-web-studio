@@ -26,5 +26,9 @@ Update the studio in the project (plugin update or copy-mode reinstall); local e
 **Fixture**: project data untouched — confirmed. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Plugin updated while the gate was open
+**Fixture**: the session's skills come from v0.7.0; the "Update 0.4.3 → 0.7.0?" gate stays open; meanwhile `claude plugin list --json` reports v0.8.0. **Expected**: after "yes" the skill re-reads the installed version before copying, notices the mismatch, prints the one-line restart instruction and ends with `RESTART REQUIRED`; nothing is seeded from the session's cache and `.claude/.web-studio-version` is not written.
+- [ ] version re-read after the gate, not only in Phase 1 · [ ] mismatch named with both versions · [ ] no files written, verdict `RESTART REQUIRED`
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
