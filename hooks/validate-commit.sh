@@ -18,13 +18,18 @@ CMD=$(jget .tool_input.command)
 echo "$CMD" | grep -qE '(^|[;&|][[:space:]]*)git[[:space:]]+commit' || exit 0
 STAGED=$(git diff --cached --name-only 2>/dev/null); [ -z "$STAGED" ] && exit 0
 WARN=""
+# warn <PreToolUse|PostToolUse> <message>: a warning as JSON on stdout — additionalContext reaches the model,
+# systemMessage the user; exit 0 keeps the tool allowed. stderr with exit 0 reaches neither (WS-050).
+warn() {
+  local m; m=$(printf '%s' "$2" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/  /g' | awk 'NR>1{printf "\\n"} {printf "%s", $0}')
+  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"},"systemMessage":"%s"}\n' "$1" "$m" "$m"
+}
 SECRET_FILES=$(echo "$STAGED" | grep -E '(^|/)\.env(\..+)?$|\.pem$|\.key$|id_rsa|\.p12$|\.pfx$' | grep -vE '\.env\.(example|dist|template|sample)$' || true)
 if [ -n "$SECRET_FILES" ]; then echo "BLOCKED: secret files are staged:" >&2; echo "$SECRET_FILES" | sed 's/^/  /' >&2; exit 2; fi
 DIFF=$(git diff --cached -U0 2>/dev/null | grep '^+' | grep -v '^+++')
 if echo "$DIFF" | grep -qE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|(password|passwd|secret|api[_-]?key|token)[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"']{12,}["'"'"']'; then
-  echo "BLOCKED: staged changes contain a secret-like string. Move it to the environment (.env is not committed)." >&2
-  echo "$DIFF" | grep -nE 'AKIA|ghp_|github_pat_|sk-|xox[baprs]-|PRIVATE KEY|(password|passwd|secret|api[_-]?key|token)[[:space:]]*[:=]' | head -5 | cut -c1-160 >&2
-  exit 2
+  { echo "BLOCKED: staged changes contain a secret-like string. Move it to the environment (.env is not committed)."
+    echo "$DIFF" | grep -nE 'AKIA|ghp_|github_pat_|sk-|xox[baprs]-|PRIVATE KEY|(password|passwd|secret|api[_-]?key|token)[[:space:]]*[:=]' | head -5 | cut -c1-160; } >&2; exit 2
 fi
 for pair in "package.json:pnpm-lock.yaml package-lock.json yarn.lock bun.lock" "composer.json:composer.lock" "go.mod:go.sum"; do
   m=${pair%%:*}; locks=${pair#*:}
@@ -48,5 +53,5 @@ if [ -z "$DEF" ]; then for b in master main; do git show-ref -q --verify "refs/r
 if [ -n "$DEF" ] && [ -n "$BR" ] && [ "$BR" != "$DEF" ] && git merge-base --is-ancestor "$BR" "origin/$DEF" 2>/dev/null; then
   WARN="$WARN\nBRANCH: '$BR' is already merged into origin/$DEF — this commit will strand; start a new branch from $DEF (git switch $DEF && git pull --ff-only && git switch -c feat/S-NNN-slug)."
 fi
-[ -n "$WARN" ] && echo -e "=== Commit warnings ===$WARN\n=======================" >&2
+[ -n "$WARN" ] && warn PreToolUse "$(printf '%b' "=== Commit warnings ===$WARN")"
 exit 0

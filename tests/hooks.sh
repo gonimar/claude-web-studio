@@ -25,6 +25,13 @@ out=$(echo '{"tool_input":{"file_path":"docs/architecture/adr-0001-x.md"}}' | ba
 mkdir -p .claude && touch .claude/.write-consent
 out=$(echo '{"tool_input":{"file_path":"docs/architecture/adr-0001-x.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent: warned despite fresh marker"; } || pass=$((pass+1))
 rm -f .claude/.write-consent
+# WS-050: warnings are JSON on stdout (additionalContext + systemMessage), never bare stderr with exit 0
+isjson() { python3 -c 'import json,sys; d=json.load(sys.stdin); assert d["hookSpecificOutput"]["hookEventName"]==sys.argv[1] and sys.argv[2] in d["hookSpecificOutput"]["additionalContext"] and sys.argv[2] in d["systemMessage"]' "$1" "$2" 2>/dev/null; }
+echo '{"tool_input":{"file_path":"docs/architecture/adr-0001-x.md"}}' | bash "$H/consent-guard.sh" 2>/dev/null | isjson PreToolUse "CONSENT:" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent: warning is not JSON additionalContext on stdout"; }
+echo '{"tool_input":{"file_path":"backend/internal/auth/session.go"}}' | bash "$H/impact-guard.sh" 2>/dev/null | isjson PreToolUse "IMPACT:" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL impact: warning is not JSON additionalContext on stdout"; }
+echo '{"tool_input":{"file_path":"/x/skills/foo/SKILL.md"}}' | bash "$H/validate-skill-change.sh" 2>/dev/null | isjson PostToolUse "skill-test" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL skill-change: warning is not JSON additionalContext on stdout"; }
+echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>/dev/null | isjson PreToolUse "WARNING: pushing directly" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL push: direct-push warning is not JSON on stdout"; }
+for h in consent-guard impact-guard validate-commit validate-push validate-deps validate-skill-change post-edit-check; do grep -qE '^[^#]*>&2' "$H/$h.sh" | grep -v 'exit 2' >/dev/null; if grep -nE '>&2' "$H/$h.sh" | grep -vqE 'BLOCKED|exit 2|^[0-9]+:#'; then failn=$((failn+1)); echo "FAIL $h: still warns on stderr (only exit-2 blocks may use stderr)"; else pass=$((pass+1)); fi; done
 # impact-guard: security/architecture surface without fresh marker -> warning; with marker -> silent; other paths -> silent
 out=$(echo '{"tool_input":{"file_path":"backend/internal/auth/session.go"}}' | bash "$H/impact-guard.sh" 2>&1); echo "$out" | grep -q 'IMPACT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL impact: no warning without marker"; }
 mkdir -p .claude && touch .claude/.impact-verdict

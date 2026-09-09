@@ -13,10 +13,19 @@ print(d if isinstance(d,str) else ("" if d is None else json.dumps(d)))' "$1" 2>
   key="${1##*.}"; echo "$INPUT" | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"" | head -1 | sed -E "s/^\"$key\"[[:space:]]*:[[:space:]]*\"//;s/\"$//;s/\\\\\"/\"/g"
 }
 FILE=$(jget .tool_input.file_path)
+# warn <PreToolUse|PostToolUse> <message>: a warning as JSON on stdout — additionalContext reaches the model,
+# systemMessage the user; exit 0 keeps the tool allowed. stderr with exit 0 reaches neither (WS-050).
+warn() {
+  local m; m=$(printf '%s' "$2" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/  /g' | awk 'NR>1{printf "\\n"} {printf "%s", $0}')
+  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"},"systemMessage":"%s"}\n' "$1" "$m" "$m"
+}
 case "$FILE" in
   */skills/*/SKILL.md|*/agents/*.md)
-    head -1 "$FILE" 2>/dev/null | grep -q '^---$' || echo "WARNING: $FILE — frontmatter must start with '---' on line 1." >&2
-    grep -q '^name:' "$FILE" 2>/dev/null || echo "WARNING: $FILE — missing name: field; the file will be ignored." >&2
-    echo "Changed $FILE — consider /skill-test static <name>." >&2 ;;
+    W=""
+    head -1 "$FILE" 2>/dev/null | grep -q '^---$' || W="$W
+WARNING: $FILE — frontmatter must start with '---' on line 1."
+    grep -q '^name:' "$FILE" 2>/dev/null || W="$W
+WARNING: $FILE — missing name: field; the file will be ignored."
+    warn PostToolUse "Changed $FILE — consider /skill-test static <name>.$W" ;;
 esac
 exit 0

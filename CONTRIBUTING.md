@@ -95,7 +95,11 @@ tokens or references to private projects.
 - **Rules** (`rules/*.md`): frontmatter `paths:` with globs, then short imperative bullets and a
   link to the relevant stack reference. Rules are copied into projects by `/init` and `install.sh`.
 - **Hooks** (`hooks/*.sh`): must work without `jq` (use the `jget` helper), exit `0` to allow,
-  `2` to block with the reason on stderr, never block on `PostToolUse`. Register in both
+  `2` to block with the reason on stderr, never block on `PostToolUse`. A **warning** that must reach
+  the model is JSON on stdout via the `warn <PreToolUse|PostToolUse> <message>` helper (copied into
+  each hook): `hookSpecificOutput.additionalContext` reaches the model, `systemMessage` the user;
+  stderr with exit `0` reaches neither — the model never saw such warnings (WS-050). Never set
+  `permissionDecision` in a warning: it would auto-allow the tool. Register in both
   `hooks/hooks.json` (plugin mode, `${CLAUDE_PLUGIN_ROOT}` paths) and `templates/settings.json`
   (copy mode). Add a case to `tests/hooks.sh`.
 - **Templates** (`docs/templates/*.md`): referenced by the authoring skill that fills them and by

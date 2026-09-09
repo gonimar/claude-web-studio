@@ -14,6 +14,12 @@ print(d if isinstance(d,str) else ("" if d is None else json.dumps(d)))' "$1" 2>
   key="${1##*.}"; echo "$INPUT" | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"" | head -1 | sed -E "s/^\"$key\"[[:space:]]*:[[:space:]]*\"//;s/\"$//;s/\\\\\"/\"/g"
 }
 FILE=$(jget .tool_input.file_path)
+# warn <PreToolUse|PostToolUse> <message>: a warning as JSON on stdout — additionalContext reaches the model,
+# systemMessage the user; exit 0 keeps the tool allowed. stderr with exit 0 reaches neither (WS-050).
+warn() {
+  local m; m=$(printf '%s' "$2" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/  /g' | awk 'NR>1{printf "\\n"} {printf "%s", $0}')
+  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"},"systemMessage":"%s"}\n' "$1" "$m" "$m"
+}
 [ -f "$FILE" ] || exit 0
 OUT=""
 case "$FILE" in
@@ -31,5 +37,5 @@ case "$FILE" in
       *.ts|*.tsx|*.vue|*.js|*.mjs) [ -f node_modules/.bin/eslint ] && { E=$(node_modules/.bin/eslint --no-warn-ignored --format unix "$FILE" 2>/dev/null | grep -E 'error' | head -8); [ -n "$E" ] && OUT="eslint:\n$E"; } ;;
     esac ;;
 esac
-[ -n "$OUT" ] && echo -e "=== post-edit ($FILE) ===\n$OUT" >&2
+[ -n "$OUT" ] && warn PostToolUse "$(printf '=== post-edit (%s) ===\n%s' "$FILE" "$OUT")"
 exit 0

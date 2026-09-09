@@ -10,6 +10,12 @@ jget() {
   key="${1##*.}"; echo "$INPUT" | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"" | head -1 | sed -E "s/^\"$key\"[[:space:]]*:[[:space:]]*\"//;s/\"$//"
 }
 FP=$(jget .tool_input.file_path)
+# warn <PreToolUse|PostToolUse> <message>: a warning as JSON on stdout — additionalContext reaches the model,
+# systemMessage the user; exit 0 keeps the tool allowed. stderr with exit 0 reaches neither (WS-050).
+warn() {
+  local m; m=$(printf '%s' "$2" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/  /g' | awk 'NR>1{printf "\\n"} {printf "%s", $0}')
+  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"},"systemMessage":"%s"}\n' "$1" "$m" "$m"
+}
 case "$FP" in
   */docs/*|docs/*|*/production/*|production/*|*/.claude/*|.claude/*|*/node_modules/*|*/vendor/*) exit 0;;
 esac
@@ -25,5 +31,5 @@ if [ -f "$M" ]; then
   age=$(( $(date +%s) - $(stat -c %Y "$M" 2>/dev/null || echo 0) ))
   [ "$age" -le 14400 ] && exit 0
 fi
-echo "IMPACT: $FP is an architecture/security surface and no fresh impact verdict exists — was the change classified (/impact) or is it inside an approved story (/dev-story sets the marker at story start)? Warn-only, coordination-rules rule 11." >&2
+warn PreToolUse "IMPACT: $FP is an architecture/security surface and no fresh impact verdict exists — was the change classified (/impact) or is it inside an approved story (/dev-story sets the marker at story start)? Warn-only, coordination-rules rule 11."
 exit 0
