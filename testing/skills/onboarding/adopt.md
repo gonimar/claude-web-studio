@@ -46,5 +46,9 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: adoption plan produced with N open items. **Expected**: the hand-off question offers, alongside the first open item, an explicit "describe your goal in your own words" option; a stated goal ("modernise versions and swap the HTTP layer, don't break behaviour") reorders the plan — goal-serving items first — before any command is recommended.
 - [ ] goal option present in the hand-off · [ ] stated goal visibly reorders the plan
 
+### 11. HIGH from the artefact audit reaches findings.md
+**Fixture**: `full` mode on a deployed project; the artefact audit finds one HIGH (traceability lost: a decision recorded as done whose artefact does not exist). **Expected**: besides the plan row, one `AskUserQuestion` (record in `production/findings.md` as `ADOPT-NNN` Recommended · story stubs · plan only); on "record" the row is written after the answer; on "plan only" the verdict line still lists the item as unrecorded.
+- [ ] question asked per BLOCKING/HIGH · [ ] row written only after consent · [ ] verdict line names unrecorded items
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

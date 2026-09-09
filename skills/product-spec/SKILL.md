@@ -29,6 +29,11 @@ Mode (`--review` or `production/review-mode.txt`, default `lean`):
 - `lean`: `technical-director` only if there are non-trivial NFRs/integrations.
 - `solo`: no review.
 CONCERNS/FAIL — show, propose edits, never advance the stage automatically.
+Then, for every BLOCKING and HIGH item of the verdict, one `AskUserQuestion`: record it in `production/findings.md`
+(template `findings.md`; id `ARCH-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now
+via `/create-stories` · keep it in the spec only. A BLOCKING that is neither recorded nor turned into a story is
+named as such in the verdict line — it must not silently stay in the document (`/create-stories`, `/sprint-plan`
+and `/help` read `production/findings.md`, nobody reads §8 of the spec for open decisions).
 
 ## Phase 4: Write
 "May I write `docs/specs/product-spec.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now; propose `production/stage.txt` = `specification`.

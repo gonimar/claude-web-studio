@@ -22,7 +22,14 @@ Copy mode: `install.sh <project> --dry-run`; the same diff for locally edited fi
 
 ## Phase 3: Apply
 "Update v[X] → v[Y]? Locally edited files [list] would be overwritten — keep copies in `.claude/local-overrides/`?"
-After "yes": copies → update/install → `git status` → summary of changed files.
+After "yes", **before copying anything**, re-read the installed version: plugin mode — `claude plugin list --json`
+again; copy mode — the kit's `.claude-plugin/plugin.json`. Compare it with the version this session's skills come
+from (the last path segment of the skill's base directory or of the "Plugin root:" line). The gate may have stayed
+open for a long time and the plugin may have been updated meanwhile: seeding `docs/` and `rules/` from the session's
+cache would stamp `.claude/.web-studio-version` with a version that is no longer installed. If the two differ: print
+one line — "this session runs v[X'], v[Z] is installed: restart the session so that skills, hooks and the seed files
+come from v[Z]" — and stop with the verdict `RESTART REQUIRED`; never apply from the session's copy.
+Otherwise: copies → update/install → `git status` → summary of changed files.
 Project data (`docs/specs`, `docs/architecture`, `production/`, a configured `technical-preferences.md`, `CLAUDE.md`) is never touched — verify and state it in the output.
 
-Verdict: `UPDATED` | `UP TO DATE` | `DRY RUN`. Next step — one `AskUserQuestion`: commit the update (Recommended) · `/skill-test static all` (if the testing framework is installed) · stop here.
+Verdict: `UPDATED` | `UP TO DATE` | `DRY RUN` | `RESTART REQUIRED`. Next step — one `AskUserQuestion`: commit the update (Recommended) · `/skill-test static all` (if the testing framework is installed) · stop here.

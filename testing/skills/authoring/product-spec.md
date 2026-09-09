@@ -26,5 +26,9 @@ Product spec section by section with review per mode.
 **Fixture**: CONCERNS → no stage advancement. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. BLOCKING from the review reaches findings.md
+**Fixture**: lean mode; `technical-director` returns CONCERNS with one BLOCKING (a fact in the draft the repository contradicts) and one HIGH. **Expected**: the draft is corrected; for each of the two items one `AskUserQuestion` (record in `production/findings.md` as `ARCH-NNN` Recommended · story stubs · spec only); a declined BLOCKING is named in the verdict line as unrecorded; the row is written only after the answer.
+- [ ] one question per BLOCKING/HIGH · [ ] `findings.md` row follows the template · [ ] unrecorded BLOCKING appears in the verdict line
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
