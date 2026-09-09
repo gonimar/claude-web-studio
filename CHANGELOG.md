@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.6.0 — 2026-09-09
 - Roadmap format v3.1 (`templates/roadmap.md`): a three-line header that names who manages the file, the source of truth and the last update; every ID is an **inline** link (`[ID](path)`, file-relative to `production/roadmap.md`) — reference-style `## Links` definitions are gone (they stop resolving once other sections fold into `<details>`, and the format's first draft also wrote repo-root-relative paths that never resolved); `⛔` accepts story, ADR and owner-decision IDs; sprints carry ISO dates in the heading (`📅 sprint-NN` is gone); a closed sprint, the Backlog and the Legend fold into `<details>` with an aggregate in `<summary>` once there's history to fold, an active sprint never does; a new `## Docs` section is a maintained-by-the-tools status board over `production/stories/`, `backlog.md`, `decisions.md`, `sprints/`, `docs/architecture/`, `docs/specs/`, `docs/ops/` (each a collapsed table, owner decisions live here now — the old numbered "Owner decisions" section is gone); `[x]` needs evidence (⏱ and/or 🔗). Proven on a real project (argus) before landing here. `create-stories`, `sprint-plan`, `story-done` and `architecture-decision` updated to the format and to keeping the Docs blocks current.
 
 ## 0.5.9 — 2026-09-10
