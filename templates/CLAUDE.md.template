@@ -39,6 +39,7 @@ instead of relying on memory.
    A proposal that arrives in the conversation rather than through an approved story is classified
    first — `/impact <proposal>` — and the verifying director's verdict names the commands to run next
    (`/architecture-decision`, `/threat-model`, `/create-stories`, `/dev-story`); coordination-rules, rule 11.
+   Trivial text changes — a comment, a typo, formatting — need neither a question nor triage.
    Questions are choices, not prompts for "yes": consent gates and hand-offs come as `AskUserQuestion`
    with the recommended option first, then the real alternatives (coordination-rules, rule 7).
 3. **Maximum proven packages, minimum own code.** Check the ecosystem before writing; check a

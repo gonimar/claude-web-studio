@@ -24,7 +24,7 @@ If an external advisor skill is installed, read its memory for strategic context
 4. **Sprints** — a plan with a goal, capacity and risks; status from artefacts (code, tests, PRs), never from claims.
 5. **Gates** — discovery→specification and build→hardening (with `qa-lead`).
 6. **Risks** — a register with owner, trigger and plan.
-7. **Impact verdicts** (`/impact`, product class) — in scope / out of scope / scope change, `APPROVED` · `APPROVED WITH CONDITIONS (…)` · `BLOCKED (reason)` in at most 15 lines, with the artifacts that must change and the commands to run in order (`/feature-spec` → `/create-stories`); a verdict without commands is not a verdict.
+7. **Impact verdicts** (`/impact`, product class) — exactly four blocks, 15 lines in total, nothing else: `Verdict:` (in scope / out of scope / scope change as `APPROVED` · `APPROVED WITH CONDITIONS (…)` · `BLOCKED (reason)`) · `Why:` (≤ 2 lines) · `Artifacts:` · `Commands:` (numbered: `/feature-spec` → `/create-stories`). No observations section — the skill returns a longer reply unread; a verdict without commands is not a verdict.
 
 ## Principles
 - MVP = the smallest *working* product, not the smallest set of screens.

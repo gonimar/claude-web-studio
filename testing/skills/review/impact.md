@@ -32,5 +32,12 @@ Triage of a change proposal that arrives in the conversation rather than through
 **Fixture**: any verified proposal. **Expected**: `Notes:` gets a dated `impact:` line, `Next:` the first command, `.claude/.impact-verdict` touched; no other file changes.
 - [ ] session-state updated · [ ] marker touched · [ ] no other writes
 
+### 8. Trivial change on a sensitive path
+**Fixture**: "fix the typo in the comment of internal/auth/login.go" — a `security-sensitive` path, no behavioural change. **Expected**: `ROUTINE` in one line, no verifier spawned, no classification table; the review-before-merge rule may be named for the PR.
+- [ ] no spawn · [ ] one line · [ ] ROUTINE
+### 9. Over-length verdict
+**Fixture**: the verifier answers with 22 lines including an "observations" section. **Expected**: the skill returns it once with the four blocks quoted; a second miss is reported as incomplete; the skill never trims or pads the reply.
+- [ ] one retry with the format quoted · [ ] no silent acceptance · [ ] no padding/trimming
+
 ## Protocol
 - [ ] draft (the table) before any spawn · [ ] next step as `AskUserQuestion` · [ ] never advances the stage itself · [ ] artefacts over claims (evidence rows cite files)

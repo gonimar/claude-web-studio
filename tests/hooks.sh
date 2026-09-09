@@ -62,6 +62,9 @@ mkdir -p sub; (cd sub && echo '{"hook_event_name":"SubagentStart","agent_type":"
 [ -e sub/production ] && { failn=$((failn+1)); echo "FAIL log-agent: wrote relative to cwd without CLAUDE_PROJECT_DIR"; } || { grep -q 'SubagentStop | vue-engineer' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent: git-toplevel fallback did not reach the root"; }; }
 out=$(cd sub && CLAUDE_PLUGIN_ROOT="$ROOT" bash "$H/session-start.sh" 2>&1); echo "$out" | grep -q "Plugin root: $ROOT" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-start: fails from a subdirectory"; }
 out=$(CLAUDE_PLUGIN_ROOT="$ROOT" bash "$H/session-start.sh" 2>&1); echo "$out" | grep -q "Plugin root: $ROOT" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-start: plugin root not printed"; }
+mkdir -p production/session-state; printf 'Task: /sprint-plan Phase 2\nNext: x\nGate: /sprint-plan Phase 2: merge #13?\n' > production/session-state/active.md
+out=$(CLAUDE_PLUGIN_ROOT="$ROOT" bash "$H/session-start.sh" 2>&1); echo "$out" | grep -q "OPEN GATE" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-start: open gate not printed"; }
+rm -rf production
 bash "$H/pre-compact.sh" >/dev/null 2>&1; expect "pre-compact runs" 0 $?
 bash "$H/session-stop.sh" >/dev/null 2>&1; expect "session-stop runs" 0 $?
 echo '{"tool_input":{"file_path":"/x/skills/foo/SKILL.md"}}' | bash "$H/validate-skill-change.sh" >/dev/null 2>&1; expect "validate-skill-change runs" 0 $?

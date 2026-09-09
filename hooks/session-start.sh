@@ -46,6 +46,9 @@ if [ -f "$IDX" ]; then
 fi
 [ -f .claude/.web-studio-version ] && echo "Web Studio v$(cat .claude/.web-studio-version)"
 STATE=production/session-state/active.md
-if [ -f "$STATE" ]; then echo; echo "=== ACTIVE SESSION STATE ($STATE) ==="; tail -20 "$STATE"; echo "=== read the whole file to resume ==="; fi
+if [ -f "$STATE" ]; then echo; echo "=== ACTIVE SESSION STATE ($STATE) ==="; tail -20 "$STATE"; echo "=== read the whole file to resume ==="
+  G=$(sed -n 's/^Gate: *//p' "$STATE" | head -1)
+  case "$G" in ""|"—"|"-"|"["*) ;; *) echo "OPEN GATE (rule 7): $G — the next answer continues that skill, it is not a new task from Next:";; esac
+fi
 echo "===================================="
 exit 0
