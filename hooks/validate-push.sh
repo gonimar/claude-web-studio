@@ -1,5 +1,11 @@
 #!/bin/bash
 # PreToolUse(Bash): block force-push, warn on direct push to protected branches.
+# warn <PreToolUse|PostToolUse> <message>: a warning as JSON on stdout — additionalContext reaches the model,
+# systemMessage the user; exit 0 keeps the tool allowed. stderr with exit 0 reaches neither (WS-050).
+warn() {
+  local m; m=$(printf '%s' "$2" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g' -e 's/\t/  /g' | awk 'NR>1{printf "\\n"} {printf "%s", $0}')
+  printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"},"systemMessage":"%s"}\n' "$1" "$m" "$m"
+}
 # Only real `git push` command segments are inspected — heredoc bodies and other commands in the
 # same Bash call (e.g. `rm -f`, documentation text quoting `git push --force`) are ignored.
 INPUT=$(cat)
@@ -30,5 +36,5 @@ PUSHES=$(printf '%s\n' "$STRIPPED" | grep -oE '(^|[;&|][[:space:]]*)git[[:space:
 [ -z "$PUSHES" ] && exit 0
 echo "$PUSHES" | grep -qE -- '(--force|--force-with-lease)([[:space:]=]|$)|[[:space:]]-f([[:space:]]|$)' && { echo "BLOCKED: force-push is not allowed by studio rules." >&2; exit 2; }
 BR=$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
-case "$BR" in main|master|production|release) echo "WARNING: pushing directly to '$BR'. Studio rule: open a PR from a feature branch (.claude/docs/git-workflow.md)." >&2;; esac
+case "$BR" in main|master|production|release) warn PreToolUse "WARNING: pushing directly to '$BR'. Studio rule: open a PR from a feature branch (.claude/docs/git-workflow.md).";; esac
 exit 0
