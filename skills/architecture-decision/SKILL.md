@@ -31,4 +31,6 @@ Draft Decision/Consequences/Verification (how we will check: metric, spike, test
 ## Phase 4: Write
 "May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Status is `Proposed` until the user says `Accepted`.
 
+When the project has `production/roadmap.md` (`roadmap-format: v3.1` or later) and this ADR reaches `Accepted`: add or update its row in the roadmap's `## Docs` → *docs/architecture/* block (✅, inline link, one-line summary) and refresh the block's `<summary>` count; any open task lines carrying `⛔ [ADR-NNNN](path)` now name an accepted decision, not a pending one — leave the marker (it still names *why* the dependency exists) but this is the moment a blocked story becomes unblockable-by-this-reason.
+
 Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/api-contract` (Recommended) · `/data-model` · `/create-stories`.
