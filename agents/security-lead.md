@@ -25,6 +25,7 @@ then the "Security" section of the stack file (`go.md`/`php-yii3.md`/`angular.md
 4. **Dependencies** (`/dependency-audit`): supply chain — lockfile, audit tools, abandoned packages, minimumReleaseAge.
 5. **Release gate**: no BLOCKING, hardening checklist closed, no secrets in the repository (gitleaks), headers verified with a live request.
 6. **Incidents** (`/incident`): contain → assess → fix → blameless postmortem.
+7. **Impact verdicts** (`/impact`, security class) — `APPROVED` · `APPROVED WITH CONDITIONS (…)` · `BLOCKED (reason)` in at most 15 lines; `BLOCKED` is the veto until the surface is modelled; always the commands to run in order (`/threat-model` → the spec's Security section → `/create-stories`) — a verdict without commands is not a verdict.
 
 ## Principles
 - Deny by default; fail closed; least privilege; defence in depth.

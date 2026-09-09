@@ -17,6 +17,18 @@
 | build → hardening | `qa-lead` | stories closed with tests, no open blocking bugs |
 | hardening → release | `security-lead` + `qa-lead` | audits without blocking findings, performance budgets met |
 
+## Change classes (`/impact`)
+A proposal from the conversation is classified before code; only the triggered classes are verified, in parallel, by their owner. Evidence, not wording, claims a class.
+
+| Class | Trigger (evidence) | Verifier | Commands after the verdict |
+|---|---|---|---|
+| architecture | an ADR names or contradicts it; a boundary/module owner moves; stack or pinned version; API contract; data model/migration; a new runtime dependency; deployment topology | `technical-director` | `/architecture-decision` → `/api-contract` / `/data-model` → `/create-stories` |
+| security | a threat-model surface; a `security-sensitive` path; auth/session/authorisation; PII, secrets, tokens; CI permissions; network/proxy/TLS; uploads, webhooks, WebSocket | `security-lead` (veto) | `/threat-model` → security section of the spec → `/create-stories` |
+| product | user-visible behaviour absent from the feature spec; a changed acceptance criterion; scope the product spec lists as out | `product-director` | `/feature-spec` → `/create-stories` |
+| routine | none of the above, or inside the active story's criteria | — | `/dev-story` |
+
+Mode: `full` — every triggered class; `lean` — architecture and security, product as classification only unless asked; `solo` — classification shown, verification on request. A verdict is ≤ 15 lines and names the commands in pipeline order; `BLOCKED` is surfaced immediately.
+
 ## Finding classification
 - **BLOCKING** — vulnerability, data loss, violation of an accepted ADR, failing test.
 - **WARNING** — deviation from a standard, missing test, tech debt with an estimate.

@@ -25,6 +25,13 @@ out=$(echo '{"tool_input":{"file_path":"docs/architecture/adr-0001-x.md"}}' | ba
 mkdir -p .claude && touch .claude/.write-consent
 out=$(echo '{"tool_input":{"file_path":"docs/architecture/adr-0001-x.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent: warned despite fresh marker"; } || pass=$((pass+1))
 rm -f .claude/.write-consent
+# impact-guard: security/architecture surface without fresh marker -> warning; with marker -> silent; other paths -> silent
+out=$(echo '{"tool_input":{"file_path":"backend/internal/auth/session.go"}}' | bash "$H/impact-guard.sh" 2>&1); echo "$out" | grep -q 'IMPACT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL impact: no warning without marker"; }
+mkdir -p .claude && touch .claude/.impact-verdict
+out=$(echo '{"tool_input":{"file_path":"backend/internal/auth/session.go"}}' | bash "$H/impact-guard.sh" 2>&1); echo "$out" | grep -q 'IMPACT:' && { failn=$((failn+1)); echo "FAIL impact: warned despite fresh marker"; } || pass=$((pass+1))
+rm -f .claude/.impact-verdict
+out=$(echo '{"tool_input":{"file_path":"frontend/src/components/Button.vue"}}' | bash "$H/impact-guard.sh" 2>&1); echo "$out" | grep -q 'IMPACT:' && { failn=$((failn+1)); echo "FAIL impact: warned on a routine path"; } || pass=$((pass+1))
+out=$(echo '{"tool_input":{"file_path":"docs/architecture/threat-model.md"}}' | bash "$H/impact-guard.sh" 2>&1); echo "$out" | grep -q 'IMPACT:' && { failn=$((failn+1)); echo "FAIL impact: warned on a document (consent-guard territory)"; } || pass=$((pass+1))
 # validate-deps: non-manifest path -> silent exit 0
 echo '{"tool_input":{"file_path":"docs/readme.md"}}' | bash "$H/validate-deps.sh" >/dev/null 2>&1; expect "deps hook ignores non-manifests" 0 $?
 # docs lane: docs: commit touching only pipeline documents on the default branch → no BRANCH warning

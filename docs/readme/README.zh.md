@@ -96,6 +96,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 **架构**
 - `/architecture-decision` — 创建或补全 ADR：方案、决策、后果、验证。
 - `/architecture-review` — 交叉检查 ADR、契约、数据模型、威胁模型与规格的一致性（只读）。
+- `/impact` — 依据所触及的 ADR、威胁模型面和路径，对对话中提出的变更建议分类（架构、安全、产品范围或常规），获取对应负责人的简短裁定，并转交给裁定所要求的命令。
 - `/api-contract` — 在写代码前设计 API 契约：默认 GraphQL SDL，或 OpenAPI/AsyncAPI/WebSocket 协议。
 - `/data-model` — 设计实体、带索引依据的 PostgreSQL DDL 以及 expand/contract 迁移。
 - `/threat-model` — 按攻击面建立 STRIDE 威胁模型，含缓解措施与优先级。
