@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.8.1 — 2026-09-10
 - `/update` re-reads the installed version after the gate, before seeding anything: on a real project the "0.4.3 → 0.7.0?" question stayed open for 47 minutes, the plugin moved to 0.8.0 meanwhile, and the skill seeded `docs/`/`rules/` from the session's 0.7.0 cache and stamped `.claude/.web-studio-version` with a version no longer installed. A mismatch between the session's skills and the installed plugin now ends in `RESTART REQUIRED` with both versions named. Spec case update 6. (#34)
 - Review and audit findings get a sink: `/product-spec` Phase 3 (verifier BLOCKING/HIGH → `ARCH-NNN`) and `/adopt` Phase 2 (artefact audit BLOCKING/HIGH → `ADOPT-NNN`) carry the same `production/findings.md` gate as the audit skills — record (Recommended) · story stubs via `/create-stories` · document only — and an unrecorded BLOCKING is named in the verdict line. Observed: a reviewer blocked a fabricated fact and raised a HIGH on an unprotected archive; both ended as prose in §8 of the spec, invisible to `/help`, `/create-stories` and `/sprint-plan`. Template `findings.md` lists the new writers and ids. Spec cases product-spec 6, adopt 11. (#35)
 
