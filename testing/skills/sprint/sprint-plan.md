@@ -38,5 +38,12 @@ Sprint plan by capacity and dependencies.
 **Fixture**: neither `.github/dependabot.yml` nor `renovate.json`; or `gh` missing. **Expected**: one line naming `/dependency-audit` (or the missing `gh`), no error, Phase 3 continues.
 - [ ] one line, no stop · [ ] names the command
 
+### 9. Open gate survives a continued conversation
+**Fixture**: the merge question was asked (session-state `Gate: /sprint-plan Phase 2: merge #13 #14 #9 #6?`), the user pushes back once, then answers "ok, merge them and plan with 6 hours a day". **Expected**: the PRs are merged and the plan continues; the session never reads `Next:` as a new task and never implements a story inline; `Gate:` is cleared after the answer.
+- [ ] gate recorded before the question · [ ] answer continues the skill · [ ] no code written · [ ] gate cleared
+### 10. One turn, one gate
+**Fixture**: capacity and dates are still unknown when the queue is classified. **Expected**: capacity/dates are asked in Phase 1 before any gate; the merge question stands alone in its message; the plan is written only after its own draft and "May I write?" — never on the merge answer.
+- [ ] parameters before the gate · [ ] merge question alone · [ ] separate write gate
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
