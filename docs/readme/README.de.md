@@ -109,6 +109,7 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 **Architektur**
 - `/architecture-decision` — erstellt oder ergänzt ein ADR mit Optionen, Entscheidung, Konsequenzen und Verifikation.
 - `/architecture-review` — gleicht ADRs, Verträge, Datenmodell, Bedrohungsmodell und Spezifikationen auf Konsistenz ab (nur lesend).
+- `/impact` — klassifiziert einen Änderungsvorschlag aus dem Gespräch (Architektur, Sicherheit, Produktumfang oder Routine) anhand der betroffenen ADRs, Bedrohungsmodell-Oberflächen und Pfade, holt das kurze Urteil des zuständigen Direktors ein und übergibt an die Befehle, die das Urteil verlangt.
 - `/api-contract` — entwirft den API-Vertrag vor dem Code: standardmäßig GraphQL SDL, sonst OpenAPI/AsyncAPI/WebSocket-Protokolle.
 - `/data-model` — entwirft Entitäten, PostgreSQL-DDL mit begründeten Indizes und Expand/Contract-Migrationen.
 - `/threat-model` — erstellt das STRIDE-Bedrohungsmodell je Angriffsfläche mit Maßnahmen und Prioritäten.

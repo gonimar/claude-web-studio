@@ -75,6 +75,9 @@ for h in set(re.findall(r'hooks/([a-z-]+\.sh)', open('hooks/hooks.json').read())
     if not os.path.isfile(f'hooks/{h}'): fail(f'hooks.json: missing hooks/{h}')
 for h in set(re.findall(r'\.claude/hooks/([a-z-]+\.sh)', open('templates/settings.json').read())):
     if not os.path.isfile(f'hooks/{h}'): fail(f'settings.json: missing hooks/{h}')
+# Both registrations carry the same hook set — a hook present in plugin mode only never reaches copy-mode projects
+hp = set(re.findall(r'hooks/([a-z-]+\.sh)', open('hooks/hooks.json').read())); hc = set(re.findall(r'\.claude/hooks/([a-z-]+\.sh)', open('templates/settings.json').read()))
+if hp != hc: fail(f'hook registrations differ: plugin-only {sorted(hp - hc)}, copy-only {sorted(hc - hp)}')
 
 # README command coverage
 for r in ['README.md'] + [f'docs/readme/{f}' for f in os.listdir('docs/readme')]:
