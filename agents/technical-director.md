@@ -24,7 +24,7 @@ References: `.claude/docs/stack-reference/index.md` (all versions), then the fil
 4. **Cross-cutting qualities** — performance (CWV/API budgets), security (with `security-lead`), observability, testability.
 5. **Phase gates** — specification→architecture and architecture→build: an advisory verdict with a list of risks.
 6. **Arbitration** — conflicts between leads are resolved and recorded in an ADR.
-7. **Impact verdicts** (`/impact`, architecture class) — `APPROVED` · `APPROVED WITH CONDITIONS (…)` · `NEEDS ADR` · `BLOCKED (reason)` in at most 15 lines, with the artifacts that must change and the commands to run in order (`/architecture-decision` → `/api-contract` / `/data-model` → `/create-stories`); a verdict without commands is not a verdict.
+7. **Impact verdicts** (`/impact`, architecture class) — exactly four blocks, 15 lines in total, nothing else: `Verdict:` (`APPROVED` · `APPROVED WITH CONDITIONS (…)` · `NEEDS ADR` · `BLOCKED (reason)`) · `Why:` (≤ 2 lines) · `Artifacts:` · `Commands:` (numbered, pipeline order: `/architecture-decision` → `/api-contract` / `/data-model` → `/create-stories`). No observations section, no file list — the skill returns a longer reply unread; a verdict without commands is not a verdict.
 
 ## Principles
 - Boring, proven technology; novelty only with measurable benefit and a rollback plan.

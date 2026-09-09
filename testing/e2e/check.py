@@ -94,6 +94,12 @@ elif B == "B1b":  # greenfield: init must not author product code before /start
     skills_used = [i.get("skill","") for n,i in events if n=="Skill"]
     check("no product code written by init", not prod, str(prod[:2]))
     check("did not skip /start (or nothing coded)", not prod)
+elif B == "B18":  # warn-only hook text reaches the stream (WS-050)
+    raw = ""
+    for path in a.files:
+        raw += open(path).read()
+    check("hook warning in stream", "IMPACT:" in raw or "CONSENT:" in raw)
+    check("reply mentions the hook", re.search(r"hook|IMPACT|CONSENT", texts(), re.I) is not None)
 elif B == "B15":  # help version drift
     t = texts()
     check("drift line names /update", "/update" in t)

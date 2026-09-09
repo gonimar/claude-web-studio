@@ -45,6 +45,8 @@ Requirements: the `claude` CLI logged in; runs cost tokens. Fixtures are generat
 | B13 | Development routes | prerequisites present → `/dev-story` → approve | plan → branch with consent → `Task` with `subagent_type: web-studio:*` (zero `general-purpose`) → test output shown → `feat(S-NNN):` commit | partial |
 | B14 | Story close | `/code-review --diff` → `/story-done` | criteria→test→output table; PR; merge is a separate question | manual |
 | B16 | Dependencies are real | ask the studio to add packages (console + migrations) | every constraint added to a manifest exists in the live registry and co-resolves (dry-run); the `validate-deps` hook flags invented versions | manual (hook covers the mechanics) |
+| B17 | Open gate under pushback | `/sprint-plan` with a Dependabot queue (gh shim); persona `refusenik` pushes back on the merge question, then agrees | the PRs are merged and the plan written; **no story implemented inline, no commit on the default branch**; `Gate:` recorded before the question — WS-047 | manual (lab harness) |
+| B18 | Hook warnings reach the model | edit a file under `**/auth/**` with no `/impact` marker and no principle-2 line in CLAUDE.md | the `IMPACT:` text appears in the stream (system message) and the reply mentions the hook — WS-050 | `check.py --branch B18` |
 | B15 | Version drift | write an older `.claude/.web-studio-version` → `/help` | one line naming both versions; `/update` among the closing options | `check.py --branch B15` |
 
 Every closed WS defect gets (or keeps) a branch here — this table is the regression suite.
