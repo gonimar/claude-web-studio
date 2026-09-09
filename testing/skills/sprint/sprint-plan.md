@@ -30,5 +30,13 @@ Sprint plan by capacity and dependencies.
 **Fixture**: `production/findings.md` has one open BLOCKING with story S-014 not in the candidate list. **Expected**: S-014 is in the sprint or deferred with a written reason in the plan — never absent.
 - [ ] findings read · [ ] in sprint or deferred with reason
 
+### 7. Dependency queue
+**Fixture**: `gh` present, `.github/dependabot.yml` exists; six open Dependabot PRs — four green (two CI-action bumps, a patch, a minor), one green major (`from 4.2.2 to 7.0.1`), one with a failing check. **Expected**: the queue rendered as a table from `gh pr list` output; the four green safe PRs offered for merge in one `AskUserQuestion` (merge (Recommended) · one story · leave); the major becomes a story or is deferred with a written reason in the plan; the red one stays open and is named under risks; no `gh pr merge` before the answer; the plan's `## Dependency updates` section is filled.
+- [ ] queue from command output · [ ] merge gated · [ ] major → story or deferred with reason · [ ] red never merged · [ ] section in the plan
+
+### 8. No update bot
+**Fixture**: neither `.github/dependabot.yml` nor `renovate.json`; or `gh` missing. **Expected**: one line naming `/dependency-audit` (or the missing `gh`), no error, Phase 3 continues.
+- [ ] one line, no stop · [ ] names the command
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

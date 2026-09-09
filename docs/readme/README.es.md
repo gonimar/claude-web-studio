@@ -119,8 +119,8 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/dev-story` — implementa una historia de principio a fin con los ingenieros adecuados, con pruebas y verificación de criterios.
 - `/code-review` — revisa archivos o el diff actual: corrección, estándares, conformidad con ADR, seguridad y rendimiento.
 - `/story-done` — comprueba que una historia está realmente terminada (pruebas ejecutadas, checks verdes, revisión aprobada) y la cierra.
-- `/sprint-plan` — planifica un sprint a partir de historias listas, capacidad y dependencias.
-- `/sprint-status` — informa del progreso del sprint según artefactos, bloqueos y riesgo para el objetivo.
+- `/sprint-plan` — planifica un sprint a partir de historias listas, capacidad y dependencias, y clasifica la cola de Dependabot/Renovate (los PR patch/minor en verde se fusionan al inicio del sprint, los majors se convierten en historias).
+- `/sprint-status` — informa del progreso del sprint según artefactos, bloqueos, la cola de actualizaciones de dependencias y riesgo para el objetivo.
 - `/qa-plan` — asocia los criterios de aceptación de cada historia a niveles de prueba, herramientas y archivos.
 - `/tech-debt` — inventaría la deuda técnica y propone historias priorizadas.
 

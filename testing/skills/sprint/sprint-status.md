@@ -26,5 +26,9 @@ Sprint status from artefacts; read-only.
 **Fixture**: no writes. **Expected**: the user decides; stage/statuses never change automatically; the hand-off is an `AskUserQuestion` with a Recommended option and alternatives.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] hand-off is an `AskUserQuestion`, not text
 
+### 6. Dependency queue
+**Fixture**: three open Dependabot PRs, one older than the sprint start, one with a failing check. **Expected**: the `Dependency PRs:` line with counts and the oldest date; the stale and the red PR under *Risk to the goal* with `/sprint-plan` named as the fix; nothing merged.
+- [ ] line present with counts · [ ] stale/red under risk · [ ] no mutation
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
