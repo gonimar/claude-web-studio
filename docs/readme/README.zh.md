@@ -106,8 +106,8 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/dev-story` — 由合适的工程师端到端实现一个故事，含测试与标准核对。
 - `/code-review` — 评审文件或当前 diff：正确性、规范、ADR 符合度、安全、性能。
 - `/story-done` — 验证故事真正完成（测试已运行、检查通过、评审批准）并关闭。
-- `/sprint-plan` — 根据就绪故事、产能和依赖规划冲刺。
-- `/sprint-status` — 依据产物报告冲刺进度、阻塞和目标风险。
+- `/sprint-plan` — 根据就绪故事、产能和依赖规划冲刺，并处理 Dependabot/Renovate 队列（绿色的 patch/minor PR 在冲刺开始时合并，major 变为故事）。
+- `/sprint-status` — 依据产物报告冲刺进度、阻塞、依赖更新队列和目标风险。
 - `/qa-plan` — 把每个故事的验收标准映射到测试层级、工具和文件。
 - `/tech-debt` — 盘点技术债务并提出按优先级排序的故事。
 

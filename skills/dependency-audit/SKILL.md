@@ -18,7 +18,7 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 Manifests and lockfiles (`go.mod/go.sum`, `composer.lock`, `pnpm-lock.yaml`/`package-lock.json`), Dockerfile base images, external `<script src>` in HTML, GitHub Actions (pins).
 
 ## Phase 2: Checks (Bash, whatever is available)
-`govulncheck ./...`; `composer audit`, `composer outdated --direct`, Packagist abandoned (WebFetch when in doubt); `pnpm audit`/`npm audit`, `pnpm outdated`; versions vs `stack-reference/index.md`; licences (`license-checker`/`composer licenses`/`go-licenses` when available); `renovate.json`/`dependabot.yml`; `trivy image` when available.
+`govulncheck ./...`; `composer audit`, `composer outdated --direct`, Packagist abandoned (WebFetch when in doubt); `pnpm audit`/`npm audit`, `pnpm outdated`; versions vs `stack-reference/index.md`; licences (`license-checker`/`composer licenses`/`go-licenses` when available); `renovate.json`/`dependabot.yml` (present, minors grouped per `tooling-devops.md`; the open update PRs themselves are `/sprint-plan`'s queue, not this report's); `trivy image` when available.
 
 ## Phase 3: Report
 Table "package → version → problem (CVE/abandoned/outdated/licence) → action (upgrade/replace/accept risk) → effort". `--fix-safe`: propose applying only patch/minor updates without breaking changes (after "yes", with a test run).
