@@ -32,7 +32,7 @@ case "$FILE" in
   */docs/architecture/data-model.md|docs/architecture/data-model.md) docfmt 6 "Entities, Tables, Key queries, Invariants, Migrations, Personal data (retention and deletion), Backups";;
   */docs/specs/product-spec.md|docs/specs/product-spec.md) docfmt 9 "the ten numbered sections";;
   */docs/specs/features/*.md|docs/specs/features/*.md) docfmt 10 "the twelve numbered sections, Acceptance criteria as Given/When/Then";;
-  */production/stories/*.md|production/stories/*.md|*/production/stories/*/*.md|production/stories/*/*.md) docfmt 5 "Goal, Context, Tasks, Acceptance criteria (table), Security and accessibility, Definition of Done";;
+  */production/stories/*.md|production/stories/*.md) docfmt 5 "Goal, Context, Tasks, Acceptance criteria (table), Security and accessibility, Definition of Done";;
   */production/sprints/sprint-*.md|production/sprints/sprint-*.md) docfmt 5 "Goal, Stories, Dependency updates, Risks, QA plan, Actions, Retrospective";;
 esac
 [ -n "$OUT" ] && { warn PostToolUse "$OUT"; exit 0; }
