@@ -37,5 +37,9 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: 10 Ready stories, `production/sprints/` empty, first `/dev-story` of the backlog. **Expected**: before the plan question one line notes no sprint covers the story, and `/sprint-plan` appears among the options (Recommended for a fresh backlog); with a covering sprint file the line and option are absent.
 - [ ] sprint absence named · [ ] /sprint-plan among options · [ ] silent when a sprint covers the story
 
+### 9. Started stamp and SEO routing
+**Fixture**: Phase 3 branches for S-030 on a `Type: site` project with a public article page. **Expected**: the story card gets `Started: <ISO minute>` when the branch is created; in Phase 4 `seo-specialist` reviews title/meta/canonical, structured data, sitemap and hreflang before the story closes; on an internal SPA no SEO review is spawned.
+- [ ] Started written · [ ] seo-specialist only for public pages
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

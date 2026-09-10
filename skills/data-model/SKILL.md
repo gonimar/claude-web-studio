@@ -18,7 +18,7 @@ Template `.claude/docs/templates/data-model.md`; reference `database.md`; rules 
 Feature spec (section 4), the current schema (migrations, `schema.sql`, AR/entity classes), the API contract (which fields we expose), the threat model (PII).
 
 ## Phase 2: Entities and queries
-ER (mermaid), a query table (frequency, read/write). Questions: volumes, retention, invariants.
+ER (mermaid), a query table (frequency, read/write). Questions: volumes, retention, invariants. **Personal data**: every PII field classified (identity, contact, behavioural, financial, special category), its **retention period** and what ends it (account deletion, inactivity, legal term), the deletion or anonymisation method per table (hard delete, tombstone + anonymise, crypto-shredding), and what happens in backups and logs — template §6; a deletion path that does not exist becomes the "Data deletion" story (`/create-stories`).
 
 ## Phase 3: DDL and migrations
 DDL with CHECK/UNIQUE/FK/indexes (each index justified by a query); migrations in the project tool (golang-migrate / yiisoft/db-migration / Drizzle) — expand/contract when changing existing tables. With a DB available (compose) — `EXPLAIN ANALYZE` on test data.

@@ -20,7 +20,7 @@ Read `docs/specs/concept-brief.md` (if any), `technical-preferences.md`, `produc
 If the stack is not configured — suggest `/setup-stack` before or after (not blocking).
 
 ## Phase 2: Sections 1–10
-Per section: 1–3 `AskUserQuestion`s → draft → "like this?". Non-functional requirements get the studio defaults
+Per section: 1–3 `AskUserQuestion`s → draft → "like this?". Section 6 always answers localisation, SEO and product analytics explicitly (`n/a — reason` is an answer; silence is not). Non-functional requirements get the studio defaults
 (CWV, WCAG 2.2 AA, OWASP baseline) — the user confirms. Scope: insist on In/Later/Out; every Out item has a reason.
 
 ## Phase 3: Review

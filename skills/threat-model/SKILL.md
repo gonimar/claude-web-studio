@@ -18,7 +18,7 @@ Template `.claude/docs/templates/threat-model.md`; `security-baseline.md`, `secu
 Read the product spec (data, jurisdiction), technical-preferences (including Deploy target, Infra repo and Proxy config — proxy requirements need an owner and a file), the API contract, compose/infra, the existing threat model. Draw the DFD (mermaid) with trust boundaries; ask about the non-obvious (external integrations, admin access, payments).
 
 ## Phase 2: Surfaces and threats
-Per surface — STRIDE threats with likelihood/impact; mitigations referencing the baseline; status (exists/planned/none). GraphQL separately: introspection, complexity, batching, field authorisation, persisted ops. Games — anti-cheat, modified clients, chat spam, room DoS.
+Per surface — STRIDE threats with likelihood/impact; mitigations referencing the baseline; status (exists/planned/none). When the data model classifies personal data, **data export / deletion** is a surface of its own: who may request, how identity is verified, what is exported (and what must not be), how deletion propagates to replicas, backups and logs, and the evidence kept. GraphQL separately: introspection, complexity, batching, field authorisation, persisted ops. Games — anti-cheat, modified clients, chat spam, room DoS.
 `appsec-engineer` and `network-security-engineer` via Task in parallel — complete their areas.
 
 ## Phase 3: Priorities

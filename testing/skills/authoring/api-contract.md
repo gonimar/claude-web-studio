@@ -26,5 +26,9 @@ Contract: GraphQL SDL by default / OpenAPI / WS; diff; codegen.
 **Fixture**: written after consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. `--deprecate` with external consumers
+**Fixture**: `/api-contract --deprecate Query.userByEmail --remove-after 2026-12-31`; the replacement `Query.user(id)` exists. **Expected**: `@deprecated(reason: "use user(id); removed after 2026-12-31")` in the SDL, the CI rule that fails after the date while the field exists, a `BREAKING` changelog entry (major bump), a removal story `📅 2026-12-31` handed to `/create-stories`, consumers from the ADR listed; removal without a period → `BREAKING (1)` and an explicit owner answer.
+- [ ] deprecation in the contract · [ ] CI date rule · [ ] removal story and BREAKING entry
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

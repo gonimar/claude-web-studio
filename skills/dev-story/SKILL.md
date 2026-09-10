@@ -39,11 +39,11 @@ request>` (rule 11) and return to the story afterwards (rule 7, hand-off after a
 
 ## Phase 3: Plan and branch
 The story's scope passed its spec and ADR gates: `touch .claude/.impact-verdict` at story start, so the impact-guard hook stays silent on the story's own architecture/security paths (rule 11).
-Files to create/change, order, tests per criterion — **the table rendered in the chat message** before the plan question (rule 7: readable rendering, on updates too). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update `session-state/active.md` (Task/Branch/Next). Show the plan, then one `AskUserQuestion`: continue (Recommended) · change the plan (say what) · stop.
+Files to create/change, order, tests per criterion — **the table rendered in the chat message** before the plan question (rule 7: readable rendering, on updates too). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update `session-state/active.md` (Task/Branch/Next) and write `Started: YYYY-MM-DDTHH:MM` into the story card's metadata line (the actual time `/story-done` records is measured from it). Show the plan, then one `AskUserQuestion`: continue (Recommended) · change the plan (say what) · stop.
 
 ## Phase 4: Implementation (via Task to the right engineers, by layer)
 - Backend: `go-engineer` / `php-engineer` / `node-engineer`; GraphQL — `graphql-engineer`; DB — `database-engineer`.
-- Frontend: `angular-engineer` / `vue-engineer`; styles — `css-engineer`.
+- Frontend: `angular-engineer` / `vue-engineer`; styles — `css-engineer`; public pages of a content site (`Type: site`, SSR/SSG) — `seo-specialist` reviews title/meta/canonical, structured data, sitemap and hreflang before the story closes; user-facing copy with i18n keys — `accessibility-specialist` for the states and copy.
 - Game: `threejs-engineer` / `web-game-engineer` / `multiplayer-engineer`.
 - Tests: the engineers themselves plus `test-engineer` for e2e.
 Each gets the story context and the rule: show code before writing (the user approves), then run tests/lint with output.

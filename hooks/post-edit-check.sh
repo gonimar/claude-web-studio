@@ -22,6 +22,20 @@ warn() {
 }
 [ -f "$FILE" ] || exit 0
 OUT=""
+# Document structure (rules/docs-format.md, warn-only, language-independent: section count and format markers, never heading text).
+docfmt() { # <min second-level sections> <hint>
+  local n; n=$(grep -c '^## ' "$FILE" 2>/dev/null); [ "${n:-0}" -lt "$1" ] && OUT="DOCS-FORMAT: $FILE has $n second-level sections, its template has at least $1 — $2 (rules/docs-format.md; /migrate converts, a section that does not apply stays as 'n/a — reason')"; }
+case "$FILE" in
+  */production/roadmap.md|production/roadmap.md) grep -q 'roadmap-format: v3' "$FILE" || OUT="DOCS-FORMAT: $FILE has no 'roadmap-format: v3.1' header — /help and /sprint-plan read the roadmap by that format; run /migrate roadmap --dry-run (rules/docs-format.md)";;
+  */docs/architecture/adr-*.md|docs/architecture/adr-*.md) docfmt 5 "Context, Options (≥ 2), Decision, Consequences, Verification";;
+  */docs/architecture/threat-model.md|docs/architecture/threat-model.md) docfmt 5 "Assets, boundaries, Attack surfaces, Threats (STRIDE), Verification";;
+  */docs/architecture/data-model.md|docs/architecture/data-model.md) docfmt 6 "Entities, Tables, Key queries, Invariants, Migrations, Personal data (retention and deletion), Backups";;
+  */docs/specs/product-spec.md|docs/specs/product-spec.md) docfmt 9 "the ten numbered sections";;
+  */docs/specs/features/*.md|docs/specs/features/*.md) docfmt 10 "the twelve numbered sections, Acceptance criteria as Given/When/Then";;
+  */production/stories/*.md|production/stories/*.md|*/production/stories/*/*.md|production/stories/*/*.md) docfmt 5 "Goal, Context, Tasks, Acceptance criteria (table), Security and accessibility, Definition of Done";;
+  */production/sprints/sprint-*.md|production/sprints/sprint-*.md) docfmt 5 "Goal, Stories, Dependency updates, Risks, QA plan, Actions, Retrospective";;
+esac
+[ -n "$OUT" ] && { warn PostToolUse "$OUT"; exit 0; }
 case "$FILE" in
   *.go)
     command -v gofmt >/dev/null && gofmt -l -w "$FILE" >/dev/null 2>&1

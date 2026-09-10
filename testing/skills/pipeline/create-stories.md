@@ -33,5 +33,9 @@ Slice a feature into vertical stories with a criteria matrix.
 **Fixture**: technical-preferences Deploy = compose on a server, no `docs/ops/deploy.md`, first feature. **Expected**: a "Deploy artefacts" story is added (Dockerfile, production compose, release workflow, healthz, runbook from `templates/deploy-runbook.md`) with the three criteria.
 - [ ] story added on the first feature · [ ] runbook template referenced · [ ] criteria present
 
+### 8. Observability, restore drill and deletion stories
+**Fixture**: Deploy target set; no `/healthz` route, no alert rule; data model with tables and no tested-restore date in §7; §6 classifies e-mail and IP as PII, no deletion code. **Expected**: the first feature gets "Observability" (devops-engineer), "Backup & restore drill" (restore on staging with the date recorded) and "Data deletion" (every §6 field, backups, logs) with the criteria the skill names; none when the evidence already exists.
+- [ ] three stories with criteria · [ ] none when evidence exists · [ ] restore date named as a criterion
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

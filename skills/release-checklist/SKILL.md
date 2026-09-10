@@ -15,7 +15,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Template `release-checklist.md`.
 
 ## Phase 1: Evidence
-Release stories Done (check CI tests: `gh run` if available); latest `docs/security/security-audit-*`, `hardening-checklist.md`, `docs/ops/perf-audit-*`, a11y reports; run `/dependency-audit` tools now; the CHANGELOG contains the version; migrations since the last tag — backward compatibility (`database-engineer` via Task); new env variables documented and present in `.env.example`/deploy instructions; backup and the date of the last tested restore.
+Release stories Done (check CI tests: `gh run` if available); latest `docs/security/security-audit-*`, `hardening-checklist.md`, `docs/ops/perf-audit-*`, a11y reports; run `/dependency-audit` tools now; the CHANGELOG contains the version; migrations since the last tag — backward compatibility (`database-engineer` via Task); new env variables documented and present in `.env.example`/deploy instructions; backup and the date of the last tested restore — on the **first** release of a project with a database the restore drill is a gate: no date in `data-model.md` §7 / the runbook → ❌ with the story to run ("Backup & restore drill", `/create-stories` adds it); later releases show the date and warn when it is older than 90 days.
 `security-lead` via Task — the final security verdict.
 
 ## Phase 2: Checklist

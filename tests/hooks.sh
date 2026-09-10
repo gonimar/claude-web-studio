@@ -54,6 +54,17 @@ echo '{"tool_input":{"file_path":"/x/a.ts","new_string":"const x = 1"}}' | bash 
 echo '{bad' > c.json
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/c.json\"}}" | bash "$H/post-edit-check.sh" 2>&1); code=$?
 expect "post-edit never blocks" 0 $code; echo "$out" | grep -q 'Invalid JSON' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: invalid JSON not reported"; }
+# docs-format (rules/docs-format.md): structure warnings, language-independent, warn-only
+mkdir -p docs/architecture production; printf '# ADR-0001: x\n\n## Context\nc\n## Decision\nd\n' > docs/architecture/adr-0001-x.md
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/docs/architecture/adr-0001-x.md\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); code=$?
+expect "post-edit docs-format never blocks" 0 $code; echo "$out" | grep -q 'DOCS-FORMAT' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: ADR with 2 sections not flagged"; }
+printf '# ADR-0002: y\n\n## Kontext\nc\n## Optionen\n### 1. a\n### 2. b\n## Entscheidung\nd\n## Konsequenzen\ne\n## Verifikation\nf\n' > docs/architecture/adr-0002-y.md
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/docs/architecture/adr-0002-y.md\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); echo "$out" | grep -q 'DOCS-FORMAT' && { failn=$((failn+1)); echo "FAIL post-edit: complete ADR in another language flagged (false positive)"; } || pass=$((pass+1))
+printf '# Roadmap\n\n- [ ] T-1 · x\n' > production/roadmap.md
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/production/roadmap.md\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); echo "$out" | grep -q 'roadmap-format' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: roadmap without format header not flagged"; }
+printf '# R\n\n<!-- roadmap-format: v3.1 -->\n' > production/roadmap.md
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/production/roadmap.md\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); echo "$out" | grep -q 'DOCS-FORMAT' && { failn=$((failn+1)); echo "FAIL post-edit: v3.1 roadmap flagged"; } || pass=$((pass+1))
+rm -rf docs production
 echo '{"hook_event_name":"SubagentStart","agent_type":"go-engineer"}' | bash "$H/log-agent.sh"; grep -q 'SubagentStart | go-engineer' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent"; }
 # Hooks must resolve the project root, not the session cwd (a subdirectory after `cd backend && …`).
 mkdir -p sub; (cd sub && echo '{"hook_event_name":"SubagentStart","agent_type":"vue-engineer"}' | CLAUDE_PROJECT_DIR="$T" bash "$H/log-agent.sh")

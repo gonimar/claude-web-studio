@@ -3,7 +3,7 @@
 **Read in:** English · [Русский](docs/readme/README.ru.md) · [Español](docs/readme/README.es.md) · [Deutsch](docs/readme/README.de.md) · [中文](docs/readme/README.zh.md)
 
 Web Studio turns Claude Code into a full web development studio: 30 specialised agents in
-three tiers, 44 slash commands that form a pipeline from idea to production, hooks that guard
+three tiers, 49 slash commands that form a pipeline from idea to production, hooks that guard
 secrets and commit hygiene, path-scoped coding rules, document templates, a **dated reference of
 current stack versions and best practices**, and a framework for testing the agents themselves.
 It covers web applications and browser games alike.¹
@@ -101,6 +101,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/start` — onboarding for a new project: asks where you are and routes to the right first steps.
 - `/help` — shows the current phase, which steps are done and the single next command; `/help commands` lists every command with its description, `/help guide [topic]` opens the playbook (what to run in every situation — [docs/playbook.md](docs/playbook.md)).
 - `/adopt` — attaches the studio to an existing project: detects the stack, audits documents, produces an adoption plan — fills `technical-preferences.md` from the detected facts and writes a checkbox adoption plan that `/help` follows.
+- `/migrate` — converts documents in older or foreign formats (roadmap, stories, ADRs, specs, sprints) to the current templates, keeping IDs and history; dry run before any write.
 - `/setup-stack` — chooses and pins the stack (backend, frontend, API style, engine, database, tests, CI) with exact versions.
 - `/stack-update` — refreshes the stack reference from official sources with dates and proposes an upgrade plan for the project.
 - `/update` — updates the studio itself in the project (plugin update or copy-mode reinstall) while keeping local edits.
@@ -131,8 +132,11 @@ Plugin mode prefixes each with `web-studio:`.
 - `/story-done` — verifies a story is truly done (tests run, checks green, review approved) and closes it.
 - `/sprint-plan` — plans a sprint from ready stories, capacity and dependencies, and triages the Dependabot/Renovate queue (green patch/minor merged at sprint start, majors become stories).
 - `/sprint-status` — reports sprint progress from artefacts, blockers, the dependency-update queue and risk to the goal.
+- `/backlog` — records an idea from the conversation as one line in `production/backlog.md` without acting on it; weekly review; promotes an idea to `/brainstorm`, `/impact` or `/feature-spec`.
+- `/retrospective` — sprint retrospective from artefacts: planned vs shipped, estimate vs actual with the calibration ratio the next `/sprint-plan` applies, blockers, actions with owners.
 - `/qa-plan` — maps every story's acceptance criteria to test levels, tools and files for a sprint.
 - `/tech-debt` — inventories technical debt and proposes prioritised stories.
+- `/docs` — documentation for people through `tech-writer`: README, API reference generated from the contract, user guide from the feature specs, runbook; every command in the docs is run first.
 
 **Hardening**
 - `/security-audit` — audits code and configuration against OWASP Top 10:2025 with tools, CVSS-scored findings and fixes; BLOCKING findings go to `production/findings.md`, which `/create-stories` and `/sprint-plan` read.
@@ -228,7 +232,7 @@ in this repository or in a project installed with `--with-testing`. Details: [te
 ## 9. Repository layout
 ```
 .claude-plugin/   plugin.json + marketplace.json (this repository is both the marketplace and the plugin)
-agents/           30 agents        skills/     44 skills        hooks/      hooks.json + 10 scripts
+agents/           30 agents        skills/     49 skills        hooks/      hooks.json + 10 scripts
 rules/            13 path-scoped rules          docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, roster, workflow catalog, security baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          agent and skill testing framework      install.sh  copy-mode / new-project installer

@@ -1,6 +1,6 @@
 ---
 updated: 2026-09-10
-sources: [https://developer.mozilla.org, https://web.dev/articles/vitals, https://www.w3.org/TR/WCAG22/, https://caniuse.com, https://web-platform-dx.github.io/web-features/, https://html.spec.whatwg.org]
+sources: [https://developer.mozilla.org, https://web.dev/articles/vitals, https://www.w3.org/TR/WCAG22/, https://caniuse.com, https://web-platform-dx.github.io/web-features/, https://html.spec.whatwg.org, https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl, https://developers.google.com/search/docs/specialty/international/localized-versions, https://unicode.org/reports/tr35/]
 ---
 # Web platform — the standards we treat as baseline
 
@@ -37,7 +37,14 @@ Also: TTFB ≤ 800 ms; initial JS ≤ 200 KB gzip for SPAs; `Cache-Control: immu
 - Realtime: SSE for one-way streams (simple, HTTP/2-friendly), WebSocket for two-way; reconnect with backoff and a resume cursor.
 
 ## SEO and sharing
-SSR/prerender for public pages; unique `<title>`/`meta description`; canonical; Open Graph + Twitter cards; JSON-LD (schema.org) for entities; `sitemap.xml`, `robots.txt`; `hreflang` with i18n; Core Web Vitals are a ranking factor.
+SSR/prerender for public pages; unique `<title>`/`meta description`; canonical; Open Graph + Twitter cards; JSON-LD (schema.org) for entities; `sitemap.xml`, `robots.txt`; `hreflang` with i18n; Core Web Vitals are a ranking factor. Per feature: the public pages name their title/meta, structured data and canonical in the feature spec §6; `seo-specialist` reviews them in `/dev-story` for `Type: site` projects.
+
+## Internationalisation (i18n)
+- **Platform first**: `Intl` (`DateTimeFormat`, `NumberFormat`, `RelativeTimeFormat`, `PluralRules`, `ListFormat`, `Segmenter`, `DisplayNames`) is Baseline — no date/number formatting libraries for formatting alone; ICU MessageFormat (`Intl.MessageFormat` is still a proposal — use a library: `@formatjs/intl`, `i18next`, Angular `$localize`, Vue `vue-i18n`) for plural/gender-aware messages, never string concatenation.
+- **Locale negotiation**: URL path or subdomain for public pages (`/de/…`, indexable, one `hreflang` per variant plus `x-default`), `Accept-Language` only as the first guess, the user's explicit choice persisted; `<html lang>` always set, `dir="rtl"` for RTL locales with logical CSS properties (`margin-inline-start`) so layouts flip without duplicated styles.
+- **Copy keys, not sentences, in code**: every user-facing string is a key in a catalogue (per locale file, ICU syntax); the feature spec §6 lists the keys; the CI fails on missing keys for a shipped locale (`i18next-parser`/`@angular/localize` extract + a completeness check); pseudo-localisation in dev catches concatenation and truncation.
+- **Data**: store timestamps in UTC with the user's time zone alongside, currency as integer minor units with the ISO code, names as one field unless the product needs the split; collation per locale in PostgreSQL (`ICU` collations) for sorted lists.
+- **Games**: fonts with the glyph coverage of the shipped locales (CJK fallback), text expansion budget ~30 % in HUD layouts, subtitles and remappable controls as accessibility settings (WCAG 2.2 / game accessibility guidelines).
 
 ## PWA
 `manifest.webmanifest`, service worker (Workbox) with an explicit cache strategy, offline page, `beforeinstallprompt`; Web Push (VAPID); for games — asset caching keyed by manifest version.

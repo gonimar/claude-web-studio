@@ -3,7 +3,7 @@
 **Leer en:** [English](../../README.md) · [Русский](README.ru.md) · Español · [Deutsch](README.de.md) · [中文](README.zh.md)
 
 Web Studio convierte Claude Code en un estudio completo de desarrollo web: 30 agentes
-especializados en tres niveles, 44 comandos que forman una cadena desde la idea hasta producción,
+especializados en tres niveles, 49 comandos que forman una cadena desde la idea hasta producción,
 hooks que protegen secretos y la higiene de los commits, reglas de código por rutas, plantillas de
 documentos, una **referencia fechada de versiones actuales del stack y buenas prácticas** y un
 marco para probar a los propios agentes. Sirve tanto para aplicaciones web como para juegos de navegador.¹
@@ -92,6 +92,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/start` — incorporación de un proyecto nuevo: pregunta dónde estás y te lleva a los primeros pasos.
 - `/help` — muestra la fase actual, los pasos hechos y el único comando siguiente; `/help commands` lista todos los comandos con su descripción, `/help guide [tema]` abre el playbook (qué ejecutar en cada situación, [docs/playbook.md](../playbook.md), en inglés).
 - `/adopt` — conecta el estudio a un proyecto existente: detecta el stack, audita documentos y produce un plan de adopción — rellena `technical-preferences.md` con los hechos detectados y escribe un plan de adopción con casillas que `/help` sigue.
+- `/migrate` — convierte documentos en formatos antiguos o ajenos (roadmap, historias, ADR, especificaciones, sprints) a las plantillas actuales, conservando IDs e historial; ensayo antes de escribir.
 - `/setup-stack` — elige y fija el stack (backend, frontend, estilo de API, motor, base de datos, pruebas, CI) con versiones exactas.
 - `/stack-update` — refresca la referencia del stack desde fuentes oficiales con fechas y propone un plan de actualización.
 - `/update` — actualiza el propio estudio en el proyecto (plugin o reinstalación de la copia) conservando los cambios locales.
@@ -122,8 +123,11 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/story-done` — comprueba que una historia está realmente terminada (pruebas ejecutadas, checks verdes, revisión aprobada) y la cierra.
 - `/sprint-plan` — planifica un sprint a partir de historias listas, capacidad y dependencias, y clasifica la cola de Dependabot/Renovate (los PR patch/minor en verde se fusionan al inicio del sprint, los majors se convierten en historias).
 - `/sprint-status` — informa del progreso del sprint según artefactos, bloqueos, la cola de actualizaciones de dependencias y riesgo para el objetivo.
+- `/backlog` — registra una idea de la conversación como una línea en `production/backlog.md` sin actuar sobre ella; revisión semanal; promueve una idea a `/brainstorm`, `/impact` o `/feature-spec`.
+- `/retrospective` — retrospectiva del sprint a partir de artefactos: planificado vs entregado, estimación vs real con el ratio de calibración que aplica el siguiente `/sprint-plan`, bloqueos, acciones con responsables.
 - `/qa-plan` — asocia los criterios de aceptación de cada historia a niveles de prueba, herramientas y archivos.
 - `/tech-debt` — inventaría la deuda técnica y propone historias priorizadas.
+- `/docs` — documentación para personas mediante `tech-writer`: README, referencia de API generada del contrato, guía de usuario desde las especificaciones, runbook; cada comando de la documentación se ejecuta antes.
 
 **Endurecimiento**
 - `/security-audit` — audita código y configuración según OWASP Top 10:2025 con herramientas, hallazgos con CVSS y correcciones; los hallazgos BLOCKING van a `production/findings.md`, que leen `/create-stories` y `/sprint-plan`.
@@ -220,7 +224,7 @@ Ejecuta `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent
 ## 9. Estructura del repositorio
 ```
 .claude-plugin/   plugin.json + marketplace.json (este repositorio es a la vez marketplace y plugin)
-agents/           30 agentes       skills/     44 skills        hooks/      hooks.json + 10 scripts
+agents/           30 agentes       skills/     49 skills        hooks/      hooks.json + 10 scripts
 rules/            13 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          marco de pruebas de agentes y skills      install.sh  instalador de copia / proyecto nuevo

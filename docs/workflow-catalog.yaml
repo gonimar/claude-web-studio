@@ -9,6 +9,7 @@ phases:
       - {id: init, command: /init, required: true, artifact: {glob: ".claude/docs/technical-preferences.md"}, description: "Scaffold studio files, choose conversation language and review mode"}
       - {id: brainstorm, command: /brainstorm, required: false, description: "Explore the idea, audience, competitors, constraints"}
       - {id: adopt, command: /adopt, required: false, artifact: {glob: "docs/adoption-plan-*.md"}, description: "Brownfield: audit stack, artefacts and settings; adoption plan"}
+      - {id: migrate, command: /migrate, required: false, repeatable: true, description: "Brownfield: convert documents in older or foreign formats to the current templates, keeping IDs and history"}
       - {id: setup-stack, command: /setup-stack, required: true, artifact: {glob: ".claude/docs/technical-preferences.md", pattern: "Type\\*\\*: (?!\\[TO BE)"}, description: "Choose and pin the stack, versions, layout"}
       - {id: product-spec, command: /product-spec, required: true, artifact: {glob: "docs/specs/product-spec.md"}, description: "Product spec: goals, users, scope, metrics"}
       - {id: game-concept, command: /game-concept, required: false, artifact: {glob: "docs/specs/game-concept.md"}, description: "Games: concept, core loop, technical feasibility"}
@@ -41,9 +42,11 @@ phases:
       - {id: prototype-gate, command: "/game-concept gate", required: false, only_for: [game, game+backend], artifact: {glob: "production/releases/gate-prototype.md"}, description: "Go/no-go on the first playable slice against the concept's fun criterion — before backend or multiplayer investment"}
       - {id: sprint, command: /sprint-plan, required: false, repeatable: true, artifact: {glob: "production/sprints/*.md"}, description: "Sprint plan"}
       - {id: impact, command: /impact, required: false, repeatable: true, description: "Classify a change proposal from the conversation and get the owning director's verdict and next commands before code"}
+      - {id: backlog, command: /backlog, required: false, repeatable: true, artifact: {glob: "production/backlog.md"}, description: "Record an idea from the conversation without acting on it; weekly review; promote to /brainstorm, /impact or /feature-spec"}
       - {id: dev, command: /dev-story, required: true, repeatable: true, description: "Implement a story with specs and tests"}
       - {id: review, command: /code-review, required: true, repeatable: true, description: "Lead review plus security"}
       - {id: done, command: /story-done, required: true, repeatable: true, description: "Verify acceptance criteria, close"}
+      - {id: retrospective, command: /retrospective, required: false, repeatable: true, description: "Sprint retrospective from artefacts: planned vs shipped, estimate vs actual (calibration ratio), actions"}
   hardening:
     label: "Hardening"
     description: "Security, performance, accessibility"
@@ -62,6 +65,7 @@ phases:
     steps:
       - {id: release-checklist, command: /release-checklist, required: true, artifact: {glob: "production/releases/*.md"}, description: "Release checklist"}
       - {id: changelog, command: /changelog, required: true, artifact: {glob: "CHANGELOG.md"}, description: "Changelog from Conventional Commits"}
+      - {id: docs, command: /docs, required: false, repeatable: true, description: "Documentation for people: README, API reference from the contract, user guide, runbook — through tech-writer"}
       - {id: deploy, command: /deploy, required: true, description: "Deploy (delegating to a deploy skill if installed)"}
   operate:
     label: "Operate"

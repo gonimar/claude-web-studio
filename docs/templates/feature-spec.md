@@ -18,7 +18,9 @@ Entities/fields (type, required, constraints), source of truth, migrations; impa
 GraphQL operations (queries/mutations/subscriptions) or REST endpoints, inputs/outputs, errors (codes / payload errors); link to `docs/architecture/api/`.
 
 ## 6. UI and states
-Screens and their states: empty / loading / error / success / offline; copy; link to the UX spec.
+Screens and their states: empty / loading / error / success / offline; copy (with i18n keys when the product is localised); link to the UX spec.
+
+Product events this feature emits (name · trigger · properties) — from the product spec §6 analytics list; SEO requirements for public pages (title/meta, structured data, canonical) or `n/a`.
 
 ## 7. Edge cases
 Table "situation → concrete behaviour" (never "handle gracefully").

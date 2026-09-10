@@ -2,8 +2,8 @@
 
 Что запускать в каждой ситуации: полный путь для нового и для существующего проекта, ежедневный
 цикл разработки, релиз, начало и конец сессии, периодические проверки и справочник «если что-то
-пошло не так». Написано по текстам скилов и хуков плагина; там, где команды ещё нет, стоит пометка
-**Планируется** со ссылкой на [`roadmap.md`](../roadmap.md).
+пошло не так». Написано по текстам скилов и хуков плагина; чего студия пока не умеет — в
+[`roadmap.md`](../roadmap.md).
 
 Внутри проекта: `/help guide` печатает оглавление этого файла, `/help guide <тема>` — нужный раздел,
 `/help commands` — все команды с описанием. Читать на: [English](../playbook.md) · Русский.
@@ -193,7 +193,7 @@ claude plugin install … --scope local        (или install.sh <project>)
 | Нет test strategy | `/test-setup --apply` | То же; `/create-stories` не предложит `/dev-story`, пока нет |
 | Нет контракта, но есть API | `/api-contract --style rest` (или graphql) | Снимает контракт с кода, добавляет diff-check в CI |
 | Нет спеки продукта | `/product-spec` (режим retrofit) | Стадия остаётся `build`/`operate`, назад не откатывает |
-| Roadmap в чужом формате | INFO «не мигрирован» — по решению; формат v3.1 см. `templates/roadmap.md` | **Планируется:** `/migrate` (roadmap R-02); пока — конвертировать живой сессией |
+| Roadmap или документы в чужом формате | `/migrate roadmap --dry-run` → `/migrate roadmap` (истории, ADR, спеки, спринты так же) | ID и история сохраняются; `/adopt` называет типы |
 | Нет деплой-артефактов, но есть deploy target | `/create-stories` добавит историю «Deploy artefacts» | Dockerfile, compose.prod, release workflow, `/healthz`, `docs/ops/deploy.md` |
 | Старые мажоры | `/stack-update --check-only` → `/dependency-audit` → истории апгрейда | Таблица «сейчас → актуально → путь» уже в adopt |
 
@@ -211,7 +211,7 @@ claude plugin install … --scope local        (или install.sh <project>)
   `/adopt` заполнил стек; если стек не выбран — `/start` (B).
 - **Чужой проект на время (аудит, консультация).** `/adopt docs` + `/architecture-review full`
   + `/security-audit quick` + `/tech-debt full` — всё read-only, отчёты в `docs/`.
-  **Планируется:** аудит расхождения кода с ADR (roadmap R-04).
+  Код против документов: `/architecture-review code` (находки расхождений с `file:line`).
 - **Хочу только одну фичу, без «наведения порядка».** На вопрос `/adopt` о цели — ответить целью;
   план перестроится: сначала `/feature-spec` этой фичи, минимальные threat-model/test-setup, затем
   истории. Остальные пункты остаются открытыми, `/help` их не навязывает, если вердикт `COMPLIANT`.
@@ -278,8 +278,8 @@ security review → code review; независимые части паралл�
 ```
 
 Без спринтов работать можно: `/create-stories` → `/dev-story` напрямую; `/help` будет
-предлагать следующую открытую историю roadmap. **Планируется:** `/retrospective` (roadmap R-08),
-калибровка оценок (R-07).
+предлагать следующую открытую историю roadmap. Конец спринта: `/retrospective NN` (план и факт, коэффициент
+калибровки, который применит следующий `/sprint-plan`).
 
 ### 5.5 Другие основные процессы (не «одна история»)
 
@@ -320,19 +320,20 @@ PII) → история «импорт с прогоном на копии пр�
 **Документация для людей** (README, API-доки, руководство пользователя, runbook): скила нет —
 это история с агентом `tech-writer` (`/create-stories` с критерием «страница X существует и
 проверена по чек-листу»); API-доки генерируются из контракта (`/api-contract`); runbook — из
-`docs/ops/deploy.md` (история «Deploy artefacts»). `/story-done` проверяет, что docs обновлены. **Планируется:** `/docs`
-(roadmap R-05).
+`docs/ops/deploy.md` (история «Deploy artefacts»). `/story-done` проверяет, что docs обновлены; `/docs readme|api|guide|runbook`
+пишет их через `tech-writer`, сначала выполняя каждую команду; `/docs --check` показывает, что устарело.
 
 **Наблюдаемость, алерты, бэкапы** (обычно забывают до первого инцидента): история «Observability»
 с `devops-engineer` — `/healthz`, структурные логи, метрики, алерт на 5xx и на место на диске;
 история «Backup & restore drill» — бэкап по расписанию и **проверенное восстановление** на
-staging. `/incident` без логов бесполезен, `/release-checklist` требует бэкап. **Планируется:** обе
-истории предлагаются автоматически (roadmap R-06).
+staging. `/incident` без логов бесполезен, `/release-checklist` требует бэкап. `/create-stories` предлагает обе
+истории сам, когда задан Deploy target, а первый релиз не проходит без записанной даты восстановления.
 
 **Локализация, SEO, аналитика.** Отдельных скилов нет: i18n — секция в `/product-spec` (NFR) и
 `/ux-spec` (тексты); SEO — агент `seo-specialist` в историях контентного сайта (`/setup-stack site`,
 рендеринг SSR/SSG); аналитика/метрики продукта — в `/product-spec` (метрики успеха) и `/feature-spec`
-(события), затем история. **Планируется:** секции шаблонов и маршрутизация (roadmap R-11).
+(события), затем история. Спека продукта §6 отвечает про i18n, SEO и аналитику явно, спека фичи §6 перечисляет
+события и ключи текстов, `seo-specialist` проверяет публичные страницы в `/dev-story`; справочник: `web-platform.md` § i18n.
 
 **Монорепозиторий / несколько приложений.** `technical-preferences` знает `backend_root` и
 `frontend_root`; один roadmap, префиксы фич по приложениям, CI-стадии по путям (`/test-setup`).
@@ -355,14 +356,14 @@ staging. `/incident` без логов бесполезен, `/release-checklist
 `/create-stories` и уточняет `/sprint-plan` по capacity; `/sprint-status` считает burn и риск цели.
 Ответ на «когда» = `/sprint-status` + открытые истории с оценками. Нужно урезать scope —
 в roadmap `🅿` (отложено) / `❌` (отменено) через `/sprint-plan`, а не тихо.
-**Планируется:** калибровка оценок по измеренному времени поставки (roadmap R-07).
+`/retrospective` считает коэффициент калибровки (факт ⏱ к оценке), `/sprint-plan` масштабирует им следующий спринт.
 
 **Пожелания пользователей и триаж багов.** Идеи — в `production/backlog.md` (формат v3.1,
 `F-NNN` одной строкой до спеки); баги с прод — `/incident` (sev 1–2) или история; находки аудитов —
 `production/findings.md`. Раз в спринт `/sprint-plan` читает findings первыми, backlog — по вашему
-выбору. Решение «делаем/не делаем» большого пожелания — `/impact` → product-director.
-**Планируется:** `/backlog` с перехватом идей — «а может…» записывается, а не делается в том же
-ходе (roadmap R-01).
+выбору. Решение «делаем/не делаем» большого пожелания — `/impact` → product-director. `/backlog add "<идея>"`
+записывает «а может…», ничего не делая; `/backlog review` раз в неделю; `/backlog promote I-NNN` отправляет идею
+в `/brainstorm`, `/impact` или `/feature-spec`.
 
 **Переезд на другой хостинг / смена топологии.** `/impact "move to Hetzner"` → architecture →
 ADR → обновить Deploy target/delegate (`/setup-stack` или правка technical-preferences) → история
@@ -372,7 +373,8 @@ ADR → обновить Deploy target/delegate (`/setup-stack` или прав�
 **Плановая ротация секретов** (раз в квартал или при уходе человека): процесс вне студии, но
 `/harden ci` проверяет permissions и secrets hygiene, `/security-audit quick` — что ничего не
 захардкожено; `docs/ops/deploy.md` должен перечислять, где какой секрет живёт (раздел
-Prerequisites & secrets в deploy-контракте). **Планируется:** `/harden secrets` (roadmap R-09).
+Prerequisites & secrets в deploy-контракте). `/harden secrets` строит чеклист ротации: каждый секрет, где живёт,
+кто читает, порядок ротации и проверка — без значений.
 
 **Ревью чужого кода** (подрядчик, другой ИИ-инструмент, старый PR): `/code-review <paths>` или
 переключиться на ветку PR и `/code-review --diff`; для скопированного кода — плюс `/dependency-audit`
@@ -541,10 +543,9 @@ Severity: 1 — прод недоступен/утечка; 2 — ключево
 Хук `IMPACT:` при записи в `auth/`, `migrations/`, `Dockerfile`, `go.mod`, `package.json`, workflows —
 это напоминание (warn-only): изменение вне истории и без `/impact`.
 
-**Размышление вслух** («а может, сделаем…», «было бы неплохо…») — это идея, а не поручение: агент
-обязан сказать это и предложить записать, а не делать в том же ходе. **Планируется:** `/backlog add`
-как точка перехвата (roadmap R-01); пока — записать в `production/backlog.md` руками, дальше
-`/impact` или `/brainstorm`.
+**Размышление вслух** («а может, сделаем…», «было бы неплохо…») — это идея, а не поручение: `/backlog add "<идея>"`
+записывает её, и разговор возвращается к текущей работе; в этом ходе ничего не делается. Потом
+`/backlog promote I-NNN` проводит идею через `/brainstorm`, `/impact` или `/feature-spec`.
 
 ### 10.4 Новая зависимость / новая технология в стеке
 1. `/impact "add <package> for <why>"` — новая runtime-зависимость = класс architecture.
@@ -567,7 +568,7 @@ bump'ом → `/security-audit <path>` для кода вокруг → BLOCKING
    студии, руками, force-push хук блокирует: договоритесь с владельцем репозитория явно.
 3. `/security-audit quick` + `gitleaks` через него; `/harden ci` (permissions в workflows).
 4. Правило на будущее: секреты только в окружении; значения не пишутся в командную строку.
-**Планируется:** чеклист ротации `/harden secrets` (roadmap R-09).
+5. `/harden secrets` — чеклист ротации для всего, что попало в зону утечки.
 
 ### 10.7 Хук сказал BLOCKED
 | Сообщение | Причина | Действие |
@@ -635,7 +636,8 @@ git stash pop
   из каталога проекта, `--scope local -y`). Затем всё равно `/update` — он досеивает `docs/` и `rules/`.
 - Новая версия сломала привычку (другой вопрос, другой порядок) — читать `CHANGELOG.md` плагина
   (`/update` показывает дельту).
-**Планируется:** `/update` досеивает шаблоны документов и настаивает на миграции (roadmap R-03).
+- `UPDATED (N documents need /migrate)` — шаблон изменился, N документов проекта старше него: `/migrate all
+  --dry-run`, затем `/migrate <тип>`; до этого `/help` может читать их неверно.
 
 ### 10.16 Скил делает не то, что обещает
 1. Убедиться, что это не режим: `production/review-mode.txt`, `stage.txt`, язык в `CLAUDE.md`.
@@ -722,8 +724,8 @@ git stash pop
 `/impact` → architecture → ADR о версионировании → `/api-contract` (новая версия рядом со старой,
 deprecation-даты в SDL/OpenAPI; diff-check в CI покажет breaking) → `/changelog` с секцией
 BREAKING → мажорный bump → период сосуществования → история на удаление старой версии.
-GraphQL: `@deprecated(reason:)` вместо удаления; REST: `/v2`. **Планируется:** `/api-contract
---deprecate` (roadmap R-13).
+GraphQL: `@deprecated(reason:)` вместо удаления; REST: `/v2`. `/api-contract --deprecate <поле> --remove-after
+<дата>` делает всё это: пометку, CI-правило с датой, запись BREAKING и историю удаления.
 
 ### 10.30 Слишком много запросов разрешений от Claude Code
 Это не хуки студии, а `permissions` в `.claude/settings.json`. `/init` кладёт базовый allow-список
@@ -772,8 +774,9 @@ roadmap с абсолютными URL обновить `docs:`-коммитом.
 `/data-model` содержит PII-классификацию и стратегию удаления/анонимизации; если её нет —
 `/data-model full` (ретроспективно) → `/threat-model` (поверхность «экспорт/удаление») →
 история «удаление аккаунта» с критерием «данные не находятся ни в БД, ни в бэкапах старше N
-дней, ни в логах». Само юридическое требование — вне студии. **Планируется:** секции retention &
-deletion в шаблонах (roadmap R-10).
+дней, ни в логах». Само юридическое требование — вне студии. Таблица §6 модели данных (поле · класс · retention ·
+способ удаления) и поверхность «экспорт/удаление» в threat model — где живут ответы; `/create-stories` предлагает
+историю «Data deletion», когда их нет.
 
 ### 10.39 Сертификат TLS истёк / домен не резолвится
 Инцидент sev 1 (`/incident`); чинится на хосте (renew, DNS) — через deploy-делегата или руками;
@@ -821,13 +824,15 @@ proxy` (лимиты, WebSocket-защита) → истории; серверн
 | `/hotfix`, `/incident` | hotfix-ветка+PR, `docs/ops/incidents/INC-NNN.md` | | operate |
 | `/tech-debt`, `/stack-update`, `/update` | `docs/ops/tech-debt-<date>.md`, `.claude/docs/stack-reference/*`, обновлённые docs/rules | | периодика |
 | `/skill-test`, `/skill-improve` | отчёты тестов студии | | после правки скилов |
+| `/backlog add\|review\|promote` | `production/backlog.md` (`I-NNN`) | | любое «а может»; раз в неделю |
+| `/migrate [тип] [--dry-run]` | документы в текущих шаблонах | | после `/adopt`, при дрейфе шаблонов |
+| `/docs [readme\|api\|guide\|runbook]` | `README.md`, справочник API, руководство, `docs/ops/deploy.md` | | перед передачей или релизом |
+| `/retrospective NN` | `## Retrospective` в файле спринта, действия в roadmap | | конец спринта |
+| `/architecture-review code`, `/harden secrets`, `/api-contract --deprecate` | находки дрейфа, чеклист ротации, deprecation в контракте | | brownfield / утечка / ломающее изменение |
 
 ---
 
-## 12. Что планируется
+## 12. Чего студия пока не умеет
 
-Всё, что помечено **Планируется**, собрано в [`roadmap.md`](../roadmap.md): перехват идей
-(`/backlog`), миграция документов (`/migrate`), строгие шаблоны через `/update`, аудит архитектуры по
-коду, `/docs`, истории наблюдаемости и бэкапов, калибровка оценок, `/retrospective`, чеклист ротации
-секретов, retention и удаление данных, i18n/SEO/аналитика, поиск по `/help guide`, deprecation
-контракта.
+У всего, что названо в инструкции, в этой версии есть команда. Оставшиеся пробелы — в
+[`roadmap.md`](../roadmap.md); если у ситуации здесь нет команды, там сказано, планируется ли она.

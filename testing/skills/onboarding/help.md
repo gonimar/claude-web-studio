@@ -65,5 +65,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: case 1. **Expected**: the report ends with `Docs: /help commands · /help guide · /help guide <n>` before the closing question — always, on every project.
 - [ ] Docs line present
 
+### 17. Backlog reminder and first-line guide match
+**Fixture**: `production/backlog.md` with four open ideas, oldest 45 days, `last-review` 12 days ago; `/help guide "two sessions"`. **Expected**: one line `Backlog: 4 ideas, oldest 45 days → /backlog review` in the report (never an option in the closing question); the guide prints §10.12 because its first line matches, heading matches win over first-line matches when both exist.
+- [ ] backlog line · [ ] not in the question · [ ] first-line match
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

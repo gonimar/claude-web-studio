@@ -30,5 +30,9 @@ STRIDE per surface, DFD, mitigations, priorities.
 **Fixture**: STRIDE analysis complete. **Expected**: the draft appears in the chat message, the consent question follows, and `docs/architecture/threat-model.md` is written only after the "write" answer; asking "the file is already written — keep it?" is a failure even if the content is correct.
 - [ ] draft before the question · [ ] no Write/Edit before the answer
 
+### 8. Export / deletion surface
+**Fixture**: data model §6 classifies personal data. **Expected**: the surfaces table has a "data export / deletion" row: requester, identity check, what is exported and what is not, propagation to replicas, backups and logs, evidence kept; STRIDE threats for it (spoofed requester, tampering with the export, information disclosure).
+- [ ] surface present when PII exists · [ ] STRIDE rows · [ ] absent when no PII
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

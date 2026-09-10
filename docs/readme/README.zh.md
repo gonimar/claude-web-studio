@@ -2,7 +2,7 @@
 
 **语言：** [English](../../README.md) · [Русский](README.ru.md) · [Español](README.es.md) · [Deutsch](README.de.md) · 中文
 
-Web Studio 把 Claude Code 变成一个完整的 Web 开发工作室：三层共 30 个专业代理、44 条构成"从想法到上线"
+Web Studio 把 Claude Code 变成一个完整的 Web 开发工作室：三层共 30 个专业代理、49 条构成"从想法到上线"
 流水线的斜杠命令、保护密钥与提交规范的钩子、按路径生效的编码规则、文档模板、**带日期的技术栈版本与最佳实践
 参考**，以及用于测试代理本身的框架。既适用于 Web 应用，也适用于浏览器游戏。¹
 
@@ -79,6 +79,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/start` — 新项目引导：询问你所处的阶段并引导到正确的第一步。
 - `/help` — 显示当前阶段、已完成的步骤和唯一的下一条命令；`/help commands` 列出所有命令及说明，`/help guide [主题]` 打开操作手册（各种情况下该运行什么，[docs/playbook.md](../playbook.md)，英文）。
 - `/adopt` — 把工作室接入已有项目：识别技术栈，审核文档，生成接入计划。；根据识别到的事实填写 `technical-preferences.md`，并写出带复选框的接入计划，`/help` 据此推进。
+- `/migrate` — 把旧格式或外来格式的文档（路线图、故事、ADR、规格、冲刺）转换为当前模板，保留 ID 与历史；写入前先做演练。
 - `/setup-stack` — 选择并固定技术栈（后端、前端、API 风格、引擎、数据库、测试、CI）及精确版本。
 - `/stack-update` — 从官方来源刷新技术栈参考并标注日期，为项目提出升级计划。
 - `/update` — 更新项目中的工作室本身（插件更新或副本重装），保留本地修改。
@@ -109,8 +110,11 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/story-done` — 验证故事真正完成（测试已运行、检查通过、评审批准）并关闭。
 - `/sprint-plan` — 根据就绪故事、产能和依赖规划冲刺，并处理 Dependabot/Renovate 队列（绿色的 patch/minor PR 在冲刺开始时合并，major 变为故事）。
 - `/sprint-status` — 依据产物报告冲刺进度、阻塞、依赖更新队列和目标风险。
+- `/backlog` — 把对话中的想法记为 `production/backlog.md` 里的一行，不做任何实现；每周回顾；把想法推进到 `/brainstorm`、`/impact` 或 `/feature-spec`。
+- `/retrospective` — 依据产物做冲刺回顾：计划与交付、估算与实际及下一次 `/sprint-plan` 使用的校准系数、阻塞、带负责人的行动项。
 - `/qa-plan` — 把每个故事的验收标准映射到测试层级、工具和文件。
 - `/tech-debt` — 盘点技术债务并提出按优先级排序的故事。
+- `/docs` — 通过 `tech-writer` 编写面向人的文档：README、由契约生成的 API 参考、基于功能规格的用户指南、runbook；文档中的每条命令都先运行。
 
 **加固**
 - `/security-audit` — 依据 OWASP Top 10:2025 用工具审计代码与配置，给出 CVSS 评分的发现与修复。；BLOCKING 发现写入 `production/findings.md`，供 `/create-stories` 与 `/sprint-plan` 读取。
@@ -200,7 +204,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ## 9. 仓库结构
 ```
 .claude-plugin/   plugin.json + marketplace.json（本仓库同时是 marketplace 和插件）
-agents/           30 个代理        skills/     44 个技能        hooks/      hooks.json + 10 个脚本
+agents/           30 个代理        skills/     49 个技能        hooks/      hooks.json + 10 个脚本
 rules/            13 条路径规则                   docs/       stack-reference/、templates/（findings、adoption-plan、deploy-runbook、deploy/）、deploy-target-contract、、名册、流水线目录、安全基线
 templates/        CLAUDE.md、settings.json、settings.plugin-mode.json、statusline.sh
 testing/          代理与技能测试框架                install.sh  副本 / 新项目安装脚本

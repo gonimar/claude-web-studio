@@ -7,7 +7,8 @@
 - [ ] Migrations backward-compatible; rollback plan written
 - [ ] CHANGELOG.md updated; tag created
 - [ ] Production secrets/env in place, new variables documented
-- [ ] DB backup taken before deploy; restore last tested: [date]
+- [ ] DB backup taken before deploy; restore last tested: [date] (first release: the restore drill on staging is a gate — story "Backup & restore drill")
+- [ ] Observability in place: `/healthz` with dependency checks, structured logs, an alert on error rate (first release gate when a Deploy target is set)
 
 ## Deploy
 Steps (`/deploy`), who, when; smoke checks afterwards (URL, healthz, key journey).

@@ -3,7 +3,7 @@
 **Lesen auf:** [English](../../README.md) · [Русский](README.ru.md) · [Español](README.es.md) · Deutsch · [中文](README.zh.md)
 
 Web Studio macht aus Claude Code ein vollständiges Webentwicklungsstudio: 30 spezialisierte Agenten
-in drei Ebenen, 44 Slash-Befehle, die eine Pipeline von der Idee bis zur Produktion bilden, Hooks,
+in drei Ebenen, 49 Slash-Befehle, die eine Pipeline von der Idee bis zur Produktion bilden, Hooks,
 die Geheimnisse und Commit-Hygiene schützen, pfadbezogene Code-Regeln, Dokumentvorlagen, eine
 **datierte Referenz aktueller Stack-Versionen und Best Practices** sowie ein Framework zum Testen
 der Agenten selbst. Es deckt Webanwendungen und Browserspiele gleichermaßen ab.¹
@@ -92,6 +92,7 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 - `/start` — Einstieg für ein neues Projekt: fragt, wo Sie stehen, und leitet zu den ersten Schritten.
 - `/help` — zeigt die aktuelle Phase, erledigte Schritte und den einen nächsten Befehl; `/help commands` listet alle Befehle mit Beschreibung, `/help guide [Thema]` öffnet das Playbook (was in jeder Situation zu tun ist, [docs/playbook.md](../playbook.md), englisch).
 - `/adopt` — bindet das Studio an ein bestehendes Projekt an: erkennt den Stack, prüft Dokumente, erstellt einen Übernahmeplan — füllt `technical-preferences.md` aus den erkannten Fakten und schreibt einen Adoptionsplan mit Checkboxen, dem `/help` folgt.
+- `/migrate` — überführt Dokumente in alten oder fremden Formaten (Roadmap, Storys, ADRs, Spezifikationen, Sprints) in die aktuellen Vorlagen, IDs und Historie bleiben erhalten; Probelauf vor jedem Schreiben.
 - `/setup-stack` — wählt und fixiert den Stack (Backend, Frontend, API-Stil, Engine, Datenbank, Tests, CI) mit exakten Versionen.
 - `/stack-update` — erneuert die Stack-Referenz aus offiziellen Quellen mit Datum und schlägt einen Upgrade-Plan für das Projekt vor.
 - `/update` — aktualisiert das Studio selbst im Projekt (Plugin-Update oder Neuinstallation der Kopie) und bewahrt lokale Änderungen.
@@ -122,8 +123,11 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 - `/story-done` — verifiziert, dass eine Story wirklich fertig ist (Tests gelaufen, Checks grün, Review genehmigt), und schließt sie.
 - `/sprint-plan` — plant einen Sprint aus bereiten Stories, Kapazität und Abhängigkeiten und sortiert die Dependabot/Renovate-Warteschlange (grüne Patch/Minor-PRs werden zum Sprintstart gemergt, Majors werden Stories).
 - `/sprint-status` — berichtet den Sprint-Fortschritt anhand von Artefakten, Blockern, der Warteschlange der Abhängigkeits-Updates und Risiko für das Ziel.
+- `/backlog` — hält eine Idee aus dem Gespräch als eine Zeile in `production/backlog.md` fest, ohne sie umzusetzen; wöchentliche Durchsicht; befördert eine Idee zu `/brainstorm`, `/impact` oder `/feature-spec`.
+- `/retrospective` — Sprint-Retrospektive aus Artefakten: geplant vs. geliefert, Schätzung vs. Ist mit dem Kalibrierungsfaktor für den nächsten `/sprint-plan`, Blocker, Maßnahmen mit Verantwortlichen.
 - `/qa-plan` — ordnet die Akzeptanzkriterien jeder Story Testebenen, Werkzeugen und Dateien zu.
 - `/tech-debt` — inventarisiert technische Schulden und schlägt priorisierte Stories vor.
+- `/docs` — Dokumentation für Menschen über `tech-writer`: README, API-Referenz aus dem Vertrag, Benutzerhandbuch aus den Spezifikationen, Runbook; jeder Befehl in der Doku wird vorher ausgeführt.
 
 **Härtung**
 - `/security-audit` — prüft Code und Konfiguration gegen OWASP Top 10:2025 mit Werkzeugen, CVSS-bewerteten Befunden und Korrekturen; BLOCKING-Befunde landen in `production/findings.md`, das `/create-stories` und `/sprint-plan` lesen.
@@ -220,7 +224,7 @@ Projekt aus. Details: [testing/README.md](../../testing/README.md).
 ## 9. Aufbau des Repositorys
 ```
 .claude-plugin/   plugin.json + marketplace.json (dieses Repository ist Marketplace und Plugin zugleich)
-agents/           30 Agenten       skills/     44 Skills        hooks/      hooks.json + 10 Skripte
+agents/           30 Agenten       skills/     49 Skills        hooks/      hooks.json + 10 Skripte
 rules/            13 pfadbezogene Regeln        docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, Agentenliste, Workflow-Katalog, Sicherheits-Baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          Testframework für Agenten und Skills      install.sh  Installer für Kopie / neues Projekt

@@ -26,5 +26,9 @@ Feature spec: scenarios, rules, data, contract, states, edge cases, security, a1
 **Fixture**: review per mode. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Events, copy keys and SEO in section 6
+**Fixture**: a public article page on a localised content site. **Expected**: section 6 lists the product events (name · trigger · properties), the copy keys, and the SEO requirements (title/meta, structured data, canonical) that `seo-specialist` checks in `/dev-story`.
+- [ ] events listed · [ ] copy keys · [ ] SEO requirements
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

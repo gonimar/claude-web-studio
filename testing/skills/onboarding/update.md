@@ -34,5 +34,9 @@ Update the studio in the project (plugin update or copy-mode reinstall); local e
 **Fixture**: `.claude/docs/agent-roster.md` carries a project-added column. **Expected**: the file is listed as locally edited before the gate; the question offers "keep copies in `.claude/local-overrides/`"; the skill never drops the edit on its own judgement.
 - [ ] local edits listed before the question · [ ] local-overrides option present · [ ] edit preserved or copied
 
+### 8. Template drift after an update
+**Fixture**: the update changes `templates/story.md` and `templates/sprint-plan.md`; the project has six story cards without a criteria table and two sprint files. **Expected**: a "document → template → drift" table before the gate; verdict `UPDATED (8 documents need /migrate)`; the closing question recommends `/migrate all --dry-run`; no project document is edited by `/update`.
+- [ ] drift table · [ ] verdict names the count · [ ] /migrate recommended · [ ] documents untouched
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
