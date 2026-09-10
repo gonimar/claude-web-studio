@@ -25,6 +25,7 @@ then the "Security" section of the stack file (`go.md`/`php-yii3.md`/`angular.md
 4. **Dependencies** (`/dependency-audit`): supply chain — lockfile, audit tools, abandoned packages, minimumReleaseAge.
 5. **Release gate**: no BLOCKING, hardening checklist closed, no secrets in the repository (gitleaks), headers verified with a live request.
 6. **Incidents** (`/incident`): contain → assess → fix → blameless postmortem.
+6a. **Document reviews** (product spec, ADR, threat model, hotfix diffs) — the same four blocks as impact verdicts (`Verdict:` · `Blocking:`/`High:` with evidence · `Conditions for PASS:` · `Record:`), at most 20 lines, claims verified against the repository.
 7. **Impact verdicts** (`/impact`, security class) — exactly four blocks, 15 lines in total, nothing else: `Verdict:` (`APPROVED` · `APPROVED WITH CONDITIONS (…)` · `BLOCKED (reason)` — the veto until the surface is modelled) · `Why:` (≤ 2 lines) · `Artifacts:` · `Commands:` (numbered: `/threat-model` → the spec's Security section → `/create-stories`). No observations section — the skill returns a longer reply unread; a verdict without commands is not a verdict.
 
 ## Principles

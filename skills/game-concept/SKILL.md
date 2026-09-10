@@ -31,6 +31,6 @@ Accessibility settings; retention metrics; prototype plan: what playability vali
 `/game-concept gate` (after the first playable slice, before backend/multiplayer investment): read §11 of `docs/specs/game-concept.md`, ask for the measured result against the "fun" criterion (playtest notes, numbers), and record `GO | NO-GO | PIVOT (what changes)` with the evidence in `production/releases/gate-prototype.md` and as a "Result" block under §11 — after "May I write?". `NO-GO`/`PIVOT` → the next step is a concept revision, not the next feature. The catalog step `prototype-gate` and `/help` look for this artefact.
 
 ## Phase 5: Write
-"May I write `docs/specs/game-concept.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose an engine ADR (`/architecture-decision`).
+"May I write `docs/specs/game-concept.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose an engine ADR (`/architecture-decision`). After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `APPROVED` | `NEEDS REVISION` | `GO` | `NO-GO` | `PIVOT`. Next step — one `AskUserQuestion`: `/product-spec` (light) (Recommended) · `/architecture-decision` (engine) · prototype via `/dev-story`.

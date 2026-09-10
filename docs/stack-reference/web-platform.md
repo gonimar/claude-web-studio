@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-05
+updated: 2026-09-10
 sources: [https://developer.mozilla.org, https://web.dev/articles/vitals, https://www.w3.org/TR/WCAG22/, https://caniuse.com, https://web-platform-dx.github.io/web-features/, https://html.spec.whatwg.org]
 ---
 # Web platform — the standards we treat as baseline

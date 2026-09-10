@@ -30,5 +30,9 @@ Product spec section by section with review per mode.
 **Fixture**: lean mode; `technical-director` returns CONCERNS with one BLOCKING (a fact in the draft the repository contradicts) and one HIGH. **Expected**: the draft is corrected; for each of the two items one `AskUserQuestion` (record in `production/findings.md` as `ARCH-NNN` Recommended · story stubs · spec only); a declined BLOCKING is named in the verdict line as unrecorded; the row is written only after the answer.
 - [ ] one question per BLOCKING/HIGH · [ ] `findings.md` row follows the template · [ ] unrecorded BLOCKING appears in the verdict line
 
+### 7. Retrofit on an operate project
+**Fixture**: stage `operate`, deployed code, no spec. **Expected**: retrofit mode — draft from CLAUDE.md/roadmap/code shown as a whole, questions only where facts are silent; `stage.txt` is not proposed backwards; a claim the repository contradicts is BLOCKING in the review.
+- [ ] no stage proposal on operate · [ ] claims verified against the repo
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

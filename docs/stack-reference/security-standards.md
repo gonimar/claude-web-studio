@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-05
+updated: 2026-09-10
 sources: [https://owasp.org/Top10/2025/, https://owasp.org/www-project-application-security-verification-standard/, https://cheatsheetseries.owasp.org, https://owasp.org/API-Security/, https://infosec.mozilla.org/guidelines/web_security, https://ssl-config.mozilla.org, https://www.w3.org/TR/CSP3/, https://datatracker.ietf.org/doc/html/rfc9457]
 ---
 # Security standards — what we apply and how we verify

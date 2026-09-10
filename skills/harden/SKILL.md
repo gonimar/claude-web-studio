@@ -24,6 +24,6 @@ Headers (HSTS, CSP nonce/strict-dynamic — mind Angular `ngCspNonce`/Nuxt, nosn
 Show config diffs — in the infra repo when declared ("May I write [infra repo path/file]?"), otherwise the exact snippet for the owner of the proxy; validate with `nginx -t`/`caddy validate`/`docker compose config`; repeat `curl -I` — before/after output. The live headers are the evidence in both cases.
 
 ## Phase 4: Write
-"May I write `docs/security/hardening-checklist.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
+"May I write `docs/security/hardening-checklist.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `HARDENED` | `PARTIAL (open: …)`. Next step — one `AskUserQuestion`: `/security-audit quick` (Recommended) · `/pentest` (optional) · stop here.

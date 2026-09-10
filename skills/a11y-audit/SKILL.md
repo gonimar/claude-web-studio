@@ -24,6 +24,6 @@ Routes/pages (from UX specs or the argument); is the dev server running? (offer 
 Keyboard, focus (2.4.11/2.4.13), names, ARIA, contrast, target size (2.5.8), forms (3.3.7/3.3.8), motion; games — keyboard/gamepad menus, settings.
 
 ## Phase 4: Report
-Table "finding → WCAG criterion → severity → file → fix". "May I write `docs/ops/a11y-audit-<date>.md` and an axe regression test?" For every critical finding one `AskUserQuestion`: record it in `production/findings.md` (`A11Y-NNN`, template `findings.md`) (Recommended) · fix stories now · report only.
+Table "finding → WCAG criterion → severity → file → fix". "May I write `docs/ops/a11y-audit-<date>.md` and an axe regression test?" For every critical finding one `AskUserQuestion`: record it in `production/findings.md` (`A11Y-NNN`, template `findings.md`) (Recommended) · fix stories now · report only. After the "write" answer: `touch .claude/.write-consent` (rule 7).
 
 Verdict: `PASS` | `FAIL (N critical)`. Next step — one `AskUserQuestion`: fix the critical findings via `angular-engineer`/`vue-engineer`/`css-engineer` (Recommended) · re-run `/a11y-audit` after fixes · `/release-checklist`.

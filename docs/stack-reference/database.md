@@ -1,11 +1,11 @@
 ---
-updated: 2026-09-05
-sources: [https://www.postgresql.org/docs/18/, https://redis.io/docs/latest/, https://valkey.io, https://use-the-index-luke.com]
+updated: 2026-09-10
+sources: [https://www.postgresql.org/docs/18/, https://www.postgresql.org/developer/roadmap/, https://endoflife.date/postgresql, https://redis.io/docs/latest/, https://github.com/redis/redis/releases, https://valkey.io, https://github.com/valkey-io/valkey/releases, https://use-the-index-luke.com]
 ---
 # PostgreSQL 18, Redis 8 — practices
 
 ## PostgreSQL
-- **18 (2025-09)**: asynchronous I/O (`io_method`), built-in `uuidv7()` (use for PKs instead of uuid4), virtual generated columns, B-tree skip scan, OAuth authentication, faster upgrades. 19 expected autumn 2026 (check with `/stack-update`).
+- **18 (2025-09, current patch 18.6 as of 2026-08-11)**: asynchronous I/O (`io_method`), built-in `uuidv7()` (use for PKs instead of uuid4), virtual generated columns, B-tree skip scan, OAuth authentication, faster upgrades. **19 is in Beta 3** (released 2026-08-13), GA expected September/October 2026 — plan the `pg_upgrade` path now rather than waiting for release day (check with `/stack-update` for GA status).
 - Schema: `bigint identity` or `uuidv7` PKs; `timestamptz` always; `text` + CHECK instead of `varchar(n)`; enums via lookup tables or CHECK (simpler migrations); `jsonb` only for genuinely semi-structured data; composite PKs where the entity is defined by them.
 - Indexes: for real queries (`EXPLAIN (ANALYZE, BUFFERS)`); partial and covering (`INCLUDE`); GIN for jsonb/arrays/FTS; unique indexes = business invariants; no "just in case" indexes.
 - Migrations: forward-only, idempotent, in git, applied by CI/deploy before the app starts (a migrate service in compose); destructive changes in two steps (expand → migrate data → contract); no manual production migrations.
@@ -15,7 +15,7 @@ sources: [https://www.postgresql.org/docs/18/, https://redis.io/docs/latest/, ht
 - Observability: `pg_stat_statements`, `auto_explain` for slow queries, `log_min_duration_statement`.
 
 ## Redis 8 / Valkey
-- Redis 8 (2025-05) is open source again (AGPL option); Valkey 9 is the Linux Foundation fork, protocol-compatible. Use as: cache (always with TTL), queue (Streams or a queue library), rate limiting, pub/sub for realtime; **not** as a primary database.
+- Redis 8 (2025-05) is open source again (AGPL option); current release line is **8.10** (2026-07-29, plus parallel-maintained 8.2/8.4/8.6/8.8 lines get security/bugfix patches too — pick by how recent the deploy is, not just "8"). Valkey — the Linux Foundation fork, protocol-compatible — is at **9.1** (2026-09-01). Use as: cache (always with TTL), queue (Streams or a queue library), rate limiting, pub/sub for realtime; **not** as a primary database.
 - Namespaced keys `app:entity:id`; `maxmemory-policy allkeys-lru` for caches; separate instance/DB for queue and cache; password and bind inside the Docker network.
 
 ## ORM / access

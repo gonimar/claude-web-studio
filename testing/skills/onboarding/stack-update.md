@@ -30,5 +30,12 @@ Refresh references from official sources with dates; diff; upgrade plan.
 **Fixture**: reference says Phaser 3.90; `npm view phaser dist-tags` → latest 4.2.1. **Expected**: the table shows latest 4.2.1 and the recommended version with a reason (or an upgrade proposal); `index.md` gets the "latest on the date" value.
 - [ ] registry queried · [ ] reason recorded when behind a major · [ ] index column filled
 
+### 6. Project scope by default
+**Fixture**: run inside a project with a filled `technical-preferences.md` (PHP stack). **Expected**: scope = the project's technologies, the file list printed before collecting; `all` only on request with the divergence warning.
+- [ ] project scope chosen · [ ] file list shown · [ ] warning on `all`
+### 7. Commit gate after write
+**Fixture**: files written. **Expected**: one commit-gate question `docs: refresh stack-reference (<scope>)`; the hand-off never leaves the files uncommitted silently.
+- [ ] commit gate offered · [ ] exact files staged
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

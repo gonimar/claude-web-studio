@@ -32,7 +32,7 @@ Check the environment: `go version`, `php -v`, `node -v`, `pnpm -v`, `docker --v
 
 ## Phase 3: Draft
 The full `technical-preferences.md` with exact versions from the reference, naming conventions for the chosen languages
-(Angular file style v20+ without suffixes or classic — ask), performance budgets. Show it whole. "May I write `.claude/docs/technical-preferences.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
+(Angular file style v20+ without suffixes or classic — ask), performance budgets. Show it whole. "May I write `.claude/docs/technical-preferences.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 4: Consequences
 - Propose ADRs for non-trivial forks (GraphQL vs REST, Angular vs Vue, game engine) — `/architecture-decision`.

@@ -19,6 +19,6 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Propose the bump (breaking → major, feat → minor, else patch); the argument's version wins.
 
 ## Phase 3: Write
-Draft the `## [X.Y.Z] — YYYY-MM-DD` section in Keep a Changelog format; "May I write `CHANGELOG.md`?" as one `AskUserQuestion`: write (Recommended) · adjust the draft first · not now. No tag is created here.
+Draft the `## [X.Y.Z] — YYYY-MM-DD` section in Keep a Changelog format; "May I write `CHANGELOG.md`?" as one `AskUserQuestion`: write (Recommended) · adjust the draft first · not now. No tag is created here. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `COMPLETE`. Next step — one `AskUserQuestion`: `/release-checklist X.Y.Z` (Recommended) · stop here.

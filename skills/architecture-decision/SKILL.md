@@ -26,10 +26,11 @@ Read technical-preferences, the product spec, related feature specs, existing AD
 ≥ 2 options (including "do nothing" where relevant) with pros/cons/cost/risk/maturity. For the studio's typical forks use the known arguments: GraphQL vs REST (see `graphql.md`), Go vs PHP vs Node, Angular vs Vue, three.js vs Pixi vs Phaser, sessions vs JWT, monolith vs services, Caddy vs nginx. Give an explicit recommendation.
 
 ## Phase 3: Decision and consequences
-Draft Decision/Consequences/Verification (how we will check: metric, spike, test; when we revisit). Review per mode: `full` — `backend-lead`/`frontend-lead`/`security-lead` for affected areas via Task; `lean` — `security-lead` when auth/data/network are affected; `solo` — none.
+Draft Decision/Consequences/Verification (how we will check: metric, spike, test; when we revisit). Review per mode: `full` — `backend-lead`/`frontend-lead`/`security-lead` for affected areas; `lean` — `security-lead` when auth/data/network are affected; `solo` — none.
+Reviews run **before** the write gate, in parallel, each as `Task` with an explicit `subagent_type` (`web-studio:backend-lead`, `web-studio:frontend-lead`, `web-studio:security-lead`) — never the default general-purpose agent — and each receives the full draft text (never a placeholder or a path alone). Name the reviewers in the report exactly as `production/session-logs/agent-audit.log` records them. Conditions from the verdicts are applied to the draft first; only then Phase 4.
 
 ## Phase 4: Write
-"May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Status is `Proposed` until the user says `Accepted`.
+"May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Status is `Proposed` until the user says `Accepted` — also for a decision that is already implemented and deployed (write `Proposed · implemented since <date>`); "implemented" is not "accepted". After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 When the project has `production/roadmap.md` (`roadmap-format: v3.1` or later) and this ADR reaches `Accepted`: add or update its row in the roadmap's `## Docs` → *docs/architecture/* block (✅, inline link, one-line summary) and refresh the block's `<summary>` count; any open task lines carrying `⛔ [ADR-NNNN](path)` now name an accepted decision, not a pending one — leave the marker (it still names *why* the dependency exists) but this is the moment a blocked story becomes unblockable-by-this-reason.
 

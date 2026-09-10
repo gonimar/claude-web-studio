@@ -30,5 +30,9 @@ Update the studio in the project (plugin update or copy-mode reinstall); local e
 **Fixture**: the session's skills come from v0.7.0; the "Update 0.4.3 → 0.7.0?" gate stays open; meanwhile `claude plugin list --json` reports v0.8.0. **Expected**: after "yes" the skill re-reads the installed version before copying, notices the mismatch, prints the one-line restart instruction and ends with `RESTART REQUIRED`; nothing is seeded from the session's cache and `.claude/.web-studio-version` is not written.
 - [ ] version re-read after the gate, not only in Phase 1 · [ ] mismatch named with both versions · [ ] no files written, verdict `RESTART REQUIRED`
 
+### 7. Local edit in a seeded doc
+**Fixture**: `.claude/docs/agent-roster.md` carries a project-added column. **Expected**: the file is listed as locally edited before the gate; the question offers "keep copies in `.claude/local-overrides/`"; the skill never drops the edit on its own judgement.
+- [ ] local edits listed before the question · [ ] local-overrides option present · [ ] edit preserved or copied
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

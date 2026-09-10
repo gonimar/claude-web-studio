@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-05
+updated: 2026-09-10
 refresh: /stack-update
 ---
 # Stack Reference — index
@@ -11,8 +11,8 @@ it was last verified; older than 60 days → run `/stack-update`. Agents read th
 |---|---|---|---|---|
 | **GraphQL** (priority API style) | Spec September 2025; GraphQL.js 17; gqlgen / Yoga 5 / graphql-php | — | [graphql.md](graphql.md) | none — spec.graphql.org, the-guild.dev |
 | Go | 1.27 (2026-08-19) | — | [go.md](go.md) | none — go.dev/doc/go1.27, pkg.go.dev |
-| PHP | 8.5 (2025-11-20); 8.6 due 2026-11 | — | [php-yii3.md](php-yii3.md) | none — php.watch, php.net |
-| Yii3 | stable (2025-12-31), packages on SemVer | — | [php-yii3.md](php-yii3.md) | none — yiiframework.com, github.com/yiisoft |
+| PHP | 8.5 (2025-11-20); 8.6 due 2026-11 | 8.5.9 (2026-07-30, php.net) | [php-yii3.md](php-yii3.md) | none — php.watch, php.net |
+| Yii3 | stable (2025-12-31), packages on SemVer | `yiisoft/queue`/`queue-redis` still `dev-master`, unabandoned (2026-09-10, packagist) | [php-yii3.md](php-yii3.md) | none — yiiframework.com, github.com/yiisoft |
 | TypeScript | 7.0 (2026-07-08, native Go compiler) | — | [typescript.md](typescript.md) | none — typescriptlang.org |
 | Node.js | 24 LTS; 26 → LTS 2026-10; one major per year from 27 | — | [tooling-devops.md](tooling-devops.md) | none — nodejs.org |
 | Angular | 22 (2026-06-03) | — | [angular.md](angular.md) | https://angular.dev/llms.txt, /llms-full.txt |
@@ -25,10 +25,10 @@ it was last verified; older than 60 days → run `/stack-update`. Agents read th
 | Playwright | 1.5x | — | [testing.md](testing.md) | none — playwright.dev |
 | three.js | r185 (2026-07-01), ~monthly releases | — | [threejs-webgames.md](threejs-webgames.md) | https://threejs.org/llms.txt (index) |
 | PixiJS / Babylon.js | 8.x / 8.x | — | [threejs-webgames.md](threejs-webgames.md) | https://pixijs.com/llms.txt, https://doc.babylonjs.com/llms.txt |
-| PostgreSQL / Redis | 18 / 8 | — | [database.md](database.md) | none — postgresql.org/docs |
+| PostgreSQL / Redis | 18 / 8 | PG 18.6, **19 Beta 3** (2026-08-13, GA ~Sep/Oct 2026); Redis **8.10** (2026-07-29), Valkey **9.1** (2026-09-01) | [database.md](database.md) | none — postgresql.org/docs |
 | Hono / NestJS | 4.x / 11.x | — | [typescript.md](typescript.md) | https://hono.dev/llms.txt, https://docs.nestjs.com/llms.txt |
-| OWASP Top 10 | 2025 (final 2026-01) | — | [security-standards.md](security-standards.md) | none — owasp.org/Top10/2025 |
-| WCAG | 2.2 AA | — | [web-platform.md](web-platform.md) | none — w3.org/TR/WCAG22 |
+| OWASP Top 10 | 2025 (final 2026-01) | confirmed current, categories unchanged (2026-09-10, owasp.org/Top10/2025) | [security-standards.md](security-standards.md) | none — owasp.org/Top10/2025 |
+| WCAG | 2.2 AA | no newer AA revision (2026-09-10) | [web-platform.md](web-platform.md) | none — w3.org/TR/WCAG22 |
 | Claude Code | docs | — | — | https://code.claude.com/docs/llms.txt |
 
 Rule: **project versions are pinned exactly** (lockfile in git); upgrades go through

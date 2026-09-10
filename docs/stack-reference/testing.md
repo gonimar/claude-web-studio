@@ -1,12 +1,12 @@
 ---
-updated: 2026-09-05
-sources: [https://vitest.dev/llms.txt, https://playwright.dev/docs/intro, https://phpunit.de, https://go.dev/doc/tutorial/add-a-test, https://testing-library.com, https://k6.io/docs]
+updated: 2026-09-10
+sources: [https://vitest.dev/llms.txt, https://playwright.dev/docs/intro, https://phpunit.de/supported-versions.html, https://go.dev/doc/tutorial/add-a-test, https://testing-library.com, https://k6.io/docs]
 ---
 # Testing — tools and pyramid
 
 | Level | Go | PHP | TS / frontend |
 |---|---|---|---|
-| Unit | `testing` table-driven, `testify`, `synctest` for time | PHPUnit 12, data providers, minimal mocking | Vitest 4 (`describe/it`, `vi.fn`), Testing Library (Angular/Vue) |
+| Unit | `testing` table-driven, `testify`, `synctest` for time | PHPUnit **13** (released 2026-02-06, requires PHP ≥ 8.4; 12 still in bugfix support until 2027-02, **11 left bugfix support 2026-02-06** — life-support/PHP-compat fixes only), data providers, minimal mocking | Vitest 4 (`describe/it`, `vi.fn`), Testing Library (Angular/Vue) |
 | Integration | `testcontainers-go` (Postgres/Redis), `httptest` | PHPUnit + a real Postgres in compose | Vitest + MSW (mock HTTP) or a real API in compose |
 | Contract | GraphQL: codegen validation + N+1 test; REST: `oapi-codegen` schema checks; Pact with several consumers | `league/openapi-psr7-validator` middleware in tests; GraphQL schema snapshot | `graphql-codegen` fails on incompatibility; `openapi-typescript` types + Schemathesis (fuzz) |
 | E2E | — | — | **Playwright** (Chromium/WebKit/Firefox), fixtures, `trace on-first-retry`, test-id selectors |

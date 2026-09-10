@@ -53,7 +53,7 @@ Show what will be created or changed:
   `operate` needs deploy artefacts **in the repository**; a README claiming a live URL alone is a
   signal to ask ("is it actually live, and is this working copy connected to that deployment?"),
   never to propose `operate` on its own — a detached copy of a deployed service is still `build`.
-"May I write these files?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
+"May I write these files?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 4: Write and verify
 Apply; print the tree of created files; run `echo '{"cwd":"'"$PWD"'"}' | bash .claude/statusline.sh` as a smoke check.
@@ -63,6 +63,11 @@ Verdict: `INITIALISED` | `ALREADY INITIALISED (N files differ)`. Next step — o
 `/adopt full` (Recommended for brownfield — the stack, artefacts and settings are audited and
 `technical-preferences.md` is filled from the facts) · `/start` (Recommended for an empty project) ·
 `/help` · stop here. Never hand off with a plain text line.
+
+On `ALREADY INITIALISED` the hand-off is decided by facts, not by a default: `.claude/.web-studio-version`
+older than the plugin (last segment of the "Plugin root:" line) → `/update` (Recommended); `technical-preferences.md`
+still a placeholder, or no `docs/adoption-plan-*.md` on a project with code → `/adopt full` (Recommended);
+otherwise `/help` (Recommended). "Do nothing" is never the recommended option on a project that has code.
 
 `/init` scaffolds the studio and stops there — it never writes product code (`index.html`, a
 `main`, a component) itself, however trivial the goal looks. A greenfield project's first product

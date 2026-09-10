@@ -26,5 +26,12 @@ ADR with ≥2 options, consequences, verification; retrofit.
 **Fixture**: Accepted only on the user's word. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Review through studio agents
+**Fixture**: `--review full`. **Expected**: reviews run before the write gate as parallel `Task`s with `subagent_type: web-studio:backend-lead` / `web-studio:security-lead`, each receiving the full draft; the report names the agents as `agent-audit.log` records them; conditions applied before Phase 4.
+- [ ] no general-purpose agent · [ ] full text passed · [ ] review precedes write
+### 7. Brownfield status
+**Fixture**: the decision is already implemented and deployed. **Expected**: `Status: Proposed · implemented since <date>` until the user says Accepted.
+- [ ] no self-assigned Accepted
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

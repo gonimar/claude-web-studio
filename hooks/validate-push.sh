@@ -1,5 +1,5 @@
 #!/bin/bash
-# PreToolUse(Bash): block force-push, warn on direct push to protected branches.
+# PreToolUse(Bash): block force-push and remote-branch deletion, warn on direct push to protected branches.
 # warn <PreToolUse|PostToolUse> <message>: a warning as JSON on stdout — additionalContext reaches the model,
 # systemMessage the user; exit 0 keeps the tool allowed. stderr with exit 0 reaches neither (WS-050).
 warn() {
@@ -34,6 +34,7 @@ STRIPPED=$(printf '%s\n' "$CMD" | awk '
 # Command segments that are actually `git push …` (start of line or after ; & |).
 PUSHES=$(printf '%s\n' "$STRIPPED" | grep -oE '(^|[;&|][[:space:]]*)git[[:space:]]+push[^;&|]*' || true)
 [ -z "$PUSHES" ] && exit 0
+echo "$PUSHES" | grep -qE -- '(--delete|[[:space:]]-d)([[:space:]]|$)|[[:space:]]:[A-Za-z0-9_./-]+([[:space:]]|$)' && { echo "BLOCKED: deleting a remote branch is not allowed by studio rules (a blocked force-push is not routed around by delete-and-repush — start a new branch name or ask the user)." >&2; exit 2; }
 echo "$PUSHES" | grep -qE -- '(--force|--force-with-lease)([[:space:]=]|$)|[[:space:]]-f([[:space:]]|$)' && { echo "BLOCKED: force-push is not allowed by studio rules." >&2; exit 2; }
 BR=$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
 case "$BR" in main|master|production|release) warn PreToolUse "WARNING: pushing directly to '$BR'. Studio rule: open a PR from a feature branch (.claude/docs/git-workflow.md).";; esac

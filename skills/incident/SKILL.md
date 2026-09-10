@@ -24,6 +24,6 @@ Logs (delegate verb `logs [service] [--since]` by `docs/deploy-target-contract.m
 `/hotfix` or rollback; verify by metrics.
 
 ## Phase 4: Postmortem
-Timeline, root cause (system/process, blameless), what worked/did not, actions (fix/prevent/detect) with owners and dates. "May I write `docs/ops/incidents/INC-NNN.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Actions → roadmap.
+Timeline, root cause (system/process, blameless), what worked/did not, actions (fix/prevent/detect) with owners and dates. "May I write `docs/ops/incidents/INC-NNN.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Actions → roadmap. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `RESOLVED` | `MITIGATED` | `OPEN`. Next step — one `AskUserQuestion`: stories for the prevent/detect actions (Recommended) · `/hotfix` · close the incident.

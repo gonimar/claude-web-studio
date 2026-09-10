@@ -15,7 +15,7 @@ Prerequisites & secrets per `docs/deploy-target-contract.md`: verify registry ac
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 1: Readiness
 `production/releases/vX.Y.Z.md` (missing → `/release-checklist`); the tag exists; CI green on the tag (`gh run`); the image is built/available; runbook `docs/ops/deploy.md`; the deploy target and delegate from `technical-preferences.md` (Infrastructure) and `docs/deploy/<target>.md` — contract: `docs/deploy-target-contract.md`.

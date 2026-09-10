@@ -22,6 +22,10 @@ Copy mode: `install.sh <project> --dry-run`; the same diff for locally edited fi
 
 ## Phase 3: Apply
 "Update v[X] → v[Y]? Locally edited files [list] would be overwritten — keep copies in `.claude/local-overrides/`?"
+The list of locally edited files (present only in the project, or differing from the plugin in a way the plugin's own
+history does not explain — e.g. a project column added to `agent-roster.md`) is printed **before** the question, and the
+question always carries the option "keep copies in `.claude/local-overrides/` and re-apply after seeding"; the skill never
+decides on its own that a local edit "is duplicated elsewhere" and may be dropped.
 After "yes", **before copying anything**, re-read the installed version: plugin mode — `claude plugin list --json`
 again; copy mode — the kit's `.claude-plugin/plugin.json`. Compare it with the version this session's skills come
 from (the last path segment of the skill's base directory or of the "Plugin root:" line). The gate may have stayed

@@ -44,7 +44,7 @@ echo '{"tool_input":{"file_path":"docs/readme.md"}}' | bash "$H/validate-deps.sh
 # docs lane: docs: commit touching only pipeline documents on the default branch → no BRANCH warning
 git commit -q -m "feat: y"; mkdir -p docs; printf 'd\n' > docs/note.md; git add docs/note.md
 out=$(echo '{"tool_input":{"command":"git commit -m \"docs: threat model refresh\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH:' && { failn=$((failn+1)); echo "FAIL commit: docs-lane commit warned on default branch"; } || pass=$((pass+1))
-git commit -q -m "docs: note"; git checkout -q -b feat/merged; git update-ref refs/remotes/origin/master HEAD; printf 'y\n' > e.txt; git add e.txt
+git commit -q -m "docs: note"; git checkout -q -b feat/merged; printf 'm\n' > m.txt; git add m.txt; git commit -q -m "feat: merged work"; git update-ref refs/remotes/origin/master HEAD; printf 'y\n' > e.txt; git add e.txt
 out=$(echo '{"tool_input":{"command":"git commit -m \"feat: z\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'already merged into origin/master' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: no warning on merged branch"; }
 git rm -q --cached e.txt; rm -f e.txt
 echo '{"tool_input":{"file_path":"/x/.env","content":"A=1"}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard blocks .env" 2 $?
@@ -69,5 +69,18 @@ bash "$H/pre-compact.sh" >/dev/null 2>&1; expect "pre-compact runs" 0 $?
 bash "$H/session-stop.sh" >/dev/null 2>&1; expect "session-stop runs" 0 $?
 echo '{"tool_input":{"file_path":"/x/skills/foo/SKILL.md"}}' | bash "$H/validate-skill-change.sh" >/dev/null 2>&1; expect "validate-skill-change runs" 0 $?
 echo '{"model":{"display_name":"M"},"context_window":{"used_percentage":5},"workspace":{"current_dir":"'"$T"'"}}' | bash "$ROOT/templates/statusline.sh" | grep -q 'ctx: 5% | M' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL statusline"; }
+# --- 0.8.2 cases (WS-053/054/056/067/069/070) ---
+echo '{}' | bash "$H/session-stop.sh" 2>/dev/null | grep -q '"systemMessage"' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-stop: no JSON systemMessage"; }
+bash "$H/session-stop.sh" </dev/null 2>&1 >/dev/null | grep -q . && { failn=$((failn+1)); echo "FAIL session-stop: still writes to stderr"; } || pass=$((pass+1))
+rm -f .claude/.write-consent; out=$(echo '{"tool_input":{"file_path":"docs/adoption-plan-2026-01-01.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: adoption-plan not covered"; }
+out=$(echo '{"tool_input":{"file_path":"production/roadmap.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: roadmap not covered"; }
+echo '{"tool_input":{"command":"git push origin --delete feat/x"}}' | bash "$H/validate-push.sh" >/dev/null 2>&1; expect "push blocks --delete" 2 $?
+echo '{"tool_input":{"command":"git push origin :feat/x"}}' | bash "$H/validate-push.sh" >/dev/null 2>&1; expect "push blocks :branch deletion" 2 $?
+printf 'h\n' > h.txt; git add h.txt
+out=$(printf '%s' '{"tool_input":{"command":"git commit -m \"$(cat <<'"'"'EOF'"'"'\ndocs: heredoc message\n\nbody line\nEOF\n)\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'COMMIT: message is not' && { failn=$((failn+1)); echo "FAIL commit: heredoc message flagged as non-conventional"; } || pass=$((pass+1))
+git commit -q -m "chore: base" 2>/dev/null; git branch -q -f master 2>/dev/null; git update-ref refs/remotes/origin/master HEAD; git checkout -q -b docs/fresh master; printf 'z\n' > f.txt; git add f.txt
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: on a fresh branch\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'already merged' && { failn=$((failn+1)); echo "FAIL commit: fresh branch reported as already merged"; } || pass=$((pass+1))
+git checkout -q -b docs/lane master; printf 'v\n' > .claude-version-test; mkdir -p .claude; printf '0.8.2' > .claude/.web-studio-version; git add .claude/.web-studio-version
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: sync docs\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: version marker breaks the docs lane"; } || pass=$((pass+1))
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]
