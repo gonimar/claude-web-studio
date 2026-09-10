@@ -24,3 +24,39 @@ Statuses: `planned` · `in progress` · `shipped vX.Y.Z`.
 | R-13 | **Contract deprecation workflow** | Breaking API changes with external consumers are handled by hand: versioning, deprecation dates, coexistence, removal. | `/api-contract --deprecate <operation>`: marks the field/route with a date, adds the CI check for removal after the date, a CHANGELOG `BREAKING` entry and the removal story. | §10.29 | shipped (unreleased) |
 | R-14 | **Session context visible to the user** | The session-start hook prints its block as plain stdout, which Claude Code adds to Claude's context only: neither the VS Code extension nor the terminal shows it, so users never see the branch warnings, the stack-reference age or the open gate the README promises them. | `session-start.sh` emits JSON: the full block as `hookSpecificOutput.additionalContext` and a three-line `systemMessage` (branch state · stage and active task · warnings/open gate) that Claude Code shows to the user on every platform; hook tests assert both channels. | §8 | shipped v0.9.0 |
 | R-15 | **Pre-compaction state that reaches someone** | `pre-compact.sh` prints the session state to stdout, but `PreCompact` stdout goes to the debug log only and the event discards `systemMessage`; only the `compaction.log` line has an effect. Recovery actually comes from `SessionStart:compact`. | Trim `pre-compact.sh` to the log line; make `session-start.sh` on `source: compact` print the whole `active.md` and the modified files (the "after compaction" block); README and playbook describe the real mechanism. | §8 | shipped v0.9.0 |
+
+## Toward 1.0
+
+1.0 is not a feature release. Functionally the studio is complete (49 commands, R-01..R-15 shipped); what 1.0 adds is
+**evidence that the studio does what its texts promise, on real projects, without an observer behind it**. Five conditions;
+each is ticked only with the artefact named next to it. The release that ticks the last one is 1.0, and its changelog says
+"nothing changed — everything verified".
+
+- [ ] **1. Verified, not "fixed".** Every defect closed since 0.5 has either a live confirmation in a session trace or a
+  behavioural spec case that fails without the fix and runs in CI. No entry left as "fixed — verify on the next run".
+  *Evidence:* the defect register of the observing lab shows zero `fixed` rows without `verified`; `testing/catalog.yaml`
+  carries a `last_spec_result: PASS` for every skill and agent.
+- [ ] **2. Three live runs without intervention.** Greenfield from `/init` to `/deploy`; brownfield from `/adopt` and
+  `/migrate` to the first release; a browser game to `/game-concept gate`. Pass criteria for each: no required catalog step
+  skipped, no pipeline document authored inline past its command, no false-positive hook warning, and no moment where the
+  owner says "that is not what I asked". The e2e personas (agreeable, hasty, refusenik, inventor, clueless) walk the same
+  paths headless with the same criteria.
+  *Evidence:* three trace reports with the checklist above, archived under `testing/results/`; persona runs green in
+  `testing/e2e/`.
+- [ ] **3. Document formats frozen.** Roadmap v3.1, story, ADR, spec, sprint, backlog and decisions templates change only
+  together with a `/migrate` path from the previous version; a template change without one fails the structure linter.
+  *Evidence:* `tests/validate-structure.py` check "template changed → migrate rule present"; one release cycle without a
+  format change on the observed projects.
+- [ ] **4. The user sees what the model sees.** Every channel that carries a message to a person — the session-start
+  summary, hook warnings and blocks, the stop reminder, gate questions, `Attention:` lines — is verified in the terminal
+  and in the VS Code extension, not assumed from documentation.
+  *Evidence:* a channel matrix in `testing/e2e/` (channel × client → observed on date) with a hook test per row; the
+  0.9.0 lesson (SessionStart stdout reached nobody for three months) never repeats.
+- [ ] **5. The studio can repair itself.** `/skill-test spec` passes for all skills and agents; `/skill-improve` closes a
+  deliberately broken case in a demo; a user who finds a defect has a documented path from symptom to an issue with
+  evidence (playbook §10.16); the plugin's CI runs the static specs, not only the linter and the hook tests.
+  *Evidence:* CI job "specs"; one issue filed by the documented path and fixed through `/skill-improve`.
+
+Out of scope for 1.0: new skills, new technologies in the stack reference, further playbook translations — all of these
+can land after 1.0 without breaking a promise. Suggested cadence: 0.11 — conditions 3 and 4; 0.12 and 0.13 — the live runs
+with their fixes; 0.14 — the remaining verifications; 1.0 — the release with nothing to change.
