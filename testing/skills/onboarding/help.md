@@ -48,12 +48,22 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: `.claude/.web-studio-version` = 0.5.1; session-start context prints `Plugin root: …/web-studio/0.5.5`. **Expected**: one line naming both versions and recommending `/update`; `/update` appears among the closing question's options; no drift line when the versions match or in copy mode (no plugin root).
 - [ ] both versions named · [ ] /update offered · [ ] silent when equal
 
-### 6. Adoption plan in table format
+### 12. Adoption plan in table format
 **Fixture**: newest `docs/adoption-plan-*.md` written before 0.7.0 (numbered table, no checkboxes). **Expected**: rows are read as items, `Adoption plan: N open` with a one-line note about the format, never `0 open`.
 - [ ] table rows counted · [ ] format note shown
-### 7. Brownfield operate with a COMPLIANT plan
+### 13. Brownfield operate with a COMPLIANT plan
 **Fixture**: stage `operate`, adoption plan `COMPLIANT` with open optional items, no product spec. **Expected**: NEXT is the plan's first open item; the missing product spec is shown as `⬜ (not migrated by decision)`, not as NEXT; the report never calls its own NEXT low-value.
 - [ ] plan items precede earlier-phase steps · [ ] no self-contradicting NEXT
+
+### 14. `commands` — every command from the skill files
+**Fixture**: argument `commands`; plugin root visible in the session-start context, one project-local skill in `.claude/skills/`. **Expected**: one line per command (`/name <argument-hint> — first sentence`), read from the frontmatters (Glob), grouped by catalog phase in catalog order with required steps marked `*`, the project-local skill under "Maintenance and teams"; a `Details:` line; verdict `READY`; no closing `AskUserQuestion`.
+- [ ] read from files, not memory · [ ] grouped and marked · [ ] ends with a text line
+### 15. `guide` — playbook table of contents and one section
+**Fixture**: argument `guide`, then `guide 10.7`, then `guide hotfix`; `.claude/docs/playbook.md` seeded, project language with a translation in `.claude/docs/readme/`. **Expected**: `guide` prints the numbered headings and the one-line usage hint; `guide 10.7` prints that section verbatim (the translation when one exists) plus up to three related section numbers; `guide hotfix` matches §10.26/§10.1 by heading text; an unknown topic prints the table of contents with `no section matches`; playbook absent everywhere → `playbook not seeded — run /update`. Never paraphrased.
+- [ ] TOC from headings · [ ] section verbatim · [ ] synonym match · [ ] not-seeded line
+### 16. `Docs:` line in the normal output
+**Fixture**: case 1. **Expected**: the report ends with `Docs: /help commands · /help guide · /help guide <n>` before the closing question — always, on every project.
+- [ ] Docs line present
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

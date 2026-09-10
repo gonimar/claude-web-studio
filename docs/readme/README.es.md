@@ -90,7 +90,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 **Incorporación y mantenimiento**
 - `/init` — crea los archivos del estudio en el proyecto, pregunta idioma y modo de revisión y fusiona la configuración.
 - `/start` — incorporación de un proyecto nuevo: pregunta dónde estás y te lleva a los primeros pasos.
-- `/help` — muestra la fase actual, los pasos hechos y el único comando siguiente.
+- `/help` — muestra la fase actual, los pasos hechos y el único comando siguiente; `/help commands` lista todos los comandos con su descripción, `/help guide [tema]` abre el playbook (qué ejecutar en cada situación, [docs/playbook.md](../playbook.md), en inglés).
 - `/adopt` — conecta el estudio a un proyecto existente: detecta el stack, audita documentos y produce un plan de adopción — rellena `technical-preferences.md` con los hechos detectados y escribe un plan de adopción con casillas que `/help` sigue.
 - `/setup-stack` — elige y fija el stack (backend, frontend, estilo de API, motor, base de datos, pruebas, CI) con versiones exactas.
 - `/stack-update` — refresca la referencia del stack desde fuentes oficiales con fechas y propone un plan de actualización.

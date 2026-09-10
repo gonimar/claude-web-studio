@@ -1,10 +1,8 @@
 #!/bin/bash
+# PreCompact: log the moment. Nothing printed here reaches anyone — PreCompact stdout goes to the debug
+# log only and the event discards systemMessage (WS-080); the recovery context after compaction comes
+# from session-start.sh, which runs again as SessionStart with source "compact".
 # Work from the project root: the session cwd may be a subdirectory.
 cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
-echo "=== SESSION STATE BEFORE COMPACTION ($(date '+%F %T')) ==="
-S=production/session-state/active.md
-if [ -f "$S" ]; then echo "## $S"; head -100 "$S"; else echo "## No $S — keep it to recover context after compaction."; fi
-echo; echo "## Modified files"; git status --porcelain 2>/dev/null | sed 's/^/  /' || echo "  (not a git repo)"
 mkdir -p production/session-logs 2>/dev/null; echo "compaction $(date '+%F %T')" >> production/session-logs/compaction.log 2>/dev/null
-echo; echo "After compaction: read $S and the files listed above."
 exit 0

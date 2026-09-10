@@ -80,7 +80,7 @@ hp = set(re.findall(r'hooks/([a-z-]+\.sh)', open('hooks/hooks.json').read())); h
 if hp != hc: fail(f'hook registrations differ: plugin-only {sorted(hp - hc)}, copy-only {sorted(hc - hp)}')
 
 # README command coverage
-for r in ['README.md'] + [f'docs/readme/{f}' for f in os.listdir('docs/readme')]:
+for r in ['README.md'] + [f'docs/readme/{f}' for f in os.listdir('docs/readme') if f.startswith('README')]:  # PLAYBOOK.* translations are not READMEs
     txt = open(r, encoding='utf-8').read()
     miss = [s for s in skills if f'`/{s}`' not in txt]
     if miss: fail(f'{r}: commands not documented: {miss}')

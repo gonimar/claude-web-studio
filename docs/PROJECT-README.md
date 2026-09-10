@@ -7,13 +7,15 @@ path-scoped rules and a dated stack reference (`.claude/docs/stack-reference/`).
 - `/init` — one-time scaffolding: conversation language, review mode, studio files.
 - `/start` — new project: interview → stack → product spec.
 - `/adopt` — existing project: detect the stack, audit artefacts, migration plan.
-- `/help` — where you are in the pipeline and what comes next.
+- `/help` — where you are in the pipeline and what comes next; `/help commands` — every command; `/help guide [topic]` — the playbook (what to run in every situation, `.claude/docs/playbook.md`).
 - `/team-feature <feature>` — a full vertical slice: spec → contract → backend → frontend → tests → review.
 (Plugin mode: prefix skills with `web-studio:` if a bare name is ambiguous, e.g. `/web-studio:help`.)
 
 ## Coming back in a new session
-The session-start hook prints the branch, stage, stack-reference age and `production/session-state/active.md`
-(`Task:`/`Next:`) if work was left unfinished; `CLAUDE.md` is loaded automatically. Then `/help` names the next command.
+The session-start hook shows you a three-line summary (branch state · stage, task and next step · warnings and an
+open gate) and hands Claude the full context: branch, stage, stack-reference age and
+`production/session-state/active.md` (`Task:`/`Next:`) if work was left unfinished; `CLAUDE.md` is loaded
+automatically. Then `/help` names the next command. After context compaction the same hook re-supplies `active.md`.
 
 ## Pipeline
 discovery → specification → architecture → build → hardening → release → operate
