@@ -17,6 +17,7 @@ warn() {
   printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"},"systemMessage":"%s"}\n' "$1" "$m" "$m"
 }
 case "$FP" in
+  */docs/adoption-plan-*.md|docs/adoption-plan-*.md|*/docs/ops/*|docs/ops/*|*/docs/security/*|docs/security/*|*/production/roadmap.md|production/roadmap.md|*/production/releases/*|production/releases/*|*/production/backlog.md|production/backlog.md|*/production/decisions.md|production/decisions.md|*/production/findings.md|production/findings.md|*/CHANGELOG.md|CHANGELOG.md) ;;
   */docs/architecture/*|docs/architecture/*|*/docs/specs/*|docs/specs/*|*/technical-preferences.md|technical-preferences.md|*/production/sprints/*|production/sprints/*|*/production/stories/*|production/stories/*) ;;
   *) exit 0;;
 esac

@@ -23,8 +23,13 @@ For the current phase check every step by glob: ✅ done / ⬜ missing / 🔁 re
 entered its phase directly (brownfield starts at `build`/`operate`) still owes the **required** steps
 of every earlier phase: check their artifact globs too, and an unmet one (e.g. no
 `docs/architecture/test-strategy.md`) becomes NEXT ahead of the current phase's own steps. Take the user's argument into account ("just finished X"): find step X in the catalog and take the next step of its phase (or the first step of `next_phase`) as NEXT — e.g. "finished security-audit" → `/dependency-audit`/`/harden` in hardening.
-If `docs/adoption-plan-*.md` exists (the newest one), count its open items (`- [ ]`): show `Adoption plan: N open`;
-when the phase has no unmet required step (typical for `operate`), the first open plan item is NEXT.
+If `docs/adoption-plan-*.md` exists (the newest one), count its open items (`- [ ]`); a plan written before 0.7.0 has a
+numbered **table** instead of checkboxes — read its rows as the items and say so in one line (`plan in table format —
+/adopt full rewrites it as checkboxes`), never report `0 open` for such a plan. Show `Adoption plan: N open`.
+Priority on a brownfield project: when the newest plan's verdict is `COMPLIANT`, its open items come **before** unmet
+required steps of earlier phases — those steps are shown as `⬜ (not migrated by decision — see adoption plan)` and are
+not NEXT; when the phase has no unmet required step (typical for `operate`), the first open plan item is NEXT. Never call
+the NEXT you name "low-value" — if the plan ranks it low, name the plan's own first item instead.
 
 ## Phase 3: Uncatalogued skills
 Glob `.claude/skills/*/SKILL.md` (copy mode) and the plugin's skills if visible; compare `name:` with the catalog's `command:`; show up to 8 relevant to the phase as "Also available".

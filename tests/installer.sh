@@ -12,6 +12,7 @@ check "new: CLAUDE.md from template" 'grep -q "\[LANGUAGE\]" "$T/new/CLAUDE.md"'
 check "new: testing copied" '[ -f "$T/new/web-studio-testing/catalog.yaml" ]'
 check "new: version stamp" '[ -f "$T/new/.claude/.web-studio-version" ]'
 check "new: gitignore entries" 'grep -q "production/session-state/" "$T/new/.gitignore"'
+check "new: gitignore consent/impact markers" 'grep -q ".claude/.write-consent" "$T/new/.gitignore" && grep -q ".claude/.impact-verdict" "$T/new/.gitignore"'
 mkdir -p "$T/ex/.claude" && (cd "$T/ex" && git init -q && echo '{"hooks":{}}' > .claude/settings.json && echo "# Mine" > CLAUDE.md)
 "$ROOT/install.sh" "$T/ex" --dry-run > "$T/dry.log"
 check "dry-run writes nothing" '[ ! -d "$T/ex/.claude/agents" ]'

@@ -15,7 +15,11 @@ Web technology moves fast; the reference is a dated snapshot. This skill refresh
 facts only from official sources, with a date and a link.
 
 ## Phase 1: Scope and current state
-Argument: `all` (default) or one technology. Read `stack-reference/index.md` and the target files;
+Argument: `all`, `project`, or one technology. **In a project** (a filled `technical-preferences.md` exists) the default is
+`project` — only the technologies the project uses (the stack section of `technical-preferences.md` and the lockfiles); `all`
+refreshes every reference file and is meant for the plugin repository — in a project say in one line that the copy will
+diverge from the plugin and be overwritten by the next `/update`. Print the list of files in scope before collecting.
+Read `stack-reference/index.md` and the target files;
 list current versions and `updated:`. Read the project lockfiles (`go.mod`, `composer.lock`,
 `pnpm-lock.yaml`/`package-lock.json`) — actual project versions.
 
@@ -43,7 +47,8 @@ For upgrades: path (e.g. `ng update`, three.js Migration Guide rNNN→rMMM, Go t
 
 ## Phase 4: Write
 Show the reference changes (updated lines, `updated:` and `sources:` in the header, new practices in the right section).
-"May I write [files]?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After "yes" also update `index.md` (table, the "latest on date" column and the date). Outdated statements are removed, not left beside new ones.
+"May I write [files]?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After "yes" also update `index.md` (table, the "latest on date" column and the date). Outdated statements are removed, not left beside new ones. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+Then the commit gate of `git-workflow.md` § Documents: one `AskUserQuestion` offering `docs: refresh stack-reference (<scope>)` staging exactly the written files — never leave the files uncommitted in the hand-off.
 
 ## Phase 5: Project upgrade plan (optional)
 If upgrades exist — propose stories (`/create-stories`) or ADRs for majors; for each — how to verify (tests, build). Do not perform upgrades in this skill.

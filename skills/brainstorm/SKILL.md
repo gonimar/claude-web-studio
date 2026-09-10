@@ -26,6 +26,6 @@ Propose success metrics and "what must be true" for the idea to work (hypotheses
 
 ## Phase 3: Concept brief
 Draft `docs/specs/concept-brief.md`: essence, personas, pain, differentiation, MVP candidate, hypotheses and how to validate them
-(landing page/prototype/interviews), risks, next step. "May I write it?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
+(landing page/prototype/interviews), risks, next step. "May I write it?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `COMPLETE`. Next step — one `AskUserQuestion`: `/setup-stack` (Recommended) · `/product-spec` or `/game-concept` directly · revise the brief.

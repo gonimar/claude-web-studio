@@ -1,6 +1,6 @@
 ---
-updated: 2026-09-05
-sources: [https://php.watch/versions, https://www.php.net/releases, https://www.yiiframework.com/news/777/yii3-is-released, https://github.com/yiisoft, https://www.php-fig.org/psr/]
+updated: 2026-09-10
+sources: [https://php.watch/versions, https://www.php.net/releases, https://www.yiiframework.com/news/777/yii3-is-released, https://github.com/yiisoft, https://www.php-fig.org/psr/, https://phpunit.de/supported-versions.html]
 ---
 # PHP 8.5 and Yii3 — versions, idioms, practices
 
@@ -38,7 +38,7 @@ not patched — look for a maintained alternative and document why.
 - Validation — `yiisoft/validator` (rules as attributes or objects); DTO hydration — `yiisoft/hydrator`.
 - Light DDD: `Domain` without framework dependencies → `Application` (use cases/handlers) → `Infrastructure` → `Web`/`Console`. No CQRS/event sourcing without a clear need.
 - Long operations go through `yiisoft/queue` with re-scheduling, not `sleep()`.
-- Static analysis — **Psalm** (the yiisoft ecosystem uses it) level ≤ 3, or PHPStan ≥ 8 for non-Yii projects; `php-cs-fixer` PSR-12/`@PER-CS`; PHPUnit 12; Rector for upgrades.
+- Static analysis — **Psalm** (the yiisoft ecosystem uses it) level ≤ 3, or PHPStan ≥ 8 for non-Yii projects; `php-cs-fixer` PSR-12/`@PER-CS`; PHPUnit **13** (12 still supported; 11 past bugfix support since 2026-02); Rector for upgrades.
 
 ### For comparison (non-Yii projects)
 Symfony 7.4 LTS / 8.0 (2025-11), Laravel 13 (2026-02), Slim 4, Mezzio. Runtime: PHP-FPM + nginx classically; **FrankenPHP** (worker mode, HTTP/3) is the modern option for containers.

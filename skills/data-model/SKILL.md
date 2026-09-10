@@ -24,6 +24,6 @@ ER (mermaid), a query table (frequency, read/write). Questions: volumes, retenti
 DDL with CHECK/UNIQUE/FK/indexes (each index justified by a query); migrations in the project tool (golang-migrate / yiisoft/db-migration / Drizzle) — expand/contract when changing existing tables. With a DB available (compose) — `EXPLAIN ANALYZE` on test data.
 
 ## Phase 4: Write
-"May I write `docs/architecture/data-model.md` and the migration files?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Update the backup section when valuable data is added.
+"May I write `docs/architecture/data-model.md` and the migration files?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Update the backup section when valuable data is added. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/create-stories` (Recommended) · `/api-contract` (if the contract changes) · revise the model.

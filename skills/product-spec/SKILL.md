@@ -36,6 +36,8 @@ named as such in the verdict line — it must not silently stay in the document 
 and `/help` read `production/findings.md`, nobody reads §8 of the spec for open decisions).
 
 ## Phase 4: Write
-"May I write `docs/specs/product-spec.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now; propose `production/stage.txt` = `specification`.
+"May I write `docs/specs/product-spec.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now; propose `production/stage.txt` = `specification` **only when the current stage is earlier than `specification` in the catalog** — on a project already in `build`/`operate` the stage is never proposed backwards. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+
+**Retrofit mode** (stage `build` or later, code and deployment exist): the spec documents what runs, not what is planned — sources are `CLAUDE.md`, the roadmap, the deployed configuration and the code; one pass with the draft shown as a whole, questions only where the facts are silent (goals, audience, out-of-scope), and the review verifies claims against the repository (a claimed fact the repository contradicts is BLOCKING).
 
 Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/feature-spec` for the Must features (Recommended) · `/game-concept` (game) · revise the spec.

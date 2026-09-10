@@ -1,6 +1,6 @@
 ---
-updated: 2026-09-05
-sources: [https://nodejs.org/en/about/previous-releases, https://docs.docker.com/compose/, https://docs.github.com/actions, https://www.conventionalcommits.org, https://semver.org, https://docs.renovatebot.com, https://opentelemetry.io/docs/]
+updated: 2026-09-10
+sources: [https://nodejs.org/en/about/previous-releases, https://docs.docker.com/compose/, https://docs.github.com/actions, https://github.com/actions/checkout/releases, https://github.com/actions/setup-node/releases, https://github.com/actions/setup-go/releases, https://github.com/actions/cache/releases, https://www.conventionalcommits.org, https://semver.org, https://docs.renovatebot.com, https://opentelemetry.io/docs/]
 ---
 # Tooling, CI/CD, operations
 
@@ -18,7 +18,7 @@ sources: [https://nodejs.org/en/about/previous-releases, https://docs.docker.com
 ```
 lint → typecheck → unit → build → integration (services: postgres, redis) → e2e (Playwright on the artefact) → security (audit, govulncheck, gitleaks, trivy) → docker build/push (main) → deploy (by tag / manual)
 ```
-- `actions/checkout@v5`, `actions/setup-node@v5` (pnpm cache), `actions/setup-go@v6`, `shivammathur/setup-php@v2`; dependency caches; `concurrency` to cancel stale runs; minimal `permissions:`; secrets only via `secrets.*`, OIDC for clouds.
+- `actions/checkout@v7`, `actions/setup-node@v7` (pnpm cache), `actions/setup-go@v7`, `shivammathur/setup-php@v2`, `actions/cache@v6`; dependency caches; `concurrency` to cancel stale runs; minimal `permissions:`; secrets only via `secrets.*`, OIDC for clouds.
 - Matrices only where needed (PHP/Node versions); `timeout-minutes` on jobs.
 - Renovate/Dependabot: group minors, `minimumReleaseAge` 3–7 days, auto-merge patches after green CI.
 

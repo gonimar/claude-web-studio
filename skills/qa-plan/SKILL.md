@@ -21,6 +21,6 @@ Sprint/feature → stories → acceptance criteria.
 Criterion → level (unit/integration/contract/e2e/security/a11y/perf) → tool → file → owner agent; test data; regression set; risks (`test-engineer` via Task — effort estimate).
 
 ## Phase 3: Write
-"May I write `production/sprints/qa-plan-NN.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now
+"May I write `production/sprints/qa-plan-NN.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `READY`. Next step — one `AskUserQuestion`: `/dev-story` (Recommended) · `/sprint-plan` adjustments · stop here.

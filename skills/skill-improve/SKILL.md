@@ -18,7 +18,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 `/skill-test static <name>` (or `agent <name>`), then `category`/`spec` when a spec exists. Record the score: FAIL/WARN per check and metric.
 
 ## Phase 3: Edits
-For every FAIL/WARN — a targeted change (add "May I write?", a phase, a verdict, a reference link, a next step, refine `argument-hint`, add a missing frontmatter field). Never rewrite the whole skill. Show the diff; "May I write?" as one `AskUserQuestion`: apply (Recommended) · apply part (say which) · skip.
+For every FAIL/WARN — a targeted change (add "May I write?", a phase, a verdict, a reference link, a next step, refine `argument-hint`, add a missing frontmatter field). Never rewrite the whole skill. Show the diff; "May I write?" as one `AskUserQuestion`: apply (Recommended) · apply part (say which) · skip. After the "write" answer: `touch .claude/.write-consent` (rule 7).
 
 ## Phase 4: Retest
 Repeat the checks; score improved → keep, otherwise revert (`git checkout -- <file>` or show the reverse diff) with an explanation. Up to `--max-iterations` (default 2).

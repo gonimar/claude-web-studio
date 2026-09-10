@@ -22,6 +22,6 @@ Release stories Done (check CI tests: `gh run` if available); latest `docs/secur
 Every item ✅/❌ with a link to evidence. Any ❌ in the gates → `NOT READY`.
 
 ## Phase 3: Write
-"May I write `production/releases/vX.Y.Z.md` (with deploy/rollback steps)?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Tag with consent: `git tag -a vX.Y.Z`.
+"May I write `production/releases/vX.Y.Z.md` (with deploy/rollback steps)?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Tag with consent: `git tag -a vX.Y.Z`. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `READY` | `NOT READY (…)`. Next step — one `AskUserQuestion`: `/deploy vX.Y.Z` (Recommended) · fix the NOT READY items · stop here.

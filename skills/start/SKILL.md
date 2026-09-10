@@ -29,7 +29,7 @@ If code/specs already exist → suggest `/adopt` instead of `/start`.
 ## Phase 3: Project type and review mode
 Second question: type (site | spa | api | fullstack | game | game+backend) and review mode
 (`full` — all gates; `lean` — lead + security on sensitive work (default for solo); `solo`).
-Write `production/review-mode.txt` and `production/stage.txt` = `discovery` after "May I write?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now.
+Write `production/review-mode.txt` and `production/stage.txt` = `discovery` after "May I write?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 4: Route
 Show the next 3 steps from `.claude/docs/workflow-catalog.yaml` with commands.

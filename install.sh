@@ -46,7 +46,7 @@ if [ ! -f "$TARGET/CLAUDE.md" ]; then run cp "$ROOT/templates/CLAUDE.md.template
 elif ! grep -q 'web-studio' "$TARGET/CLAUDE.md"; then echo "  CLAUDE.md exists — add the Studio/Stack/Language sections from templates/CLAUDE.md.template (/adopt offers this)"; fi
 for d in docs/specs docs/architecture docs/security docs/ops production/sprints production/stories production/session-state production/session-logs; do [ -d "$TARGET/$d" ] || run mkdir -p "$TARGET/$d"; done
 GI="$TARGET/.gitignore"
-for line in "production/session-state/" "production/session-logs/" ".claude/settings.local.json" ".claude/agent-memory-local/" "web-studio-testing/results/"; do
+for line in "production/session-state/" "production/session-logs/" ".claude/settings.local.json" ".claude/agent-memory-local/" ".claude/.write-consent" ".claude/.impact-verdict" "web-studio-testing/results/"; do
   if [ -f "$GI" ] && ! grep -qxF "$line" "$GI"; then [ $DRY = 1 ] && echo "  + .gitignore += $line" || echo "$line" >> "$GI"; fi
 done
 [ $DRY = 1 ] || printf '%s' "$VERSION" > "$STAMP"

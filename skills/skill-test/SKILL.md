@@ -31,7 +31,7 @@ Parse mode and target; unknown → usage and stop. Read the framework's `catalog
 1. Frontmatter starts on line 1 with `---`; fields `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools` — FAIL if missing.
 2. ≥ 2 phases (`## Phase N` or ≥ 2 `##`) — FAIL.
 3. A verdict word (`PASS|FAIL|CONCERNS|APPROVED|ACCEPTED|PROPOSED|NEEDS REVISION|NEEDS CHANGES|BLOCKED|COMPLETE|READY|DONE|UPDATED|CLEAN|RELEASED|DEPLOYED|HARDENED|PLAYABLE|COMPLIANT|INITIALISED|RESOLVED|MITIGATED|WITHIN BUDGET|OVER BUDGET|ON TRACK|AT RISK|OFF TRACK|FIXED|IMPROVED`) — FAIL.
-4. Ask-before-write: `May I write` (or an explicit gate sentence) when `Write|Edit` is in `allowed-tools` — FAIL; otherwise WARN. A gate that is not an `AskUserQuestion` with alternatives (coordination-rules, rule 7) — WARN.
+4. Ask-before-write: `May I write` (or an explicit gate sentence) when `Write|Edit` is in `allowed-tools` — FAIL; otherwise WARN. A gate that is not an `AskUserQuestion` with alternatives (coordination-rules, rule 7) — WARN. After the "write" answer: `touch .claude/.write-consent` (rule 7).
 5. A "Next step" at the end — WARN; one that is not offered as an `AskUserQuestion` with alternatives — WARN.
 6. A reference/template/rules link (`stack-reference/`, `templates/`, `rules/`) for authoring/analysis skills — WARN.
 7. `argument-hint` non-empty and consistent with the argument-parsing phase — WARN.

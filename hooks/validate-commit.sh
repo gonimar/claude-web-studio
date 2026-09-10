@@ -38,7 +38,15 @@ done
 for f in $(echo "$STAGED" | grep -E '\.(go|php|ts|tsx|vue|js|scss|css)$'); do
   [ -f "$f" ] && grep -nE '(TODO|FIXME|HACK)[^(]' "$f" >/dev/null 2>&1 && WARN="$WARN\nSTYLE: $f has TODO/FIXME without an owner — use TODO(name)."
 done
-MSG=$(echo "$CMD" | grep -oE -- "-m[[:space:]]+[\"'][^\"']*" | head -1 | sed -E "s/^-m[[:space:]]+[\"']//")
+# Commit message: plain -m "…", or the heredoc form -m "$(cat <<'EOF' … EOF)" — take the heredoc's first
+# non-empty line (WS-069: the heredoc opener used to be parsed as the message and always warned).
+if echo "$CMD" | grep -qE -- "-m[[:space:]]+[\"']?\\$\(cat[[:space:]]*<<"; then
+  MSG=$(printf '%s\n' "$CMD" | awk 'hd!=""{ if ($0 ~ /^[[:space:]]*$/) next; print; exit } /-m[[:space:]]+["'"'"']?\$\(cat[[:space:]]*<<-?[[:space:]]*["'"'"']?[A-Za-z_]+/ { hd=1 }')
+elif echo "$CMD" | grep -qE -- "(^|[[:space:]])-F[[:space:]]"; then
+  MSG=""   # message from a file — nothing to check here
+else
+  MSG=$(echo "$CMD" | grep -oE -- "-m[[:space:]]+[\"'][^\"']*" | head -1 | sed -E "s/^-m[[:space:]]+[\"']//")
+fi
 if [ -n "$MSG" ] && ! echo "$MSG" | grep -qE '^(feat|fix|perf|refactor|docs|test|build|ci|chore|style|revert)(\([a-z0-9/_-]+\))?!?: .+'; then
   WARN="$WARN\nCOMMIT: message is not Conventional Commits: '$MSG'"
 fi
@@ -46,11 +54,13 @@ fi
 # branch or on a branch that origin's default branch already contains (the commit would strand).
 BR=$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
 DOCS_LANE=0
-if echo "$MSG" | grep -qE '^docs(\([a-z0-9/_-]+\))?!?: ' && ! echo "$STAGED" | grep -qvE '^(docs/|production/|CLAUDE\.md$|\.claude/docs/|README)'; then DOCS_LANE=1; fi
+if echo "$MSG" | grep -qE '^docs(\([a-z0-9/_-]+\))?!?: ' && ! echo "$STAGED" | grep -qvE '^(docs/|production/|CLAUDE\.md$|\.claude/docs/|\.claude/rules/|\.claude/\.web-studio-version$|README|CHANGELOG\.md$)'; then DOCS_LANE=1; fi
 case "$BR" in main|master|production|release) [ "$DOCS_LANE" = 1 ] || WARN="$WARN\nBRANCH: committing directly to '$BR' — studio rule: one story = one branch (feat/S-NNN-slug); pipeline documents use the docs: lane (git-workflow.md).";; esac
 DEF=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')
 if [ -z "$DEF" ]; then for b in master main; do git show-ref -q --verify "refs/remotes/origin/$b" && { DEF=$b; break; }; done; fi
-if [ -n "$DEF" ] && [ -n "$BR" ] && [ "$BR" != "$DEF" ] && git merge-base --is-ancestor "$BR" "origin/$DEF" 2>/dev/null; then
+# "Already merged" needs two facts: the tip is an ancestor of origin/<default> AND the branch has commits of its
+# own (its reflog shows a commit) — a branch just created from the default has neither and is not merged (WS-070).
+if [ -n "$DEF" ] && [ -n "$BR" ] && [ "$BR" != "$DEF" ] && git merge-base --is-ancestor "$BR" "origin/$DEF" 2>/dev/null && { [ "$(git rev-parse "$BR" 2>/dev/null)" != "$(git rev-parse "origin/$DEF" 2>/dev/null)" ] || git reflog show --format=%gs "$BR" 2>/dev/null | grep -q "^commit"; }; then
   WARN="$WARN\nBRANCH: '$BR' is already merged into origin/$DEF — this commit will strand; start a new branch from $DEF (git switch $DEF && git pull --ff-only && git switch -c feat/S-NNN-slug)."
 fi
 [ -n "$WARN" ] && warn PreToolUse "$(printf '%b' "=== Commit warnings ===$WARN")"

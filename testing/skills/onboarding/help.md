@@ -48,5 +48,12 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: `.claude/.web-studio-version` = 0.5.1; session-start context prints `Plugin root: …/web-studio/0.5.5`. **Expected**: one line naming both versions and recommending `/update`; `/update` appears among the closing question's options; no drift line when the versions match or in copy mode (no plugin root).
 - [ ] both versions named · [ ] /update offered · [ ] silent when equal
 
+### 6. Adoption plan in table format
+**Fixture**: newest `docs/adoption-plan-*.md` written before 0.7.0 (numbered table, no checkboxes). **Expected**: rows are read as items, `Adoption plan: N open` with a one-line note about the format, never `0 open`.
+- [ ] table rows counted · [ ] format note shown
+### 7. Brownfield operate with a COMPLIANT plan
+**Fixture**: stage `operate`, adoption plan `COMPLIANT` with open optional items, no product spec. **Expected**: NEXT is the plan's first open item; the missing product spec is shown as `⬜ (not migrated by decision)`, not as NEXT; the report never calls its own NEXT low-value.
+- [ ] plan items precede earlier-phase steps · [ ] no self-contradicting NEXT
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

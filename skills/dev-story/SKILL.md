@@ -11,7 +11,7 @@ model: sonnet
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7); delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7); delegated agents follow the same protocol. After the "write" answer: `touch .claude/.write-consent` (rule 7).
 
 ```
 /create-stories → /dev-story (this) → /code-review → /story-done
@@ -51,6 +51,8 @@ Independent layers in parallel; dependent ones sequentially (contract → backen
 
 ## Phase 5: Criteria check
 Table "criterion → test → result (output)". Unmet ones explicitly. Lint/typecheck/dependency audit (if packages were added — health verified).
+
+**Waiting for CI** after the push: as in `/story-done` — one background `gh run watch <run-id> --exit-status`, no polling `Monitor`, no `AskUserQuestion` as a pause; end the turn with a one-line status if the queue is slow.
 
 ## Phase 6: Wrap-up and commit
 Update the story status (`Review`), session state (`Next: /code-review`). Then, with consent as one `AskUserQuestion` — commit and push (Recommended) · commit only · not now (`git-workflow.md`, step "Implement"): stage the story's files, `git commit -m "feat(S-NNN): <story title>"`, `git push -u origin feat/S-NNN-slug`. Never commit on the default branch.

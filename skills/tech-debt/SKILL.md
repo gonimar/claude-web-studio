@@ -19,6 +19,6 @@ Dependencies: `go list -m -u all` / `composer outdated` / `pnpm outdated` vs `st
 Table "debt → impact (security/velocity/risk) → effort → priority → proposed story".
 
 ## Phase 3: Report
-Show; "May I write `docs/ops/tech-debt-<date>.md` and add the top 5 to the roadmap?" as one `AskUserQuestion`: report and roadmap (Recommended) · report only · not now.
+Show; "May I write `docs/ops/tech-debt-<date>.md` and add the top 5 to the roadmap?" as one `AskUserQuestion`: report and roadmap (Recommended) · report only · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `COMPLETE (N items, M critical)`. Next step — one `AskUserQuestion`: `/create-stories` for critical items (Recommended when any) · `/stack-update` for outdated majors · stop here.

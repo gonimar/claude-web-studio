@@ -27,6 +27,6 @@ Example operations + persisted documents.
 Show the table operations → permissions → errors; ask about contentious points (nullability, naming, permissions). When changing an existing contract — `frontend-lead`/`game-lead` via Task to confirm compatibility.
 
 ## Phase 4: Write
-"May I write `docs/architecture/api/…` and update the api-contract document?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose the codegen task (`graphql-codegen`/`gqlgen generate`/`openapi-typescript`) as part of the first story.
+"May I write `docs/architecture/api/…` and update the api-contract document?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose the codegen task (`graphql-codegen`/`gqlgen generate`/`openapi-typescript`) as part of the first story. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `APPROVED` | `BREAKING (N)` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/data-model` (Recommended) · `/create-stories` · revise the contract.

@@ -8,6 +8,7 @@ phases:
     steps:
       - {id: init, command: /init, required: true, artifact: {glob: ".claude/docs/technical-preferences.md"}, description: "Scaffold studio files, choose conversation language and review mode"}
       - {id: brainstorm, command: /brainstorm, required: false, description: "Explore the idea, audience, competitors, constraints"}
+      - {id: adopt, command: /adopt, required: false, artifact: {glob: "docs/adoption-plan-*.md"}, description: "Brownfield: audit stack, artefacts and settings; adoption plan"}
       - {id: setup-stack, command: /setup-stack, required: true, artifact: {glob: ".claude/docs/technical-preferences.md", pattern: "Type\\*\\*: (?!\\[TO BE)"}, description: "Choose and pin the stack, versions, layout"}
       - {id: product-spec, command: /product-spec, required: true, artifact: {glob: "docs/specs/product-spec.md"}, description: "Product spec: goals, users, scope, metrics"}
       - {id: game-concept, command: /game-concept, required: false, artifact: {glob: "docs/specs/game-concept.md"}, description: "Games: concept, core loop, technical feasibility"}

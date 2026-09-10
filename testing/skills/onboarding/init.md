@@ -39,3 +39,7 @@ Scaffolds studio files, asks the conversation language and review mode, updates 
 - [ ] first post-answer question already in the chosen language · [ ] write plan and hand-off in the chosen language
 
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
+
+### 6. Repeated /init on a deployed project
+**Fixture**: studio already initialised, `.claude/.web-studio-version` older than the plugin, `technical-preferences.md` filled. **Expected**: verdict `ALREADY INITIALISED (N files differ)` and the hand-off recommends `/update` (or `/adopt full` when preferences are a placeholder), never "do nothing".
+- [ ] verdict names the differing files · [ ] recommended option follows the facts · [ ] no code written

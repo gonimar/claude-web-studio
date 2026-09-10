@@ -12,7 +12,7 @@ agent: qa-lead
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7); delegated agents follow the same protocol.
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7); delegated agents follow the same protocol. After the "write" answer: `touch .claude/.write-consent` (rule 7).
 
 ## Phase 1: Story and evidence
 Read the story, the feature-spec criteria, the latest `/code-review` report (chat history or `production/reviews/` if kept).
@@ -25,6 +25,8 @@ Criteria ↔ tests ✅ — the criterion → test → result table **rendered in
 
 ## Phase 4: Close
 "May I set the story status → Done, tick `[x]` in the roadmap (add `🔗 [PR #N](url)` inline — same rule as the ID: file-relative link, not a `## Links` reference-definition — and refresh the `Updated:` line), update the story's row in the roadmap's `## Docs` → *production/stories/* block to `✅ … Done · PR #N`, commit `docs: close S-NNN — Done, PR #N` and open the PR if it does not exist yet (`gh pr create`)?" Only on `DONE`; asked as one `AskUserQuestion`: close and open the PR (Recommended) · close without the PR · not now. This answer covers the close only — never the merge.
+
+**Waiting for CI** (Phase 4/5): one background command with a single completion notification — `gh run watch <run-id> --exit-status` (or `gh pr checks <n> --watch`) via Bash `run_in_background` — never a polling `Monitor`, never `ScheduleWakeup`, and never an `AskUserQuestion` as a pause (rule 7: a question is a decision for the user, not a wait). If the runner queue exceeds ~10 minutes, say so in one line and end the turn; the notification resumes the skill.
 
 ## Phase 5: Merge (`.claude/docs/git-workflow.md`, step "Merge")
 Only on `DONE` and only after Phase 4 is finished, ask a separate `AskUserQuestion`: "PR #N is open and CI is green. Merge it into `<default>` and delete the branch now?" — merge now (Recommended when CI is green) · leave the PR open.
