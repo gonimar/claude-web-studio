@@ -18,7 +18,12 @@ What CHECK/UNIQUE guarantees, what code guarantees; transaction boundaries; lock
 Expand/contract strategy; order; backward compatibility with the running version.
 
 ## 6. Personal data and security
-Field classification, encryption/masking, deletion on request, access.
+Field classification (identity / contact / behavioural / financial / special), encryption/masking, access.
+
+| Table.field | Class | Retention (what ends it) | Deletion method (table, backups, logs) | Story |
+|---|---|---|---|---|
+
+Export on request: what is included, format, identity check. Deletion on request: the path, and the evidence kept.
 
 ## 7. Backups and restore
 Schedule, PITR, restore test (date of the last one).

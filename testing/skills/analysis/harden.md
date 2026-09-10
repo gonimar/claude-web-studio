@@ -30,5 +30,9 @@ Headers/TLS/proxy/Docker/CI with live verification.
 **Fixture A**: `Infra repo` and `Proxy config` set → diffs proposed there with "May I write?", live `curl -I` before/after. **Fixture B**: not set and no proxy config here → the limitation is stated, snippet for the owner, live check only.
 - [ ] infra repo edited only with consent · [ ] live headers are the evidence · [ ] missing field named
 
+### 7. `secrets` rotation checklist
+**Fixture**: `/harden secrets` after `/incident` on a leaked registry token; deploy contract lists four secrets; one workflow uses `secrets.GHCR_TOKEN`. **Expected**: an inventory table (secret → where it lives → who reads it → rotation steps → last rotation), the rotation order, verification per secret (gitleaks / history search by pattern, `docker history`, CI permissions); no secret value ever appears in a command or the chat; written into `hardening-checklist.md` § Secrets behind the write gate.
+- [ ] inventory without values · [ ] order and verification · [ ] write gate
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -26,5 +26,9 @@ ER, DDL with justified indexes, expand/contract migrations, PII, backups.
 **Fixture**: written after consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. Retention and deletion per PII field
+**Fixture**: feature stores e-mail, IP address and payment reference. **Expected**: §6 table lists each field with class, retention (what ends it), deletion method for table, backups and logs; the missing deletion path becomes the "Data deletion" story proposal; export on request described.
+- [ ] every PII field in the table · [ ] retention and method · [ ] deletion story proposed
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

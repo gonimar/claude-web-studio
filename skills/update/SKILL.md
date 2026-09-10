@@ -19,6 +19,7 @@ Read the kit's `CHANGELOG.md` (from the plugin cache or the kit repo) and show e
 ## Phase 2: What will change
 Plugin mode: `claude plugin update web-studio` updates agents/skills/hooks automatically; then compare the plugin's `docs/` and `rules/` with `.claude/docs` and `.claude/rules` (`diff -rq`) — list files that differ and whether the difference is a local edit (present only in the project) or an upstream update.
 Copy mode: `install.sh <project> --dry-run`; the same diff for locally edited files.
+**Template drift**: for every file under `docs/templates/` that this update changes or adds, list the project documents of that type (`rules/docs-format.md` table) whose structure predates it — fewer second-level sections than the template, a roadmap without the `roadmap-format:` header, story cards without a criteria table; a table "document → template → drift". These are never edited here; they are `/migrate`'s work.
 
 ## Phase 3: Apply
 "Update v[X] → v[Y]? Locally edited files [list] would be overwritten — keep copies in `.claude/local-overrides/`?"
@@ -36,4 +37,4 @@ come from v[Z]" — and stop with the verdict `RESTART REQUIRED`; never apply fr
 Otherwise: copies → update/install → `git status` → summary of changed files.
 Project data (`docs/specs`, `docs/architecture`, `production/`, a configured `technical-preferences.md`, `CLAUDE.md`) is never touched — verify and state it in the output.
 
-Verdict: `UPDATED` | `UP TO DATE` | `DRY RUN` | `RESTART REQUIRED`. Next step — one `AskUserQuestion`: commit the update (Recommended) · `/skill-test static all` (if the testing framework is installed) · stop here.
+Verdict: `UPDATED` | `UPDATED (N documents need /migrate)` | `UP TO DATE` | `DRY RUN` | `RESTART REQUIRED`. Next step — one `AskUserQuestion`: commit the update (Recommended) · `/migrate all --dry-run` (Recommended instead when documents drifted — the update is not finished while `/help` cannot read them) · `/skill-test static all` (if the testing framework is installed) · stop here.

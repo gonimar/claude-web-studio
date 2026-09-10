@@ -34,5 +34,9 @@ Product spec section by section with review per mode.
 **Fixture**: stage `operate`, deployed code, no spec. **Expected**: retrofit mode — draft from CLAUDE.md/roadmap/code shown as a whole, questions only where facts are silent; `stage.txt` is not proposed backwards; a claim the repository contradicts is BLOCKING in the review.
 - [ ] no stage proposal on operate · [ ] claims verified against the repo
 
+### 8. NFR section answers i18n, SEO and analytics
+**Fixture**: an internal admin tool in one language. **Expected**: section 6 carries explicit `n/a — internal app` for SEO, `n/a — single locale` for localisation and a product-events list (or `n/a — reason`) for analytics; silence is not accepted as an answer.
+- [ ] three explicit answers · [ ] events mapped to §2 metrics when present
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

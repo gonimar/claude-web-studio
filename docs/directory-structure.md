@@ -15,7 +15,9 @@ are bound to file extensions, not directories.
 │   ├── ops/                      # runbooks, deploy.md, perf audits, incidents/
 │   └── web-studio/README.md      # how the studio is used in this project
 ├── production/
-│   ├── roadmap.md                # plan source of truth (checkbox list)
+│   ├── roadmap.md                # plan source of truth (checkbox list, format v3.1)
+│   ├── backlog.md                # ideas before their spec (I-NNN, /backlog)
+│   ├── decisions.md              # owner decisions the roadmap waits on (D-NN)
 │   ├── stage.txt                 # discovery | specification | architecture | build | hardening | release | operate
 │   ├── review-mode.txt           # full | lean | solo
 │   ├── sprints/ stories/ releases/

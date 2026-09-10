@@ -45,5 +45,9 @@ Sprint plan by capacity and dependencies.
 **Fixture**: capacity and dates are still unknown when the queue is classified. **Expected**: capacity/dates are asked in Phase 1 before any gate; the merge question stands alone in its message; the plan is written only after its own draft and "May I write?" — never on the merge answer.
 - [ ] parameters before the gate · [ ] merge question alone · [ ] separate write gate
 
+### 11. Calibration ratio and the backlog line
+**Fixture**: roadmap with five closed stories carrying `~Nh` and `⏱ Nh` (Σ~ 30 h, Σ⏱ 3.5 h); `production/backlog.md` with three open ideas. **Expected**: `Calibration: ratio 0.12 over 5 stories — capacity fits ~X h of estimates`; selection uses calibrated estimates; the plan header records the ratio; one line `Backlog: 3 open ideas — /backlog review`, no idea enters the sprint; with two stories the line says "insufficient data" and estimates are taken as written.
+- [ ] ratio exact · [ ] applied to selection · [ ] backlog line, no idea selected · [ ] insufficient-data path
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

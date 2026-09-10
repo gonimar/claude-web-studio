@@ -26,5 +26,9 @@ Cross-check of ADRs/contracts/data/threats; read-only.
 **Fixture**: stage unchanged. **Expected**: the user decides; stage/statuses never change automatically; the hand-off is an `AskUserQuestion` with a Recommended option and alternatives.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] hand-off is an `AskUserQuestion`, not text
 
+### 6. `code` mode drift findings
+**Fixture**: `/architecture-review code` on an adopted Go project: a WebSocket endpoint absent from the contract and the threat model; a runtime dependency no ADR names; import direction violating ADR-0003. **Expected**: findings with `file:line` and the contradicted document — the endpoint BLOCKING, the dependency WARNING with the ADR to write, the import direction BLOCKING; BLOCKING/HIGH go to `production/findings.md` (`ARCH-NNN`) behind the record-or-story gate; nothing else is written.
+- [ ] evidence from the tree, not the docs · [ ] findings sink · [ ] read-only otherwise
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -28,8 +28,9 @@ Two arguments answer a reference question instead of "what next" and end without
   when the project's conversation language has one — prefer it). Without a topic: print the playbook's
   table of contents (its `##` and `###` headings with numbers) and the line `/help guide <topic> prints
   one section`. With a topic: find the heading that matches it best (a section number like `10.7`, or a
-  case-insensitive match on the heading text — playbook headings are in the file's language, so also
-  match the obvious synonyms the user would use: "hotfix", "secret", "release", "session", "CI");
+  case-insensitive match on the heading text **or on the first line of a section** — playbook headings
+  are in the file's language, so also match the obvious synonyms the user would use: "hotfix", "secret",
+  "release", "session", "CI"; several matches → the section whose heading matches wins, then the earliest);
   print that section verbatim, then the numbers of up to three related sections. No match → the table
   of contents with `no section matches "<topic>"`. Never paraphrase or shorten a printed section.
   Playbook missing everywhere → one line: `playbook not seeded — run /update` and stop.
@@ -74,6 +75,7 @@ version is the last path segment of the "Plugin root:" line the session-start ho
 no plugin root: skip the check). Different → one line: `Studio files seeded by vX, plugin is vY —
 /update re-seeds changed docs/rules`, and `/update` joins the closing question's options.
 If `production/session-state/active.md` exists — show its `Task:`/`Next:`.
+If `production/backlog.md` has open ideas (`### I-NNN` without `[x]`) — one line `Backlog: N ideas, oldest N days → /backlog review` (a reminder when the oldest passes 30 days or `last-review` is older than 7 days; never an option in the closing question).
 If `production/findings.md` has open BLOCKING findings without a story — one line `Open BLOCKING findings: N without a story → /create-stories` (they take precedence over the next feature).
 External signals (a red CI, a failed deploy, a billing or access problem seen in `session-state`, a tech-debt CRITICAL) are **one `Attention:` line each** with the command or place that fixes them — never the subject of the closing question and never investigated here (no `gh run`, no log reading: help is orientation, not diagnosis).
 Build phase with a Deploy target in technical-preferences and no `docs/ops/deploy.md` — one line: the "Deploy artefacts" story is missing (`/create-stories` adds it).

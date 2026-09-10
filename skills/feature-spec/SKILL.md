@@ -19,6 +19,7 @@ existing `docs/specs/features/*.md` (F-NNN numbering, overlaps), `technical-pref
 `docs/architecture/api/` (existing types/operations), `docs/architecture/threat-model.md`.
 
 ## Phase 2: Sections
+Section 6 lists the product events the feature emits (from the product spec §6) and, for a localised product, the copy keys; public pages name their SEO requirements (`seo-specialist` reviews them in `/dev-story`).
 1–3 Overview/scenarios/rules: questions to the user; formulas with a worked example.
 4 Data: entities → propose what changes in `data-model.md`.
 5 Contract: GraphQL — types/queries/mutations as SDL sketches; REST — endpoints; errors.

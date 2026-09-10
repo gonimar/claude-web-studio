@@ -3,8 +3,7 @@
 Situational guide for a project run with Web Studio: the full path for a new or an existing
 project, the everyday build cycle, releases, session start and stop, periodic maintenance, and a
 reference of what to do when something goes wrong. Written against the skill and hook texts of the
-plugin; where a process has no command yet, the entry says **Planned** and points to
-[`roadmap.md`](roadmap.md).
+plugin; what the studio does not do yet is listed in [`roadmap.md`](roadmap.md).
 
 Inside a project: `/help guide` prints the index of this file, `/help guide <topic>` the
 matching section, `/help commands` every command with its description. Read in: English ·
@@ -193,7 +192,7 @@ Then the plan items one by one, usually in this order:
 | No test strategy | `/test-setup --apply` | Same; `/create-stories` will not offer `/dev-story` without it |
 | No contract, but an API exists | `/api-contract --style rest` (or graphql) | Captures the contract from the code, adds a diff check in CI |
 | No product spec | `/product-spec` (retrofit mode) | The stage stays `build`/`operate`, never moves back |
-| Roadmap in a foreign format | INFO "not migrated" — by decision; format v3.1 in `templates/roadmap.md` | **Planned:** `/migrate` (roadmap R-02); until then convert in a live session |
+| Roadmap or documents in a foreign format | `/migrate roadmap --dry-run` → `/migrate roadmap` (stories, ADRs, specs, sprints the same way) | IDs and history kept; `/adopt` names the types |
 | No deploy artefacts but a Deploy target | `/create-stories` adds the "Deploy artefacts" story | Dockerfile, production compose, release workflow, `/healthz`, `docs/ops/deploy.md` |
 | Old majors | `/stack-update --check-only` → `/dependency-audit` → upgrade stories | The "now → current → path" table is already in the adoption plan |
 
@@ -211,7 +210,7 @@ Then the plan items one by one, usually in this order:
   the stack; if the stack is not chosen — `/start` (B).
 - **Someone else's project for a while (audit, consulting).** `/adopt docs` + `/architecture-review
   full` + `/security-audit quick` + `/tech-debt full` — all read-only, reports in `docs/`.
-  **Planned:** code-vs-ADR drift audit (roadmap R-04).
+  Code against the documents: `/architecture-review code` (drift findings with `file:line`).
 - **Just one feature, no "tidying up".** Answer `/adopt`'s goal question with the goal; the plan is
   reordered: `/feature-spec` of that feature first, minimal threat model and test strategy, then
   stories. The other items stay open; `/help` does not push them when the verdict is `COMPLIANT`.
@@ -278,7 +277,7 @@ the stories are small. Still finish with `/story-done` per story (merge and road
 ```
 
 Sprints are optional: `/create-stories` → `/dev-story` directly works; `/help` offers the next open
-roadmap story. **Planned:** `/retrospective` (roadmap R-08), estimation calibration (R-07).
+roadmap story. Sprint end: `/retrospective NN` (planned vs shipped, the calibration ratio the next `/sprint-plan` applies).
 
 ### 5.5 Other core processes (not "one story")
 
@@ -320,19 +319,20 @@ a separate "undo the import" story. Never on the live database without the backu
 **Documentation for people** (README, API docs, user guide, runbook): no skill yet — a story with
 the `tech-writer` agent (`/create-stories` with the criterion "page X exists and passes the
 checklist"); API docs come from the contract (`/api-contract`); the runbook from `docs/ops/deploy.md`
-(the "Deploy artefacts" story). `/story-done` checks that docs were updated. **Planned:** `/docs`
-(roadmap R-05).
+(the "Deploy artefacts" story). `/story-done` checks that docs were updated; `/docs readme|api|guide|runbook`
+writes them through `tech-writer`, running every command first; `/docs --check` reports what is stale.
 
 **Observability, alerts, backups** (usually forgotten until the first incident): an "Observability"
 story with `devops-engineer` — `/healthz`, structured logs, metrics, alerts on 5xx and disk space; a
 "Backup & restore drill" story — scheduled backup and a **verified restore** on staging. `/incident`
-is useless without logs; `/release-checklist` requires a backup. **Planned:** both stories proposed
-automatically (roadmap R-06).
+is useless without logs; `/release-checklist` requires a backup. `/create-stories` proposes both stories
+automatically when a Deploy target is set, and the first release gates on the recorded restore date.
 
 **Localisation, SEO, analytics.** No dedicated skills: i18n — a section in `/product-spec` (NFRs) and
 `/ux-spec` (copy); SEO — the `seo-specialist` agent in content-site stories (`/setup-stack site`,
 SSR/SSG rendering); product analytics — success metrics in `/product-spec`, events in `/feature-spec`,
-then a story. **Planned:** template sections and routing (roadmap R-11).
+then a story. The product spec §6 answers i18n, SEO and analytics explicitly, the feature spec §6 lists events
+and copy keys, and `seo-specialist` reviews public pages in `/dev-story`; reference: `web-platform.md` § i18n.
 
 **Monorepo / several applications.** `technical-preferences` knows `backend_root` and
 `frontend_root`; one roadmap, feature prefixes per application, CI stages by path (`/test-setup`).
@@ -355,13 +355,13 @@ shows what is missing), `/tech-debt full`, every branch pushed; `active.md` is n
 `📅`), set by `/create-stories` and refined by `/sprint-plan` from capacity; `/sprint-status` computes
 burn and risk to the goal. The answer to "when" = `/sprint-status` + the open stories with estimates.
 Cutting scope — `🅿` (deferred) / `❌` (cancelled) in the roadmap through `/sprint-plan`, never silently.
-**Planned:** calibration of estimates against measured delivery time (roadmap R-07).
+`/retrospective` computes the calibration ratio (actual ⏱ over estimate) and `/sprint-plan` scales the next sprint by it.
 
 **Feature requests and bug triage.** Ideas → `production/backlog.md` (format v3.1, `F-NNN` as one line
 before its spec); production bugs → `/incident` (sev 1–2) or a story; audit findings →
 `production/findings.md`. Every sprint `/sprint-plan` reads findings first, the backlog by your choice.
-"Do we build it?" for a big request — `/impact` → product-director. **Planned:** `/backlog` with idea
-capture — a musing is recorded, never implemented in the same turn (roadmap R-01).
+"Do we build it?" for a big request — `/impact` → product-director. `/backlog add "<idea>"` records a musing
+without acting on it; `/backlog review` weekly; `/backlog promote I-NNN` sends it to `/brainstorm`, `/impact` or `/feature-spec`.
 
 **Moving to another host / changing the topology.** `/impact "move to <provider>"` → architecture →
 ADR → update the Deploy target/delegate (`/setup-stack` or edit technical-preferences) → a "Deploy
@@ -371,7 +371,8 @@ artefacts" story for the new target → `/harden full --apply` on the new host �
 **Scheduled secret rotation** (quarterly or when someone leaves): a process outside the studio, but
 `/harden ci` checks permissions and secrets hygiene, `/security-audit quick` that nothing is
 hard-coded; `docs/ops/deploy.md` must list where each secret lives (the Prerequisites & secrets
-section of the deploy contract). **Planned:** `/harden secrets` (roadmap R-09).
+section of the deploy contract). `/harden secrets` builds the rotation checklist: every secret, where it lives,
+who reads it, the rotation order and the verification — never the values.
 
 **Reviewing someone else's code** (a contractor, another AI tool, an old PR): `/code-review <paths>`,
 or switch to the PR branch and `/code-review --diff`; for copied code add `/dependency-audit`
@@ -542,10 +543,9 @@ Rejected (`BLOCKED`) — rephrase, or record the rejection as an ADR.
 The `IMPACT:` hook on writes to `auth/`, `migrations/`, `Dockerfile`, `go.mod`, `package.json`,
 workflows is a warn-only reminder: a change outside a story and without `/impact`.
 
-A **musing** ("what if we…", "maybe we should…") is an idea, not an instruction: say so and ask to
-record it, never implement it in the same turn. **Planned:** `/backlog add` as the capture point
-(roadmap R-01); until then write it to `production/backlog.md` by hand and let `/impact` or
-`/brainstorm` take it from there.
+A **musing** ("what if we…", "maybe we should…") is an idea, not an instruction: `/backlog add "<idea>"`
+records it and the conversation returns to the current work; nothing is implemented in that turn. Later
+`/backlog promote I-NNN` sends it through `/brainstorm`, `/impact` or `/feature-spec`.
 
 ### 10.4 A new dependency / a new technology in the stack
 1. `/impact "add <package> for <why>"` — a new runtime dependency is the architecture class.
@@ -568,7 +568,7 @@ record it, never implement it in the same turn. **Planned:** `/backlog add` as t
    the studio and by hand, the force-push hook blocks it: agree it explicitly with the repository owner.
 3. `/security-audit quick` (runs gitleaks) + `/harden ci` (workflow permissions).
 4. Rule for the future: secrets only in the environment; values never on a command line.
-**Planned:** `/harden secrets` rotation checklist (roadmap R-09).
+5. `/harden secrets` — the rotation checklist for everything else that shares the leak's blast radius.
 
 ### 10.7 A hook said BLOCKED
 | Message | Cause | Action |
@@ -636,7 +636,8 @@ in the roadmap. Open PRs: `gh pr list` → `/story-done S-NNN` for the ready one
   for local — from the project directory). Then still `/update` — it seeds `docs/` and `rules/`.
 - A new version changed a habit (a different question, a different order) — read the plugin's
   `CHANGELOG.md` (`/update` shows the delta).
-**Planned:** `/update` seeds document templates and insists on migrating documents (roadmap R-03).
+- `UPDATED (N documents need /migrate)` — a template changed and N project documents predate it: run
+  `/migrate all --dry-run`, then `/migrate <type>`; until then `/help` may misread them.
 
 ### 10.16 A skill does not do what it promises
 1. Make sure it is not a mode: `production/review-mode.txt`, `stage.txt`, the language in `CLAUDE.md`.
@@ -723,8 +724,8 @@ audit should have caught it → a story for that test.
 `/impact` → architecture → an ADR on versioning → `/api-contract` (the new version next to the old,
 deprecation dates in the SDL/OpenAPI; the CI diff check flags breaking changes) → `/changelog` with a
 BREAKING section → a major bump → coexistence period → a story to remove the old version.
-GraphQL: `@deprecated(reason:)` instead of removal; REST: `/v2`. **Planned:** `/api-contract
---deprecate` (roadmap R-13).
+GraphQL: `@deprecated(reason:)` instead of removal; REST: `/v2`. `/api-contract --deprecate <field> --remove-after
+<date>` does all of it: the mark, the CI date rule, the BREAKING entry and the removal story.
 
 ### 10.30 Too many permission prompts from Claude Code
 Not the studio's hooks but `permissions` in `.claude/settings.json`. `/init` writes a base allow list
@@ -773,8 +774,9 @@ it, `/code-review <paths>` looks at correctness and security only.
 `/data-model` holds the PII classification and the deletion/anonymisation strategy; if missing —
 `/data-model full` (retroactively) → `/threat-model` (the "export/deletion" surface) → an "account
 deletion" story with the criterion "no data left in the database, in backups older than N days, or in
-logs". The legal requirement itself is outside the studio. **Planned:** retention & deletion as
-template sections (roadmap R-10).
+logs". The legal requirement itself is outside the studio. The data model §6 table (field · class · retention ·
+deletion method) and the threat model's export/deletion surface are where the answers live; `/create-stories`
+proposes the "Data deletion" story when they are missing.
 
 ### 10.39 The TLS certificate expired / the domain does not resolve
 A sev 1 incident (`/incident`); fixed on the host (renew, DNS) — through the deploy delegate or by
@@ -822,13 +824,15 @@ there is no document and `/help` never sees the step.
 | `/hotfix`, `/incident` | hotfix branch + PR, `docs/ops/incidents/INC-NNN.md` | | operate |
 | `/tech-debt`, `/stack-update`, `/update` | `docs/ops/tech-debt-<date>.md`, `.claude/docs/stack-reference/*`, refreshed docs/rules | | periodic |
 | `/skill-test`, `/skill-improve` | studio test reports | | after editing skills |
+| `/backlog add\|review\|promote` | `production/backlog.md` (`I-NNN`) | | any musing; weekly |
+| `/migrate [type] [--dry-run]` | documents converted to the current templates | | after `/adopt`, after template drift |
+| `/docs [readme\|api\|guide\|runbook]` | `README.md`, API reference, guide pages, `docs/ops/deploy.md` | | before a hand-over or release |
+| `/retrospective NN` | `## Retrospective` in the sprint file, actions in the roadmap | | sprint end |
+| `/architecture-review code`, `/harden secrets`, `/api-contract --deprecate` | drift findings, rotation checklist, deprecation in the contract | | brownfield / leak / breaking change |
 
 ---
 
-## 12. What is planned
+## 12. What the studio does not do (yet)
 
-Everything marked **Planned** above is tracked in [`roadmap.md`](roadmap.md): idea capture
-(`/backlog`), document migration (`/migrate`), strict templates through `/update`, a code-level
-architecture audit, `/docs`, observability and backup stories, estimation calibration,
-`/retrospective`, a secret-rotation checklist, retention and deletion, i18n/SEO/analytics guidance,
-`/help guide` keyword search, and a contract deprecation workflow.
+Everything the playbook names has a command as of this version. Gaps still open are tracked in
+[`roadmap.md`](roadmap.md); when a situation here has no command, that file says whether one is planned.

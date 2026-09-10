@@ -11,7 +11,7 @@ Data-flow diagram (mermaid): clients → proxy → services → DB/queues → ex
 ## 3. Attack surfaces
 | Surface | Entry | Authentication | Data |
 |---|---|---|---|
-(auth, GraphQL/REST API, WebSocket, uploads, webhooks, admin, CI/CD, dependencies, infrastructure)
+(auth, GraphQL/REST API, WebSocket, uploads, webhooks, admin, CI/CD, dependencies, infrastructure, data export/deletion when personal data exists)
 
 ## 4. Threats (STRIDE)
 | ID | Surface | Threat | S/T/R/I/D/E | Likelihood | Impact | Mitigation | Status |

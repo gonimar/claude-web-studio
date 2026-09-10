@@ -33,5 +33,9 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: PR open, self-hosted runner queue slow. **Expected**: one background `gh run watch --exit-status` with a single notification; no polling `Monitor`, no `ScheduleWakeup`, no `AskUserQuestion` used as a pause; a slow queue ends the turn with one status line.
 - [ ] single background wait · [ ] no placeholder question
 
+### 7. Actual time recorded
+**Fixture**: story card `Started: 2026-09-10T09:00`, closing at 11:40. **Expected**: `⏱ 2.5h` on the roadmap line and `Actual: 2.5h` in the card inside the Phase 4 gate; a card without `Started:` gets `⏱ ?` and one line naming the omission — never a guessed number.
+- [ ] ⏱ computed from Started · [ ] unknown stays unknown
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

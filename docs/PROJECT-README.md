@@ -9,6 +9,7 @@ path-scoped rules and a dated stack reference (`.claude/docs/stack-reference/`).
 - `/adopt` — existing project: detect the stack, audit artefacts, migration plan.
 - `/help` — where you are in the pipeline and what comes next; `/help commands` — every command; `/help guide [topic]` — the playbook (what to run in every situation, `.claude/docs/playbook.md`).
 - `/team-feature <feature>` — a full vertical slice: spec → contract → backend → frontend → tests → review.
+- `/backlog add "<idea>"` — an idea from the conversation is recorded, not implemented; `/backlog review` weekly.
 (Plugin mode: prefix skills with `web-studio:` if a bare name is ambiguous, e.g. `/web-studio:help`.)
 
 ## Coming back in a new session

@@ -1,6 +1,6 @@
 # Story: [Title] (S-NNN)
 
-> Feature: F-NNN · ADR: · Layer: backend | frontend | game | infra | fullstack · Size: XS/S/M/L · Status: Draft | Ready | In Progress | Review | Done
+> Feature: F-NNN · ADR: · Layer: backend | frontend | game | infra | fullstack · Size: XS/S/M/L · Status: Draft | Ready | In Progress | Review | Done · Started: (set by `/dev-story`) · Actual: (set by `/story-done`, ⏱ on the roadmap)
 
 ## Goal
 As a [persona], I want […], so that […].

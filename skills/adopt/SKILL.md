@@ -60,7 +60,7 @@ Every BLOCKING and HIGH gets a sink, not only a row in the plan: one `AskUserQue
 `production/findings.md` (template `findings.md`; id `ADOPT-NNN`, severity, area, the decision needed) (Recommended) ·
 story stubs now via `/create-stories` · plan only. A BLOCKING that is neither recorded nor turned into a story is
 named as such in the verdict line (`/help`, `/create-stories` and `/sprint-plan` read `production/findings.md`;
-the adoption plan is read only by `/help` and only for its first open item).
+the adoption plan is read only by `/help` and only for its first open item). A HIGH that is a **format** gap (a roadmap in a foreign format, story cards without a criteria table, ADRs without options) gets the plan item `/migrate <type> --dry-run` — never "rewrite by hand".
 
 ## Phase 3: Settings (`settings` / `full`)
 - `.claude/settings.web-studio.json` present → show a diff with `settings.json` for `hooks`, `permissions`, `statusLine`; propose a merge (never drop foreign hooks; merge arrays).

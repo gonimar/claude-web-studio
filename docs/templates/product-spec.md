@@ -20,7 +20,10 @@ One paragraph: what it is, for whom, which problem it solves, what makes it diff
 List of features with priority (Must/Should/Could) and a link to the future feature spec.
 
 ## 6. Non-functional requirements
-Performance (CWV / API p95), accessibility (WCAG 2.2 AA), security (data, auth, jurisdiction), localisation, platforms/browsers (browserslist), offline/PWA, SEO.
+Performance (CWV / API p95), accessibility (WCAG 2.2 AA), security (data, auth, jurisdiction), platforms/browsers (browserslist), offline/PWA.
+- **Localisation (i18n)**: languages at launch and later, default locale, what is translated (UI, content, emails), formats (dates, numbers, currency), RTL — or `n/a — reason`.
+- **SEO**: public pages that must be indexable, rendering strategy (SSR/SSG/prerender), structured data, sitemap/hreflang — or `n/a — internal app`.
+- **Product analytics**: the success metrics of §2 mapped to events (name, properties, owner), the tool, consent/privacy constraints — or `n/a — reason`.
 
 ## 7. Constraints and dependencies
 Legal (personal data, asset licences), technical (existing systems, stack), budget/time, external APIs.

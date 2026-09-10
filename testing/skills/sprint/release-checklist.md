@@ -26,5 +26,9 @@ Release gate from evidence.
 **Fixture**: tag with consent. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### 6. First release: restore drill and observability gates
+**Fixture**: first tag of a project with a database; `data-model.md` §7 has no restore date; no `/healthz`. **Expected**: `NOT READY` with two ❌ gates naming the stories ("Backup & restore drill", "Observability"); on a later release the restore date is shown and a >90-day date is a warning, not a gate.
+- [ ] gates on the first release · [ ] warning only later · [ ] stories named
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

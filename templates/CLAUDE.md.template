@@ -40,6 +40,10 @@ instead of relying on memory.
    first — `/impact <proposal>` — and the verifying director's verdict names the commands to run next
    (`/architecture-decision`, `/threat-model`, `/create-stories`, `/dev-story`); coordination-rules, rule 11.
    Trivial text changes — a comment, a typo, formatting — need neither a question nor triage.
+   **A musing is an idea, not a task**: "what if we…", "maybe we should…", "it would be nice…" said while
+   something else is in progress is recorded — `/backlog add "<the idea>"` — and nothing is implemented, drafted
+   or planned from it in the same turn; it enters the pipeline only through `/backlog promote` (→ `/brainstorm`,
+   `/impact` or `/feature-spec`).
    Questions are choices, not prompts for "yes": consent gates and hand-offs come as `AskUserQuestion`
    with the recommended option first, then the real alternatives (coordination-rules, rule 7).
 3. **Maximum proven packages, minimum own code.** Check the ecosystem before writing; check a

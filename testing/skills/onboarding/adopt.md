@@ -50,5 +50,9 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: `full` mode on a deployed project; the artefact audit finds one HIGH (traceability lost: a decision recorded as done whose artefact does not exist). **Expected**: besides the plan row, one `AskUserQuestion` (record in `production/findings.md` as `ADOPT-NNN` Recommended · story stubs · plan only); on "record" the row is written after the answer; on "plan only" the verdict line still lists the item as unrecorded.
 - [ ] question asked per BLOCKING/HIGH · [ ] row written only after consent · [ ] verdict line names unrecorded items
 
+### 12. Format gaps hand off to /migrate
+**Fixture**: roadmap in a companion tool's table format (HIGH), story cards with prose criteria (HIGH). **Expected**: the plan items read `/migrate roadmap --dry-run` and `/migrate stories --dry-run`, never "rewrite by hand"; the roadmap itself is left untouched by adopt.
+- [ ] /migrate named per type · [ ] no manual rewrite
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
