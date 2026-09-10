@@ -60,15 +60,23 @@ Pipeline: **discovery → specification → architecture → build → hardening
 (`.claude/docs/workflow-catalog.yaml`). Phase gates are advisory — you decide.
 
 ## 3. Coming back in a new session
-Nothing needs to be re-explained. When a session starts, the hook prints the branch, recent
+Nothing needs to be re-explained. When a session starts, the hook hands Claude the branch, recent
 commits, the current stage, the stack-reference age and — if you left work unfinished — the
-contents of `production/session-state/active.md` (`Task:`, `Branch:`, `Next:`, `Blocked:`).
-`CLAUDE.md` is loaded automatically, so the language, stack and principles are known.
+contents of `production/session-state/active.md` (`Task:`, `Branch:`, `Next:`, `Blocked:`), and
+shows **you** a three-line summary (branch state · stage, task and next step · warnings and an open
+gate) in the terminal and in the VS Code extension. `CLAUDE.md` is loaded automatically, so the
+language, stack and principles are known.
 
-Typical return: read the session summary → `/help` → continue with the command it names
-(usually `/dev-story S-NNN` or `/code-review --diff`). Before context compaction the hook dumps
-the same state, and `/dev-story` keeps `active.md` updated as it works. The plan of record is
-`production/roadmap.md` (a checkbox list); sprints and stories live in `production/`.
+Typical return: read the three-line summary → `/help` → continue with the command it names
+(usually `/dev-story S-NNN` or `/code-review --diff`). After context compaction the same hook runs
+again and hands Claude the whole `active.md` and the modified files; `/dev-story` keeps `active.md`
+updated as it works. The plan of record is `production/roadmap.md` (a checkbox list); sprints and
+stories live in `production/`.
+
+Every other situation — a new or an existing project step by step, the build cycle, releases,
+periodic maintenance, incidents, hook messages, lost context — is in the **playbook**:
+[docs/playbook.md](docs/playbook.md) (`/help guide` inside a project). What the studio does not do
+yet is listed in [docs/roadmap.md](docs/roadmap.md).
 
 ## 4. How the studio works
 - **Agents** are tiered: two directors (Opus) decide, seven leads (Sonnet) design and review,
@@ -91,7 +99,7 @@ Plugin mode prefixes each with `web-studio:`.
 **Onboarding and maintenance**
 - `/init` — scaffolds the studio files in the project, asks the conversation language and review mode, merges settings.
 - `/start` — onboarding for a new project: asks where you are and routes to the right first steps.
-- `/help` — shows the current phase, which steps are done and the single next command.
+- `/help` — shows the current phase, which steps are done and the single next command; `/help commands` lists every command with its description, `/help guide [topic]` opens the playbook (what to run in every situation — [docs/playbook.md](docs/playbook.md)).
 - `/adopt` — attaches the studio to an existing project: detects the stack, audits documents, produces an adoption plan — fills `technical-preferences.md` from the detected facts and writes a checkbox adoption plan that `/help` follows.
 - `/setup-stack` — chooses and pins the stack (backend, frontend, API style, engine, database, tests, CI) with exact versions.
 - `/stack-update` — refreshes the stack reference from official sources with dates and proposes an upgrade plan for the project.

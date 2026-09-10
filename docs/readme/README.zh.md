@@ -77,7 +77,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 **接入与维护**
 - `/init` — 在项目中搭建工作室文件，询问对话语言和评审模式，合并设置。
 - `/start` — 新项目引导：询问你所处的阶段并引导到正确的第一步。
-- `/help` — 显示当前阶段、已完成的步骤和唯一的下一条命令。
+- `/help` — 显示当前阶段、已完成的步骤和唯一的下一条命令；`/help commands` 列出所有命令及说明，`/help guide [主题]` 打开操作手册（各种情况下该运行什么，[docs/playbook.md](../playbook.md)，英文）。
 - `/adopt` — 把工作室接入已有项目：识别技术栈，审核文档，生成接入计划。；根据识别到的事实填写 `technical-preferences.md`，并写出带复选框的接入计划，`/help` 据此推进。
 - `/setup-stack` — 选择并固定技术栈（后端、前端、API 风格、引擎、数据库、测试、CI）及精确版本。
 - `/stack-update` — 从官方来源刷新技术栈参考并标注日期，为项目提出升级计划。

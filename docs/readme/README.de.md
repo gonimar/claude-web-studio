@@ -90,7 +90,7 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 **Einstieg und Wartung**
 - `/init` — legt die Studio-Dateien im Projekt an, fragt Gesprächssprache und Review-Modus und führt Einstellungen zusammen.
 - `/start` — Einstieg für ein neues Projekt: fragt, wo Sie stehen, und leitet zu den ersten Schritten.
-- `/help` — zeigt die aktuelle Phase, erledigte Schritte und den einen nächsten Befehl.
+- `/help` — zeigt die aktuelle Phase, erledigte Schritte und den einen nächsten Befehl; `/help commands` listet alle Befehle mit Beschreibung, `/help guide [Thema]` öffnet das Playbook (was in jeder Situation zu tun ist, [docs/playbook.md](../playbook.md), englisch).
 - `/adopt` — bindet das Studio an ein bestehendes Projekt an: erkennt den Stack, prüft Dokumente, erstellt einen Übernahmeplan — füllt `technical-preferences.md` aus den erkannten Fakten und schreibt einen Adoptionsplan mit Checkboxen, dem `/help` folgt.
 - `/setup-stack` — wählt und fixiert den Stack (Backend, Frontend, API-Stil, Engine, Datenbank, Tests, CI) mit exakten Versionen.
 - `/stack-update` — erneuert die Stack-Referenz aus offiziellen Quellen mit Datum und schlägt einen Upgrade-Plan für das Projekt vor.

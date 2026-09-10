@@ -45,7 +45,7 @@ Show what will be created or changed:
 - `CLAUDE.md`: create from the template with the language filled in, or (if it exists) insert the
   `## Language`, `## Studio (Web Studio)`, `## Stack` and `## Working principles` sections without
   touching other content — show the exact insertion.
-- `.claude/docs/` (stack-reference, templates, roster, coordination, workflow catalog, technical-preferences with `[TO BE CONFIGURED]`) — copy only files that do not exist; list existing ones that differ.
+- `.claude/docs/` (stack-reference, templates, roster, coordination, workflow catalog, `playbook.md` with its `readme/PLAYBOOK.*.md` translations and `roadmap.md` — what `/help guide` reads, technical-preferences with `[TO BE CONFIGURED]`) — copy only files that do not exist; list existing ones that differ.
 - `.claude/rules/` — same policy.
 - `.claude/settings.json`: create from `settings.plugin-mode.json` (permissions + statusline) or show a diff of `permissions.allow/deny` and `statusLine` to merge; hooks are provided by the plugin (copy mode: hooks already in `settings.json`).
 - `.claude/statusline.sh`, `docs/web-studio/README.md`, `docs/{specs,architecture,security,ops}`, `production/{sprints,stories,releases,session-state,session-logs}`, `production/review-mode.txt`, `.gitignore` entries (`production/session-state/`, `production/session-logs/`, `.claude/settings.local.json`, `.claude/agent-memory-local/`).
