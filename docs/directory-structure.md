@@ -36,7 +36,8 @@ Monorepo (pnpm workspaces / Go workspace) is the default for projects with a cli
 server; separate repositories when release cycles differ.
 
 Go backends follow [golang-standards/project-layout](https://github.com/golang-standards/project-layout)
-as adapted in `stack-reference/go.md` ("Project layout"): `cmd/<app>/`, `internal/<domain>/`, optional
-`pkg/`, `api/`, `configs/`, `scripts/`, `build/`, `deployments/`, `test/`, `tools/`; never `src/`.
+as adapted in `stack-reference/go.md` ("Project layout"): `cmd/<app>/main.go` (the only file there),
+`internal/app/<app>/` (sub-commands, flags, wiring), `internal/<domain>/`, optional `pkg/`, `api/`,
+`configs/`, `scripts/`, `build/`, `deployments/`, `test/`, `tools/`; never `src/`.
 A single-binary tool stays `main.go` + `go.mod`. The variant is recorded as `go_layout` in
 `technical-preferences.md`.
