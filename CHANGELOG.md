@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.10.1 — 2026-09-11
 - Go layout becomes a measurable contract instead of "no business logic in `cmd/`": `cmd/<app>/main.go` is the only non-test file of a binary (≤ 50 lines: args/env → `internal/app/<app>.Run` → exit code); sub-commands, flag parsing, dependency wiring, adapters and CLI output live in `internal/app/<app>/` (the convention's own `/internal/app/myapp`, missing from the studio table until now); one constructor per shared dependency graph; behaviour tests never in `package main`. `go-engineer` runs a numeric self-check (`wc -l cmd/*/*.go`, `grep 'flag\.\|Fprint' cmd/`) and reports the numbers in every story touching `cmd/`; `/code-review` Phase 3 raises `LAYOUT` WARNINGs from the same commands and a BLOCKING when a dependency-graph literal duplicated across sub-commands already differs by a field; `/architecture-review code` treats `cmd/` content as drift even when the layout ADR lists only directories; `backend-lead`, `rules/go-code.md`, `directory-structure.md` and the go-engineer spec (case 6: a sub-command added to a binary whose `cmd/` already holds 700 lines) say the same. Observed on a real service: three sub-commands, a lock policy, an adapter and a twice-copied 20-line dependency struct (one copy missing a field — a confirmed BLOCKING bug) accumulated in `cmd/<app>` over five stories, each commented as "wiring-only glue, no business logic here", and passed five reviews and a code-level architecture review that recorded four directory deviations. (WS-081)
 
 ## 0.10.0 — 2026-09-10
