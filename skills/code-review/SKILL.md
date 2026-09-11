@@ -23,6 +23,7 @@ Give each the files, ADRs and rules; ask for findings as `severity | file:line |
 
 ## Phase 3: Automated checks (Bash, when tools exist)
 `go vet`/`staticcheck`/`govulncheck`; `vendor/bin/psalm`/`php -l`; `eslint`/`tsc --noEmit`/`vue-tsc`; `graphql-inspector diff`; tests of affected packages. Output goes into the report.
+Go layout (`go.md` "Project layout", whenever the diff touches `cmd/` or the project has one): `wc -l cmd/*/*.go` and `grep -ln 'flag\.\|Fprint' cmd/*/*.go` — a second non-test file in `cmd/<app>`, a `main.go` over 50 lines or a `flag.`/`Fprint` hit there is a WARNING `LAYOUT | cmd/<app>/<file>:1 | application code in cmd/ | grows with every story, untestable without package main | move to internal/app/<app>`; the same dependency-graph struct literal in two files is BLOCKING when a field is already missing in one of them (that difference is the bug), WARNING otherwise (fix: one constructor). The numbers go into the report even when clean; a code comment calling the code "wiring" changes nothing.
 
 ## Phase 4: ADR conformance
 Deviation from an accepted ADR: ARCHITECTURAL VIOLATION (BLOCKING) / DRIFT (WARNING) / MINOR (INFO).

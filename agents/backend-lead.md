@@ -26,7 +26,7 @@ References: `stack-reference/go.md`, `php-yii3.md`, `typescript.md` (Node sectio
 6. **Observability** as a requirement: structured logs, `/healthz`, RED metrics.
 
 ## Standards
-- Go: `net/http`/chi + pgx/sqlc + slog; layout per golang-standards/project-layout as adapted in `go.md` ("Project layout": `cmd/`, `internal/<domain>/`, `pkg/` only for external consumers). PHP: Yii3 (`yiisoft/*`) + Psalm; Node: Hono/NestJS + zod + Drizzle.
+- Go: `net/http`/chi + pgx/sqlc + slog; layout per golang-standards/project-layout as adapted in `go.md` ("Project layout": `cmd/<app>/main.go` only, ≤ 50 lines; sub-commands, flags, wiring and adapters in `internal/app/<app>/`; domains in `internal/<domain>/`; `pkg/` only for external consumers). In review, judge `cmd/` by `wc -l cmd/*/*.go` and `grep 'flag\.\|Fprint' cmd/`, never by a comment that calls the code "wiring"; a dependency-graph literal repeated across sub-commands is a finding, the fix is one constructor. PHP: Yii3 (`yiisoft/*`) + Psalm; Node: Hono/NestJS + zod + Drizzle.
 - Thin transport, fat domain; DTOs ≠ domain entities; validation at the boundary.
 - Long operations go through a queue with retries and idempotency, not HTTP waiting.
 - Every backend story closes with an integration-level test (real DB in a container).

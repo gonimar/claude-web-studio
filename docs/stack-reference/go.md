@@ -53,7 +53,8 @@ directories "for later".
 
 | Directory | Studio usage |
 |---|---|
-| `cmd/<app>/main.go` | One directory per binary, named after the executable (`cmd/api`, `cmd/worker`). `main` wires config, dependencies, server and graceful shutdown — no business logic. |
+| `cmd/<app>/main.go` | One directory per binary, named after the executable (`cmd/api`, `cmd/worker`). **`main.go` is the only non-test file there**, ≤ 50 lines including the doc comment: read `os.Args`/`os.Environ`, call `internal/app/<app>.Run(ctx, args, env, stdout, stderr) int`, `os.Exit` with its code — the convention's own wording is "a small `main` function that imports and invokes the code from `/internal` and `/pkg` and nothing else". No `flag.*`, no sub-command bodies, no type or adapter declarations, no output formatting, no dependency construction. Tests: at most one smoke test (`--help`/`version`). |
+| `internal/app/<app>/` | The composition root of one binary (the convention's `/internal/app/myapp`): `Run`, sub-command dispatch (`serve`, `update`, `migrate`, …), flag parsing per sub-command, config → dependency graph → server wiring, adapters between internal packages, signal handling, CLI output. One constructor per shared dependency graph (`newServices(cfg, log, …)`) used by every sub-command that needs it — never the same struct literal in two sub-commands. Tests of the CLI contract (exit codes, stdout tokens, flag errors) live here, not in `package main`. |
 | `internal/` | All application code; privacy enforced by the compiler. Domains as `internal/<domain>/` (handler → service → repository/sqlc); private shared code (`config`, `db`, `logging`, `auth`) in `internal/platform/` (or `internal/pkg/`) once two or more domains use it. |
 | `pkg/` | Only code deliberately importable by other modules (SDK, client library, shared protocol types). Empty by default; the convention notes it is contested in the community — it is not an "everything else" bucket. |
 | `api/` | Protobuf, JSON Schema, generated stubs that ship with the module. The contract source of truth stays `docs/architecture/api/` (GraphQL SDL / OpenAPI); embed or copy it in CI, never fork it. |
@@ -69,8 +70,17 @@ directories "for later".
 | `init/` | systemd / supervisor units — only for non-container deployments. |
 
 **Never**: `src/` (a Java habit; the convention lists it under "directories you shouldn't have");
-`utils/`, `common/`, `helpers/` packages; business logic in `cmd/`; a `pkg/` created before an external
-consumer exists; several `main` packages in one directory.
+`utils/`, `common/`, `helpers/` packages; anything but `main.go` (+ one smoke test) in `cmd/<app>` —
+sub-command bodies, flag parsing, adapters, output formatting and dependency graphs belong to
+`internal/app/<app>`; a `pkg/` created before an external consumer exists; several `main` packages
+in one directory.
+
+**Layout check — by numbers, never by the comment that calls code "wiring"**: `wc -l cmd/*/*.go` and
+`grep -ln 'flag\.\|Fprint' cmd/*/*.go`. A second non-test file in `cmd/<app>`, a `main.go` over 50
+lines, or a `flag.`/`Fprint` hit there is a `LAYOUT` finding (WARNING in `/code-review`, drift in
+`/architecture-review code`); the fix is a move to `internal/app/<app>`, never a comment. The same
+dependency-graph literal in two files is BLOCKING once a field has already been missed in one of them —
+that is the bug class it produces.
 
 Monorepo mapping: `backend/` is the Go root with `go.mod`; `cmd/`, `internal/` and the rest live under it.
 `go.work` only when there are several modules. The chosen variant is recorded as `go_layout` in
