@@ -7,11 +7,15 @@
 #   agent-stats.sh --since 2026-09-09
 #   agent-stats.sh --since 14d
 #
-# What the log can and cannot say. A run of a non-studio agent means routing went around the roster
-# (WS-001) — that one is certain, the name is in the line. The gap between starts and stops is NOT:
-# the log carries two formats (older lines have no `aid`), and even among lines that do, stops
-# arrive about half the time and sometimes twice. So the gap is reported as a gap — starts, stops,
-# difference — with both readings named, never as "N agents were cut off" (WS-117).
+# What the log can and cannot say (WS-117, measured on two real projects):
+#   * a run of a non-studio agent is a fact — the name is in the line (WS-001);
+#   * `SubagentStart` fires per invocation, including every resume of the same agent: one `aid` in a
+#     real log carries eight starts and no stop. So starts minus stops is NOT a count of anything —
+#     it is mostly resumes, and reading it as lost work is how a recount arrived at 126 where the
+#     truth was 5;
+#   * what does mean something is the agent: an `aid` that was started and never closed (WS-087);
+#   * lines written before the id fields existed (`date | event | agent`) cannot be paired at all.
+#     Where the log has such lines, say so — a silent zero reads as "clean" when it means "blind".
 set -u
 cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
 LOG=production/session-logs/agent-audit.log
@@ -39,17 +43,16 @@ awk -F'|' -v since="$SINCE" -v label="$LABEL" '
   ev == "SubagentStart" {
     starts++; runs[name]++
     if (since != "" && date >= since) window++
-    if (aid != "" && aid != "-") { if (!(aid in seen_start)) { seen_start[aid] = name; agents++ }; openids[aid] = name }
+    if (aid != "" && aid != "-") { if (!(aid in seen)) { seen[aid] = 1; agents++ }; openids[aid] = name }
+    else noid++
     if (name == "general-purpose" || name == "Explore" || name == "claude") foreign++
   }
-  ev == "SubagentStop" {
-    stops++
-    if (aid != "" && aid != "-") delete openids[aid]
-  }
+  ev == "SubagentStop" { if (aid != "" && aid != "-") delete openids[aid] }
   END {
     if (starts == 0) { print "Agents: the log has no runs yet"; exit }
     printf "Agents: %d runs all-time", starts
     if (since != "") printf " · %d in the %s", window + 0, label
+    if (agents > 0) printf " · %d agents", agents
     printf "\n"
     n = 0
     for (a in runs) { order[++n] = a }
@@ -57,14 +60,11 @@ awk -F'|' -v since="$SINCE" -v label="$LABEL" '
     line = ""
     for (i = 1; i <= n && i <= 5; i++) line = line (i > 1 ? " · " : "") order[i] " " runs[order[i]]
     print "  " line
-    gap = starts - stops
-    if (gap > 0) {
-      unpaired = 0
-      for (a in openids) unpaired++
-      printf "  %d start(s) vs %d stop(s) — %d more starts than stops", starts, stops, gap
-      if (agents > 0) printf "; of the %d agents the log identifies by id, %d were never closed", agents, unpaired
-      printf "\n"
-      print "  read it as: agents cut off at their turn limit (check the story results), or stop events that never reached the log — the log cannot tell you which"
-    }
+    unpaired = 0
+    for (a in openids) unpaired++
+    if (agents > 0 && unpaired > 0)
+      printf "  %d agent(s) started and never closed — cut off at the turn limit, or still running: check what their stories say\n", unpaired
+    if (noid > 0)
+      printf "  %d run(s) predate the agent ids in the log — they cannot be paired, so \"never closed\" is measured only over the %d that can\n", noid, agents
     if (foreign > 0) printf "  ! %d run(s) of non-studio agents — routing went around the roster\n", foreign
   }' "$LOG"
