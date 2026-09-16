@@ -195,5 +195,20 @@ if [ "$(grep -c 'resume=1' production/session-logs/agent-audit.log)" = 1 ]; then
 echo '{"hook_event_name":"SubagentStop","agent_type":"go-engineer","agent_id":"aid-budget-1"}' | bash "$H/log-agent.sh"
 echo '{"hook_event_name":"SubagentStart","agent_type":"go-engineer","agent_id":"aid-budget-1"}' | bash "$H/log-agent.sh"
 if [ "$(grep -c 'resume=1' production/session-logs/agent-audit.log)" = 1 ]; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL log-agent: a Start after a proper Stop marked as a resumption"; fi
+# WS-115: the writer refuses a state file it cannot round-trip, and backs up the ones it can
+printf '# Active session\n\n**Task**: rich markdown\n\n## Sprint 03 status\n- done\n' > "$T/production/session-state/active.md"
+CLAUDE_PROJECT_DIR="$T" bash "$S" note "x" >/dev/null 2>&1; expect "session-state refuses a foreign file" 2 $?
+if [ "$(grep -c 'Sprint 03 status' "$T/production/session-state/active.md")" = 1 ]; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: a foreign file was overwritten"; fi
+printf '<!-- x -->\nTask: —\nBranch: —\nNext: —\nGate: —\nBlocked: —\nFiles: —\nNotes: —\n' > "$T/production/session-state/active.md"
+CLAUDE_PROJECT_DIR="$T" bash "$S" set Task "S-040" >/dev/null
+if grep -q "^Task: S-040" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: a canonical file is no longer written"; fi
+if ls "$T/production/session-state/archive"/active-*.md >/dev/null 2>&1; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: no backup before the write"; fi
+# WS-115: migrate converts a grown state file once, archiving the whole of it first
+printf '# Active session\n\n**Task**: rich markdown\n**Next**: /sprint-plan 04\n\n## Sprint 03 status\n- done\n' > "$T/production/session-state/active.md"
+CLAUDE_PROJECT_DIR="$T" bash "$S" migrate >/dev/null
+if grep -q "^Task: rich markdown" "$T/production/session-state/active.md" && grep -q "^Next: /sprint-plan 04" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state migrate: bold fields not carried over"; fi
+if ls "$T/production/session-state/archive"/*premigration.md >/dev/null 2>&1 && grep -q "Sprint 03 status" "$T/production/session-state/archive"/*premigration.md; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state migrate: the previous file was not archived whole"; fi
+CLAUDE_PROJECT_DIR="$T" bash "$S" note "after migration" >/dev/null
+if grep -q "after migration" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: writer still refuses after a migration"; fi
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]
