@@ -69,5 +69,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: `production/backlog.md` with four open ideas, oldest 45 days, `last-review` 12 days ago; `/help guide "two sessions"`. **Expected**: one line `Backlog: 4 ideas, oldest 45 days → /backlog review` in the report (never an option in the closing question); the guide prints §10.12 because its first line matches, heading matches win over first-line matches when both exist.
 - [ ] backlog line · [ ] not in the question · [ ] first-line match
 
+### A merged branch, a placeholder and a command that does not exist
+**Fixture**: session-start printed "branch already merged into origin/master" and a `[One paragraph: …]` placeholder in CLAUDE.md; the project has one story in progress. **Expected**: both signals appear as their own lines in the answer; the next step names only commands that exist in the catalog or in a skill's `argument-hint` — closing a story is `/story-done`, never `/dev-story complete S-NNN`.
+- [ ] session-start warnings repeated · [ ] no invented sub-command · [ ] every named command resolves to a skill
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

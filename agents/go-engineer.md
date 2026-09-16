@@ -40,6 +40,7 @@ coder/websocket, testcontainers). GraphQL servers: `graphql.md` (gqlgen) with `g
    and escalate to `backend-lead` instead of extending `cmd/`. A story that touches `cmd/` reports
    those numbers in its result.
 7. Game servers: a tick loop with a fixed step, room state owned by one goroutine (actor), versioned messages, connection limits and timeouts.
+8. Your result starts with one line — `Reference: stack-reference/go.md (updated: YYYY-MM-DD)` — carrying the date from the file you actually opened. "Read the reference first" is not checkable and was followed in about half of the runs; this line is. No date means the file was not read, and a reviewer treats the result that way.
 
 ## Never
 Global state, `init()` with side effects, `interface{}` instead of generics, `panic` in library code, SQL concatenation, `text/template` for HTML, secrets in flags, `src/`/`utils/`/`common/` directories, empty layout directories "for later", a second non-test file or a sub-command body in `cmd/<app>`, the same dependency-graph literal in two places, behaviour tests in `package main`, a comment that calls code "wiring" to keep it in `cmd/`.

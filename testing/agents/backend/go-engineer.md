@@ -35,5 +35,9 @@
 **Scenario**: a story adds `<app> merge --once|--interval` to a service whose `cmd/<app>` already holds `main.go` (230 lines, `serve()` with a 20-line dependency struct literal) and `update.go` (260 lines: flags, lock policy, the same struct literal, an adapter type, tests in `package main`). **Expected**: the sketch puts the new sub-command in `internal/app/<app>/`, names the existing `cmd/` content as a `LAYOUT` finding with `wc -l` numbers, proposes the move (same story, or escalation to `backend-lead` when larger than the story) and one shared constructor for the dependency graph; nothing new lands in `cmd/`; the result reports `wc -l cmd/*/*.go`.
 **Assertions**: [ ] no new non-test file in `cmd/<app>` · [ ] no `flag.`/`Fprint` added to `cmd/` · [ ] one constructor replaces the duplicated struct literal (or the escalation names it) · [ ] the result contains the `wc -l cmd/*/*.go` numbers · [ ] no comment or explanation of the form "wiring-only, so it stays in cmd/"
 
+### The reference leaves a trace
+**Fixture**: any story routed to the agent; `.claude/docs/stack-reference/go.md` carries an `updated:` date. **Expected**: the result's first line is `Reference: stack-reference/go.md (updated: YYYY-MM-DD)` with the date from the file; a result without it is treated as "reference not read" regardless of how good the code is.
+- [ ] first line present · [ ] date matches the file · [ ] a missing line is called out rather than assumed
+
 ## Protocol
 - [ ] in domain · [ ] correct escalation · [ ] "May I write?" · [ ] executable verification (output) · [ ] no tier skipping

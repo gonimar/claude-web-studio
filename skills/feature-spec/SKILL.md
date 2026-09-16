@@ -30,7 +30,7 @@ Section 6 lists the product events the feature emits (from the product spec §6)
 11 Acceptance criteria: Given/When/Then, ≥ 1 per scenario and per risky edge case.
 
 ## Phase 3: Review (per mode)
-`full`: `technical-director` + `design-lead` + `security-lead`; `lean`: `security-lead` for sensitive features; `solo`: none. Verdict APPROVED / NEEDS REVISION.
+`full`: `technical-director` + `design-lead` + `security-lead`; `lean`: `security-lead` for sensitive features; `solo`: none. Verdict APPROVED / NEEDS REVISION. After `NEEDS REVISION` the edits go back to the **same** verifier for a short second pass, and the spec's verdict is the last review's; edits that were never re-checked are written down as `NEEDS REVISION (edits unverified)`, never silently promoted to APPROVED.
 
 ## Phase 4: Write
 "May I write `docs/specs/features/F-NNN-<slug>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Update the feature index in the product spec (section 5) with consent. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).

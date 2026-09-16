@@ -49,5 +49,13 @@ Sprint plan by capacity and dependencies.
 **Fixture**: roadmap with five closed stories carrying `~Nh` and `⏱ Nh` (Σ~ 30 h, Σ⏱ 3.5 h); `production/backlog.md` with three open ideas. **Expected**: `Calibration: ratio 0.12 over 5 stories — capacity fits ~X h of estimates`; selection uses calibrated estimates; the plan header records the ratio; one line `Backlog: 3 open ideas — /backlog review`, no idea enters the sprint; with two stories the line says "insufficient data" and estimates are taken as written.
 - [ ] ratio exact · [ ] applied to selection · [ ] backlog line, no idea selected · [ ] insufficient-data path
 
+### Calibration comes from one named sample
+**Fixture**: a roadmap with eight closed stories carrying `~Nh` and `⏱ Nh` across two sprints; `/retrospective` has just run for the last sprint. **Expected**: the ratio is computed over the last six closed stories regardless of sprint, the report names the sample in those words, and the number matches the "rolling" ratio `/retrospective` printed.
+- [ ] sample named (last six closed stories) · [ ] same number as the retrospective's rolling ratio · [ ] not rounded
+
+### Selected stories leave the backlog block
+**Fixture**: a roadmap in v3.1 format with a Backlog block of nine stories; four are taken into the new sprint. **Expected**: after the write the four are under the sprint heading and gone from the Backlog block, both `<summary>` counts are recalculated, and the closing report states the numbers (`Backlog: 9 → 5, Sprint: 0 → 4, overlap none`).
+- [ ] no story in two blocks · [ ] both counts recalculated · [ ] the numbers stated in the report
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

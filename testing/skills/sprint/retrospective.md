@@ -26,6 +26,10 @@ Sprint retrospective from artefacts: planned vs shipped, estimate vs actual with
 **Fixture**: the user edits two of the five actions. **Expected**: actions are accepted in their own `AskUserQuestion` before the write gate; the write gate is a separate message with the rendered section; the next step offers `/sprint-plan 03` (Recommended).
 - [ ] two gates, two messages · [ ] rendered before the write · [ ] next step is the next sprint plan
 
+### Two ratios, each labelled
+**Fixture**: a sprint whose own ratio differs from the rolling one over the last six closed stories. **Expected**: both are printed, each labelled ("this sprint" · "rolling, used by /sprint-plan"), and the rolling one matches what `/sprint-plan` would compute from the same roadmap.
+- [ ] both ratios present · [ ] labels make clear which one plans the next sprint · [ ] rolling sample identical to /sprint-plan's
+
 ## Protocol
 - [ ] "May I write?" before writes · [ ] draft before approval · [ ] next step · [ ] never advances the stage itself
 
