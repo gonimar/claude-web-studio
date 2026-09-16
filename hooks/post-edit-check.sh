@@ -47,7 +47,7 @@ case "$FILE" in
   */production/sprints/sprint-*.md|production/sprints/sprint-*.md) docfmt 5 "Goal, Stories, Dependency updates, Risks, QA plan, Actions, Retrospective";;
   */production/session-state/active.md|production/session-state/active.md)
     for fld in Task Branch Next Gate Blocked Files Notes; do
-      grep -qE "^$fld:" "$FILE" || OUT="STATE: $FILE has no '$fld:' line — write it with hooks/session-state.sh, which keeps every field (a hand-built one-liner drops the ones it does not name)"
+      grep -qE "^$fld:" "$FILE" || OUT="STATE: $FILE has no '$fld:' line. If this file is in the writer's format, write it with hooks/session-state.sh (it keeps every field, unlike a hand-built one-liner). If it is a working document of its own shape, leave it to Write/Edit — the writer refuses it on purpose and must not be forced"
     done ;;
 esac
 [ -n "$OUT" ] && { warn PostToolUse "$OUT"; exit 0; }

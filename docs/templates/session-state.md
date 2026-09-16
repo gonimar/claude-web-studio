@@ -1,4 +1,8 @@
 <!-- production/session-state/active.md — current work state (gitignored) -->
+<!-- Working memory: the seven fields below and dated Notes, nothing else. Anything that must -->
+<!-- survive this session — sprint status, lessons, tech debt, decisions, a plan with open -->
+<!-- items — belongs in its own committed document (sprint file, findings, backlog, ADR, -->
+<!-- agent memory). This file is gitignored: what lives only here is one session from gone. -->
 Task: [what we are doing now — story/skill]
 Branch: [story branch feat/S-NNN-slug — set by /dev-story, cleared by /story-done after the merge]
 Next: [the next concrete step]
