@@ -56,6 +56,7 @@ the NEXT you name "low-value" — if the plan ranks it low, name the plan's own 
 
 ## Phase 3: Uncatalogued skills
 Glob `.claude/skills/*/SKILL.md` (copy mode) and the plugin's skills if visible; compare `name:` with the catalog's `command:`; show up to 8 relevant to the phase as "Also available".
+**Shadow copies**: when the plugin is installed and `.claude/skills/` holds skills of the same names, the project copies win for a bare command while `/web-studio:<name>` runs the plugin — print one line ("N project copies shadow the plugin: `/update` to check and remove them") and name the project's own skills separately, since those are meant to stay.
 
 ## Phase 4: Output
 ```

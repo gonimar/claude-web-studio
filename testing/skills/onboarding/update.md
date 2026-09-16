@@ -38,5 +38,17 @@ Update the studio in the project (plugin update or copy-mode reinstall); local e
 **Fixture**: the update changes `templates/story.md` and `templates/sprint-plan.md`; the project has six story cards without a criteria table and two sprint files. **Expected**: a "document → template → drift" table before the gate; verdict `UPDATED (8 documents need /migrate)`; the closing question recommends `/migrate all --dry-run`; no project document is edited by `/update`.
 - [ ] drift table · [ ] verdict names the count · [ ] /migrate recommended · [ ] documents untouched
 
+### 9. Configured technical-preferences.md survives the seeding
+**Fixture**: a project whose `.claude/docs/technical-preferences.md` is filled (`**Type**: game+backend`, pinned versions, rationale for rejected upgrades) and still carries the template's header comment mentioning `[TO BE CONFIGURED]`; `/update` across two versions, seeding agreed at the gate. **Expected**: the file is byte-identical after the run; the seeding step is `install.sh <project> --seed-only` (no hand-written `cp -r` of `docs/`); the summary contains `technical-preferences.md: kept (configured)` and the claim "project data untouched" appears only after `git diff --quiet` on that file has run.
+- [ ] file unchanged · [ ] seeding through the installer, not `cp -r` · [ ] "kept (configured)" line · [ ] the untouched claim is backed by the check
+
+### 10. The plugin is installed at a non-user scope
+**Fixture**: `claude plugin list --json` reports `web-studio` at scope `local`. **Expected**: Phase 2 shows and runs `claude plugin update web-studio --scope local` (with `-y` when non-interactive), not the bare command; if the scope is unreadable, the skill prints the candidates and asks instead of guessing.
+- [ ] scope taken from Phase 1 output · [ ] command carries `--scope` · [ ] no silent assumption of `user`
+
+### 11. A copy-mode install left under the plugin
+**Fixture**: the plugin is installed at `local` scope and `.claude/agents` / `.claude/skills` hold a byte-identical copy of an older version, plus one agent and one skill belonging to the project; `.claude/.web-studio-version` names a version that matches neither. **Expected**: Phase 1 reports `HYBRID INSTALL`, names the copy's real version from the cache comparison rather than from the stamp, and lists the project's own files separately; Phase 3 offers the removal as its own gate, moves agent memory to the `web-studio-<agent>` directories (appending `MEMORY.md` pointers, not overwriting), checks `.claude/settings.json` for hooks pointing at the copies, deletes the stamp with the copy and ends with "restart the session".
+- [ ] hybrid named, not silently treated as plugin mode · [ ] version from `cmp`, not from the stamp · [ ] project-owned files kept · [ ] memory moved before deletion · [ ] restart line present
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
