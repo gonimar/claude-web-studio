@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- `/update` reads the plugin listing per project. `claude plugin list --json` covers every project on the machine, and the skill took the first `web-studio` row it saw — with four projects side by side on three different versions, a project on 0.10.0 read a neighbour's 0.10.1 and reported itself up to date. Phase 1 now selects the row by `projectPath`, Phase 2 takes the scope from that row, Phase 3 re-reads it the same way, and a listing with no row for this project is reported as "not installed here" instead of being substituted. The form without `--json` is documented as unusable for this: its blocks carry Version, Scope and Status and no project path. Spec case update 12. (WS-110)
+
 ## 0.10.2 — 2026-09-16
 # Changelog
 
