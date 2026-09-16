@@ -107,5 +107,30 @@ git commit -q -m "chore: base" 2>/dev/null; git branch -q -f master 2>/dev/null;
 out=$(echo '{"tool_input":{"command":"git commit -m \"docs: on a fresh branch\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'already merged' && { failn=$((failn+1)); echo "FAIL commit: fresh branch reported as already merged"; } || pass=$((pass+1))
 git checkout -q -b docs/lane master; printf 'v\n' > .claude-version-test; mkdir -p .claude; printf '0.8.2' > .claude/.web-studio-version; git add .claude/.web-studio-version
 out=$(echo '{"tool_input":{"command":"git commit -m \"docs: sync docs\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: version marker breaks the docs lane"; } || pass=$((pass+1))
+# WS-101: `git add … && git commit …` in one call — the index is still empty when the hook runs
+git reset -q; git checkout -q master 2>/dev/null
+printf 'X=1\n' > .env
+echo '{"tool_input":{"command":"git add .env && git commit -m \"feat: x\""}}' | bash "$H/validate-commit.sh" >/dev/null 2>&1; expect "commit blocks a secret file staged in the same call" 2 $?
+rm -f .env
+printf 'k = "ghp_%s"\n' "$(printf 'A%.0s' $(seq 1 36))" > leak.ts
+echo '{"tool_input":{"command":"git add -A && git commit -m \"feat: x\""}}' | bash "$H/validate-commit.sh" >/dev/null 2>&1; expect "commit blocks a secret-like string staged in the same call" 2 $?
+rm -f leak.ts
+printf 'ok\n' > plain.txt
+echo '{"tool_input":{"command":"git add plain.txt && git commit -m \"feat: x\""}}' | bash "$H/validate-commit.sh" >/dev/null 2>&1; expect "commit allows a clean file staged in the same call" 0 $?
+# WS-102: a story ID in the scope is valid Conventional Commits, a capitalised type is not
+git add plain.txt
+out=$(echo '{"tool_input":{"command":"git commit -m \"feat(S-019): capitals in the scope\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'COMMIT: message is not' && { failn=$((failn+1)); echo "FAIL commit: feat(S-019) flagged as non-conventional"; } || pass=$((pass+1))
+out=$(echo '{"tool_input":{"command":"git commit -m \"Feat: capital type\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'COMMIT: message is not' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: a capitalised type passes as Conventional Commits"; }
+git reset -q
+# WS-103: the documents lane reaches the push hook, everything else on the default branch still warns
+git checkout -q master 2>/dev/null; git update-ref refs/remotes/origin/master HEAD
+mkdir -p docs; printf 'x\n' > docs/x.md; git add docs/x.md; git commit -q -m "docs: add x"
+out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'WARNING: pushing directly' && { failn=$((failn+1)); echo "FAIL push: docs-lane push to master warned"; } || pass=$((pass+1))
+printf 'package main\n' > app.go; git add app.go; git commit -q -m "feat: code"
+out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'WARNING: pushing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL push: a non-docs push to master is not warned"; }
+# WS-089: a Stop with no agent type is built-in tooling, not a lost studio agent
+echo '{"hook_event_name":"SubagentStop"}' | bash "$H/log-agent.sh"
+grep -q 'SubagentStop | builtin' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent: a Stop without a type is not marked builtin"; }
+grep -q '| unknown |' production/session-logs/agent-audit.log && { failn=$((failn+1)); echo "FAIL log-agent: still writes unknown"; } || pass=$((pass+1))
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]
