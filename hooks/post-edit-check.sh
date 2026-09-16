@@ -1,5 +1,8 @@
 #!/bin/bash
-# PostToolUse(Write|Edit): format and quick-check the edited file when tools are available. Never blocks.
+# PostToolUse(Write|Edit|Bash): format and quick-check the edited file when tools are available. Never blocks.
+# A document written with `cat > … <<EOF` gets the document-format checks too (WS-085); the code
+# formatters stay on the Write/Edit path, where the call names one file and means exactly it.
+. "$(dirname "$0")/written-paths.sh"
 INPUT=$(cat)
 # --- json helper: jq -> python3 -> grep ---
 jget() {
@@ -14,6 +17,13 @@ print(d if isinstance(d,str) else ("" if d is None else json.dumps(d)))' "$1" 2>
   key="${1##*.}"; echo "$INPUT" | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"" | head -1 | sed -E "s/^\"$key\"[[:space:]]*:[[:space:]]*\"//;s/\"$//;s/\\\\\"/\"/g"
 }
 FILE=$(jget .tool_input.file_path)
+DOCS_ONLY=0
+if [ -z "$FILE" ]; then
+  CMD=$(jget .tool_input.command); [ -z "$CMD" ] && exit 0
+  FILE=$(written_paths "$CMD" | grep -E '(^|/)(docs|production)/' | head -1)
+  [ -z "$FILE" ] && exit 0
+  DOCS_ONLY=1
+fi
 # warn <PreToolUse|PostToolUse> <message>: a warning as JSON on stdout — additionalContext reaches the model,
 # systemMessage the user; exit 0 keeps the tool allowed. stderr with exit 0 reaches neither (WS-050).
 warn() {
@@ -36,6 +46,7 @@ case "$FILE" in
   */production/sprints/sprint-*.md|production/sprints/sprint-*.md) docfmt 5 "Goal, Stories, Dependency updates, Risks, QA plan, Actions, Retrospective";;
 esac
 [ -n "$OUT" ] && { warn PostToolUse "$OUT"; exit 0; }
+[ "$DOCS_ONLY" = 1 ] && exit 0   # a Bash write names no single file to format — documents only
 case "$FILE" in
   *.go)
     command -v gofmt >/dev/null && gofmt -l -w "$FILE" >/dev/null 2>&1
