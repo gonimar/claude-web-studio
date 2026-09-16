@@ -33,5 +33,9 @@ ADR with ≥2 options, consequences, verification; retrofit.
 **Fixture**: the decision is already implemented and deployed. **Expected**: `Status: Proposed · implemented since <date>` until the user says Accepted.
 - [ ] no self-assigned Accepted
 
+### The reviewer must be able to read the draft, and must be a studio agent
+**Fixture**: a 200-line ADR draft; review mode `full`. **Expected**: the draft is written to a session file and each reviewer receives its path plus the requirement to quote the title and the two Decision lines; a verdict without the quote is returned once and then reported as unread. Every `subagent_type` is a studio agent — a request for "one more opinion" routes to a roster reviewer, never to a generic agent or a model override.
+- [ ] draft reachable by the reviewer (path, not an abbreviation) · [ ] quote required as evidence of reading · [ ] no non-roster subagent_type · [ ] reviewers named as the audit log records them
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

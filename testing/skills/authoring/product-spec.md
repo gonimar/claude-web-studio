@@ -38,5 +38,9 @@ Product spec section by section with review per mode.
 **Fixture**: an internal admin tool in one language. **Expected**: section 6 carries explicit `n/a — internal app` for SEO, `n/a — single locale` for localisation and a product-events list (or `n/a — reason`) for analytics; silence is not accepted as an answer.
 - [ ] three explicit answers · [ ] events mapped to §2 metrics when present
 
+### A FAIL that was edited is reviewed again
+**Fixture**: the reviewer returns `FAIL` with four blocking factual errors; the skill applies all four. **Expected**: the same verifier gets the corrected text for a short second pass and the document's verdict is that second verdict; if the user declines the re-review, the spec is recorded as `FAIL (edits unverified)` rather than as passed.
+- [ ] second pass by the same verifier · [ ] verdict comes from the last review · [ ] no silent promotion to PASS
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -56,6 +56,7 @@ the NEXT you name "low-value" — if the plan ranks it low, name the plan's own 
 
 ## Phase 3: Uncatalogued skills
 Glob `.claude/skills/*/SKILL.md` (copy mode) and the plugin's skills if visible; compare `name:` with the catalog's `command:`; show up to 8 relevant to the phase as "Also available".
+**Shadow copies**: when the plugin is installed and `.claude/skills/` holds skills of the same names, the project copies win for a bare command while `/web-studio:<name>` runs the plugin — print one line ("N project copies shadow the plugin: `/update` to check and remove them") and name the project's own skills separately, since those are meant to stay.
 
 ## Phase 4: Output
 ```
@@ -80,5 +81,7 @@ If `production/findings.md` has open BLOCKING findings without a story — one l
 External signals (a red CI, a failed deploy, a billing or access problem seen in `session-state`, a tech-debt CRITICAL) are **one `Attention:` line each** with the command or place that fixes them — never the subject of the closing question and never investigated here (no `gh run`, no log reading: help is orientation, not diagnosis).
 Build phase with a Deploy target in technical-preferences and no `docs/ops/deploy.md` — one line: the "Deploy artefacts" story is missing (`/create-stories` adds it).
 Game project (technical-preferences type game / game+backend): when every story of the first feature is Done and `production/releases/gate-prototype.md` is missing — NEXT is `/game-concept gate`, not the next feature.
+
+Every command named anywhere in the answer comes from the catalog or from a skill's own frontmatter, never from memory: a sub-command is named only when its skill's `argument-hint` lists it. There is no `/dev-story complete S-NNN` — a story is closed by `/story-done`, and inventing the shape of a command sends the user to a dead end with the studio's own authority behind it. The session-start context is data, not decoration: a merged branch, a template placeholder left in CLAUDE.md, a stack reference older than 60 days or an open `Gate:` printed there is repeated here as one line each — the user reads this answer, not the startup block a second time.
 
 Verdict: `READY`. Next step — one `AskUserQuestion` about the pipeline only: the "Next" command (Recommended) · up to two "Also available" commands relevant to the phase · nothing now. Run nothing without that answer; `Attention:` items are not options here.

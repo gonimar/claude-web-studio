@@ -26,9 +26,12 @@ hotfixes dated inside the sprint (`docs/ops/incidents/`, `hotfix/*` branches), `
 ## Phase 2: Analysis
 Rendered in the chat as tables (rule 7):
 1. **Planned vs shipped** — per story: planned · Done/carried over/cancelled · PR · `~Nh` · `⏱ Nh` · ratio.
-   Sprint totals: Σ estimate, Σ actual, **calibration ratio** = Σ⏱ / Σ~ over the stories that have both (fewer than
-   three such stories → "insufficient data, ratio not applied"). The ratio is what `/sprint-plan` uses to scale the
-   next sprint's capacity; write it exactly as computed, never rounded to a nicer story.
+   Sprint totals: Σ estimate, Σ actual, and **two ratios that are never merged into one number**: this sprint's
+   (Σ⏱ / Σ~ over its own stories, labelled "this sprint") and the **rolling calibration ratio** over the last six
+   closed stories of the roadmap carrying both numbers, labelled "rolling, used by /sprint-plan" — the same sample
+   `/sprint-plan` reads, so the two skills never quote different numbers under the same name (fewer than three
+   stories in the rolling sample → "insufficient data, ratio not applied"). Write both exactly as computed, never
+   rounded to a nicer story.
 2. **Goal** — met / partially / not, with the evidence (the verifiable statement from the plan against what exists).
 3. **What slowed us** — carried-over stories with the recorded cause (blocked by …, spec gap, red CI, dependency,
    context lost N times), findings and incidents of the period, actions from the previous retrospective that were

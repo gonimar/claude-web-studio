@@ -14,7 +14,11 @@ print(d if isinstance(d,str) else ("" if d is None else json.dumps(d)))' "$1" 2>
   key="${1##*.}"; echo "$INPUT" | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"" | head -1 | sed -E "s/^\"$key\"[[:space:]]*:[[:space:]]*\"//;s/\"$//;s/\\\\\"/\"/g"
 }
 EV=$(jget .hook_event_name); [ -z "$EV" ] && EV="?"
-AG=$(jget .agent_type); [ -z "$AG" ] && AG=unknown
+AG=$(jget .agent_type)
+# A Stop with no agent type is not a studio agent that vanished: it is built-in tooling (a plain
+# Task, compaction) whose Start the hook never saw. Calling it "unknown" made the log look like a
+# trail of lost agents and broke Start/Stop pairing in the stats (WS-089).
+[ -z "$AG" ] && AG=builtin
 SID=$(jget .session_id); AID=$(jget .agent_id); TID=$(jget .tool_use_id)
 # Always log at the project root: the session cwd may be a subdirectory (cd backend && …).
 cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
