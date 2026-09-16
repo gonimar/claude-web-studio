@@ -6,6 +6,7 @@
 # On `source: compact` the block also carries the whole active.md and the modified files (the recovery
 # context — PreCompact stdout reaches nobody, WS-080).
 # Work from the project root: the session cwd may be a subdirectory.
+. "$(dirname "$0")/prefs.sh"
 cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
 INPUT=""; [ -t 0 ] || INPUT=$(cat)
 SOURCE=$(printf '%s' "$INPUT" | grep -oE '"source"[[:space:]]*:[[:space:]]*"[a-z]+"' | head -1 | sed -E 's/.*"([a-z]+)"$/\1/')
@@ -45,7 +46,7 @@ fi
 STAGE=""; [ -f production/stage.txt ] && { STAGE=$(head -1 production/stage.txt); line "Stage: $STAGE"; }
 if [ ! -f .claude/docs/technical-preferences.md ]; then
   line "Web Studio is not initialised in this project — run /web-studio:init (or /init in copy mode)."; warn3 "not initialised → /init"
-elif grep -q 'TO BE CONFIGURED' .claude/docs/technical-preferences.md; then
+elif ! configured_prefs .claude/docs/technical-preferences.md; then
   line "Stack not configured — run /setup-stack (new project) or /adopt (existing project)."; warn3 "stack not configured → /setup-stack or /adopt"
 fi
 [ -f CLAUDE.md ] && grep -q 'One paragraph: what it is' CLAUDE.md && { line "CLAUDE.md: the Project section is still the template placeholder — fill it in (one paragraph)."; warn3 "CLAUDE.md Project section is a placeholder"; }
