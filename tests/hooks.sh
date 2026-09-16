@@ -147,5 +147,19 @@ printf '%s' '{"tool_input":{"command":"cat > config.yml <<EOF\ntoken: ghp_AAAAAA
 printf '%s' '{"tool_input":{"command":"echo ok > notes.txt"}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard allows an ordinary Bash write" 0 $?
 mkdir -p production && printf '# Roadmap\n' > production/roadmap.md
 out=$(printf '%s' '{"tool_input":{"command":"cat > production/roadmap.md <<EOF\n# Roadmap\nEOF"}}' | bash "$H/post-edit-check.sh" 2>&1); echo "$out" | grep -q 'DOCS-FORMAT' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit-check: a document written through Bash is not format-checked"; }
+# WS-112: `git commit -F <file>` and `-F -` — the message is read, not skipped
+git checkout -q master 2>/dev/null; git reset -q
+mkdir -p .claude/docs && printf 'x\n' > .claude/docs/coordination-rules.md && git add .claude/docs/coordination-rules.md
+printf 'docs: update Web Studio 0.10.1 -> 0.10.2\n\nbody with `inline code`\n' > "$T/msg.txt"
+out=$(echo "{\"tool_input\":{\"command\":\"git commit -F $T/msg.txt\"}}" | bash "$H/validate-commit.sh" 2>&1)
+echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: -F file, docs lane not recognised"; } || pass=$((pass+1))
+echo "$out" | grep -q 'COMMIT: message is not' && { failn=$((failn+1)); echo "FAIL commit: -F file message read as non-conventional"; } || pass=$((pass+1))
+printf 'sync stuff\n' > "$T/bad.txt"
+out=$(echo "{\"tool_input\":{\"command\":\"git commit -F $T/bad.txt\"}}" | bash "$H/validate-commit.sh" 2>&1)
+echo "$out" | grep -q 'COMMIT: message is not' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: -F file with a bad message is not checked at all"; }
+out=$(printf '%s' '{"tool_input":{"command":"git commit -q -F - <<EOF\ndocs: heredoc through -F\n\nbody\nEOF"}}' | bash "$H/validate-commit.sh" 2>&1)
+echo "$out" | grep -q 'COMMIT: message is not' && { failn=$((failn+1)); echo "FAIL commit: -F - heredoc message read as non-conventional"; } || pass=$((pass+1))
+echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: -F - heredoc, docs lane not recognised"; } || pass=$((pass+1))
+git reset -q
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]

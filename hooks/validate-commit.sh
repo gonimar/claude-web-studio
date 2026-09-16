@@ -64,7 +64,18 @@ done
 if echo "$CMD" | grep -qE -- "-m[[:space:]]+[\"']?\\$\(cat[[:space:]]*<<"; then
   MSG=$(printf '%s\n' "$CMD" | awk 'hd!=""{ if ($0 ~ /^[[:space:]]*$/) next; print; exit } /-m[[:space:]]+["'"'"']?\$\(cat[[:space:]]*<<-?[[:space:]]*["'"'"']?[A-Za-z_]+/ { hd=1 }')
 elif echo "$CMD" | grep -qE -- "(^|[[:space:]])-F[[:space:]]"; then
-  MSG=""   # message from a file — nothing to check here
+  # `-F <file>` and `-F -` with a heredoc: read the message instead of skipping it. `git commit -m`
+  # runs command substitution on backticks, so every multi-line message with inline code — which is
+  # what a documents commit looks like — goes through -F. Reading nothing here made the documents
+  # lane invisible (a false "committing directly to master") and skipped the Conventional Commits
+  # check altogether: blind rather than lenient (WS-112).
+  MSGF=$(printf '%s\n' "$CMD" | grep -oE -- "-F[[:space:]]+[\"']?[A-Za-z0-9_./-]+" | head -1 | sed -E "s/^-F[[:space:]]+[\"']?//")
+  if [ -n "$MSGF" ] && [ -f "$MSGF" ]; then
+    MSG=$(grep -m1 -vE '^[[:space:]]*(#|$)' "$MSGF")
+  else
+    # -F - : the message is the heredoc body inside this same command
+    MSG=$(printf '%s\n' "$CMD" | awk 'hd!=""{ if ($0 ~ /^[[:space:]]*$/) next; print; exit } /-F[[:space:]]+-[[:space:]]*<<-?[[:space:]]*["'"'"']?[A-Za-z_]+/ { hd=1 }')
+  fi
 else
   MSG=$(echo "$CMD" | grep -oE -- "-m[[:space:]]+[\"'][^\"']*" | head -1 | sed -E "s/^-m[[:space:]]+[\"']//")
 fi
