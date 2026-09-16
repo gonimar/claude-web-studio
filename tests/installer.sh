@@ -44,6 +44,10 @@ check "seed-only: rules seeded" '[ -d "$T/seed/.claude/rules" ]'
 check "seed-only: agents left to the plugin" 'grep -q AGENT-MARK "$T/seed/.claude/agents/technical-director.md"'
 check "seed-only: configured technical-preferences kept" 'grep -q PREFS-MARK "$T/seed/.claude/docs/technical-preferences.md"'
 check "seed-only: reports the file as kept" 'grep -q "technical-preferences.md: kept (configured)" "$T/seed.log"'
-check "seed-only: version stamped" '[ -f "$T/seed/.claude/.web-studio-version" ]'
+# --seed-only is plugin mode: the stamp belongs to copy mode only (WS-111)
+rm -f "$T/seed/.claude/.web-studio-version"
+"$ROOT/install.sh" "$T/seed" --seed-only > "$T/seed2.log"
+check "seed-only: no version stamp written" '[ ! -f "$T/seed/.claude/.web-studio-version" ]'
+check "seed-only: says so in the output" 'grep -q "no version stamp written" "$T/seed2.log"'
 mkdir -p "$T/nogit"; "$ROOT/install.sh" "$T/nogit" >/dev/null 2>&1; check "refuses non-git dir" '[ $? != 0 ]'
 rm -rf "$T"; echo "installer: $failn failed"; [ $failn = 0 ]

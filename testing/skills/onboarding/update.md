@@ -54,5 +54,9 @@ Update the studio in the project (plugin update or copy-mode reinstall); local e
 **Fixture**: `claude plugin list --json` returns rows for five projects — four neighbours on 0.10.1 and 0.10.2, this project on 0.10.0. **Expected**: Phase 1 selects the row whose `projectPath` is this project's root and reports 0.10.0, so the update proceeds; the version and the scope never come from a neighbour's row, and a listing with no row for this project is reported as "not installed here" rather than silently read from someone else's.
 - [ ] row selected by projectPath · [ ] neighbours' versions never used · [ ] missing row named, not substituted
 
+### 13. Seeding in plugin mode leaves no stamp
+**Fixture**: a plugin-mode project with no `.claude/.web-studio-version`; `/update` seeds with `install.sh --seed-only`. **Expected**: no stamp is created, the installer says so in its output, and the next `/update` still detects plugin mode — a stamp here would name a version whose agents and skills are not in the project and would send the next run down the copy-mode branch.
+- [ ] no stamp after seeding · [ ] the output says so · [ ] mode detection unaffected
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
