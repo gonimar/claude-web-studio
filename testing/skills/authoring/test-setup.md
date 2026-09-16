@@ -34,5 +34,9 @@ Test strategy and configs per stack.
 **Fixture**: strategy written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write gate one commit gate offers `docs: test strategy` staging exactly the written files, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); nothing is committed without the answer.
 - [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended
 
+### The pipeline fits a budget
+**Fixture**: a private repository, four test levels, a project merging a few times a day. **Expected**: the generated workflow keeps one job per toolchain, filters by `paths:`, runs e2e and security on pull requests to the default branch rather than on every push, sets `concurrency: cancel-in-progress` and `runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}`; the report states the estimated minutes per run and per month against the 2 000-minute free tier.
+- [ ] jobs not multiplied per check · [ ] triggers scoped · [ ] runner switchable by a variable · [ ] minutes estimated in the report
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

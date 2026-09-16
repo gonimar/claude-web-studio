@@ -23,5 +23,12 @@ SID=$(jget .session_id); AID=$(jget .agent_id); TID=$(jget .tool_use_id)
 # Always log at the project root: the session cwd may be a subdirectory (cd backend && …).
 cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}" 2>/dev/null || exit 0
 mkdir -p production/session-logs 2>/dev/null
-echo "$(date '+%F %T') | $EV | $AG | sid=${SID:--} aid=${AID:--} tuid=${TID:--}" >> production/session-logs/agent-audit.log 2>/dev/null
+# A second Start for an agent whose Stop never came is a resumption, not a new agent: mark it so the
+# pairs stay countable and a session that silently re-spawned an agent is visible afterwards (WS-088).
+RESUME=""
+if [ "$EV" = SubagentStart ] && [ -n "${AID:-}" ] && [ -f production/session-logs/agent-audit.log ]; then
+  LAST=$(grep -F "aid=$AID" production/session-logs/agent-audit.log 2>/dev/null | tail -1)
+  case "$LAST" in *SubagentStart*) RESUME=" resume=1";; esac
+fi
+echo "$(date '+%F %T') | $EV | $AG | sid=${SID:--} aid=${AID:--} tuid=${TID:--}$RESUME" >> production/session-logs/agent-audit.log 2>/dev/null
 exit 0

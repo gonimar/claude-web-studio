@@ -21,7 +21,7 @@ technical-preferences; what exists (`vitest.config`, `playwright.config`, `phpun
 A table of tools per level and language; the `test` environment (compose profile/testcontainers); contract tests per API style (GraphQL: codegen check + N+1 test; REST: schema validation); security/a11y/perf stages; thresholds; flaky rules.
 
 ## Phase 3: Configs (`--apply` or with consent)
-`test-engineer` via Task: configs, a first smoke test per level, CI stages (`devops-engineer`). A run — output in the result.
+`test-engineer` via Task: configs, a first smoke test per level, CI stages (`devops-engineer`) **within the budget rules of `stack-reference/tooling-devops.md` § CI** — one job per toolchain, `paths:` filters, e2e and security on pull requests to the default branch, `concurrency: cancel-in-progress`, `runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}`. The report states the estimated minutes per run and per month at the project's current merge rate; on a private repository the free tier is 2 000 minutes a month and every job is rounded up to the minute, so a seven-job pipeline of forty-second jobs costs seven minutes per push. A run — output in the result.
 Everything the generated CI references must exist after this run: a compose profile or service named in a workflow (`docker compose --profile test …`) is created as a minimal `compose.yaml` fragment (profile + services with healthchecks) in the same run, or the skill stops with `BLOCKED (compose profile 'test' missing — story S-NNN adds it)` naming the story — never a CI that cannot pass. Self-check before finishing: `docker compose --profile test config` when docker is available, and every service named in `test-strategy.md` exists in compose.
 
 ## Phase 4: Write
