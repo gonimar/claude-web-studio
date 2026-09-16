@@ -25,7 +25,6 @@ Generate 3 positioning variants (narrow/medium/wide scope) with cost and risk; f
 Propose success metrics and "what must be true" for the idea to work (hypotheses to validate).
 
 ## Phase 3: Concept brief
-Draft `docs/specs/concept-brief.md`: essence, personas, pain, differentiation, MVP candidate, hypotheses and how to validate them
-(landing page/prototype/interviews), risks, next step. "May I write it?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+Draft `docs/specs/concept-brief.md` **from `docs/templates/concept-brief.md`** — the eight sections in the template's order (essence, personas, pain, differentiation, MVP candidate, hypotheses with a validation table, risks, next step). `/product-spec` Phase 1 reads this file as its input, so a brief that invents its own shape costs the next skill the facts it came for; a section with nothing behind it is written as `n/a — reason`, never dropped. "May I write it?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `COMPLETE`. Next step — one `AskUserQuestion`: `/setup-stack` (Recommended) · `/product-spec` or `/game-concept` directly · revise the brief.

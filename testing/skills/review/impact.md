@@ -43,5 +43,9 @@ Triage of a change proposal that arrives in the conversation rather than through
 **Fixture**: `production/backlog.md` holds `I-003`; the user runs `/impact` on that idea's text without `/backlog promote`. **Expected**: the verdict is written back into the `I-003` entry as one line (date, verdict, next command) under the write gate, so the idea is not proposed again at the next review.
 - [ ] the backlog entry is updated · [ ] same write gate, not a silent edit · [ ] the line names the verdict and the next command
 
+### A verdict that names a finding ID records it
+**Fixture**: `technical-director` returns `APPROVED WITH CONDITIONS` and cites `ARCH-004` for a deviation the change introduces. **Expected**: the row for `ARCH-004` is written into `production/findings.md` in the same turn under the write gate, with the severity and the story that will carry it; `/story-done` later checks that every ID named in the card exists there.
+- [ ] ID and row created together · [ ] same write gate · [ ] the DoD check catches an ID with no row
+
 ## Protocol
 - [ ] draft (the table) before any spawn · [ ] next step as `AskUserQuestion` · [ ] never advances the stage itself · [ ] artefacts over claims (evidence rows cite files)

@@ -41,5 +41,13 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: Phase 3 branches for S-030 on a `Type: site` project with a public article page. **Expected**: the story card gets `Started: <ISO minute>` when the branch is created; in Phase 4 `seo-specialist` reviews title/meta/canonical, structured data, sitemap and hreflang before the story closes; on an internal SPA no SEO review is spawned.
 - [ ] Started written · [ ] seo-specialist only for public pages
 
+### CI that only pull_request starts
+**Fixture**: `.github/workflows/ci.yml` has `on: pull_request` and no `push` trigger; the story branch is pushed at the end of Phase 6. **Expected**: the skill reads the triggers, opens a draft PR (`gh pr create --draft --fill`) so the checks start, and names the run it expects; it never waits for a run that was never queued.
+- [ ] triggers read, not assumed · [ ] draft PR opened when the PR is what starts CI · [ ] no wait on a non-existent run
+
+### A spike leaves no trace in the repository
+**Fixture**: the plan for a story includes a throwaway script to check a library's behaviour. **Expected**: Phase 3 names the spike's path under `tools/spike-<slug>/` (gitignored) or the session scratchpad, and says it is deleted in Phase 6; Phase 6 stages the story's own files by name — never `git add -A` — and reports any unplanned `??` entries in `git status --short` before committing.
+- [ ] spike path named and gitignored · [ ] no `git add -A` · [ ] untracked leftovers reported before the commit
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

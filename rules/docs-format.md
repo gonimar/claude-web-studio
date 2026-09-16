@@ -14,6 +14,7 @@ the hooks read these documents by structure, so a document that drifts from its 
 | `production/decisions.md` | `decisions.md` | `D-NN` entries with options, recommendation, needed-by; decided history |
 | `production/stories/**` | `story.md` | metadata line (feature, ADR, layer, size, status), Goal, Context, Tasks, Acceptance criteria **as a table** (criterion → test), Security and accessibility, Definition of Done |
 | `production/sprints/sprint-NN.md` | `sprint-plan.md` | Goal, Stories table, Dependency updates, Risks and blockers, QA plan, Actions from the last retrospective, Retrospective (filled by `/retrospective`) |
+| `docs/specs/concept-brief.md` | `concept-brief.md` | the eight sections (essence … next step); hypotheses as a table with a validation method per row; the next step names a command |
 | `docs/specs/product-spec.md` | `product-spec.md` | the ten numbered sections (essence … MVP acceptance criteria); NFR section names i18n, SEO and analytics explicitly (`n/a — reason` allowed) |
 | `docs/specs/features/F-NNN-*.md` | `feature-spec.md` | the twelve numbered sections; Acceptance criteria in Given/When/Then; Security section; UI section lists product events and copy keys |
 | `docs/architecture/adr-*.md` | `adr.md` | Status, Context, Options (≥ 2), Decision, Consequences, Verification |

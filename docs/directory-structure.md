@@ -28,6 +28,7 @@ are bound to file extensions, not directories.
 ├── game/                         # game client (three.js / Pixi) when the game is a separate package
 ├── packages/                     # shared monorepo packages (types, contracts, UI kit)
 ├── tests/ e2e/                   # integration and e2e tests
+├── tools/spike-<slug>/           # throwaway code answering one question (gitignored, deleted when the story closes)
 ├── docker/ Dockerfile* compose*  # containers
 └── .github/workflows/            # CI
 ```
