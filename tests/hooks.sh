@@ -107,5 +107,20 @@ git commit -q -m "chore: base" 2>/dev/null; git branch -q -f master 2>/dev/null;
 out=$(echo '{"tool_input":{"command":"git commit -m \"docs: on a fresh branch\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'already merged' && { failn=$((failn+1)); echo "FAIL commit: fresh branch reported as already merged"; } || pass=$((pass+1))
 git checkout -q -b docs/lane master; printf 'v\n' > .claude-version-test; mkdir -p .claude; printf '0.8.2' > .claude/.web-studio-version; git add .claude/.web-studio-version
 out=$(echo '{"tool_input":{"command":"git commit -m \"docs: sync docs\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: version marker breaks the docs lane"; } || pass=$((pass+1))
+# WS-085: the guards see a document written through Bash, not only through Write/Edit
+rm -f .claude/.write-consent
+out=$(printf '%s' '{"tool_input":{"command":"cat > production/roadmap.md <<EOF\n# Roadmap\nEOF"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: a heredoc write to a protected document is invisible"; }
+out=$(printf '%s' '{"tool_input":{"command":"python3 - <<PY\nimport io\nio.open(\"docs/architecture/adr-0002-x.md\",\"w\").write(\"x\")\nPY"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: a python heredoc write is invisible"; }
+mkdir -p .claude && touch .claude/.write-consent
+out=$(printf '%s' '{"tool_input":{"command":"cat > production/roadmap.md <<EOF\n# Roadmap\nEOF"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent-guard: warned on a Bash write despite a fresh marker"; } || pass=$((pass+1))
+rm -f .claude/.write-consent
+out=$(printf '%s' '{"tool_input":{"command":"go build ./... > /tmp/build.log 2>&1"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent-guard: warned on an ordinary command with a redirect"; } || pass=$((pass+1))
+rm -f .claude/.impact-verdict
+out=$(printf '%s' '{"tool_input":{"command":"cat > backend/internal/auth/session.go <<EOF\npackage auth\nEOF"}}' | bash "$H/impact-guard.sh" 2>&1); echo "$out" | grep -q 'IMPACT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL impact-guard: a heredoc write to a security surface is invisible"; }
+printf '%s' '{"tool_input":{"command":"cat > .env <<EOF\nTOKEN=x\nEOF"}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard blocks a heredoc write to .env" 2 $?
+printf '%s' '{"tool_input":{"command":"cat > config.yml <<EOF\ntoken: ghp_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nEOF"}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard blocks a token inside a heredoc body" 2 $?
+printf '%s' '{"tool_input":{"command":"echo ok > notes.txt"}}' | bash "$H/secret-guard.sh" >/dev/null 2>&1; expect "secret-guard allows an ordinary Bash write" 0 $?
+mkdir -p production && printf '# Roadmap\n' > production/roadmap.md
+out=$(printf '%s' '{"tool_input":{"command":"cat > production/roadmap.md <<EOF\n# Roadmap\nEOF"}}' | bash "$H/post-edit-check.sh" 2>&1); echo "$out" | grep -q 'DOCS-FORMAT' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit-check: a document written through Bash is not format-checked"; }
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]
