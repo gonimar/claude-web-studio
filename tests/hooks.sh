@@ -188,5 +188,12 @@ echo "$out" | grep -q 'STATE:' && { failn=$((failn+1)); echo "FAIL post-edit-che
 printf 'Task: x\nNext: y\n' > "$T/production/session-state/active.md"
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/production/session-state/active.md\"}}" | bash "$H/post-edit-check.sh" 2>&1)
 echo "$out" | grep -q 'STATE:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit-check: a state missing five fields passes"; }
+# WS-088: a second Start for an agent whose Stop never came is marked as a resumption
+echo '{"hook_event_name":"SubagentStart","agent_type":"go-engineer","agent_id":"aid-budget-1"}' | bash "$H/log-agent.sh"
+echo '{"hook_event_name":"SubagentStart","agent_type":"go-engineer","agent_id":"aid-budget-1"}' | bash "$H/log-agent.sh"
+if [ "$(grep -c 'resume=1' production/session-logs/agent-audit.log)" = 1 ]; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL log-agent: a repeated Start is not marked resume=1"; fi
+echo '{"hook_event_name":"SubagentStop","agent_type":"go-engineer","agent_id":"aid-budget-1"}' | bash "$H/log-agent.sh"
+echo '{"hook_event_name":"SubagentStart","agent_type":"go-engineer","agent_id":"aid-budget-1"}' | bash "$H/log-agent.sh"
+if [ "$(grep -c 'resume=1' production/session-logs/agent-audit.log)" = 1 ]; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL log-agent: a Start after a proper Stop marked as a resumption"; fi
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]

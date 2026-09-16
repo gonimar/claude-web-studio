@@ -26,5 +26,9 @@ Urgent fix with a failing test and an expedited gate.
 **Fixture**: postmortem note. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### Toolchain work is not a production incident
+**Fixture**: the CI runner has been red for two days over an action version; nothing is broken for users. **Expected**: `--chore` takes the chore/infra lane — `chore/<slug>` branch, `ci(…)`/`chore(…)` commits, a PR with `/code-review --diff` routed to `devops-engineer`, no release machinery — and the outcome is recorded as a finding or a backlog entry; the experimental commits are squashed before the merge.
+- [ ] chore path distinguished from a production incident · [ ] PR and review, not a direct push · [ ] outcome recorded · [ ] no release steps
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

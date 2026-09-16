@@ -9,6 +9,8 @@ model: sonnet
 
 # Hotfix
 
+**Two kinds of urgent, one skill.** `production` (the default): something is broken for users — reproduce with a failing test, minimal fix on a hotfix branch from the release tag, expedited security gate, release. `--chore`: the toolchain is broken or in the way — a red runner, a linter that blocks every commit, a dependency that must move now. The chore path skips the release machinery and follows the chore/infra lane of `git-workflow.md`: branch `chore/<slug>`, commits `ci(…)`/`chore(…)`, a PR with `/code-review --diff` (workflow files → `devops-engineer`), and the outcome recorded as a finding or a backlog entry. Neither path is a place for a feature: work that changes what the product does is a story, however small it looks at the moment it is asked for.
+
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).

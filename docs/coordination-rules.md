@@ -38,6 +38,7 @@ generic agent — `general-purpose`, `claude`, an explore agent, anything with a
 roster name — is not a substitute for a reviewer or a specialist: it arrives without the project's rules,
 without the agent's own memory, and the audit log records no role for it. Wanting a stronger opinion changes
 the *model of the studio agent*, never the agent itself.
+**A subagent has a turn budget, and running out of it is normal.** A mid-sized story in a typed language costs a specialist more turns than the default limit allows, so a truncated result is an expected outcome, not a failure of the agent: the sign is a result that stops mid-sentence, or a log with a `SubagentStart` and no matching `SubagentStop`. The caller resumes that agent with its own id and the work it had left — never spawns a second one on the same task, which starts from an empty head and redoes what the first had already done. Work is handed out in pieces a budget can hold: one layer, one file cluster, one question per call, and the result carries what the caller cannot reconstruct — decisions, surprises, numbers — not a copy of the diff, which the caller reads with `git diff`.
 **A reviewer reads what it reviews**: a draft goes to the subagent as a path it can read plus a requirement to
 quote back a named part of it; pasting an abbreviated draft, or a placeholder, produces a verdict about
 nothing. A verdict that quotes nothing is returned once and then reported as unread, never counted.
