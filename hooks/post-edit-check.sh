@@ -45,6 +45,10 @@ case "$FILE" in
   */docs/specs/features/*.md|docs/specs/features/*.md) docfmt 10 "the twelve numbered sections, Acceptance criteria as Given/When/Then";;
   */production/stories/*.md|production/stories/*.md) docfmt 5 "Goal, Context, Tasks, Acceptance criteria (table), Security and accessibility, Definition of Done";;
   */production/sprints/sprint-*.md|production/sprints/sprint-*.md) docfmt 5 "Goal, Stories, Dependency updates, Risks, QA plan, Actions, Retrospective";;
+  */production/session-state/active.md|production/session-state/active.md)
+    for fld in Task Branch Next Gate Blocked Files Notes; do
+      grep -qE "^$fld:" "$FILE" || OUT="STATE: $FILE has no '$fld:' line — write it with hooks/session-state.sh, which keeps every field (a hand-built one-liner drops the ones it does not name)"
+    done ;;
 esac
 [ -n "$OUT" ] && { warn PostToolUse "$OUT"; exit 0; }
 [ "$DOCS_ONLY" = 1 ] && exit 0   # a Bash write names no single file to format — documents only

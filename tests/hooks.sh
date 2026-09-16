@@ -170,5 +170,23 @@ printf '# Technical Preferences\n\n<!-- While [TO BE CONFIGURED] remains, skills
 out=$(echo '{"hook_event_name":"SessionStart","source":"startup"}' | bash "$H/session-start.sh" 2>&1)
 echo "$out" | grep -q 'Stack not configured' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-start: an unconfigured stack is not reported"; }
 rm -rf .claude/docs
+# WS-095: the session-state writer keeps every field, dates notes and archives the overflow
+S="$H/session-state.sh"
+CLAUDE_PROJECT_DIR="$T" bash "$S" set Task "S-012 repo layer" Branch feat/S-012 Next "/code-review" >/dev/null
+if grep -q "^Task: S-012 repo layer" "$T/production/session-state/active.md" && grep -q "^Branch: feat/S-012" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: fields written"; fi
+if grep -q "^Blocked: —" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: untouched fields kept as —"; fi
+CLAUDE_PROJECT_DIR="$T" bash "$S" note "impact: chi v5 approved" >/dev/null
+CLAUDE_PROJECT_DIR="$T" bash "$S" set Next "/story-done" >/dev/null
+if grep -q "impact: chi v5 approved" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: a set after a note keeps the note"; fi
+if grep -qE "^  - [0-9]{4}-[0-9]{2}-[0-9]{2} impact:" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: note is dated"; fi
+for i in 1 2 3 4 5 6 7 8 9 10 11; do CLAUDE_PROJECT_DIR="$T" bash "$S" note "note $i" >/dev/null; done
+if [ "$(grep -c "^  - " "$T/production/session-state/active.md")" = 10 ]; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: notes capped at ten"; fi
+if grep -rq "impact: chi v5 approved" "$T/production/session-state/archive/"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: overflow archived, not lost"; fi
+CLAUDE_PROJECT_DIR="$T" bash "$S" set Nonsense x >/dev/null 2>&1; expect "session-state: unknown field refused" 2 $?
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/production/session-state/active.md\"}}" | bash "$H/post-edit-check.sh" 2>&1)
+echo "$out" | grep -q 'STATE:' && { failn=$((failn+1)); echo "FAIL post-edit-check: complete state reported as missing a field"; } || pass=$((pass+1))
+printf 'Task: x\nNext: y\n' > "$T/production/session-state/active.md"
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/production/session-state/active.md\"}}" | bash "$H/post-edit-check.sh" 2>&1)
+echo "$out" | grep -q 'STATE:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit-check: a state missing five fields passes"; }
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]
