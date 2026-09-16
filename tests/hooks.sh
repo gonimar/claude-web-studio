@@ -221,10 +221,14 @@ mkdir -p "$T/production/session-logs"
   echo "2026-09-10 12:00:00 | SubagentStart | general-purpose | sid=s1 aid=a3 tuid=-"
   echo "2026-09-10 12:10:00 | SubagentStart | vue-engineer | sid=s1 aid=a4 tuid=-"
 } > "$T/production/session-logs/agent-audit.log"
+# an older line has no id field at all: `date | event | agent`
+echo "2026-09-09 09:00:00 | SubagentStart | web-studio:vue-engineer" >> "$T/production/session-logs/agent-audit.log"
 out=$(CLAUDE_PROJECT_DIR="$T" bash "$A" --since 2026-01-01 2>&1)
-echo "$out" | grep -q "4 runs all-time" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: wrong total"; }
+echo "$out" | grep -q "5 runs all-time" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: id-less lines not counted"; }
+echo "$out" | grep -q "5 start(s) vs 2 stop(s) — 3 more starts than stops" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: the gap is not reported as starts vs stops"; }
+echo "$out" | grep -q "the log cannot tell you which" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: the gap is asserted as a cause"; }
 echo "$out" | grep -q "go-engineer 2" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: prefixed and bare names not merged"; }
-echo "$out" | grep -q "2 start(s) without a stop" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: unpaired starts not counted"; }
+echo "$out" | grep -q "never closed" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: agents identified by id not reported"; }
 echo "$out" | grep -q "1 run(s) of non-studio agents" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: non-studio agents not flagged"; }
 rm -f "$T/production/session-logs/agent-audit.log"
 out=$(CLAUDE_PROJECT_DIR="$T" bash "$A" 2>&1); echo "$out" | grep -q "no production" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: no graceful message without a log"; }

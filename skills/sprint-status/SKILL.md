@@ -27,11 +27,11 @@ In progress now: S-NNN (branch, last commit, tests: ✅/❌)
 Dependency PRs: N open (green N · red N · majors N · oldest YYYY-MM-DD)
 Agents: N runs all-time · M this sprint
   go-engineer N · vue-engineer N · appsec-engineer N · … (top five, plugin and copy-mode names merged)
-  K start(s) without a stop — cut off at the turn limit, or still running
+  N start(s) vs M stop(s) — K more starts than stops; of the A agents the log identifies by id, U were never closed
   ! F run(s) of non-studio agents — routing went around the roster
 ```
 A dependency PR older than the sprint start, or any red one, is a line under *Risk to the goal* with `/sprint-plan` (its Phase 2) as the fix; without `gh` the line says `Dependency PRs: n/a (no gh)`.
-The last two agent lines are the ones to read. A start with no stop is an agent cut off at its turn limit: the work it was given either came back half-done or was finished by the parent, and neither shows anywhere else — four stories in a row were written by the parent this way before anyone looked at the log. A run of a non-studio agent (`general-purpose`, `Explore`) is routing that went around the roster: the specialist's rules, stack reference and memory were not in the room. Both belong under *Risk to the goal* when they are not zero, with the count.
+The last two agent lines are the ones to read, and they are read differently. The **non-studio count** is a fact: the name is in the line, and routing went around the roster — the specialist's rules, stack reference and memory were not in the room. The **gap between starts and stops** is a question, not a finding: it can mean agents cut off at their turn limit (then the work came back half-done or was finished by the parent — four stories in a row went that way on one project), or stop events that never reached the log. On a real project the gap is 123 of 288 while only 5 of the 66 agents the log identifies by id are unclosed, so the two readings are not interchangeable: check the story results before believing either. Never report the gap as "N agents were cut off". A run of a non-studio agent (`general-purpose`, `Explore`) is routing that went around the roster: the specialist's rules, stack reference and memory were not in the room. Both belong under *Risk to the goal* when they are not zero, with the count.
 Discrepancies "Done without a test/PR" on a separate line. `Open BLOCKING findings: N (production/findings.md)` — with the story or "no story" per finding.
 
 Verdict: `ON TRACK` | `AT RISK` | `OFF TRACK`. Next step — one `AskUserQuestion`: `/dev-story <next story>` (Recommended) · `/help` · nothing now.
