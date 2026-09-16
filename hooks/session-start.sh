@@ -61,11 +61,18 @@ if [ -f "$IDX" ]; then
 fi
 [ -f .claude/.web-studio-version ] && line "Web Studio v$(cat .claude/.web-studio-version)"
 STATE=production/session-state/active.md
+STATE_NOTES=5   # notes shown after compaction; the rest stays in the file
 SUM2="Stage ${STAGE:-not set}"
 if [ -f "$STATE" ]; then
   line ""
   if [ "$SOURCE" = compact ]; then
-    line "=== ACTIVE SESSION STATE after compaction ($STATE, whole file) ==="; line "$(cat "$STATE")"
+    # After compaction the state is the recovery anchor, but it is not a document: print the fields that
+    # decide what happens next and bound the rest, so a Notes block that grew all session does not push
+    # the rest of the context out (WS-094).
+    line "=== ACTIVE SESSION STATE after compaction ($STATE) ==="
+    line "$(grep -E "^(Task|Branch|Next|Gate|Blocked|Files):" "$STATE")"
+    line "$(grep -A"$STATE_NOTES" "^Notes:" "$STATE" | head -n $((STATE_NOTES + 1)))"
+    [ "$(grep -c . "$STATE")" -gt $((STATE_NOTES + 8)) ] && line "(state truncated: the full file is $STATE, its older notes are in production/session-state/archive/)"
     line "=== Modified files ==="; line "$(git status --porcelain 2>/dev/null | sed 's/^/  /')"
     line "=== context was compacted: read $STATE and the files above before continuing ==="
   else

@@ -20,6 +20,7 @@ the hooks read these documents by structure, so a document that drifts from its 
 | `docs/architecture/adr-*.md` | `adr.md` | Status, Context, Options (≥ 2), Decision, Consequences, Verification |
 | `docs/architecture/threat-model.md` | `threat-model.md` | Assets, boundaries, Attack surfaces table (including data export/deletion when PII exists), STRIDE table, Verification |
 | `docs/architecture/data-model.md` | `data-model.md` | Entities, Tables, Key queries, Invariants, Migrations, Personal data (classification, **retention and deletion**), Backups and restore |
+| `docs/ops/measurements/*.md` | — | the command, the environment, the raw output, the number; linked from the document that quotes it |
 | `docs/architecture/test-strategy.md` | `test-strategy.md` | levels with tools, coverage thresholds, CI stages |
 | `production/releases/vX.Y.Z.md` | `release-checklist.md` | Gates (each with evidence), Deploy, Rollback, Post-release |
 
