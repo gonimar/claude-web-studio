@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.10.6 — 2026-09-17
 - The agent summary counts agents, not events. 0.10.5 paired starts and stops by `aid` and printed "K starts without a stop"; a project session recounted by name, got 126 where the tool said 5, and reported it. Both numbers were answering different questions and one of them is not a question worth asking: `SubagentStart` fires on every resume of the same agent — one `aid` in a real log carries eight starts and no stop — so starts minus stops counts resumes, not losses. What the log does support is the agent: an `aid` started and never closed (five on that project, seven on another) means an agent cut off at its turn limit or still running, and the story it was given is where to look. The summary now says that, and says when it cannot: lines written before the id fields existed are named as unpairable, so a silent zero no longer reads as "clean" when it means "blind" — 139 of that project's runs are in that state. (WS-117)
 
 ## 0.10.5 — 2026-09-17
