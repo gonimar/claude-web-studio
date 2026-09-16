@@ -22,7 +22,7 @@ TARGET="$(cd "$TARGET" && pwd)"
 VERSION="$(python3 -c "import json;print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])" 2>/dev/null || grep -oE '"version": *"[^"]+"' "$ROOT/.claude-plugin/plugin.json" | head -1 | sed 's/.*"\([^"]*\)"$/\1/')"
 STAMP="$TARGET/.claude/.web-studio-version"
 [ -d "$TARGET/.git" ] || { echo "ERROR: $TARGET is not a git repository"; exit 1; }
-MODE="install"; [ -f "$STAMP" ] && MODE="update ($(cat "$STAMP") -> $VERSION)"
+MODE="install"; [ -f "$STAMP" ] && [ $SEED_ONLY = 0 ] && MODE="update ($(cat "$STAMP") -> $VERSION)"
 LABEL="copy mode"; [ $SEED_ONLY = 1 ] && LABEL="seed only: docs/ and rules/"
 echo "Web Studio v$VERSION ($LABEL): $MODE -> $TARGET"; [ $DRY = 1 ] && echo "(dry-run: nothing is written)"
 run() { [ $DRY = 1 ] && { echo "  + $*"; return; }; "$@"; }
@@ -55,8 +55,10 @@ else
   copy_tree "$ROOT/docs" "$TARGET/.claude/docs"
 fi
 if [ $SEED_ONLY = 1 ]; then
-  [ $DRY = 1 ] || printf '%s' "$VERSION" > "$STAMP"
-  echo; echo "Done (docs/ and rules/ seeded; agents, skills and hooks come from the plugin)."; exit 0
+  # No stamp here. --seed-only *is* plugin mode, where `claude plugin list --json` is the source of
+  # truth; a stamp would send the next /update down the copy-mode branch and, worse, would name a
+  # version whose agents and skills are not in the project at all (WS-109, WS-111).
+  echo; echo "Done (docs/ and rules/ seeded; agents, skills and hooks come from the plugin; no version stamp written)."; exit 0
 fi
 run cp "$ROOT/templates/statusline.sh" "$TARGET/.claude/statusline.sh"
 [ $DRY = 1 ] || chmod +x "$TARGET/.claude/hooks/"*.sh "$TARGET/.claude/statusline.sh" 2>/dev/null || true
