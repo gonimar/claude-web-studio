@@ -210,5 +210,23 @@ if grep -q "^Task: rich markdown" "$T/production/session-state/active.md" && gre
 if ls "$T/production/session-state/archive"/*premigration.md >/dev/null 2>&1 && grep -q "Sprint 03 status" "$T/production/session-state/archive"/*premigration.md; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state migrate: the previous file was not archived whole"; fi
 CLAUDE_PROJECT_DIR="$T" bash "$S" note "after migration" >/dev/null
 if grep -q "after migration" "$T/production/session-state/active.md"; then pass=$((pass+1)); else failn=$((failn+1)); echo "FAIL session-state: writer still refuses after a migration"; fi
+# agent-stats: the numbers come from the log, prefixed and bare names are one agent
+A="$H/agent-stats.sh"
+mkdir -p "$T/production/session-logs"
+{
+  echo "2026-09-10 10:00:00 | SubagentStart | go-engineer | sid=s1 aid=a1 tuid=-"
+  echo "2026-09-10 10:05:00 | SubagentStop | go-engineer | sid=s1 aid=a1 tuid=-"
+  echo "2026-09-10 11:00:00 | SubagentStart | web-studio:go-engineer | sid=s1 aid=a2 tuid=-"
+  echo "2026-09-10 11:30:00 | SubagentStop | web-studio:go-engineer | sid=s1 aid=a2 tuid=-"
+  echo "2026-09-10 12:00:00 | SubagentStart | general-purpose | sid=s1 aid=a3 tuid=-"
+  echo "2026-09-10 12:10:00 | SubagentStart | vue-engineer | sid=s1 aid=a4 tuid=-"
+} > "$T/production/session-logs/agent-audit.log"
+out=$(CLAUDE_PROJECT_DIR="$T" bash "$A" --since 2026-01-01 2>&1)
+echo "$out" | grep -q "4 runs all-time" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: wrong total"; }
+echo "$out" | grep -q "go-engineer 2" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: prefixed and bare names not merged"; }
+echo "$out" | grep -q "2 start(s) without a stop" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: unpaired starts not counted"; }
+echo "$out" | grep -q "1 run(s) of non-studio agents" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: non-studio agents not flagged"; }
+rm -f "$T/production/session-logs/agent-audit.log"
+out=$(CLAUDE_PROJECT_DIR="$T" bash "$A" 2>&1); echo "$out" | grep -q "no production" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: no graceful message without a log"; }
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]
