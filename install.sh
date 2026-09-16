@@ -5,6 +5,8 @@
 #   ./install.sh /path/to/project --with-testing  also copy the agent testing framework
 #   ./install.sh /path/to/project --dry-run       show what would happen
 #   ./install.sh --new /path/to/new-project       create a new project from the template (git init + install)
+#   ./install.sh /path/to/project --seed-only     seed docs/ and rules/ only — what plugin mode needs after
+#                                                 `claude plugin update` (agents/skills/hooks come from the plugin)
 #
 # Copies ONLY managed files: agents, skills, hooks, rules, docs (stack-reference, templates,
 # roster…), statusline, settings.json (only when absent). Project data — docs/specs,
@@ -13,29 +15,48 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 if [ "${1:-}" = "--new" ]; then NEW="${2:?Usage: ./install.sh --new /path/to/new-project}"; mkdir -p "$NEW"; [ -d "$NEW/.git" ] || git -C "$NEW" init -q; [ -f "$NEW/.gitignore" ] || printf "node_modules/\nvendor/\n.env\n.env.*\n!.env.example\n" > "$NEW/.gitignore"; set -- "$NEW" "${@:3}"; fi
-TARGET="${1:?Usage: ./install.sh /path/to/project [--dry-run] [--with-testing] | --new /path}"
-DRY=0; WITH_TESTING=0
-for a in "${@:2}"; do case "$a" in --dry-run) DRY=1;; --with-testing) WITH_TESTING=1;; esac; done
+TARGET="${1:?Usage: ./install.sh /path/to/project [--dry-run] [--with-testing] [--seed-only] | --new /path}"
+DRY=0; WITH_TESTING=0; SEED_ONLY=0
+for a in "${@:2}"; do case "$a" in --dry-run) DRY=1;; --with-testing) WITH_TESTING=1;; --seed-only) SEED_ONLY=1;; esac; done
 TARGET="$(cd "$TARGET" && pwd)"
 VERSION="$(python3 -c "import json;print(json.load(open('$ROOT/.claude-plugin/plugin.json'))['version'])" 2>/dev/null || grep -oE '"version": *"[^"]+"' "$ROOT/.claude-plugin/plugin.json" | head -1 | sed 's/.*"\([^"]*\)"$/\1/')"
 STAMP="$TARGET/.claude/.web-studio-version"
 [ -d "$TARGET/.git" ] || { echo "ERROR: $TARGET is not a git repository"; exit 1; }
 MODE="install"; [ -f "$STAMP" ] && MODE="update ($(cat "$STAMP") -> $VERSION)"
-echo "Web Studio v$VERSION (copy mode): $MODE -> $TARGET"; [ $DRY = 1 ] && echo "(dry-run: nothing is written)"
+LABEL="copy mode"; [ $SEED_ONLY = 1 ] && LABEL="seed only: docs/ and rules/"
+echo "Web Studio v$VERSION ($LABEL): $MODE -> $TARGET"; [ $DRY = 1 ] && echo "(dry-run: nothing is written)"
 run() { [ $DRY = 1 ] && { echo "  + $*"; return; }; "$@"; }
 copy_tree() { # src dst [exclude]
   if [ $DRY = 1 ]; then echo "  + copy $1 -> $2 ${3:+(excluding $3)}"; return; fi
   mkdir -p "$2"
-  if command -v rsync >/dev/null 2>&1; then rsync -a ${3:+--exclude "$3"} "$1/" "$2/"; else cp -r "$1/." "$2/"; [ -n "${3:-}" ] && echo "  ! rsync missing — $3 may have been overwritten, check git diff"; fi
+  if [ "${WS_NO_RSYNC:-0}" != 1 ] && command -v rsync >/dev/null 2>&1; then rsync -a ${3:+--exclude "$3"} "$1/" "$2/"; return; fi
+  # No rsync: keep the excluded file byte for byte instead of warning that it may be gone.
+  if [ -n "${3:-}" ] && [ -f "$2/$3" ]; then
+    keep="$(mktemp)"; cp "$2/$3" "$keep"; cp -r "$1/." "$2/"; cp "$keep" "$2/$3"; rm -f "$keep"
+  else cp -r "$1/." "$2/"; fi
 }
-copy_tree "$ROOT/agents" "$TARGET/.claude/agents"
-copy_tree "$ROOT/skills" "$TARGET/.claude/skills"
-copy_tree "$ROOT/hooks"  "$TARGET/.claude/hooks" "hooks.json"
+# A technical-preferences.md counts as configured when its Type field is filled — the same predicate
+# docs/workflow-catalog.yaml uses. A whole-file grep for the placeholder never sees a configured file:
+# the template's own header comment says "While [TO BE CONFIGURED] remains…" and projects keep that line.
+configured_prefs() { # file
+  [ -f "$1" ] && grep -qE '^[[:space:]]*-[[:space:]]*\*\*Type\*\*:' "$1" \
+    && ! grep -qE '^[[:space:]]*-[[:space:]]*\*\*Type\*\*:[[:space:]]*\[TO BE CONFIGURED\]' "$1"
+}
+if [ $SEED_ONLY = 0 ]; then
+  copy_tree "$ROOT/agents" "$TARGET/.claude/agents"
+  copy_tree "$ROOT/skills" "$TARGET/.claude/skills"
+  copy_tree "$ROOT/hooks"  "$TARGET/.claude/hooks" "hooks.json"
+fi
 copy_tree "$ROOT/rules"  "$TARGET/.claude/rules"
-if [ -f "$TARGET/.claude/docs/technical-preferences.md" ] && ! grep -q 'TO BE CONFIGURED' "$TARGET/.claude/docs/technical-preferences.md"; then
+if configured_prefs "$TARGET/.claude/docs/technical-preferences.md"; then
   copy_tree "$ROOT/docs" "$TARGET/.claude/docs" "technical-preferences.md"
+  echo "  technical-preferences.md: kept (configured)"
 else
   copy_tree "$ROOT/docs" "$TARGET/.claude/docs"
+fi
+if [ $SEED_ONLY = 1 ]; then
+  [ $DRY = 1 ] || printf '%s' "$VERSION" > "$STAMP"
+  echo; echo "Done (docs/ and rules/ seeded; agents, skills and hooks come from the plugin)."; exit 0
 fi
 run cp "$ROOT/templates/statusline.sh" "$TARGET/.claude/statusline.sh"
 [ $DRY = 1 ] || chmod +x "$TARGET/.claude/hooks/"*.sh "$TARGET/.claude/statusline.sh" 2>/dev/null || true

@@ -8,6 +8,7 @@ warn() {
 }
 # Only real `git push` command segments are inspected — heredoc bodies and other commands in the
 # same Bash call (e.g. `rm -f`, documentation text quoting `git push --force`) are ignored.
+. "$(dirname "$0")/docs-lane.sh"
 INPUT=$(cat)
 # --- json helper: jq -> python3 -> grep ---
 jget() {
@@ -37,5 +38,19 @@ PUSHES=$(printf '%s\n' "$STRIPPED" | grep -oE '(^|[;&|][[:space:]]*)git[[:space:
 echo "$PUSHES" | grep -qE -- '(--delete|[[:space:]]-d)([[:space:]]|$)|[[:space:]]:[A-Za-z0-9_./-]+([[:space:]]|$)' && { echo "BLOCKED: deleting a remote branch is not allowed by studio rules (a blocked force-push is not routed around by delete-and-repush — start a new branch name or ask the user)." >&2; exit 2; }
 echo "$PUSHES" | grep -qE -- '(--force|--force-with-lease)([[:space:]=]|$)|[[:space:]]-f([[:space:]]|$)' && { echo "BLOCKED: force-push is not allowed by studio rules." >&2; exit 2; }
 BR=$(git symbolic-ref -q --short HEAD 2>/dev/null || git rev-parse --abbrev-ref HEAD 2>/dev/null)
-case "$BR" in main|master|production|release) warn PreToolUse "WARNING: pushing directly to '$BR'. Studio rule: open a PR from a feature branch (.claude/docs/git-workflow.md).";; esac
+# Pipeline documents have their own lane and live on the default branch by design
+# (git-workflow.md § Documents) — validate-commit lets those commits through, so the push that
+# carries them must not cry wolf either (WS-103). Anything else on the default branch still warns,
+# and so does a push whose range cannot be established.
+DOCS_LANE=0
+if git show-ref -q --verify "refs/remotes/origin/$BR" 2>/dev/null; then
+  COMMITS=$(git rev-list "origin/$BR..HEAD" 2>/dev/null)
+  if [ -n "$COMMITS" ]; then
+    DOCS_LANE=1
+    for c in $COMMITS; do docs_lane_commit "$c" || { DOCS_LANE=0; break; }; done
+  fi
+fi
+case "$BR" in main|master|production|release)
+  [ "$DOCS_LANE" = 1 ] || warn PreToolUse "WARNING: pushing directly to '$BR'. Studio rule: open a PR from a feature branch (.claude/docs/git-workflow.md).";;
+esac
 exit 0
