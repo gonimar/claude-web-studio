@@ -37,5 +37,9 @@ ADR with ≥2 options, consequences, verification; retrofit.
 **Fixture**: a 200-line ADR draft; review mode `full`. **Expected**: the draft is written to a session file and each reviewer receives its path plus the requirement to quote the title and the two Decision lines; a verdict without the quote is returned once and then reported as unread. Every `subagent_type` is a studio agent — a request for "one more opinion" routes to a roster reviewer, never to a generic agent or a model override.
 - [ ] draft reachable by the reviewer (path, not an abbreviation) · [ ] quote required as evidence of reading · [ ] no non-roster subagent_type · [ ] reviewers named as the audit log records them
 
+### The answer is "no ADR, change the code"
+**Fixture**: the discussion of a draft ADR ends with the conclusion that no decision is needed — a two-line change to the production `Dockerfile` settles it. **Expected**: the rejection is recorded in `production/decisions.md` (or the draft becomes `Rejected`) with the reason and date; the code change is handed to `/impact`, `/hotfix` or a story, never made from this session; the verdict names `REJECTED`.
+- [ ] rejection recorded, not dropped · [ ] no production file edited here · [ ] hand-off named in the closing question
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

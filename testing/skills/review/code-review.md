@@ -29,5 +29,9 @@ Review with routing by file type and security for sensitive paths.
 **Fixture**: BLOCKING fixed after "yes" on `feat/S-004-…`. **Expected**: checks re-run, then a `fix(S-004): apply /code-review findings` commit and push after consent; the review never commits by itself.
 - [ ] checks re-run before the commit · [ ] commit scope is the story ID · [ ] no commit without fixes
 
+### The diff decides the reviewers, and the report shows them
+**Fixture**: a diff touching `*.go`, `Makefile`, `*_test.go` and a migration. **Expected**: Phase 2 prints the routing table (path → required reviewer → spawned yes/no) before the reviewers run, at least the Go, DevOps, test and database roles appear or are explicitly skipped with a reason, and Phase 5 repeats that table with each reviewer's verdict.
+- [ ] routing table before the run · [ ] every required role spawned or skipped with a reason · [ ] reviewers and verdicts in the report
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

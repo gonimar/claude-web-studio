@@ -20,6 +20,7 @@ Argument: paths or `--diff` (`git diff --name-only <default-branch>...HEAD` (`ma
 By extension/path: `*.go` → `go-engineer` (+ `backend-lead`); `*.php` → `php-engineer`; `*.graphql`/resolvers → `graphql-engineer`; Angular → `angular-engineer`; `*.vue` → `vue-engineer`; `*.css/scss` → `css-engineer`; `game/`, three.js → `threejs-engineer`/`web-game-engineer`; migrations/SQL → `database-engineer`; workflows/Docker → `devops-engineer`; tests → `test-engineer`.
 Sensitive paths (`auth`, `security`, `payments`, `upload`, `webhook`, proxy configs) or `--security` → `appsec-engineer` is mandatory.
 Give each the files, ADRs and rules; ask for findings as `severity | file:line | what | risk | fix`.
+**Routing is printed, not implied**: before the reviewers run, a table — extension or path in the diff → the reviewer this list requires → spawned yes/no. A required reviewer may be skipped, but only as a line saying so and why; chosen "by eye", routing quietly shrinks to one reviewer on a diff that touches three layers.
 
 ## Phase 3: Automated checks (Bash, when tools exist)
 `go vet`/`staticcheck`/`govulncheck`; `vendor/bin/psalm`/`php -l`; `eslint`/`tsc --noEmit`/`vue-tsc`; `graphql-inspector diff`; tests of affected packages. Output goes into the report.
@@ -29,6 +30,6 @@ Go layout (`go.md` "Project layout", whenever the diff touches `cmd/` or the pro
 Deviation from an accepted ADR: ARCHITECTURAL VIOLATION (BLOCKING) / DRIFT (WARNING) / MINOR (INFO).
 
 ## Phase 5: Report and fix commit
-BLOCKING/WARNING/INFO summary, findings table, verdict `APPROVED` / `NEEDS CHANGES`. Then one `AskUserQuestion`: fix BLOCKING now (Recommended on NEEDS CHANGES) · fix BLOCKING and WARNING · report only — edits only after that answer (through the relevant specialist). After fixes: re-run Phase 3 checks, then with consent `git commit -m "fix(S-NNN): apply /code-review findings"` and `git push` on the story branch (`.claude/docs/git-workflow.md`, step "Review"). The review itself never commits or changes the branch.
+BLOCKING/WARNING/INFO summary, the routing table from Phase 2 with each reviewer's verdict next to it (a review whose reviewers are invisible cannot be audited later — `production/session-logs/agent-audit.log` names who actually ran), findings table, verdict `APPROVED` / `NEEDS CHANGES`. Then one `AskUserQuestion`: fix BLOCKING now (Recommended on NEEDS CHANGES) · fix BLOCKING and WARNING · report only — edits only after that answer (through the relevant specialist). After fixes: re-run Phase 3 checks, then with consent `git commit -m "fix(S-NNN): apply /code-review findings"` and `git push` on the story branch (`.claude/docs/git-workflow.md`, step "Review"). The review itself never commits or changes the branch.
 
 Next step — one `AskUserQuestion`, never a bare "run /story-done?": `/story-done` (Recommended on APPROVED) · re-review after manual fixes · stop here.

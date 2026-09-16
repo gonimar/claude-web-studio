@@ -26,5 +26,9 @@ Idea exploration: audience, pain, comparables, framing, hypotheses; concept brie
 **Fixture**: no review. **Expected**: the user decides; stage/statuses never change automatically.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
+### The brief follows its template
+**Fixture**: a `/brainstorm` run that reaches Phase 3. **Expected**: `docs/specs/concept-brief.md` carries the template's eight sections in order, hypotheses as a table with a validation method per row, and a next step naming a command; an empty section is written as `n/a — reason` rather than omitted, so `/product-spec` Phase 1 finds what it reads.
+- [ ] template used · [ ] hypotheses table present · [ ] next step names a command · [ ] no section silently dropped
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -40,6 +40,7 @@ case "$FILE" in
   */docs/architecture/adr-*.md|docs/architecture/adr-*.md) docfmt 5 "Context, Options (≥ 2), Decision, Consequences, Verification";;
   */docs/architecture/threat-model.md|docs/architecture/threat-model.md) docfmt 5 "Assets, boundaries, Attack surfaces, Threats (STRIDE), Verification";;
   */docs/architecture/data-model.md|docs/architecture/data-model.md) docfmt 6 "Entities, Tables, Key queries, Invariants, Migrations, Personal data (retention and deletion), Backups";;
+  */docs/specs/concept-brief.md|docs/specs/concept-brief.md) docfmt 7 "the eight sections: essence, personas, pain, differentiation, MVP candidate, hypotheses, risks, next step";;
   */docs/specs/product-spec.md|docs/specs/product-spec.md) docfmt 9 "the ten numbered sections";;
   */docs/specs/features/*.md|docs/specs/features/*.md) docfmt 10 "the twelve numbered sections, Acceptance criteria as Given/When/Then";;
   */production/stories/*.md|production/stories/*.md) docfmt 5 "Goal, Context, Tasks, Acceptance criteria (table), Security and accessibility, Definition of Done";;
