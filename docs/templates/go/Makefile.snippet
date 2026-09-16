@@ -1,0 +1,37 @@
+# Web Studio — Makefile targets for a Go module (stack-reference/go.md). Merge into the project's
+# Makefile; `make ci` is what CI runs and what /story-done and /refactor read.
+BINARY ?= app
+
+.PHONY: fmt lint test coverage-gate layout-check arch-check ci
+
+fmt: ## gofmt + goimports through the linter's formatter
+	golangci-lint fmt ./...
+
+lint: ## staticcheck-class linters + depguard (layer rule) + gosec
+	go vet ./...
+	golangci-lint run ./...
+
+test: ## unit and integration tests with the race detector
+	go test -race -coverprofile=coverage.out ./...
+
+coverage-gate: ## per-layer thresholds (go_coverage_domain / go_coverage_usecase)
+	scripts/coverage-gate.sh domain=90 usecase=80
+
+layout-check: ## project-layout by numbers: cmd/<app>/ holds only main.go, <= 50 lines, no flags or output there
+	@extra="$$(find cmd/$(BINARY) -maxdepth 1 -name '*.go' ! -name '*_test.go' ! -name 'main.go')"; \
+	test -z "$$extra" || { echo "layout-check: cmd/$(BINARY)/ has non-test files besides main.go:"; echo "$$extra"; exit 1; }
+	@lines=$$(wc -l < cmd/$(BINARY)/main.go); \
+	test $$lines -le 50 || { echo "layout-check: cmd/$(BINARY)/main.go is $$lines lines, must stay <= 50"; exit 1; }
+	@hit="$$(grep -l 'flag\.\|Fprint' cmd/$(BINARY)/*.go 2>/dev/null || true)"; \
+	test -z "$$hit" || { echo "layout-check: cmd/$(BINARY)/ must not parse flags or format output directly:"; echo "$$hit"; exit 1; }
+	@echo "layout-check: OK"
+
+arch-check: ## layer rule by the dependency graph (the same rule depguard enforces per file)
+	@bad="$$(go list -deps ./internal/domain/... 2>/dev/null | grep -E "$$(go list -m)/internal/(usecase|infrastructure|app)" || true)"; \
+	test -z "$$bad" || { echo "arch-check: internal/domain depends on outer layers:"; echo "$$bad"; exit 1; }
+	@bad="$$(go list -deps ./internal/usecase/... 2>/dev/null | grep -E "$$(go list -m)/internal/(infrastructure|app)" || true)"; \
+	test -z "$$bad" || { echo "arch-check: internal/usecase depends on infrastructure or app:"; echo "$$bad"; exit 1; }
+	@echo "arch-check: OK"
+
+ci: lint test coverage-gate layout-check arch-check ## everything CI runs
+	govulncheck ./...

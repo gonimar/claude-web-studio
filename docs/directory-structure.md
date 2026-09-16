@@ -41,4 +41,8 @@ as adapted in `stack-reference/go.md` ("Project layout"): `cmd/<app>/main.go` (t
 `internal/app/<app>/` (sub-commands, flags, wiring), `internal/<domain>/`, optional `pkg/`, `api/`,
 `configs/`, `scripts/`, `build/`, `deployments/`, `test/`, `tools/`; never `src/`.
 A single-binary tool stays `main.go` + `go.mod`. The variant is recorded as `go_layout` in
-`technical-preferences.md`.
+`technical-preferences.md`; the inside of `internal/` follows `go_architecture` — `layered`
+(`internal/domain/`, `internal/usecase/`, `internal/infrastructure/`, dependencies inwards, `depguard`)
+or `modular` (`internal/<domain>/`) — see `stack-reference/go.md` "Architecture style". A Go module's
+GraphQL SDL lives at `api/schema.graphqls` (`api_contract_path`); `docs/architecture/api/` keeps the
+contract document that links to it.

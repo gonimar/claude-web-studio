@@ -1,0 +1,63 @@
+# golangci-lint v2 configuration — Web Studio template for a Go module (stack-reference/go.md).
+# Installed by /setup-stack or /test-setup as .golangci.yml in the Go root; MODULE_PATH is replaced
+# with the module path from go.mod. The depguard block is the layer rule of `go_architecture: layered`;
+# a `modular` project deletes it and keeps the rest.
+version: "2"
+run:
+  timeout: 3m
+linters:
+  default: standard
+  enable:
+    - bodyclose
+    - depguard
+    - errorlint
+    - gocritic
+    - gosec
+    - misspell
+    - unconvert
+    - unparam
+  settings:
+    depguard:
+      rules:
+        domain:
+          # The domain imports the standard library and the value libraries listed in
+          # technical-preferences `go_domain_allow` — never a driver, a framework, a transport, a logger.
+          files:
+            - "**/internal/domain/**"
+          allow:
+            - "$gostd"
+            - "MODULE_PATH/internal/domain"
+            # go_domain_allow — one line per package, e.g.:
+            # - "github.com/google/uuid"
+            # - "github.com/shopspring/decimal"
+          deny:
+            - pkg: "MODULE_PATH/internal/usecase"
+              desc: "domain must not depend on use cases"
+            - pkg: "MODULE_PATH/internal/infrastructure"
+              desc: "domain must not depend on infrastructure"
+            - pkg: "MODULE_PATH/internal/app"
+              desc: "domain must not depend on the composition root"
+        usecase:
+          files:
+            - "**/internal/usecase/**"
+          allow:
+            - "$gostd"
+            - "MODULE_PATH/internal/domain"
+            - "MODULE_PATH/internal/usecase"
+          deny:
+            - pkg: "MODULE_PATH/internal/infrastructure"
+              desc: "use cases talk to ports declared in the domain, not to adapters"
+            - pkg: "MODULE_PATH/internal/app"
+              desc: "use cases must not depend on the composition root"
+  exclusions:
+    generated: lax
+    presets:
+      - std-error-handling
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - MODULE_PATH

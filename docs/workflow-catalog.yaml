@@ -76,4 +76,5 @@ phases:
       - {id: incident, command: /incident, required: false, repeatable: true, description: "Incident response and postmortem"}
       - {id: hotfix, command: /hotfix, required: false, repeatable: true, description: "Urgent fix with an expedited gate"}
       - {id: tech-debt, command: /tech-debt, required: false, description: "Tech-debt inventory"}
+      - {id: refactor, command: /refactor, required: false, repeatable: true, artifact: {glob: "docs/ops/refactor-*.md"}, description: "Behaviour-preserving refactoring of the maintained code: dry-run plan by numbers, stories, apply from a story in refactor/S-NNN (Go)"}
       - {id: stack-update, command: /stack-update, required: false, description: "Refresh the stack reference and check upgrades"}

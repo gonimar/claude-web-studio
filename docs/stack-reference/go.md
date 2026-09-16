@@ -1,6 +1,6 @@
 ---
-updated: 2026-09-05
-sources: [https://go.dev/doc/go1.27, https://go.dev/doc/go1.26, https://go.dev/doc/effective_go, https://google.github.io/styleguide/go/, https://go.dev/doc/modules/layout, https://github.com/golang-standards/project-layout]
+updated: 2026-09-17
+sources: [https://go.dev/doc/go1.27, https://go.dev/doc/go1.26, https://go.dev/doc/effective_go, https://google.github.io/styleguide/go/, https://go.dev/doc/modules/layout, https://github.com/golang-standards/project-layout, https://golangci-lint.run/docs/linters/configuration/#depguard, https://gqlgen.com/config/, https://pkg.go.dev/testing/synctest]
 ---
 # Go 1.27 — versions, idioms, practices
 
@@ -18,27 +18,94 @@ Always `go mod tidy`, `go vet`, `govulncheck ./...`.
 ## Studio default set
 | Task | Choice | Why |
 |---|---|---|
-| HTTP router | `net/http` ServeMux (1.22+); `chi` v5 when middleware groups are needed | The standard library covers 90 %; chi is a thin idiomatic layer |
+| HTTP router | `chi` v5 (recommended) or `net/http` ServeMux (1.22+) — chosen in `/setup-stack`, recorded as `go_router` | chi is a thin idiomatic layer with middleware groups; the standard library covers a service without them. Request logging through `slog` (a middleware of the project's own or `httplog` on slog) — chi's `middleware.Logger` is plain text, not structured |
 | Database | `pgx` v5 (pool) + `sqlc` for type-safe queries | No ORM magic, SQL is the source of truth |
 | Migrations | `golang-migrate` or `goose` (SQL files) | Transparent, runs from CI |
 | Logging | `log/slog` JSON handler | Standard, structured |
 | Config | environment variables (`caarlos0/env` / `koanf`) | 12-factor |
 | Validation | manual at the boundary; `go-playground/validator` for many DTOs | |
 | WebSocket | `coder/websocket` (formerly nhooyr) or `gorilla/websocket` | context-aware, no leaks |
-| Tests | `testing` table-driven, `testify` optional, `testcontainers-go` for Postgres | |
-| Lint | `gofmt`, `go vet`, `staticcheck`, `golangci-lint` v2 | |
+| Tests | `testing` table-driven, `testify` optional, `testcontainers-go` for Postgres, `synctest` for time, `moq` for ports with more than three methods | See "Tests by layer" below |
+| Lint | `gofmt` + `goimports`, `go vet`, `staticcheck`, `golangci-lint` v2 (`version: "2"` config; a v1 `linters-settings:` file is rejected by v2) | Template `docs/templates/go/golangci.yml`; `depguard` enforces the layer rule when `go_architecture: layered` |
 | Docker | multi-stage, `CGO_ENABLED=0`, `distroless/static` or `scratch` | minimal image |
 
 ## Idioms
 - Errors: `fmt.Errorf("op: %w", err)`, `errors.Is/As`; exported sentinel errors; no panics in library code.
 - `context.Context` first argument for anything that waits or does I/O; timeouts on every external call.
-- Layout: see "Project layout" below — `cmd/<app>/main.go`, `internal/<domain>/…`; `pkg/` only for genuinely reusable code; no `utils`, no `src/`.
-- Interfaces are declared by the consumer, kept small (1–3 methods); accept interfaces, return structs.
+- Layout: see "Project layout" below — `cmd/<app>/main.go`, `internal/…`; `pkg/` only for genuinely reusable code; no `utils`, no `src/`. The inside of `internal/` follows the architecture style (`go_architecture`, next section).
+- Interfaces are declared by the consumer, kept small (1–3 methods); accept interfaces, return structs. Exception under `go_architecture: layered`: repository and gateway **ports** are declared in the domain package (see "Layered architecture"), because the domain is the one that states what it needs from the outside world.
 - Concurrency: `errgroup` for fan-out; the sender owns the channel; `sync.Once`, `atomic`; `-race` in CI.
 - HTTP server: `ReadHeaderTimeout`, `ReadTimeout`, `IdleTimeout`; graceful shutdown on signal; `http.MaxBytesReader` on bodies.
 - JSON: `encoding/json/v2` for new code (strict options, streaming); DTOs separate from domain structs.
 - Secrets only from the environment; never as command-line flag values.
 - Profiling: `net/http/pprof` on an internal port only; `go test -bench` + `benchstat`.
+
+## Architecture style (`go_architecture` in technical-preferences)
+Two styles; the choice is made once in `/setup-stack` (or recorded by `/adopt` from the tree) and changed only
+through `/refactor layout` with an ADR — never story by story.
+
+| Style | Inside `internal/` | When |
+|---|---|---|
+| `modular` | One package per domain, `internal/<domain>/` with handler → service → repository in it; shared code in `internal/platform/` | A single tool, a small service, a brownfield project adopted as it is |
+| `layered` | Three layers with a compiler-checked dependency direction: `internal/domain/` → `internal/usecase/` → `internal/infrastructure/` (DDD, ports & adapters) | A service with business rules, several entry points (GraphQL + REST + worker), a team that wants the rules in one place |
+
+`cmd/<app>/main.go` and `internal/app/<app>/` (the composition root) are the same in both styles — see "Project layout".
+
+## Layered architecture (`go_architecture: layered`)
+Dependencies point inwards only. Each layer imports the ones below it, never above; the domain imports
+nothing of the project and nothing outside the standard library (plus the value libraries listed in
+`go_domain_allow`, e.g. `github.com/google/uuid`, `github.com/shopspring/decimal` — never a driver, a
+framework, a transport or a logger).
+
+| Layer | Package | Contains | Never |
+|---|---|---|---|
+| Domain | `internal/domain/<ctx>/` | Entities and aggregates as **rich models** (unexported fields, a validating constructor `New…`, operations as methods that keep the invariants, exported sentinel errors `ErrX`), value objects, domain events, and the **ports**: `Repository`, gateway interfaces the use cases need | Importing `usecase`/`infrastructure`; frameworks; SQL; HTTP; `context` is allowed in port signatures |
+| Use cases | `internal/usecase/<ctx>/` (`go_layers: per-context`) or `internal/usecase/` (`flat-usecase`) | **One struct per scenario** with one method `Execute(ctx, Input) (Output, error)`; a constructor taking the ports; orchestration, transactions (through a `TxManager` port), calls into the domain, emitting events | Importing `infrastructure`; business rules (they belong to the entity); knowing SQL, HTTP or GraphQL types |
+| Infrastructure | `internal/infrastructure/postgres/`, `…/transport/graphql/`, `…/transport/http/`, `…/mail/`, … | Adapters implementing the ports (sqlc/pgx repositories, `Rehydrate`-style loading of entities), the gqlgen server and resolvers, chi/ServeMux handlers, clients; DTOs and mapping to/from the domain | Business rules; a resolver or handler that calls a repository directly instead of a use case |
+| Composition root | `internal/app/<app>/` | `Run`, config, the dependency graph (`newServices`), the HTTP server with timeouts and graceful shutdown, signal handling | Anything the four rows above own |
+| Entry | `cmd/<app>/main.go` | ≤ 50 lines: args/env → `Run` → exit code | Everything else (see "Project layout") |
+
+Directory shape is a recorded choice, not taste (`/setup-stack` asks; `/refactor layout` asks again on a brownfield
+project): `go_layers: per-context` (recommended — one use-case package per bounded context, so `subscription.Activate`
+reads and dependencies stay small) or `flat-usecase` (one `usecase` package, simpler while the service is small).
+`go_composition_root: internal/app` (the studio contract, checked by numbers) or `main` (the classic guide shape —
+the graph and the router assembled in `cmd/<app>/main.go`; the ≤ 50-line rule does not apply, `cmd/<app>` still holds one
+non-test file, and the choice is written into the layout ADR as an accepted deviation so the `LAYOUT` check reads it and stays silent).
+
+**Rich model, concretely.** A `Subscription` with `Balance` and `IsActive` as exported fields and an `Activate()` that checks them is
+half-way: any package can still set `IsActive = true`. The studio form: unexported fields, `NewSubscription(id, userID, balance)` validating
+its arguments and returning `(*Subscription, error)`, `Activate() error` returning `ErrZeroBalance`/`ErrAlreadyActive`, getters for reads,
+and a `Rehydrate(...)` constructor (or a `subscription.State` struct) for repositories loading persisted state without re-running the
+creation rules. Anemic struct + rules in the use case is a `RICH-MODEL` finding in `/code-review`.
+
+**GraphQL models** (`graphql_models` in technical-preferences, asked in `/setup-stack`): `dto` (recommended) — gqlgen generates its
+models into `internal/infrastructure/transport/graphql/model/`, resolvers map them to and from the domain; `bind` — `gqlgen.yml`
+`models:` binds schema types to domain types; with unexported fields the binding goes through getter methods, which gqlgen resolves
+by name. Either way: **a schema type must not be named `Query`, `Mutation` or `Subscription`** — gqlgen (per the spec) treats those as
+the root operation types, and an entity called `Subscription` is generated as a set of channel-returning subscription resolvers.
+The SDL lives where `api_contract_path` says (Go default `api/schema.graphqls`); `gqlgen.yml` points at that file, no copies.
+
+**The dependency rule is a linter rule, not a comment.** `docs/templates/go/golangci.yml` carries `depguard` with the three lists
+(`domain`, `usecase`, and the value-library allow-list from `go_domain_allow`); `golangci-lint run ./...` in `make ci` and in
+`/code-review` Phase 3. The same check by hand: `go list -deps ./internal/domain/... | grep '<module>/internal/'` must print only
+domain packages. Verified when the rule was written: a domain file importing `internal/infrastructure/postgres` fails with
+`import '…/internal/infrastructure/postgres' is not allowed from list 'domain'`.
+
+### Tests by layer (`go_architecture: layered`)
+| Layer | Level | Doubles | Gate |
+|---|---|---|---|
+| Domain | Unit, table-driven, no doubles at all (nothing to double) | none — a mock in a domain test is a finding | statement coverage ≥ `go_coverage_domain` (default 90 %), every sentinel error has a case |
+| Use cases | Unit, table-driven, ports replaced by doubles | hand-written func-field fakes (`GetByIDFunc func(...)`) for ports of ≤ 3 methods; `moq` (`go tool moq`, `tool` directive in `go.mod`) above that | statement coverage ≥ `go_coverage_usecase` (default 80 %); a test importing `pgx`, `testcontainers`, `net/http` or `os` file APIs is a finding |
+| Infrastructure | Integration against a real Postgres (testcontainers) or `httptest`; contract tests against the SDL | none | no threshold; every adapter has at least one round-trip test |
+| Composition root / CLI | `internal/app/<app>` tests: exit codes, flags, `--help` | none | as in "Project layout" |
+
+Rules that apply to every Go test, whatever the style: **`errors.Is`/`errors.As`** against the sentinel — never
+`err.Error() == "..."` (string comparison breaks on the first `%w` wrap and on a message edit); case names in English, as all
+identifiers; **no `time.Sleep`** to wait for anything — `testing/synctest` (Go 1.25+) for code that waits on time, a polling helper
+with a deadline (`require.Eventually` or a ten-line local one) for external systems; `go test -race ./...` after every change, a
+race or a deadlock means the change is invalid and goes back to the engineer, not into a retry loop. The gate script
+`docs/templates/go/coverage-gate.sh` (installed as `scripts/coverage-gate.sh`, called by `make ci`) fails the build below the
+thresholds and prints one line per layer — the number goes into the story result and the review.
 
 ## Project layout (golang-standards/project-layout, adapted)
 Source: [golang-standards/project-layout](https://github.com/golang-standards/project-layout) — a
@@ -55,9 +122,9 @@ directories "for later".
 |---|---|
 | `cmd/<app>/main.go` | One directory per binary, named after the executable (`cmd/api`, `cmd/worker`). **`main.go` is the only non-test file there**, ≤ 50 lines including the doc comment: read `os.Args`/`os.Environ`, call `internal/app/<app>.Run(ctx, args, env, stdout, stderr) int`, `os.Exit` with its code — the convention's own wording is "a small `main` function that imports and invokes the code from `/internal` and `/pkg` and nothing else". No `flag.*`, no sub-command bodies, no type or adapter declarations, no output formatting, no dependency construction. Tests: at most one smoke test (`--help`/`version`). |
 | `internal/app/<app>/` | The composition root of one binary (the convention's `/internal/app/myapp`): `Run`, sub-command dispatch (`serve`, `update`, `migrate`, …), flag parsing per sub-command, config → dependency graph → server wiring, adapters between internal packages, signal handling, CLI output. One constructor per shared dependency graph (`newServices(cfg, log, …)`) used by every sub-command that needs it — never the same struct literal in two sub-commands. Tests of the CLI contract (exit codes, stdout tokens, flag errors) live here, not in `package main`. |
-| `internal/` | All application code; privacy enforced by the compiler. Domains as `internal/<domain>/` (handler → service → repository/sqlc); private shared code (`config`, `db`, `logging`, `auth`) in `internal/platform/` (or `internal/pkg/`) once two or more domains use it. |
+| `internal/` | All application code; privacy enforced by the compiler. `modular`: domains as `internal/<domain>/` (handler → service → repository/sqlc); `layered`: `internal/domain/`, `internal/usecase/`, `internal/infrastructure/` (see "Layered architecture"). Private shared code (`config`, `logging`) in `internal/platform/` (or `internal/pkg/`) once two or more packages use it. |
 | `pkg/` | Only code deliberately importable by other modules (SDK, client library, shared protocol types). Empty by default; the convention notes it is contested in the community — it is not an "everything else" bucket. |
-| `api/` | Protobuf, JSON Schema, generated stubs that ship with the module. The contract source of truth stays `docs/architecture/api/` (GraphQL SDL / OpenAPI); embed or copy it in CI, never fork it. |
+| `api/` | The API contract of a Go module: the GraphQL SDL (`api/schema.graphqls`, the Go default of `api_contract_path` — `gqlgen.yml` reads it in place), OpenAPI, Protobuf, JSON Schema. One source of truth: `docs/architecture/api/` holds the contract document (`api-contract.md`, examples, persisted operations) and links to the file here; never two copies of the schema. |
 | `configs/` | Config templates and defaults (`config.example.yaml`, `.env.example`); never secrets. |
 | `scripts/` | Build, migrate, lint, release helpers called from `Makefile` / CI so the Makefile stays small. |
 | `build/` | Packaging: Dockerfiles and package specs in `build/package/`. CI stays in `.github/workflows/` (GitHub requires the path), so `build/ci/` is unused. |
@@ -94,4 +161,4 @@ Monorepo mapping: `backend/` is the Go root with `go.mod`; `cmd/`, `internal/` a
 - `govulncheck` in CI is mandatory.
 
 ## Go review checklist
-1. Contexts and timeouts on I/O; 2. errors wrapped and checked; 3. no global state beyond config; 4. goroutines have an owner and an exit; 5. table-driven tests, `-race` passes; 6. `go vet`/`staticcheck` clean; 7. structured logs without secrets.
+1. Contexts and timeouts on I/O; 2. errors wrapped and checked; 3. no global state beyond config; 4. goroutines have an owner and an exit; 5. table-driven tests, `-race` passes; 6. `go vet`/`staticcheck`/`golangci-lint` clean; 7. structured logs without secrets; 8. (`layered`) `depguard` clean, rules live in entities not in use cases or resolvers, ports in the domain, one struct per use case; 9. (`layered`) coverage gate green, domain tests without doubles, use-case tests without I/O; 10. tests: `errors.Is`, no `time.Sleep`, English case names.

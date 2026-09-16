@@ -15,10 +15,10 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Template `.claude/docs/templates/api-contract.md`; references `graphql.md`, `web-platform.md` (REST conventions), rules `api-contracts.md`.
 
 ## Phase 1: Scope and style
-Style from technical-preferences (GraphQL by default) or `--style`. Read the feature spec (sections 3–5), the current schema (`docs/architecture/api/schema.graphql` / `openapi.yaml`), the threat model (permissions).
+Style from technical-preferences (GraphQL by default) or `--style`. Read the feature spec (sections 3–5), the current schema at `api_contract_path` (`api/schema.graphqls` in a Go module, `docs/architecture/api/schema.graphql` / `openapi.yaml` otherwise — the field is set by `/setup-stack`; unset → ask once and record it), the threat model (permissions).
 
 ## Phase 2: Draft
-GraphQL: an SDL fragment — types, `Node`, connections, inputs (`@oneOf`), mutations with `…Payload { …, errors: [UserError!]! }`, subscriptions; field authorisation directives; limits (`first` ≤ 100). Then `graphql-inspector diff` against the current schema (Bash, if installed) — highlight breaking changes.
+GraphQL: an SDL fragment — types, `Node`, connections, inputs (`@oneOf`), mutations with `…Payload { …, errors: [UserError!]! }`, subscriptions; field authorisation directives; limits (`first` ≤ 100); no object type named `Query`, `Mutation` or `Subscription` other than the roots (an entity with that name is generated as a root by gqlgen — rename it or declare `schema { … }`). Then `graphql-inspector diff` against the current schema (Bash, if installed) — highlight breaking changes.
 REST: operations with `operationId`, schemas with limits, `Problem`, cursor pagination, `Idempotency-Key`; `spectral lint`.
 WS/games: message types `type/v/seq`, limits, auth at handshake.
 Example operations + persisted documents.
@@ -28,6 +28,6 @@ Example operations + persisted documents.
 Show the table operations → permissions → errors; ask about contentious points (nullability, naming, permissions). When changing an existing contract — `frontend-lead`/`game-lead` via Task to confirm compatibility.
 
 ## Phase 4: Write
-"May I write `docs/architecture/api/…` and update the api-contract document?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose the codegen task (`graphql-codegen`/`gqlgen generate`/`openapi-typescript`) as part of the first story. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+"May I write the schema at `api_contract_path` and update `docs/architecture/api/api-contract.md` (which links to it)?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose the codegen task (`graphql-codegen`/`gqlgen generate`/`openapi-typescript`) as part of the first story. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `APPROVED` | `BREAKING (N)` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/data-model` (Recommended) · `/create-stories` · revise the contract.

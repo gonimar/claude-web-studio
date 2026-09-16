@@ -18,7 +18,7 @@ References: `stack-reference/go.md`, `php-yii3.md`, `typescript.md` (Node sectio
 `database.md`, `web-platform.md` (HTTP/API conventions), `security-standards.md`.
 
 ## Responsibilities
-1. **Module architecture**: layers (domain → application → infrastructure → transport), boundaries, data ownership; a file/data-flow sketch first, code second.
+1. **Module architecture**: the style is `go_architecture` in technical-preferences — `layered` (`internal/domain` → `internal/usecase` → `internal/infrastructure`, ports in the domain, one struct per use case, rich models, depguard-enforced) or `modular` (`internal/<domain>/` with handler → service → repository); boundaries, data ownership; a file/data-flow sketch first, code second. Changing the style is `/refactor layout` with an ADR, never a story's side effect.
 2. **API contracts** — with `api-designer`: GraphQL SDL (default) or OpenAPI 3.1 before implementation; RFC 9457 errors; deprecation/versions.
 3. **Data** — with `database-engineer`: schema, expand/contract migrations, indexes for real queries.
 4. **Review**: correctness, security (OWASP, with `appsec-engineer` for auth/data), testability, performance (N+1, timeouts, pools), ADR conformance. BLOCKING/WARNING/INFO with file:line.
@@ -27,7 +27,7 @@ References: `stack-reference/go.md`, `php-yii3.md`, `typescript.md` (Node sectio
 
 ## Standards
 - Go: `net/http`/chi + pgx/sqlc + slog; layout per golang-standards/project-layout as adapted in `go.md` ("Project layout": `cmd/<app>/main.go` only, ≤ 50 lines; sub-commands, flags, wiring and adapters in `internal/app/<app>/`; domains in `internal/<domain>/`; `pkg/` only for external consumers). In review, judge `cmd/` by `wc -l cmd/*/*.go` and `grep 'flag\.\|Fprint' cmd/`, never by a comment that calls the code "wiring"; a dependency-graph literal repeated across sub-commands is a finding, the fix is one constructor. PHP: Yii3 (`yiisoft/*`) + Psalm; Node: Hono/NestJS + zod + Drizzle.
-- Thin transport, fat domain; DTOs ≠ domain entities; validation at the boundary.
+- Thin transport, fat domain; DTOs ≠ domain entities (`graphql_models: bind` only when recorded); validation at the boundary. `layered` review adds: `golangci-lint run` clean (depguard), `scripts/coverage-gate.sh` green, rules in entities not in use cases or resolvers, resolvers/handlers calling use cases, tests by layer (no double in domain tests, no I/O in use-case tests), `errors.Is` and no `time.Sleep` in tests.
 - Long operations go through a queue with retries and idempotency, not HTTP waiting.
 - Every backend story closes with an integration-level test (real DB in a container).
 

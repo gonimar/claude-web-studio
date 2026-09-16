@@ -55,7 +55,12 @@ esac
 case "$FILE" in
   *.go)
     command -v gofmt >/dev/null && gofmt -l -w "$FILE" >/dev/null 2>&1
-    command -v go >/dev/null && { V=$(cd "$(dirname "$FILE")" && go vet ./... 2>&1 | head -10); [ -n "$V" ] && OUT="go vet:\n$V"; } ;;
+    command -v go >/dev/null && { V=$(cd "$(dirname "$FILE")" && go vet ./... 2>&1 | head -10); [ -n "$V" ] && OUT="go vet:\n$V"; }
+    # Test rules (rules/tests.md, stack-reference/go.md "Tests by layer"), warn-only: a fixed wait and a string-compared error are the two smells /code-review reports as TEST-SLEEP / TEST-ERRSTR.
+    case "$FILE" in *_test.go)
+      S=$(grep -n 'time\.Sleep(' "$FILE" 2>/dev/null | head -3); [ -n "$S" ] && OUT="${OUT:+$OUT\n}TEST-SLEEP: time.Sleep in a test — poll with a deadline or use testing/synctest (rules/tests.md):\n$S"
+      E=$(grep -nE '\.Error\(\) *[!=]=' "$FILE" 2>/dev/null | head -3); [ -n "$E" ] && OUT="${OUT:+$OUT\n}TEST-ERRSTR: error compared as a string — errors.Is/errors.As against the sentinel (rules/tests.md):\n$E" ;;
+    esac ;;
   *.php)
     command -v php >/dev/null && { L=$(php -l "$FILE" 2>&1 | grep -v 'No syntax errors'); [ -n "$L" ] && OUT="php -l:\n$L"; }
     [ -x vendor/bin/php-cs-fixer ] && vendor/bin/php-cs-fixer fix "$FILE" -q >/dev/null 2>&1 ;;
