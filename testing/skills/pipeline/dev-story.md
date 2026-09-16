@@ -49,5 +49,9 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: the plan for a story includes a throwaway script to check a library's behaviour. **Expected**: Phase 3 names the spike's path under `tools/spike-<slug>/` (gitignored) or the session scratchpad, and says it is deleted in Phase 6; Phase 6 stages the story's own files by name — never `git add -A` — and reports any unplanned `??` entries in `git status --short` before committing.
 - [ ] spike path named and gitignored · [ ] no `git add -A` · [ ] untracked leftovers reported before the commit
 
+### The parent does not write the story's code
+**Fixture**: a story touching a Go package and its tests; the first `go-engineer` call comes back cut off at its turn limit having written nothing. **Expected**: the skill resumes that agent with its stopping point rather than spawning a new one; on a second truncation it splits the remaining work into smaller calls; the parent writes product code only after both attempts failed, and then the story result says so in one line. Phase 5 compares the agents that started (`agent-audit.log`) against the agents the plan named.
+- [ ] every file written through Task with an explicit studio `subagent_type` · [ ] truncation resumed, not re-spawned · [ ] a parent-written fallback is recorded, never silent · [ ] agents that ran are checked against the plan
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
