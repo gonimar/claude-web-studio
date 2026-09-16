@@ -65,6 +65,13 @@ framework, a transport or a logger).
 | Composition root | `internal/app/<app>/` | `Run`, config, the dependency graph (`newServices`), the HTTP server with timeouts and graceful shutdown, signal handling | Anything the four rows above own |
 | Entry | `cmd/<app>/main.go` | ≤ 50 lines: args/env → `Run` → exit code | Everything else (see "Project layout") |
 
+The names are the studio's; the shape is the one the cited sources describe. Evrone's go-clean-template keeps the graph in
+`internal/app` and calls the layers `internal/entity`, `internal/usecase`, `internal/repo` (driven adapters) and
+`internal/controller` (driving adapters) — `domain` ≙ `entity`, `infrastructure` ≙ `repo` + `controller`; `/adopt` recognises
+both spellings as `layered`. The official "Organizing a Go module" page prescribes only `cmd/` + `internal/` for a server and
+no exported packages; project-layout adds `/internal/app/<app>` and `/internal/pkg`. Kat Zien's structure examples are cited
+by guides but their author marks the talks as outdated — history, not a reference.
+
 Directory shape is a recorded choice, not taste (`/setup-stack` asks; `/refactor layout` asks again on a brownfield
 project): `go_layers: per-context` (recommended — one use-case package per bounded context, so `subscription.Activate`
 reads and dependencies stay small) or `flat-usecase` (one `usecase` package, simpler while the service is small).
@@ -85,9 +92,11 @@ by name. Either way: **a schema type must not be named `Query`, `Mutation` or `S
 the root operation types, and an entity called `Subscription` is generated as a set of channel-returning subscription resolvers.
 The SDL lives where `api_contract_path` says (Go default `api/schema.graphqls`); `gqlgen.yml` points at that file, no copies.
 
-**The dependency rule is a linter rule, not a comment.** `docs/templates/go/golangci.yml` carries `depguard` with the three lists
-(`domain`, `usecase`, and the value-library allow-list from `go_domain_allow`); `golangci-lint run ./...` in `make ci` and in
-`/code-review` Phase 3. The same check by hand: `go list -deps ./internal/domain/... | grep '<module>/internal/'` must print only
+**The dependency rule is a linter rule, not a comment.** `docs/templates/go/golangci.yml` carries `depguard` with two lists:
+`domain` in `list-mode: strict` (only `$gostd` and the `go_domain_allow` packages pass) and `usecase` in `list-mode: lax`
+(everything passes except `internal/infrastructure` and `internal/app`) — depguard's default mode denies every package
+absent from `allow`, which would forbid `errgroup` or `uuid` in a use case (source: the depguard README, "ListMode").
+`golangci-lint run ./...` in `make ci` and in `/code-review` Phase 3. The same check by hand: `go list -deps ./internal/domain/... | grep '<module>/internal/'` must print only
 domain packages. Verified when the rule was written: a domain file importing `internal/infrastructure/postgres` fails with
 `import '…/internal/infrastructure/postgres' is not allowed from list 'domain'`.
 

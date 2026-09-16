@@ -20,8 +20,9 @@ linters:
     depguard:
       rules:
         domain:
-          # The domain imports the standard library and the value libraries listed in
+          # Strict: the domain imports the standard library and the value libraries listed in
           # technical-preferences `go_domain_allow` — never a driver, a framework, a transport, a logger.
+          list-mode: strict
           files:
             - "**/internal/domain/**"
           allow:
@@ -38,12 +39,11 @@ linters:
             - pkg: "MODULE_PATH/internal/app"
               desc: "domain must not depend on the composition root"
         usecase:
+          # Lax: use cases may import third-party libraries (errgroup, uuid, …); only the outer
+          # layers are denied. The default list mode would reject every package not in `allow`.
+          list-mode: lax
           files:
             - "**/internal/usecase/**"
-          allow:
-            - "$gostd"
-            - "MODULE_PATH/internal/domain"
-            - "MODULE_PATH/internal/usecase"
           deny:
             - pkg: "MODULE_PATH/internal/infrastructure"
               desc: "use cases talk to ports declared in the domain, not to adapters"
