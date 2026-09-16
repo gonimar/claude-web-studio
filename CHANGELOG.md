@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.10.3 — 2026-09-16
 - `/brainstorm` writes its concept brief from a template that now exists. The skill created `docs/specs/concept-brief.md` and `/product-spec` Phase 1 read it as input, but `docs/templates/` had no brief — so each run invented a shape and the next skill looked for facts where they were not. Template, a row in `rules/docs-format.md` and a `post-edit-check` branch; an empty section is written `n/a — reason` rather than dropped. (WS-100)
 - `/architecture-decision` has an outcome for "no ADR needed". A discussion that ended in rejection had nowhere to be recorded, and one ended instead with a production `Dockerfile` edited from a document session — bypassing the review, the branch and the DoD of the story that owns the file. The rejection is now a `D-NN` line in `production/decisions.md` (or an ADR marked `Rejected`), and a change to code is handed to `/impact`, `/hotfix` or a story. (WS-106)
 - A finding ID is never minted without the finding. `/impact` verdicts cited `ARCH-004` for a deviation that existed in no file: the next session greps the ID and finds nothing. The row is now written into `production/findings.md` in the same turn under the same write gate, and `/story-done` checks that every `ARCH-NNN`/`SEC-NNN` named in a story card exists there. (WS-084)
