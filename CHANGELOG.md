@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.10.5 — 2026-09-17
 - `/sprint-status` says who did the work. `hooks/agent-stats.sh` summarises the trail `log-agent` already keeps: runs all-time and within the sprint, the top five agents (the plugin's `web-studio:go-engineer` and copy mode's `go-engineer` counted as one agent, not two), and two lines that were previously invisible without opening the log — starts with no matching stop (an agent cut off at its turn limit, or still running) and runs of non-studio agents (`general-purpose`, `Explore`), which mean routing went around the roster. Both go under *Risk to the goal* when they are not zero. On real projects the second line reads 106 of 260 runs and 22 of 255 — the oldest open defect in the register turns from an observation into a number the project sees itself. Costs nothing: one pass over a few hundred local lines.
 
 ## 0.10.4 — 2026-09-17
