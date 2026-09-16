@@ -31,3 +31,11 @@ New skill: Haiku if it only reads and formats; Opus if it synthesises 5+ documen
 Orchestrating skills (`/team-*`, `/dev-story`) spawn subagents via `Task`. Independent tasks are
 launched in one batch and run in parallel; results are collected before dependent phases; a
 `BLOCKED` from any agent is surfaced immediately and a partial report is mandatory.
+**`subagent_type` is always a studio agent** (`web-studio:<name>` in plugin mode, `<name>` in copy mode). A
+generic agent — `general-purpose`, `claude`, an explore agent, anything with a model override instead of a
+roster name — is not a substitute for a reviewer or a specialist: it arrives without the project's rules,
+without the agent's own memory, and the audit log records no role for it. Wanting a stronger opinion changes
+the *model of the studio agent*, never the agent itself.
+**A reviewer reads what it reviews**: a draft goes to the subagent as a path it can read plus a requirement to
+quote back a named part of it; pasting an abbreviated draft, or a placeholder, produces a verdict about
+nothing. A verdict that quotes nothing is returned once and then reported as unread, never counted.

@@ -28,7 +28,7 @@ Mode (`--review` or `production/review-mode.txt`, default `lean`):
 - `full`: `technical-director` (feasibility, stack risks) and `security-lead` (data, jurisdiction) in parallel via Task, verdict PASS/CONCERNS/FAIL with reasons.
 - `lean`: `technical-director` only if there are non-trivial NFRs/integrations.
 - `solo`: no review.
-CONCERNS/FAIL — show, propose edits, never advance the stage automatically.
+CONCERNS/FAIL — show, propose edits, never advance the stage automatically. **The edits are re-reviewed by the same verifier** (same contract, ≤ N lines, only "do the findings still stand?"), and the document's verdict is the verdict of the **last** review — not the first one with a list of fixes claimed against it. A spec that went out as `FAIL` and comes back rewritten "according to all eight comments" has been checked by nobody; say so plainly when the second review is skipped by the user's choice, and record the verdict as `FAIL (edits unverified)`.
 Then, for every BLOCKING and HIGH item of the verdict, one `AskUserQuestion`: record it in `production/findings.md`
 (template `findings.md`; id `ARCH-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now
 via `/create-stories` · keep it in the spec only. A BLOCKING that is neither recorded nor turned into a story is

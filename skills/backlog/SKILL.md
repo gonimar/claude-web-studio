@@ -49,6 +49,10 @@ Decide the route from the entry, not from its wording, and hand off with one `As
 - a technical choice → `/architecture-decision "<title>"`.
 After the hand-off returns, mark the entry `→ promoted YYYY-MM-DD: [F-NNN](../docs/specs/features/…)` (or the
 ADR / impact verdict) and tick it `[x]` — "May I update `production/backlog.md`?" with the same gate and commit.
+The promotion counts only once that line exists: an idea can also leave the backlog sideways — the user runs
+`/impact` or `/feature-spec` on it directly, without `promote` — and the entry then stays open for weeks while
+the work is already done. `review` treats an entry whose text matches a spec, ADR or impact verdict written
+later as exactly that case: it names it and offers to close it with the link.
 `park I-NNN` adds `🅿` and a date; `close I-NNN <reason>` ticks it with the reason. Nothing here ever creates a
 story or writes code.
 

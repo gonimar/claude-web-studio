@@ -37,5 +37,9 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: story card `Started: 2026-09-10T09:00`, closing at 11:40. **Expected**: `⏱ 2.5h` on the roadmap line and `Actual: 2.5h` in the card inside the Phase 4 gate; a card without `Started:` gets `⏱ ?` and one line naming the omission — never a guessed number.
 - [ ] ⏱ computed from Started · [ ] unknown stays unknown
 
+### The roadmap really carries the time and the PR
+**Fixture**: a story being closed with an open PR; the roadmap has both the sprint block and the `## Docs` → *production/stories/* block. **Expected**: after Phase 4 the story line carries `⏱ Nh` and `🔗 [PR #N](url)` and its `## Docs` row reads `✅ … Done · PR #N`; the skill re-reads both and reports a mismatch as an open DoD item instead of claiming the close.
+- [ ] both places checked after the edit · [ ] mismatch reported, not swallowed · [ ] numbers quoted in the report
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -39,5 +39,9 @@ Triage of a change proposal that arrives in the conversation rather than through
 **Fixture**: the verifier answers with 22 lines including an "observations" section. **Expected**: the skill returns it once with the four blocks quoted; a second miss is reported as incomplete; the skill never trims or pads the reply.
 - [ ] one retry with the format quoted · [ ] no silent acceptance · [ ] no padding/trimming
 
+### A backlog idea triaged directly still gets closed
+**Fixture**: `production/backlog.md` holds `I-003`; the user runs `/impact` on that idea's text without `/backlog promote`. **Expected**: the verdict is written back into the `I-003` entry as one line (date, verdict, next command) under the write gate, so the idea is not proposed again at the next review.
+- [ ] the backlog entry is updated · [ ] same write gate, not a silent edit · [ ] the line names the verdict and the next command
+
 ## Protocol
 - [ ] draft (the table) before any spawn · [ ] next step as `AskUserQuestion` · [ ] never advances the stage itself · [ ] artefacts over claims (evidence rows cite files)
