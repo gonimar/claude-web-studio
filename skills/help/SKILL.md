@@ -38,7 +38,7 @@ Verdict for both: `READY`. End with a text line, not a question.
 
 ## Phase 1: Catalog
 Read `.claude/docs/workflow-catalog.yaml`: phases, steps, `artifact.glob`. Missing → the studio is not initialised: answer "run `/init`" and stop.
-`technical-preferences.md` still `[TO BE CONFIGURED]` on a project that has code → the studio was initialised but not adopted: NEXT is `/adopt full`.
+`technical-preferences.md` whose `**Type**` field is still `[TO BE CONFIGURED]` on a project that has code (the field, never a grep of the whole file — the template's header comment names the placeholder and every configured project keeps that line) → the studio was initialised but not adopted: NEXT is `/adopt full`.
 
 ## Phase 2: Where we are
 Stage from `production/stage.txt`; otherwise infer from artefacts (the first phase with an unmet required step).

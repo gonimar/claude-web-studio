@@ -35,13 +35,9 @@ copy_tree() { # src dst [exclude]
     keep="$(mktemp)"; cp "$2/$3" "$keep"; cp -r "$1/." "$2/"; cp "$keep" "$2/$3"; rm -f "$keep"
   else cp -r "$1/." "$2/"; fi
 }
-# A technical-preferences.md counts as configured when its Type field is filled — the same predicate
-# docs/workflow-catalog.yaml uses. A whole-file grep for the placeholder never sees a configured file:
-# the template's own header comment says "While [TO BE CONFIGURED] remains…" and projects keep that line.
-configured_prefs() { # file
-  [ -f "$1" ] && grep -qE '^[[:space:]]*-[[:space:]]*\*\*Type\*\*:' "$1" \
-    && ! grep -qE '^[[:space:]]*-[[:space:]]*\*\*Type\*\*:[[:space:]]*\[TO BE CONFIGURED\]' "$1"
-}
+# "Configured" lives in hooks/prefs.sh — the same definition the session-start banner uses, so the
+# installer and the banner can never disagree about whether this project has chosen its stack.
+. "$ROOT/hooks/prefs.sh"
 if [ $SEED_ONLY = 0 ]; then
   copy_tree "$ROOT/agents" "$TARGET/.claude/agents"
   copy_tree "$ROOT/skills" "$TARGET/.claude/skills"

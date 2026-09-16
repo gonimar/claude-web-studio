@@ -161,5 +161,14 @@ out=$(printf '%s' '{"tool_input":{"command":"git commit -q -F - <<EOF\ndocs: her
 echo "$out" | grep -q 'COMMIT: message is not' && { failn=$((failn+1)); echo "FAIL commit: -F - heredoc message read as non-conventional"; } || pass=$((pass+1))
 echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: -F - heredoc, docs lane not recognised"; } || pass=$((pass+1))
 git reset -q
+# WS-113: the startup banner judges the stack by the Type field, not by a whole-file grep
+mkdir -p .claude/docs
+printf '# Technical Preferences\n\n<!-- While [TO BE CONFIGURED] remains, skills treat the stack as not chosen. -->\n\n## Project type\n- **Type**: fullstack\n' > .claude/docs/technical-preferences.md
+out=$(echo '{"hook_event_name":"SessionStart","source":"startup"}' | bash "$H/session-start.sh" 2>&1)
+echo "$out" | grep -q 'Stack not configured' && { failn=$((failn+1)); echo "FAIL session-start: a configured stack reported as not configured"; } || pass=$((pass+1))
+printf '# Technical Preferences\n\n<!-- While [TO BE CONFIGURED] remains, skills treat the stack as not chosen. -->\n\n## Project type\n- **Type**: [TO BE CONFIGURED] (site | spa | api)\n' > .claude/docs/technical-preferences.md
+out=$(echo '{"hook_event_name":"SessionStart","source":"startup"}' | bash "$H/session-start.sh" 2>&1)
+echo "$out" | grep -q 'Stack not configured' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-start: an unconfigured stack is not reported"; }
+rm -rf .claude/docs
 cd /; rm -rf "$T"
 echo "hooks: $pass passed, $failn failed"; [ $failn = 0 ]
