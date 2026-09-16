@@ -11,7 +11,7 @@ it was last verified; older than 60 days → run `/stack-update`. Agents read th
 |---|---|---|---|---|
 | **GraphQL** (priority API style) | Spec September 2025; GraphQL.js 17; gqlgen / Yoga 5 / graphql-php | — | [graphql.md](graphql.md) | none — spec.graphql.org, the-guild.dev |
 | Go | 1.27 (2026-08-19) | — | [go.md](go.md) | none — go.dev/doc/go1.27, pkg.go.dev |
-| PHP | 8.5 (2025-11-20); 8.6 due 2026-11 | 8.5.9 (2026-07-30, php.net) | [php-yii3.md](php-yii3.md) | none — php.watch, php.net |
+| PHP | 8.5 (2025-11-20); 8.6 due 2026-11; PHPUnit 13, PHPStan 2.2 / Psalm 6, deptrac 4, ECS 13 / php-cs-fixer 3, PER-CS 3.1 | 8.5.9 (2026-07-30, php.net); phpunit 13.3.4, pest 5.2.0, phpstan 2.2.14, psalm 6.17.2, deptrac 4.7.2, ecs 13.3.2, php-cs-fixer 3.95 (2026-09-17, packagist) | [php.md](php.md) | none — php.watch, php.net, php-fig.org |
 | Yii3 | stable (2025-12-31), packages on SemVer | `yiisoft/queue`/`queue-redis` still `dev-master`, unabandoned (2026-09-10, packagist) | [php-yii3.md](php-yii3.md) | none — yiiframework.com, github.com/yiisoft |
 | TypeScript | 7.0 (2026-07-08, native Go compiler) | — | [typescript.md](typescript.md) | none — typescriptlang.org |
 | Node.js | 24 LTS; 26 → LTS 2026-10; one major per year from 27 | — | [tooling-devops.md](tooling-devops.md) | none — nodejs.org |

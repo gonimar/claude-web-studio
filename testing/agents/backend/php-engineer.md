@@ -3,15 +3,15 @@
 > **Tier**: backend · **Spec written**: 2026-09-05
 
 ## Summary
-**Domain**: PHP 8.5 / Yii3: yiisoft/* packages, DI, middleware, validator, queue, Psalm, PHPUnit
+**Domain**: PHP 8.5 in the framework recorded as `php_framework` (Yii3 with the studio reference: yiisoft/* packages, DI, middleware, validator, queue; Symfony/Laravel/Slim from their docs), layered or framework architecture, rich models, use cases, PHPStan/Psalm, ECS/php-cs-fixer, deptrac, PHPUnit 13 by layer
 **Does not own**: Architecture (backend-lead), frontend
 **Escalates to**: the relevant lead; security → security-lead
-**Reference**: `stack-reference/php-yii3.md`
+**Reference**: `stack-reference/php.md`, then the framework file (`php-yii3.md`)
 **Verdict vocabulary**: COMPLETE / PARTIAL / BLOCKED (work result)
 
 ## Static checks
 - [ ] agent file `php-engineer.md` with `name/description/model/tools`
-- [ ] reads `stack-reference/php-yii3.md` first
+- [ ] reads `stack-reference/php.md` first, then the framework file named by `php_framework`
 - [ ] a "How you work" section (spec → questions → sketch → code → tests → run)
 - [ ] a "Never" section (or explicit prohibitions) and the Collaboration protocol
 

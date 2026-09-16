@@ -23,7 +23,7 @@ are bound to file extensions, not directories.
 │   ├── sprints/ stories/ releases/
 │   ├── session-state/active.md   # session state (gitignored)
 │   └── session-logs/             # agent audit trail (gitignored)
-├── backend/ | api/ | src/        # server code (Go: cmd/, internal/, pkg/… per project-layout; PHP: src/, config/, public/)
+├── backend/ | api/ | src/        # server code (Go: cmd/, internal/, pkg/… per project-layout; PHP: src/{Domain,Application,Infrastructure}/ under `php_architecture: layered`, or the framework's layout; config/, public/, tests/{Unit,Integration}/)
 ├── frontend/ | web/ | src/app/   # client (Angular / Vue / Nuxt)
 ├── game/                         # game client (three.js / Pixi) when the game is a separate package
 ├── packages/                     # shared monorepo packages (types, contracts, UI kit)

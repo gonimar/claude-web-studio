@@ -8,7 +8,7 @@ die Geheimnisse und Commit-Hygiene schützen, pfadbezogene Code-Regeln, Dokument
 **datierte Referenz aktueller Stack-Versionen und Best Practices** sowie ein Framework zum Testen
 der Agenten selbst. Es deckt Webanwendungen und Browserspiele gleichermaßen ab.¹
 
-Stack: Go 1.27 · PHP 8.5 / Yii3 · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
+Stack: Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL zuerst, REST wo es passt · PostgreSQL 18 · three.js r185 /
 PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA.
 
@@ -127,7 +127,7 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 - `/retrospective` — Sprint-Retrospektive aus Artefakten: geplant vs. geliefert, Schätzung vs. Ist mit dem Kalibrierungsfaktor für den nächsten `/sprint-plan`, Blocker, Maßnahmen mit Verantwortlichen.
 - `/qa-plan` — ordnet die Akzeptanzkriterien jeder Story Testebenen, Werkzeugen und Dateien zu.
 - `/tech-debt` — inventarisiert technische Schulden und schlägt priorisierte Stories vor.
-- `/refactor` — refaktoriert den betreuten Code ohne Verhaltensänderung: Dry-Run-Plan nach Zahlen (Build, Tests, Abdeckung, Abhängigkeitsgraph, Test-Smells), Stories und die Ausführung aus einer Story mit Charakterisierungstests zuerst und einem grünen Schritt pro Commit; `layout` migriert einen Go-Dienst auf die Schichtenarchitektur, `tests` bringt Tests auf die Regeln.
+- `/refactor` — refaktoriert den betreuten Code ohne Verhaltensänderung: Dry-Run-Plan nach Zahlen (Build, Tests, Abdeckung, Abhängigkeitsgraph, Test-Smells), Stories und die Ausführung aus einer Story mit Charakterisierungstests zuerst und einem grünen Schritt pro Commit; `layout` migriert einen Go- oder PHP-Dienst auf die Schichtenarchitektur, `tests` bringt Tests auf die Regeln, `framework` (PHP) inventarisiert und plant den Wechsel zu einem anderen Framework.
 - `/docs` — Dokumentation für Menschen über `tech-writer`: README, API-Referenz aus dem Vertrag, Benutzerhandbuch aus den Spezifikationen, Runbook; jeder Befehl in der Doku wird vorher ausgeführt.
 
 **Härtung**

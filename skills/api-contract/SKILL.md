@@ -18,7 +18,7 @@ Template `.claude/docs/templates/api-contract.md`; references `graphql.md`, `web
 Style from technical-preferences (GraphQL by default) or `--style`. Read the feature spec (sections 3–5), the current schema at `api_contract_path` (`api/schema.graphqls` in a Go module, `docs/architecture/api/schema.graphql` / `openapi.yaml` otherwise — the field is set by `/setup-stack`; unset → ask once and record it), the threat model (permissions).
 
 ## Phase 2: Draft
-GraphQL: an SDL fragment — types, `Node`, connections, inputs (`@oneOf`), mutations with `…Payload { …, errors: [UserError!]! }`, subscriptions; field authorisation directives; limits (`first` ≤ 100); no object type named `Query`, `Mutation` or `Subscription` other than the roots (an entity with that name is generated as a root by gqlgen — rename it or declare `schema { … }`). Then `graphql-inspector diff` against the current schema (Bash, if installed) — highlight breaking changes.
+GraphQL: an SDL fragment — types, `Node`, connections, inputs (`@oneOf`), mutations with `…Payload { …, errors: [UserError!]! }`, subscriptions; field authorisation directives; limits (`first` ≤ 100); no object type named `Query`, `Mutation` or `Subscription` other than the roots (an entity with that name is generated as a root by gqlgen and taken as the root by graphql-php's `BuildSchema` — rename it or declare `schema { … }`). Then `graphql-inspector diff` against the current schema (Bash, if installed) — highlight breaking changes.
 REST: operations with `operationId`, schemas with limits, `Problem`, cursor pagination, `Idempotency-Key`; `spectral lint`.
 WS/games: message types `type/v/seq`, limits, auth at handshake.
 Example operations + persisted documents.

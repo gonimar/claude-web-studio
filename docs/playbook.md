@@ -293,11 +293,13 @@ roadmap story. Sprint end: `/retrospective NN` (planned vs shipped, the calibrat
 ```
 Never mix an upgrade with features in one story.
 
-**Refactoring / migrating a Go service to the layered architecture.** `/refactor --dry-run` (or
+**Refactoring / migrating a Go or PHP service to the layered architecture (and, for PHP, to another framework).** `/refactor --dry-run` (or
 `/refactor layout`, `/refactor <package>`, `/refactor tests`): the baseline by numbers, the architecture
 choices as in `/setup-stack`, a step plan whose first step is always characterisation tests →
 `/architecture-decision` when the style changes → `/create-stories` (one story per step group) →
-`/refactor --apply S-NNN` in `refactor/S-NNN-<slug>`, one green step per commit, a before/after table →
+`/refactor --apply S-NNN` in `refactor/S-NNN-<slug>`, one green step per commit, a before/after table
+(PHP `framework`: only after the project is `layered` — Domain and Application do not import the framework, so
+the move touches `src/Infrastructure` and the composition root, one Infrastructure sub-namespace per step) →
 `/code-review --diff` → `/story-done`. A step that would change behaviour, a contract or a schema is not
 a refactoring step: `/impact` first. **Rewriting a module** (behaviour changes): `/tech-debt <area>` →
 `/impact` → an ADR "why and where the boundary is" → `/api-contract` if the contract changes → stories,

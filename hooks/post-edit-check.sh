@@ -63,7 +63,13 @@ case "$FILE" in
     esac ;;
   *.php)
     command -v php >/dev/null && { L=$(php -l "$FILE" 2>&1 | grep -v 'No syntax errors'); [ -n "$L" ] && OUT="php -l:\n$L"; }
-    [ -x vendor/bin/php-cs-fixer ] && vendor/bin/php-cs-fixer fix "$FILE" -q >/dev/null 2>&1 ;;
+    if [ -x vendor/bin/ecs ]; then vendor/bin/ecs check --fix "$FILE" --no-progress-bar >/dev/null 2>&1;
+    elif [ -x vendor/bin/php-cs-fixer ]; then vendor/bin/php-cs-fixer fix "$FILE" -q >/dev/null 2>&1; fi
+    # Test rules (rules/tests.md, stack-reference/php.md "Tests by layer"), warn-only — the PHP twins of TEST-SLEEP / TEST-ERRSTR.
+    case "$FILE" in *Test.php)
+      S=$(grep -nE '\b(u?sleep)\(' "$FILE" 2>/dev/null | head -3); [ -n "$S" ] && OUT="${OUT:+$OUT\n}TEST-SLEEP: sleep() in a test — a fake clock or polling with a deadline (rules/tests.md):\n$S"
+      E=$(grep -nE 'assert(Same|Equals|StringContainsString)\(.*getMessage\(\)' "$FILE" 2>/dev/null | head -3); [ -n "$E" ] && OUT="${OUT:+$OUT\n}TEST-ERRSTR: exception asserted by message — expectException(Class::class) (rules/tests.md):\n$E" ;;
+    esac ;;
   *.ts|*.tsx|*.vue|*.js|*.mjs|*.scss|*.css|*.json|*.md|*.yaml|*.yml)
     if [ -f node_modules/.bin/prettier ]; then node_modules/.bin/prettier --write --log-level silent "$FILE" >/dev/null 2>&1;
     elif [ -f node_modules/.bin/biome ]; then node_modules/.bin/biome format --write "$FILE" >/dev/null 2>&1; fi

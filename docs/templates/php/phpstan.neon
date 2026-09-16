@@ -1,0 +1,13 @@
+# PHPStan — Web Studio template (stack-reference/php.md). `php_static_analysis: phpstan`.
+# Level 9 is the studio default for a new project; a brownfield project starts at its baseline
+# (`vendor/bin/phpstan analyse --generate-baseline`) and raises the level one step per story.
+parameters:
+    level: 9
+    paths:
+        - src
+        - tests
+    tmpDir: build/phpstan
+    treatPhpDocTypesAsCertain: false
+# includes:
+#     - vendor/phpstan/phpstan-strict-rules/rules.neon
+#     - vendor/phpstan/phpstan-phpunit/extension.neon

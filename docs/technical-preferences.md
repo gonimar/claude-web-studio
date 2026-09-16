@@ -10,7 +10,12 @@
 
 ## Backend
 - **Language/runtime**: [TO BE CONFIGURED] (Go 1.27 | PHP 8.5 | Node 24 | none)
-- **Framework**: [net/http + chi | Yii3 | Hono | NestJS | …]
+- **Framework**: [net/http + chi | Yii3 | Symfony | Laravel | Slim | Hono | NestJS | …]
+- **php_framework**: [yii3 (reference php-yii3.md) | symfony | laravel | slim | none — php-engineer works from the official docs when no studio reference exists]
+- **php_architecture**: [layered (src/Domain → src/Application → src/Infrastructure, deptrac-enforced) | framework (the framework's own layout) — see stack-reference/php.md "Layered architecture"]
+- **php_static_analysis**: [phpstan (level 9 new / baseline brownfield) | psalm (level 1)]
+- **php_cs_tool**: [ecs (perCs: true) | php-cs-fixer (@PER-CS)]
+- **php_domain_allow**: [non-PSR vendor namespaces the domain may use, e.g. Ramsey\Uuid, Brick\Money — mirrored into deptrac.yaml's Vendor layer; `none` = PHP only]
 - **Database**: [PostgreSQL 18 | …]  **Cache/queue**: [Redis 8 | …]
 - **API style**: [GraphQL (default for the client API; schema-first SDL) | REST/OpenAPI 3.1 (webhooks, files, integrations) | WebSocket/SSE (realtime) | gRPC]
 - **api_contract_path**: [api/schema.graphqls (Go module) | docs/architecture/api/schema.graphql | docs/architecture/api/openapi.yaml] — the one SDL/OpenAPI file every skill and the codegen read
@@ -32,10 +37,10 @@
 - **Frame budget**: [16.6 ms @60fps; draw calls ≤ N; memory ≤ N MB]
 
 ## Tests and quality
-- **Unit**: [Vitest 4 | PHPUnit 12 | go test]
+- **Unit**: [Vitest 4 | PHPUnit 13 (+ Pest 5) | go test]
 - **E2E**: [Playwright]
-- **Lint/format**: [ESLint 9 flat + Prettier | php-cs-fixer + Psalm | gofmt + golangci-lint]
-- **Coverage threshold**: [Go layered: go_coverage_domain 90 %, go_coverage_usecase 80 % — a gate in `scripts/coverage-gate.sh`; otherwise e.g. 80 % for the domain layer as an indicator]
+- **Lint/format**: [ESLint 9 flat + Prettier | ecs or php-cs-fixer + phpstan or psalm + deptrac | gofmt + golangci-lint]
+- **Coverage threshold**: [Go layered: go_coverage_domain 90 %, go_coverage_usecase 80 % — a gate in `scripts/coverage-gate.sh`; PHP layered: php_coverage_domain 90 %, php_coverage_application 80 % — a gate in `scripts/coverage-gate.php`; otherwise e.g. 80 % for the domain layer as an indicator]
 
 ## Infrastructure
 - **Containers**: [Docker, compose v2]  **CI**: [GitHub Actions]
@@ -58,7 +63,7 @@
 
 ## Naming conventions
 - Go: lowercase packages, exported PascalCase, snake_case files, `_test.go`
-- PHP: PSR-12, PascalCase classes, `declare(strict_types=1)`, `*Test.php`
+- PHP: PER-CS 3.1, PascalCase classes, `declare(strict_types=1)`, `*Test.php`
 - TS: kebab-case files, PascalCase classes/types, camelCase variables, `*.spec.ts`
 - Angular: v20+ style by default — no suffixes (`user-profile.ts`, class `UserProfile`); or classic `feature.component.ts` — the choice is recorded here; selectors `app-*`
 - Vue: PascalCase SFCs (`UserCard.vue`), composables `useX.ts`, stores `useXStore`

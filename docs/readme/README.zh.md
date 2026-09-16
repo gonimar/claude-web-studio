@@ -6,7 +6,7 @@ Web Studio 把 Claude Code 变成一个完整的 Web 开发工作室：三层共
 流水线的斜杠命令、保护密钥与提交规范的钩子、按路径生效的编码规则、文档模板、**带日期的技术栈版本与最佳实践
 参考**，以及用于测试代理本身的框架。既适用于 Web 应用，也适用于浏览器游戏。¹
 
-技术栈：Go 1.27 · PHP 8.5 / Yii3 · TypeScript 7 / Node 24 · Angular 22（Material、Taiga UI）·
+技术栈：Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22（Material、Taiga UI）·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL 优先，REST 按需 · PostgreSQL 18 · three.js r185 / PixiJS 8 / Phaser ·
 Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA。
 
@@ -114,7 +114,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/retrospective` — 依据产物做冲刺回顾：计划与交付、估算与实际及下一次 `/sprint-plan` 使用的校准系数、阻塞、带负责人的行动项。
 - `/qa-plan` — 把每个故事的验收标准映射到测试层级、工具和文件。
 - `/tech-debt` — 盘点技术债务并提出按优先级排序的故事。
-- `/refactor` — 在不改变行为的前提下重构所维护的代码：按数字给出演练计划（构建、测试、覆盖率、依赖图、测试异味）、生成故事，并从故事执行——先写特征化测试，每次提交一个绿色步骤；`layout` 将 Go 服务迁移到分层架构，`tests` 使测试符合规则。
+- `/refactor` — 在不改变行为的前提下重构所维护的代码：按数字给出演练计划（构建、测试、覆盖率、依赖图、测试异味）、生成故事，并从故事执行——先写特征化测试，每次提交一个绿色步骤；`layout` 将 Go 或 PHP 服务迁移到分层架构，`tests` 使测试符合规则，`framework`（PHP）盘点并规划迁移到另一个框架。
 - `/docs` — 通过 `tech-writer` 编写面向人的文档：README、由契约生成的 API 参考、基于功能规格的用户指南、runbook；文档中的每条命令都先运行。
 
 **加固**

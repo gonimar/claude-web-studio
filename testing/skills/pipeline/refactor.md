@@ -3,10 +3,10 @@
 > **Category**: pipeline · **Priority**: high · **Spec written**: 2026-09-17
 
 ## Summary
-Behaviour-preserving refactoring of a Go project the studio maintains. Dry-run by default: baseline by
+Behaviour-preserving refactoring of a Go or PHP project the studio maintains. Dry-run by default: baseline by
 numbers → (layout mode) architecture choices → step plan → plan document and stories. `--apply S-NNN`
 executes the plan from a story on `refactor/S-NNN-<slug>` through `go-engineer`, one green step per
-commit, and reports a before/after table. Agents: `go-engineer` (steps), `/create-stories`,
+commit, and reports a before/after table. Agents: `go-engineer` / `php-engineer` (steps), `/create-stories`,
 `/architecture-decision` and `/code-review` by hand-off.
 
 ## Static checks
@@ -20,8 +20,8 @@ command output (build, vet, lint, tests, coverage per layer, layout numbers, dep
 smells) before any question; Phase 3 questions with the tree as evidence; a step table whose first step is
 characterisation tests and whose second is the tooling; `PLANNED (N steps, M stories)`.
 - [ ] every metric has a command and its output · [ ] no code written · [ ] write gate is one `AskUserQuestion` covering plan document, technical-preferences and stories · [ ] hand-off names `/architecture-decision` when the style changed
-### 2. Refusal / BLOCKED — not Go, or red baseline
-**Fixture**: a PHP project; then a Go project with a failing test. **Expected**: `BLOCKED (refactor supports Go in this version — …)` in one line; `BLOCKED (baseline red — fix first: <package>)` after the table.
+### 2. Refusal / BLOCKED — not Go or PHP, or red baseline
+**Fixture**: a Node project; then a Go project with a failing test. **Expected**: `BLOCKED (refactor supports Go and PHP in this version — …)` in one line; `BLOCKED (baseline red — fix first: <package>)` after the table.
 - [ ] stops with the reason · [ ] names the command to run instead · [ ] writes no files
 ### 3. Mode/argument variant — `tests`, `<package>`, no argument
 **Fixture**: tests with `time.Sleep` and `err.Error() ==`; a 2 000-line package; no argument. **Expected**: `tests` plans one step per smell class; `<package>` plans only that package; no argument runs layout → packages → tests and asks every question before the first step.
@@ -36,5 +36,9 @@ characterisation tests and whose second is the tooling; `PLANNED (N steps, M sto
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output in every table)
 
+### 6. PHP — `framework` mode
+**Fixture**: a Yii3 project with `php_architecture: layered`, `Yiisoft\` imported in three Infrastructure classes and one Application class. **Expected**: the Phase 2 table names the Application import as the first thing to move; the plan lists one step per Infrastructure sub-namespace and the composition root; no plan is written before `/architecture-decision` is named in the hand-off.
+- [ ] framework dependencies counted per layer from `grep`/deptrac output · [ ] the ADR is a precondition, not an afterthought
+
 ## Coverage notes
-Layered rules under test: `stack-reference/go.md` "Layered architecture" and "Tests by layer"; the templates in `docs/templates/go/`.
+PHP rules under test: `stack-reference/php.md` "Layered architecture" and "Tests by layer"; templates in `docs/templates/php/`. Layered rules under test: `stack-reference/go.md` "Layered architecture" and "Tests by layer"; the templates in `docs/templates/go/`.
