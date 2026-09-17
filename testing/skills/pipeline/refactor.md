@@ -19,7 +19,7 @@ commit, and reports a before/after table. Agents: `go-engineer` (steps), `/creat
 command output (build, vet, lint, tests, coverage per layer, layout numbers, dependency direction, test
 smells) before any question; Phase 3 questions with the tree as evidence; a step table whose first step is
 characterisation tests and whose second is the tooling; `PLANNED (N steps, M stories)`.
-- [ ] every metric has a command and its output · [ ] no code written · [ ] write gate is one `AskUserQuestion` covering plan document, technical-preferences and stories · [ ] hand-off names `/architecture-decision` when the style changed
+- [ ] every metric has a command and its output · [ ] no code written · [ ] write gate is the canonical `AskUserQuestion` (write · show the draft/diff first · not now) covering the plan document and technical-preferences; stories come from `/create-stories <plan-path>` in the hand-off · [ ] hand-off names `/architecture-decision` when the style changed
 ### 2. Refusal / BLOCKED — not Go, or red baseline
 **Fixture**: a PHP project; then a Go project with a failing test. **Expected**: `BLOCKED (refactor supports Go in this version — …)` in one line; `BLOCKED (baseline red — fix first: <package>)` after the table.
 - [ ] stops with the reason · [ ] names the command to run instead · [ ] writes no files

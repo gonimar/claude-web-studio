@@ -14,7 +14,7 @@ Documentation for people through `tech-writer`: README, API reference generated 
 **Fixture**: `technical-preferences.md` configured, product spec present, `.env.example` with six variables, no README. **Expected**: README draft with quick start commands **run in the session with their output**, an env table naming all six variables without values, a deploy link to the runbook; "May I write `README.md`?"; `docs: readme from …` commit gate.
 - [ ] commands run · [ ] env table complete, no values · [ ] write gate · [ ] no duplication of CLAUDE.md
 ### 2. Refusal / BLOCKED — no sources
-**Fixture**: `/docs api` with no `docs/architecture/api/*`. **Expected**: `BLOCKED (no contract — run /api-contract first)`, nothing written, no hand-written reference invented.
+**Fixture**: `/docs api` with no contract (no `docs/architecture/api/api-contract.md` and no file at `api_contract_path`). **Expected**: `BLOCKED (no contract — run /api-contract first)`, nothing written, no hand-written reference invented.
 - [ ] writes no files · [ ] names `/api-contract`
 ### 3. Mode/argument variant — `--check`
 **Fixture**: README older than the last change of `.env.example`; guide missing for two Done features. **Expected**: the inventory table with "stale vs" and gaps, `COMPLETE (check only: 2 targets stale)`, stop.

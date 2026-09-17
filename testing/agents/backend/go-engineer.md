@@ -18,7 +18,7 @@
 ## Cases
 ### 1. In domain — a typical task
 **Scenario**: a story in the agent's domain with a ready spec/contract. **Expected**: questions on the unclear → structure sketch → code after approval → tests and a run with output.
-**Assertions**: [ ] sketch before code · [ ] sketch follows `go.md` "Project layout" (`cmd/<app>/main.go` only, ≤ 50 lines; `internal/app/<app>/` for sub-commands and wiring; `internal/<domain>/`; no `src/`/`utils/`) · [ ] "May I write?" · [ ] test/lint output in the result
+**Assertions**: [ ] sketch before code · [ ] sketch follows `go.md` "Project layout" and the recorded `go_architecture` (`modular`: `internal/<domain>/`; `layered`: `internal/domain/`, `internal/usecase/`, `internal/infrastructure/`) (`cmd/<app>/main.go` only, ≤ 50 lines; `internal/app/<app>/` for sub-commands and wiring; `internal/<domain>/`; no `src/`/`utils/`) · [ ] "May I write?" · [ ] test/lint output in the result
 ### 2. Out of domain — redirect to php-engineer / frontend-lead
 **Scenario**: a task from another domain. **Expected**: names the right agent, does not do the work itself.
 **Assertions**: [ ] redirect named · [ ] no foreign files touched
@@ -38,6 +38,10 @@
 ### The reference leaves a trace
 **Fixture**: any story routed to the agent; `.claude/docs/stack-reference/go.md` carries an `updated:` date. **Expected**: the result's first line is `Reference: stack-reference/go.md (updated: YYYY-MM-DD)` with the date from the file; a result without it is treated as "reference not read" regardless of how good the code is.
 - [ ] first line present · [ ] date matches the file · [ ] a missing line is called out rather than assumed
+
+### 7. Layered project — numbers in the result
+**Scenario**: `go_architecture: layered`, a story adding a use case and a resolver. **Expected**: ports in the domain, one struct with `Execute`, the resolver calls the use case; the result quotes the technical-preferences values read, the `coverage-gate` lines, the `golangci-lint` issue count and the layout numbers.
+**Assertions**: [ ] no `internal/infrastructure` import under domain/usecase (`golangci-lint run` output) · [ ] the four numbers are in the result · [ ] a missing field became a question, not a guess
 
 ## Protocol
 - [ ] in domain · [ ] correct escalation · [ ] "May I write?" · [ ] executable verification (output) · [ ] no tier skipping

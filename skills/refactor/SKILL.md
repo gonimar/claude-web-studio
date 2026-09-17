@@ -14,7 +14,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 **Dry-run is the default and writes no code.** Its deliverables are a plan in the chat, on consent a
 plan document and stories. Code changes happen only with `--apply S-NNN` — a Ready story produced by a
 dry-run — on a `refactor/S-NNN-<slug>` branch, with the same consent contour as `/dev-story`: every
-file through `Task` to `go-engineer` (the parent writes no product code, coordination-rules rule 7),
+file through `Task` to `go-engineer` (the parent writes no product code — `/dev-story` Phase 4 is the rule),
 "May I write?" as an `AskUserQuestion` before the first write, `touch .claude/.write-consent` after
 the "write" answer. Behaviour does not change in a refactoring: a step that needs a new rule, a
 contract change or a schema change is not a refactoring step — it is a `/impact` detour (rule 11).
@@ -30,8 +30,9 @@ before it runs. Stack from technical-preferences: Go only in this version — an
 one line, no plan. Read `go_architecture`, `go_layers`, `go_composition_root`, `go_router`,
 `graphql_models`, `go_domain_allow`, the coverage thresholds, the layout ADR, `production/findings.md`
 (`ARCH-NNN` rows the plan must close) and the last `docs/ops/tech-debt-*.md`. In the full pass the
-questions come first, all of them, before any step runs: the mode list to confirm, the Phase 3 choices
-when `layout` applies, and the write gate for the plan — the user answers once and the pass runs through.
+questions come first, before any step runs: the mode list to confirm and the Phase 3 choices when `layout`
+applies (batched by group, see Phase 3); the write gate for the plan is the one question that comes at the end,
+because it asks about tables that do not exist yet.
 
 ## Phase 2: Baseline by numbers
 Nothing is planned from an impression. Run and tabulate, from the Go root: `go build ./...`; `go vet ./...`;
@@ -48,8 +49,9 @@ The table — metric · value · rule it is measured against — is rendered in 
 refactoring starts from green.
 
 ## Phase 3: Choices (`layout` mode; skipped when technical-preferences already records them)
-The same questions `/setup-stack` asks, one `AskUserQuestion` each, recommendation first, the current
-tree as evidence for the recommendation: `go_architecture` layered | modular (staying modular ends the
+The same choices `/setup-stack` records, batched into three `AskUserQuestion`s — architecture and shape ·
+transport (router, GraphQL models) · thresholds and allow-list — recommendation first, the current tree as
+evidence for the recommendation: `go_architecture` layered | modular (staying modular ends the
 mode with `PLANNED (no migration — modular confirmed)`); `go_layers` per-context | flat-usecase;
 `go_composition_root` internal/app | main; ports in the domain (the layered rule) — shown, not asked;
 `go_router` chi | ServeMux; `graphql_models` dto | bind; `go_domain_allow`; coverage thresholds.
@@ -73,15 +75,16 @@ plus the gate or `arch-check` once they exist) · size (files, lines). Fixed ord
    table-driven, doubles by layer, thresholds). `<package>` mode plans the split/move of that package only.
 Every step names the `ARCH-NNN`/tech-debt row it closes. Steps that would change behaviour, a contract,
 a schema or a dependency are listed under **Out of scope — /impact** with the reason, never absorbed.
-Then one `AskUserQuestion`: "May I write `docs/ops/refactor-<date>-<scope>.md` (the tables above), update
-`technical-preferences.md` with the Phase 3 answers, and create the stories through `/create-stories`
-(one story per step group, `refactor` as the layer tag)?" — write and create stories (Recommended) ·
-write the plan only · show only. After the "write" answer: `touch .claude/.write-consent` (rule 7).
-Dry-run verdict: `PLANNED (N steps, M stories)`.
+Then one `AskUserQuestion`: "May I write `docs/ops/refactor-<date>-<scope>.md` (the tables above) and the Phase 3
+answers into `technical-preferences.md`?" — write (Recommended) · show the draft/diff first · not now. After the
+"write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). Stories are not
+written here: the plan document is the spec `/create-stories <plan-path>` slices (one story per step group, layer
+`backend`, the title prefixed `refactor:`; the story card cites the plan), and that command owns its own gate.
+Dry-run verdict: `PLANNED (N steps)`.
 
 ## Phase 5: Apply (`--apply S-NNN` only)
 The story must be Ready and reference a plan document; otherwise `BLOCKED (no plan — run /refactor
---dry-run first)`. Branch per `git-workflow.md`: from an up-to-date default branch, `git switch -c
+--dry-run first)`. Branch per `git-workflow.md` ("Refactor" lane): from an up-to-date default branch, `git switch -c
 refactor/S-NNN-<slug>`, session state through `hooks/session-state.sh set Task "S-NNN …" Branch
 refactor/S-NNN-<slug> Next "/code-review"`. Then, step by step from the plan: `Task` to `go-engineer`
 with the step's row and the rule "move, do not improve — the diff of a refactoring step contains no new
@@ -89,7 +92,7 @@ behaviour"; after the step `go build ./... && go test -race -count=1 ./...` (and
 installed) — green → `git commit -m "refactor(S-NNN): <step>"` staging the step's files by name; red →
 the same agent fixes it in the same step, or the step is reverted (`git restore` of its files) and the
 plan is amended, never a red commit and never a second agent on the same step (a cut-off agent is resumed,
-rule 7). The parent writes no code; the story result says who wrote each step from
+`/dev-story` Phase 4). The parent writes no code; the story result says who wrote each step from
 `production/session-logs/agent-audit.log`.
 
 ## Phase 6: Verification by numbers
@@ -103,6 +106,6 @@ no new dependency in `go.mod`. A metric that moved the wrong way is a `PARTIAL (
 Push with consent (`git push -u origin refactor/S-NNN-<slug>`), draft PR when a workflow starts on
 `pull_request` (as `/dev-story` Phase 6). Story status → `Review`. Verdict: `PLANNED (…)` | `COMPLETE` |
 `PARTIAL (open: …)` | `BLOCKED (…)`. Next step — one `AskUserQuestion`: after a dry-run
-`/architecture-decision` when Phase 3 changed the style, else `/create-stories` (Recommended) · show the
-plan · stop here; after an apply `/code-review --diff` (Recommended) · show the before/after table ·
+`/architecture-decision` when Phase 3 changed the style (Recommended then), else `/create-stories <plan-path>`
+(Recommended) · show the plan · stop here; after an apply `/code-review --diff` (Recommended) · show the before/after table ·
 stop here.

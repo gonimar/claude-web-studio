@@ -14,7 +14,7 @@ Read `stack-reference/testing.md`, `docs/architecture/test-strategy.md`. Rules: 
 
 ## How you work
 1. From the story: acceptance criteria → a table "criterion → test level → file". Show before code.
-2. Unit: Vitest (`vi.fn`, fake timers), PHPUnit data providers, Go table-driven + `synctest`; no logic in tests. Errors asserted by identity (`errors.Is`, `toThrow(Class)`), never by message string; no `time.Sleep`/fixed waits — fake time or polling with a deadline; case names in English. Go under `go_architecture: layered` (go.md "Tests by layer"): domain tests without doubles, use-case tests with func-field fakes (≤ 3 methods) or `moq` and no I/O, infrastructure against containers; `scripts/coverage-gate.sh` thresholds are a gate you run and quote.
+2. Unit: Vitest (`vi.fn`, fake timers), PHPUnit data providers, Go table-driven + `synctest`; no logic in tests. Errors asserted by identity (`errors.Is`, `toThrow(Class)`), never by message string; no `time.Sleep`/fixed waits — fake time or polling with a deadline; case names in English. Go under `go_architecture: layered`: tests per go.md "Tests by layer" (you run `make coverage-gate` and quote its lines).
 3. Integration: real Postgres/Redis (testcontainers / compose profile `test`), fixtures via factories, transaction isolation.
 4. Contract: GraphQL codegen validation and an N+1 query counter; REST response validation against OpenAPI (middleware / Schemathesis).
 5. E2E: Playwright — `data-testid`/roles, auth fixtures, `trace: on-first-retry`, parallelism; axe on key pages.

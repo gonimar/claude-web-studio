@@ -28,8 +28,8 @@
 ### 4. Conflict — an architectural decision beyond its authority
 **Scenario**: the implementation requires changing module boundaries/contract/ADR. **Expected**: stop, escalation to the lead/technical-director with options.
 **Assertions**: [ ] does not change the ADR/contract itself · [ ] correct escalation
-### 5. Context from a parent — SDL schema from docs/architecture/api
-**Scenario**: the context "SDL schema from docs/architecture/api" is passed. **Expected**: uses it without re-asking, does not expand the task.
+### 5. Context from a parent — SDL schema from the file at `api_contract_path` (`api/schema.graphqls` on a Go module)
+**Scenario**: the context "SDL schema from the file at `api_contract_path` (`api/schema.graphqls` on a Go module)" is passed. **Expected**: uses it without re-asking, does not expand the task.
 **Assertions**: [ ] context used · [ ] result within the sub-task
 
 ## Protocol

@@ -65,12 +65,12 @@ framework, a transport or a logger).
 | Composition root | `internal/app/<app>/` | `Run`, config, the dependency graph (`newServices`), the HTTP server with timeouts and graceful shutdown, signal handling | Anything the four rows above own |
 | Entry | `cmd/<app>/main.go` | ≤ 50 lines: args/env → `Run` → exit code | Everything else (see "Project layout") |
 
-The names are the studio's; the shape is the one the cited sources describe. Evrone's go-clean-template keeps the graph in
+The names are the studio's; the shape is the one the cited sources describe. The go-clean-template repository (evrone) keeps the graph in
 `internal/app` and calls the layers `internal/entity`, `internal/usecase`, `internal/repo` (driven adapters) and
 `internal/controller` (driving adapters) — `domain` ≙ `entity`, `infrastructure` ≙ `repo` + `controller`; `/adopt` recognises
 both spellings as `layered`. The official "Organizing a Go module" page prescribes only `cmd/` + `internal/` for a server and
-no exported packages; project-layout adds `/internal/app/<app>` and `/internal/pkg`. Kat Zien's structure examples are cited
-by guides but their author marks the talks as outdated — history, not a reference.
+no exported packages; project-layout adds `/internal/app/<app>` and `/internal/pkg`. The go-structure-examples repository from the 2018 "How do you structure your Go apps" talks is cited
+by guides, but its README marks the talks as outdated — history, not a reference.
 
 Directory shape is a recorded choice, not taste (`/setup-stack` asks; `/refactor layout` asks again on a brownfield
 project): `go_layers: per-context` (recommended — one use-case package per bounded context, so `subscription.Activate`
@@ -96,8 +96,10 @@ The SDL lives where `api_contract_path` says (Go default `api/schema.graphqls`);
 `domain` in `list-mode: strict` (only `$gostd` and the `go_domain_allow` packages pass) and `usecase` in `list-mode: lax`
 (everything passes except `internal/infrastructure` and `internal/app`) — depguard's default mode denies every package
 absent from `allow`, which would forbid `errgroup` or `uuid` in a use case (source: the depguard README, "ListMode").
-`golangci-lint run ./...` in `make ci` and in `/code-review` Phase 3. The same check by hand: `go list -deps ./internal/domain/... | grep '<module>/internal/'` must print only
-domain packages. Verified when the rule was written: a domain file importing `internal/infrastructure/postgres` fails with
+`golangci-lint run ./...` in `make ci` and in `/code-review` Phase 3. `make arch-check` is a second, different check: transitive,
+over the package graph (`go list -deps -test`), project packages only — it catches `usecase → platform → infrastructure`, which
+per-file depguard cannot, and ignores third-party packages, which depguard covers. When they disagree, each is right about its
+own question; neither is "fixed" in its config. Verified when the rule was written: a domain file importing `internal/infrastructure/postgres` fails with
 `import '…/internal/infrastructure/postgres' is not allowed from list 'domain'`.
 
 ### Tests by layer (`go_architecture: layered`)
@@ -113,8 +115,10 @@ Rules that apply to every Go test, whatever the style: **`errors.Is`/`errors.As`
 identifiers; **no `time.Sleep`** to wait for anything — `testing/synctest` (Go 1.25+) for code that waits on time, a polling helper
 with a deadline (`require.Eventually` or a ten-line local one) for external systems; `go test -race ./...` after every change, a
 race or a deadlock means the change is invalid and goes back to the engineer, not into a retry loop. The gate script
-`docs/templates/go/coverage-gate.sh` (installed as `scripts/coverage-gate.sh`, called by `make ci`) fails the build below the
-thresholds and prints one line per layer — the number goes into the story result and the review.
+`docs/templates/go/coverage-gate.sh` (installed as `scripts/coverage-gate.sh`, called by `make coverage-gate` on the profile
+`make test` wrote — one test run, not three) fails the build below the thresholds and prints one line per layer — the number goes
+into the story result and the review. The thresholds live once for the build, as `GO_COVERAGE_DOMAIN`/`GO_COVERAGE_USECASE` in
+the Makefile, written by `/test-setup` from technical-preferences.
 
 ## Project layout (golang-standards/project-layout, adapted)
 Source: [golang-standards/project-layout](https://github.com/golang-standards/project-layout) — a

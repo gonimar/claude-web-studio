@@ -16,7 +16,7 @@ Template `.claude/docs/templates/feature-spec.md`. Section by section; written a
 ## Phase 1: Context
 Read `docs/specs/product-spec.md` (the feature must be in scope — otherwise ask whether to add it),
 existing `docs/specs/features/*.md` (F-NNN numbering, overlaps), `technical-preferences.md` (API style GraphQL/REST — shapes section 5),
-`docs/architecture/api/` (existing types/operations), `docs/architecture/threat-model.md`.
+`docs/architecture/api/api-contract.md` and the schema file at `api_contract_path` (technical-preferences; default `api/schema.graphqls` for a Go module, `docs/architecture/api/schema.graphql` otherwise) (existing types/operations), `docs/architecture/threat-model.md`.
 
 ## Phase 2: Sections
 Section 6 lists the product events the feature emits (from the product spec §6) and, for a localised product, the copy keys; public pages name their SEO requirements (`seo-specialist` reviews them in `/dev-story`).

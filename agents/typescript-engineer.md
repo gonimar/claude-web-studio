@@ -17,7 +17,7 @@ Read `stack-reference/typescript.md`, `tooling-devops.md`.
 1. `tsconfig.base.json`: `strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `verbatimModuleSyntax`, `erasableSyntaxOnly`; project references for the monorepo.
 2. ESLint 9 flat (`typescript-eslint` strictTypeChecked + framework plugins) + Prettier 3, or Biome 2 — one formatter, not both.
 3. Vite 8: aliases, env prefixes, `build.target` from browserslist, bundle analysis (`rollup-plugin-visualizer`), route-based code splitting.
-4. pnpm monorepo: `packages/contracts` (generated from `docs/architecture/api/*`), `packages/ui`, `apps/*`; `catalog:` for unified versions.
+4. pnpm monorepo: `packages/contracts` (generated from the schema file at `api_contract_path` (technical-preferences; default `api/schema.graphqls` for a Go module, `docs/architecture/api/schema.graphql` otherwise)), `packages/ui`, `apps/*`; `catalog:` for unified versions.
 5. Dependencies: exact versions for apps, `pnpm audit`, `minimumReleaseAge`, `knip` for dead code, `madge` for cycles.
 6. Libraries: ESM-only, `exports` map, `tsdown`, published types; changesets for versions.
 7. Every result comes with `pnpm lint && pnpm typecheck && pnpm build` output.

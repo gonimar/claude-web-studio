@@ -35,7 +35,9 @@
 - **Unit**: [Vitest 4 | PHPUnit 12 | go test]
 - **E2E**: [Playwright]
 - **Lint/format**: [ESLint 9 flat + Prettier | php-cs-fixer + Psalm | gofmt + golangci-lint]
-- **Coverage threshold**: [Go layered: go_coverage_domain 90 %, go_coverage_usecase 80 % — a gate in `scripts/coverage-gate.sh`; otherwise e.g. 80 % for the domain layer as an indicator]
+- **Coverage threshold**: [an indicator for non-layered stacks, e.g. 80 % for the domain layer; layered Go uses the two fields below as a gate]
+- **go_coverage_domain**: [90] — statement coverage of `internal/domain/...`; /test-setup writes it into the Makefile (`GO_COVERAGE_DOMAIN`), which is what `make coverage-gate` reads
+- **go_coverage_usecase**: [80] — the same for `internal/usecase/...` (`GO_COVERAGE_USECASE`)
 
 ## Infrastructure
 - **Containers**: [Docker, compose v2]  **CI**: [GitHub Actions]
@@ -51,7 +53,7 @@
 - **go_layers**: [per-context (internal/usecase/<ctx>/ — recommended) | flat-usecase (one internal/usecase package) | n/a]
 - **go_composition_root**: [internal/app (studio contract, cmd/<app>/main.go ≤ 50 lines) | main (graph and router assembled in cmd/<app>/main.go; recorded in the layout ADR as an accepted deviation)]
 - **go_router**: [chi v5 (recommended) | net/http ServeMux]
-- **go_domain_allow**: [non-stdlib packages the domain layer may import, e.g. github.com/google/uuid, github.com/shopspring/decimal — mirrored into .golangci.yml depguard; `none` = stdlib only]
+- **go_domain_allow**: [non-stdlib packages the domain layer may import, e.g. github.com/google/uuid, github.com/shopspring/decimal; `none` = stdlib only. The list is written into `.golangci.yml` depguard by /test-setup; growing it is a technical-preferences change (one AskUserQuestion, the field, then /test-setup regenerates the allow-list) — never a hand edit of the linter config alone]
 - **frontend_root**: [./frontend | ./web | …]
 - **game_root**: [./game | none]
 - **shared_packages**: [./packages | none]

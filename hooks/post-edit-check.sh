@@ -31,6 +31,7 @@ warn() {
   printf '{"hookSpecificOutput":{"hookEventName":"%s","additionalContext":"%s"},"systemMessage":"%s"}\n' "$1" "$m" "$m"
 }
 [ -f "$FILE" ] || exit 0
+NL=$'\n'
 OUT=""
 # Document structure (rules/docs-format.md, warn-only, language-independent: section count and format markers, never heading text).
 docfmt() { # <min second-level sections> <hint>
@@ -55,21 +56,29 @@ esac
 case "$FILE" in
   *.go)
     command -v gofmt >/dev/null && gofmt -l -w "$FILE" >/dev/null 2>&1
-    command -v go >/dev/null && { V=$(cd "$(dirname "$FILE")" && go vet ./... 2>&1 | head -10); [ -n "$V" ] && OUT="go vet:\n$V"; }
+    command -v go >/dev/null && { V=$(cd "$(dirname "$FILE")" && go vet ./... 2>&1 | head -10); [ -n "$V" ] && OUT="go vet:$NL$V"; }
     # Test rules (rules/tests.md, stack-reference/go.md "Tests by layer"), warn-only: a fixed wait and a string-compared error are the two smells /code-review reports as TEST-SLEEP / TEST-ERRSTR.
+    # A file that imports testing/synctest sleeps on a fake clock — that is the recommended form, not a smell; comment lines are ignored.
     case "$FILE" in *_test.go)
-      S=$(grep -n 'time\.Sleep(' "$FILE" 2>/dev/null | head -3); [ -n "$S" ] && OUT="${OUT:+$OUT\n}TEST-SLEEP: time.Sleep in a test — poll with a deadline or use testing/synctest (rules/tests.md):\n$S"
-      E=$(grep -nE '\.Error\(\) *[!=]=' "$FILE" 2>/dev/null | head -3); [ -n "$E" ] && OUT="${OUT:+$OUT\n}TEST-ERRSTR: error compared as a string — errors.Is/errors.As against the sentinel (rules/tests.md):\n$E" ;;
+      if ! grep -q '"testing/synctest"' "$FILE"; then
+        S=$(grep -v '^[[:space:]]*//' "$FILE" | grep -n 'time\.Sleep(' | head -3); [ -n "$S" ] && OUT="${OUT:+$OUT$NL}TEST-SLEEP: time.Sleep in a test — poll with a deadline or use testing/synctest (rules/tests.md):$NL$S"
+      fi
+      E=$(grep -v '^[[:space:]]*//' "$FILE" | grep -nE '\.Error\(\) *[!=]= *"[^"]' | head -3); [ -n "$E" ] && OUT="${OUT:+$OUT$NL}TEST-ERRSTR: error compared as a string — errors.Is/errors.As against the sentinel (rules/tests.md):$NL$E" ;;
     esac ;;
+  *.graphql|*.graphqls|*.gql)
+    # GraphQL root names (stack-reference/graphql.md): a type named Subscription with an `id` field and no `schema {}` block is an entity that gqlgen / graphql-php will turn into the root subscription type.
+    if grep -qE '^(type|extend type) +Subscription[ {]' "$FILE" && ! grep -qE '^schema *\{' "$FILE" && awk '/^type +Subscription[ {]/{f=1} f&&/^[[:space:]]+id:/{print; exit} /^}/{f=0}' "$FILE" | grep -q .; then
+      OUT="GQL-ROOT: 'type Subscription' is the root subscription type for gqlgen and graphql-php — an entity with that name is generated as subscription resolvers; rename it (Membership, Plan …) or declare 'schema { subscription: … }' (stack-reference/graphql.md)"
+    fi ;;
   *.php)
-    command -v php >/dev/null && { L=$(php -l "$FILE" 2>&1 | grep -v 'No syntax errors'); [ -n "$L" ] && OUT="php -l:\n$L"; }
+    command -v php >/dev/null && { L=$(php -l "$FILE" 2>&1 | grep -v 'No syntax errors'); [ -n "$L" ] && OUT="php -l:$NL$L"; }
     [ -x vendor/bin/php-cs-fixer ] && vendor/bin/php-cs-fixer fix "$FILE" -q >/dev/null 2>&1 ;;
   *.ts|*.tsx|*.vue|*.js|*.mjs|*.scss|*.css|*.json|*.md|*.yaml|*.yml)
     if [ -f node_modules/.bin/prettier ]; then node_modules/.bin/prettier --write --log-level silent "$FILE" >/dev/null 2>&1;
     elif [ -f node_modules/.bin/biome ]; then node_modules/.bin/biome format --write "$FILE" >/dev/null 2>&1; fi
     case "$FILE" in
       *.json) command -v python3 >/dev/null && ! python3 -m json.tool "$FILE" >/dev/null 2>&1 && OUT="Invalid JSON: $FILE" ;;
-      *.ts|*.tsx|*.vue|*.js|*.mjs) [ -f node_modules/.bin/eslint ] && { E=$(node_modules/.bin/eslint --no-warn-ignored --format unix "$FILE" 2>/dev/null | grep -E 'error' | head -8); [ -n "$E" ] && OUT="eslint:\n$E"; } ;;
+      *.ts|*.tsx|*.vue|*.js|*.mjs) [ -f node_modules/.bin/eslint ] && { E=$(node_modules/.bin/eslint --no-warn-ignored --format unix "$FILE" 2>/dev/null | grep -E 'error' | head -8); [ -n "$E" ] && OUT="eslint:$NL$E"; } ;;
     esac ;;
 esac
 [ -n "$OUT" ] && warn PostToolUse "$(printf '=== post-edit (%s) ===\n%s' "$FILE" "$OUT")"

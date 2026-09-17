@@ -29,36 +29,26 @@ the values you read in your plan; a missing field is a question to the user, nev
    no `src/`/`utils/`; a one-file tool stays `main.go`. "Wiring" is not a label that lets code stay
    in `cmd/`: if it parses a flag, chooses a lock mode, formats output, converts one type into
    another or fills a dependency struct, it is application code and belongs to `internal/app/<app>`.
-3. Implement per style. `modular`: thin handler → service → repository (sqlc) inside `internal/<domain>/`.
-   `layered` (go.md "Layered architecture"): the rule lives in the entity — unexported fields, a validating
-   `New…`, operations as methods returning sentinel errors, `Rehydrate` for adapters; ports (`Repository`,
-   gateways) declared in `internal/domain/<ctx>/`; **one struct per use case** with `Execute(ctx, Input)`
-   in `internal/usecase/<ctx>/` (or `internal/usecase/` when `go_layers: flat-usecase`) that loads through
-   a port, calls the entity, saves, and knows no SQL, HTTP or GraphQL type; adapters, DTOs and mapping in
-   `internal/infrastructure/…`; resolvers and handlers call use cases, never repositories. Dependencies
-   point inwards only — `golangci-lint run` (depguard, template `docs/templates/go/golangci.yml`) is the
-   check, and a finding is fixed by moving the code, never by editing the allow-list. Both styles: DTOs
-   separate from the domain (`graphql_models: dto`; `bind` only when technical-preferences says so, and then
-   through getters); boundary validation; `%w` errors; contexts and timeouts; the HTTP server with
-   `ReadHeaderTimeout`/`IdleTimeout` and graceful shutdown in `internal/app/<app>`; request logging through
-   `slog`, not chi's text `middleware.Logger`. One constructor per shared dependency graph
+3. Implement per style — the rules are go.md's, not this file's: `modular` per "Project layout" (`internal/<domain>/`,
+   handler → service → repository); `layered` per "Layered architecture" and "Rich model, concretely" — quote the
+   row you apply in your plan. What only this agent adds: the HTTP server with `ReadHeaderTimeout`/`IdleTimeout` and
+   graceful shutdown lives in `internal/app/<app>`; request logging through `slog`, never chi's text `middleware.Logger`;
+   a `depguard` finding is fixed by moving the code — a value library the domain genuinely needs is a
+   technical-preferences change (`go_domain_allow` through one `AskUserQuestion`, then `/test-setup` regenerates the
+   allow-list), never a hand edit of `.golangci.yml`. One constructor per shared dependency graph
    (`newServices(cfg, log, …)`) called by every sub-command that needs it — the same struct literal
    in two sub-commands is the bug class "field added in one, forgotten in the other".
-4. Table-driven tests with `t.Run`, case names in English, `errors.Is`/`errors.As` against sentinels —
-   never `err.Error() == "…"`; no `time.Sleep` to wait (`testing/synctest` for time, a polling helper
-   with a deadline for external systems). `layered`, by layer (go.md "Tests by layer"): domain tests
-   without any double, every sentinel error a case; use-case tests with func-field fakes (≤ 3 methods)
-   or `moq`, no DB, file or network; infrastructure against a real Postgres (testcontainers). A changed
-   file in `internal/domain` or `internal/usecase` changes its `_test.go` in the same step. `go test -race
-   ./...` after every change and `scripts/coverage-gate.sh` — a race, a deadlock or a layer below its
-   threshold means the change is not done; fix it in the same story and attach the clean run.
+4. Tests per go.md "Tests by layer" and `rules/tests.md` (table-driven, `errors.Is`, no `time.Sleep`, doubles by layer).
+   A changed file in `internal/domain` or `internal/usecase` changes its `_test.go` in the same step. After each change
+   `go test -race` on the packages you touched; once before reporting the full suite and `make coverage-gate` — a race, a
+   deadlock or a layer below its threshold means the change is not done; fix it in the same story and attach the clean run.
    Tests of CLI behaviour (exit codes, stdout tokens, flag errors) sit in `internal/app/<app>`, not
    in `package main`; `cmd/` keeps at most one smoke test.
-5. After every write `gofmt` + `goimports` (`golangci-lint fmt`); before reporting `go vet`,
-   `golangci-lint run ./...` (depguard included), `govulncheck` — a finding is fixed in the same step
-   until the run is clean, and the clean output is attached.
-6. Layout self-check before you report, by numbers, not by eye: `wc -l cmd/*/*.go` and
-   `grep -ln 'flag\.\|Fprint' cmd/*/*.go`. A second non-test file in `cmd/<app>`, a `main.go` over
+5. After every write `gofmt` + `goimports` (`golangci-lint fmt`); before reporting `golangci-lint run ./...`
+   (govet and depguard included) and `make arch-check` — a finding is fixed in the same step until the run is
+   clean, and the clean output is attached; `govulncheck` belongs to `make ci-full`, once per story.
+6. Layout self-check before you report, by numbers, not by eye: `make layout-check` (or `wc -l cmd/*/*.go` and
+   `grep -ln 'flag\.\|Fprint' cmd/*/*.go` where the target is not installed). A second non-test file in `cmd/<app>`, a `main.go` over
    50 lines or a `flag.`/`Fprint` hit there is a finding: move the code to `internal/app/<app>` in
    the same story — never add to it; when the move is larger than the story, say so in the result
    and escalate to `backend-lead` instead of extending `cmd/`. A story that touches `cmd/` reports

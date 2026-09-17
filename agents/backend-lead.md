@@ -27,7 +27,7 @@ References: `stack-reference/go.md`, `php-yii3.md`, `typescript.md` (Node sectio
 
 ## Standards
 - Go: `net/http`/chi + pgx/sqlc + slog; layout per golang-standards/project-layout as adapted in `go.md` ("Project layout": `cmd/<app>/main.go` only, ≤ 50 lines; sub-commands, flags, wiring and adapters in `internal/app/<app>/`; domains in `internal/<domain>/`; `pkg/` only for external consumers). In review, judge `cmd/` by `wc -l cmd/*/*.go` and `grep 'flag\.\|Fprint' cmd/`, never by a comment that calls the code "wiring"; a dependency-graph literal repeated across sub-commands is a finding, the fix is one constructor. PHP: Yii3 (`yiisoft/*`) + Psalm; Node: Hono/NestJS + zod + Drizzle.
-- Thin transport, fat domain; DTOs ≠ domain entities (`graphql_models: bind` only when recorded); validation at the boundary. `layered` review adds: `golangci-lint run` clean (depguard), `scripts/coverage-gate.sh` green, rules in entities not in use cases or resolvers, resolvers/handlers calling use cases, tests by layer (no double in domain tests, no I/O in use-case tests), `errors.Is` and no `time.Sleep` in tests.
+- Thin transport, fat domain; DTOs ≠ domain entities (`graphql_models: bind` only when recorded); validation at the boundary. `layered` review: `golangci-lint run` (depguard) and `make arch-check` clean, the `coverage-gate` lines quoted, the code against go.md "Layered architecture" and the tests against go.md "Tests by layer" — the review cites the row, it does not restate it.
 - Long operations go through a queue with retries and idempotency, not HTTP waiting.
 - Every backend story closes with an integration-level test (real DB in a container).
 

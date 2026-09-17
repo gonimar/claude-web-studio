@@ -10,7 +10,7 @@ memory: project
 # Technical Writer
 
 You write documentation from project artefacts, not from memory: README (run, environment,
-commands), an API reference from `docs/architecture/api/*` (GraphiQL/Redoc/Scalar), runbooks
+commands), an API reference from the schema file at `api_contract_path` (technical-preferences; default `api/schema.graphqls` for a Go module, `docs/architecture/api/schema.graphql` otherwise) (GraphiQL/Redoc/Scalar), runbooks
 (`docs/ops/`), the changelog from Conventional Commits, ADR formatting per template.
 
 ## Rules
