@@ -29,12 +29,14 @@ Argument → mode: `<package|namespace|file>` (local), `layout` (architecture mi
 applies, in the order layout → packages → tests, each announced before it runs. Stack from
 technical-preferences: Go and PHP in this version — anything else → `BLOCKED (refactor supports Go and PHP in
 this version — inventory with /tech-debt, changes through /dev-story)`, one line, no plan. Read the stack's
-fields — Go: `go_architecture`, `go_layers`, `go_composition_root`, `go_router`, `graphql_models`,
+fields — Go: `go_architecture`, `go_composition_root`, `go_router`, `graphql_models`,
 `go_domain_allow`; PHP: `php_framework`, `php_architecture`, `php_static_analysis`, `php_cs_tool`,
 `php_domain_allow` — the coverage thresholds, the layout ADR, `production/findings.md`
-(`ARCH-NNN` rows the plan must close) and the last `docs/ops/tech-debt-*.md`. In the full pass the
-questions come first, before any step runs: the mode list to confirm and the Phase 3 choices when `layout`
-applies (batched by group, see Phase 3); the write gate for the plan is the one question that comes at the end,
+(`ARCH-NNN` rows the plan must close) and the last `docs/ops/tech-debt-*.md`. **Without an argument the pass is also a full interview**: before any step runs, every choice of Phase 3 is asked —
+recorded or not — with the current value first ("keep: <value> (current)", Recommended) and the alternatives after it;
+this is how the owner changes the approach of a running project. An answer equal to the current value creates no
+step; a different one becomes a plan step — `/architecture-decision` first, the migration after it. With an argument,
+only the questions of that mode are asked. The write gate for the plan is the one question that comes at the end,
 because it asks about tables that do not exist yet.
 
 ## Phase 2: Baseline by numbers
@@ -63,15 +65,17 @@ Domain / Application / Infrastructure — the first two columns are what a frame
 before the last one, and under `layered` they must be zero. A red build or a failing test stops here: `BLOCKED (baseline red — fix first: <package>)`;
 refactoring starts from green.
 
-## Phase 3: Choices (`layout` mode: asked for the fields technical-preferences does not record yet; `framework` mode: always asks the target)
+## Phase 3: Choices (no argument: every choice, current value first; `layout` mode: the fields not recorded yet; `framework` mode: the target)
 The same choices `/setup-stack` records, batched into three `AskUserQuestion`s — architecture and shape ·
-transport (router, GraphQL models) · thresholds and allow-list — recommendation first, the current tree as
-evidence for the recommendation: `go_architecture` layered | modular (staying modular ends the
-mode with `PLANNED (no migration — modular confirmed)`); `go_layers` per-context | flat-usecase;
-`go_composition_root` internal/app | main; ports in the domain (the layered rule) — shown, not asked;
+transport (router, GraphQL models) · thresholds and allow-list — the current value from technical-preferences, the
+layout ADR or the tree as the first, Recommended option ("keep"), the alternatives after it, the tree as evidence:
+`go_architecture` layered | modular (keeping modular ends the `layout` mode with `PLANNED (no migration — modular
+confirmed)`); the use-case shape — one package per context | one `usecase` package (the layout ADR's tree; a change
+is an ADR step); `go_composition_root` internal/app | main; ports in the domain (the layered rule) — shown, not asked;
 `go_router` chi | ServeMux; `graphql_models` dto | bind; `go_domain_allow`; coverage thresholds. PHP:
-`php_architecture` layered | framework (staying `framework` ends the mode the same way); `php_layers` per-context | flat; `php_static_analysis`
-phpstan | psalm; `php_cs_tool` ecs | php-cs-fixer; `php_domain_allow`; coverage thresholds. `framework` mode asks one
+`php_architecture` layered | framework (keeping `framework` ends the mode the same way); the use-case shape per context
+| flat (ADR tree); `php_static_analysis` phpstan | psalm; `php_cs_tool` ecs | php-cs-fixer; `php_domain_allow`;
+coverage thresholds. `framework` mode asks one
 thing only — the target framework (yii3 · symfony · laravel · slim · none) — and writes nothing into
 technical-preferences: the current `php_framework` stays the truth until the ADR is accepted and the last apply step
 lands. The `layout` answers are written into `technical-preferences.md` under the plan's write gate (Phase 4);

@@ -33,6 +33,13 @@ warn() {
 [ -f "$FILE" ] || exit 0
 NL=$'\n'
 OUT=""
+# smell <CODE> <ERE> <hint>: a warn-only test-smell finding on $FILE (comment lines skipped); the labels are the ones
+# /code-review reports (TEST-SLEEP, TEST-ERRSTR). One helper for Go, PHP and Vitest so the patterns cannot drift apart.
+smell() {
+  local hits; hits=$(grep -vE '^[[:space:]]*(//|#)' "$FILE" | grep -nE "$2" | head -3)
+  [ -n "$hits" ] && OUT="${OUT:+$OUT$NL}$1: $3 (rules/tests.md):$NL$hits"
+}
+
 # Document structure (rules/docs-format.md, warn-only, language-independent: section count and format markers, never heading text).
 docfmt() { # <min second-level sections> <hint>
   local n; n=$(grep -c '^## ' "$FILE" 2>/dev/null); [ "${n:-0}" -lt "$1" ] && OUT="DOCS-FORMAT: $FILE has $n second-level sections, its template has at least $1 — $2 (rules/docs-format.md; /migrate converts, a section that does not apply stays as 'n/a — reason')"; }
@@ -60,10 +67,8 @@ case "$FILE" in
     # Test rules (rules/tests.md, stack-reference/go.md "Tests by layer"), warn-only: a fixed wait and a string-compared error are the two smells /code-review reports as TEST-SLEEP / TEST-ERRSTR.
     # A file that imports testing/synctest sleeps on a fake clock — that is the recommended form, not a smell; comment lines are ignored.
     case "$FILE" in *_test.go)
-      if ! grep -q '"testing/synctest"' "$FILE"; then
-        S=$(grep -v '^[[:space:]]*//' "$FILE" | grep -n 'time\.Sleep(' | head -3); [ -n "$S" ] && OUT="${OUT:+$OUT$NL}TEST-SLEEP: time.Sleep in a test — poll with a deadline or use testing/synctest (rules/tests.md):$NL$S"
-      fi
-      E=$(grep -v '^[[:space:]]*//' "$FILE" | grep -nE '\.Error\(\) *[!=]= *"[^"]' | head -3); [ -n "$E" ] && OUT="${OUT:+$OUT$NL}TEST-ERRSTR: error compared as a string — errors.Is/errors.As against the sentinel (rules/tests.md):$NL$E" ;;
+      grep -q '"testing/synctest"' "$FILE" || smell TEST-SLEEP 'time\.Sleep\(' 'time.Sleep in a test — poll with a deadline or use testing/synctest'
+      smell TEST-ERRSTR '\.Error\(\) *[!=]= *"[^"]' 'error compared as a string — errors.Is/errors.As against the sentinel' ;;
     esac ;;
   *.graphql|*.graphqls|*.gql)
     # GraphQL root names (stack-reference/graphql.md): a type named Subscription with an `id` field and no `schema {}` block is an entity that gqlgen / graphql-php will turn into the root subscription type.
@@ -76,12 +81,16 @@ case "$FILE" in
     elif [ -x vendor/bin/php-cs-fixer ]; then vendor/bin/php-cs-fixer fix "$FILE" -q >/dev/null 2>&1; fi
     # Test rules (rules/tests.md, stack-reference/php.md "Tests by layer"), warn-only — the PHP twins of TEST-SLEEP / TEST-ERRSTR; a method call like $clock->sleep() is not a smell.
     case "$FILE" in *Test.php)
-      S=$(grep -v '^[[:space:]]*//' "$FILE" | grep -nE '(^|[^>[:alnum:]_])u?sleep\(' | head -3); [ -n "$S" ] && OUT="${OUT:+$OUT$NL}TEST-SLEEP: sleep() in a test — a fake clock or polling with a deadline (rules/tests.md):$NL$S"
-      E=$(grep -nE 'assert(Same|Equals|StringContainsString)\(.*getMessage\(\)' "$FILE" 2>/dev/null | head -3); [ -n "$E" ] && OUT="${OUT:+$OUT$NL}TEST-ERRSTR: exception asserted by message — expectException(Class::class) (rules/tests.md):$NL$E" ;;
+      smell TEST-SLEEP '(^|[^>[:alnum:]_])u?sleep\(' 'sleep() in a test — a fake clock or polling with a deadline'
+      smell TEST-ERRSTR 'assert(Same|Equals|StringContainsString)\(.*getMessage\(\)' 'exception asserted by message — expectException(Class::class)' ;;
     esac ;;
   *.ts|*.tsx|*.vue|*.js|*.mjs|*.scss|*.css|*.json|*.md|*.yaml|*.yml)
     if [ -f node_modules/.bin/prettier ]; then node_modules/.bin/prettier --write --log-level silent "$FILE" >/dev/null 2>&1;
     elif [ -f node_modules/.bin/biome ]; then node_modules/.bin/biome format --write "$FILE" >/dev/null 2>&1; fi
+    case "$FILE" in *.spec.ts|*.test.ts|*.spec.tsx|*.test.tsx)
+      smell TEST-SLEEP 'await +new +Promise\([^)]*setTimeout|setTimeout\([^)]*,[[:space:]]*[0-9]{2,}' 'a fixed wait in a test — vi.useFakeTimers()/vi.advanceTimersByTime or waitFor with a condition'
+      smell TEST-ERRSTR 'toThrow(Error)?\([[:space:]]*["'"'"'`]' 'error asserted by message — toThrow(ErrorClass) or toBeInstanceOf' ;;
+    esac
     case "$FILE" in
       *.json) command -v python3 >/dev/null && ! python3 -m json.tool "$FILE" >/dev/null 2>&1 && OUT="Invalid JSON: $FILE" ;;
       *.ts|*.tsx|*.vue|*.js|*.mjs) [ -f node_modules/.bin/eslint ] && { E=$(node_modules/.bin/eslint --no-warn-ignored --format unix "$FILE" 2>/dev/null | grep -E 'error' | head -8); [ -n "$E" ] && OUT="eslint:$NL$E"; } ;;

@@ -15,7 +15,7 @@ by `php_framework` in `.claude/docs/technical-preferences.md`: `yii3.md` for Yii
 packages, the "maximum ready packages, minimum own code" rule, package health checks). For a framework
 without a studio reference (Symfony, Laravel, Slim, none) you work from its official documentation, say
 so in the first line of your result, and keep every rule of `php.md` — the framework is an Infrastructure
-detail. The project's choices are facts, not defaults: `php_framework`, `php_architecture`, `php_layers`,
+detail. The project's choices are facts, not defaults: `php_framework`, `php_architecture`,
 `php_static_analysis`, `php_cs_tool`, `php_domain_allow`, `api_contract_path`, the coverage thresholds —
 quote the values you read in your plan; a missing field is a question to the user, never a guess.
 GraphQL endpoints: `graphql.md` (graphql-php) with `graphql-engineer`.
@@ -23,9 +23,15 @@ GraphQL endpoints: `graphql.md` (graphql-php) with `graphql-engineer`.
 ## How you work
 1. Spec/ADR/contract → questions → a sketch of classes and the composition-root config before code (Yii3: `config/common/di/*.php`, `params.php`; Symfony: `config/services.yaml`; Laravel: `app/Providers/*`; slim/none: the container bootstrap).
 2. Before a new dependency: Packagist (abandoned? tags? date?), `composer show`, a real run for `dev-master`. Out-of-sync `dev-*` packages are not patched — find an alternative and document it.
-3. Implementation per style. `framework`: the framework's own layout, thin actions, logic in services. `layered` (`php.md` "Layered architecture"): the rule lives in the entity — `readonly` identity, `public private(set)` state, a validating constructor, operations as methods throwing domain exceptions (incl. a domain `NotFoundException`); ports (`<Entity>RepositoryInterface`) in `App\Domain\<Context>`; **one class per use case** with `execute()` in `App\Application\<Context>` (or `App\Application` when `php_layers: flat`) that loads through a port, calls the entity, saves, and knows no framework, ORM or HTTP type; adapters, ORM mapping, invokable actions, resolvers, DTOs in `App\Infrastructure\…`, calling use cases, never repositories; port → adapter bindings in the framework's container config. Dependencies point inwards only — `composer arch-check` (deptrac, template `docs/templates/php/deptrac.yaml`) is the check, and a finding is fixed by moving the code, never by editing the ruleset. Both styles: `declare(strict_types=1)`, `readonly`, enums, `final`; RFC 9457 errors from an error-handler middleware; schema changes only as migration files.
+3. Implementation per `php_architecture` — the rules are `php.md`'s ("Layered architecture", "Rich model, concretely") and
+   `rules/php-code.md`'s, not this file's; quote the row you apply in your plan. What only this agent adds: the port →
+   adapter bindings live in the framework's composition root; a deptrac finding is fixed by moving the code
+   (`rules/php-code.md` says where a value library goes).
 4. Boundary validation and DTO hydration with the framework's own means (Yii3: `yiisoft/validator`, `yiisoft/hydrator`; Symfony: Validator + Form/serializer; Laravel: Form Requests; slim/none: a validator library recorded in technical-preferences); errors — domain exceptions mapped to RFC 9457 in the error-handler middleware (Yii3 adds `FriendlyException` for user-facing text); CSRF/sessions/RBAC — the framework's packages, never hand-rolled.
-5. PHPUnit 13 with data providers, method names in English, `expectException(Class::class)` — never a message comparison; no `sleep()`/`usleep()` to wait. `layered`, by layer (`php.md` "Tests by layer"): domain tests without any double, every domain exception a case; application tests with `createMock()` of the ports and no framework, DB or network; infrastructure in `tests/Integration/` against a real Postgres (compose profile `test`). A changed class in `src/Domain` or `src/Application` changes its test in the same step. Formatting is the post-edit hook's job (it runs the recorded coding-standard tool on every write when `vendor/bin` is reachable; run it yourself only when the hook reported nothing and `vendor/bin` sits under `backend_root`). After each change `vendor/bin/phpunit --filter` on the classes you touched; once before reporting `composer ci` (validate → lint → stan → arch-check → tests with coverage → coverage-gate; `composer ci-full` with `composer audit` once per story) — a red step is fixed in the same story until green, and the green output is attached; `layered` results quote the `coverage-gate:` lines and the deptrac violation count (0 expected).
+5. Tests per `rules/tests.md` and `php.md` "Tests by layer". A changed class in `src/Domain` or `src/Application` changes
+   its test in the same step. Formatting is the post-edit hook's job. After each change `phpunit --filter` on the classes
+   you touched; once before reporting `composer ci` — a red step is fixed in the same story until green, the green output
+   is attached, and a `layered` result quotes the `coverage-gate:` lines and the deptrac violation count.
 6. Long operations — the framework's queue (Yii3 `yiisoft/queue`, Symfony Messenger, Laravel queues) with re-scheduling, idempotent handlers; never `sleep()`.
 
 ## Never

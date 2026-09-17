@@ -44,23 +44,37 @@ if (!is_file($clover)) {
     fwrite(STDERR, "coverage-gate: $clover not found — run phpunit with --coverage-clover=$clover first\n");
     exit(2);
 }
-$xml = @simplexml_load_file($clover);
-if ($xml === false) {
-    fwrite(STDERR, "coverage-gate: $clover is not a clover report\n");
+$reader = new XMLReader();
+if (!@$reader->open($clover)) {
+    fwrite(STDERR, "coverage-gate: $clover is not readable as XML\n");
     exit(2);
 }
 $totals = [];
-foreach ($xml->xpath('//file') as $file) {
-    $name = (string) $file['name'];
-    foreach (array_keys($gates) as $layer) {
-        if (preg_match('#(^|/)' . preg_quote($root, '#') . '/' . preg_quote($layer, '#') . '/#', $name) !== 1) {
-            continue;
+$currentLayer = null;
+// Stream the report: a clover file lists <file name="…"> elements with one <metrics> child each; the <line>
+// elements (most of the bytes) are skipped, so a report of any size fits in the default memory_limit.
+while ($reader->read()) {
+    if ($reader->nodeType !== XMLReader::ELEMENT) {
+        continue;
+    }
+    if ($reader->name === 'file') {
+        $currentLayer = null;
+        $name = (string) $reader->getAttribute('name');
+        foreach (array_keys($gates) as $layer) {
+            if (preg_match('#(^|/)' . preg_quote($root, '#') . '/' . preg_quote($layer, '#') . '/#', $name) === 1) {
+                $currentLayer = $layer;
+                break;
+            }
         }
-        $m = $file->metrics;
-        $totals[$layer]['statements'] = ($totals[$layer]['statements'] ?? 0) + (int) $m['statements'];
-        $totals[$layer]['covered'] = ($totals[$layer]['covered'] ?? 0) + (int) $m['coveredstatements'];
+        continue;
+    }
+    if ($reader->name === 'metrics' && $currentLayer !== null) {
+        $totals[$currentLayer]['statements'] = ($totals[$currentLayer]['statements'] ?? 0) + (int) $reader->getAttribute('statements');
+        $totals[$currentLayer]['covered'] = ($totals[$currentLayer]['covered'] ?? 0) + (int) $reader->getAttribute('coveredstatements');
+        $currentLayer = null;
     }
 }
+$reader->close();
 $rc = 0;
 foreach ($gates as $layer => $min) {
     if (!isset($totals[$layer]) || $totals[$layer]['statements'] === 0) {
