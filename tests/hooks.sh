@@ -61,6 +61,15 @@ expect "post-edit test smells never block" 0 $code
 echo "$out" | grep -q 'TEST-SLEEP' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: time.Sleep in a test not flagged"; }
 echo "$out" | grep -q 'TEST-ERRSTR' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: string-compared error not flagged"; }
 printf 'package x\n\nimport ("errors"; "testing")\n\nvar errX = errors.New("x")\n\nfunc TestB(t *testing.T) {\n\tif !errors.Is(errX, errX) {\n\t\tt.Fatal("no")\n\t}\n}\n' > clean_test.go
+printf 'package x\n\nimport ("testing"; "testing/synctest"; "time")\n\n// time.Sleep(1) in a comment\nfunc TestC(t *testing.T) {\n\tsynctest.Test(t, func(t *testing.T) { time.Sleep(time.Second) })\n}\n' > synctest_test.go
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/synctest_test.go\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null)
+echo "$out" | grep -q 'TEST-SLEEP' && { failn=$((failn+1)); echo "FAIL post-edit: time.Sleep inside synctest flagged (false positive)"; } || pass=$((pass+1))
+printf 'type Subscription {\n    id: ID!\n    balance: Int!\n}\n\ntype Query {\n    getSubscription(id: ID!): Subscription\n}\n' > schema.graphqls
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/schema.graphqls\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); code=$?
+expect "post-edit graphql never blocks" 0 $code; echo "$out" | grep -q 'GQL-ROOT' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: entity named Subscription not flagged"; }
+printf 'type Subscription {\n    membershipActivated: ID!\n}\n\ntype Query {\n    ping: Boolean!\n}\n' > root.graphqls
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/root.graphqls\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null)
+echo "$out" | grep -q 'GQL-ROOT' && { failn=$((failn+1)); echo "FAIL post-edit: real root Subscription flagged (false positive)"; } || pass=$((pass+1))
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/clean_test.go\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null)
 echo "$out" | grep -q 'TEST-' && { failn=$((failn+1)); echo "FAIL post-edit: clean test flagged (false positive)"; } || pass=$((pass+1))
 # PHP test smells (rules/tests.md): sleep() and a message assertion in a *Test.php -> warning; a clean test -> silent

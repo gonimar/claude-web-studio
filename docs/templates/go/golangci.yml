@@ -22,6 +22,7 @@ linters:
         domain:
           # Strict: the domain imports the standard library and the value libraries listed in
           # technical-preferences `go_domain_allow` — never a driver, a framework, a transport, a logger.
+          # Strict mode denies every package absent from `allow`; the `deny` entries below only carry the message.
           list-mode: strict
           files:
             - "**/internal/domain/**"

@@ -1,37 +1,46 @@
 # Web Studio — Makefile targets for a Go module (stack-reference/go.md). Merge into the project's
-# Makefile; `make ci` is what CI runs and what /story-done and /refactor read.
+# Makefile; `make ci` is the local gate (/story-done and /refactor read it), `make ci-full` adds the
+# network checks CI runs. /test-setup writes the coverage thresholds from technical-preferences here —
+# this file is the single place the numbers live for the build.
 BINARY ?= app
+GO_COVERAGE_DOMAIN ?= 90
+GO_COVERAGE_USECASE ?= 80
 
-.PHONY: fmt lint test coverage-gate layout-check arch-check ci
+.PHONY: fmt lint test coverage-gate layout-check arch-check ci ci-full
 
 fmt: ## gofmt + goimports through the linter's formatter
 	golangci-lint fmt ./...
 
-lint: ## staticcheck-class linters + depguard (layer rule) + gosec
-	go vet ./...
+lint: ## staticcheck-class linters + depguard (layer rule) + gosec; govet runs inside golangci-lint
 	golangci-lint run ./...
 
-test: ## unit and integration tests with the race detector
-	go test -race -coverprofile=coverage.out ./...
+test: ## unit and integration tests with the race detector; the profile feeds coverage-gate
+	CGO_ENABLED=1 go test -race -covermode=atomic -coverprofile=coverage.out ./...
 
-coverage-gate: ## per-layer thresholds (go_coverage_domain / go_coverage_usecase)
-	scripts/coverage-gate.sh domain=90 usecase=80
+coverage-gate: ## per-layer thresholds from the existing profile (no second test run)
+	scripts/coverage-gate.sh --profile=coverage.out domain=$(GO_COVERAGE_DOMAIN) usecase=$(GO_COVERAGE_USECASE)
 
-layout-check: ## project-layout by numbers: cmd/<app>/ holds only main.go, <= 50 lines, no flags or output there
-	@extra="$$(find cmd/$(BINARY) -maxdepth 1 -name '*.go' ! -name '*_test.go' ! -name 'main.go')"; \
-	test -z "$$extra" || { echo "layout-check: cmd/$(BINARY)/ has non-test files besides main.go:"; echo "$$extra"; exit 1; }
-	@lines=$$(wc -l < cmd/$(BINARY)/main.go); \
-	test $$lines -le 50 || { echo "layout-check: cmd/$(BINARY)/main.go is $$lines lines, must stay <= 50"; exit 1; }
-	@hit="$$(grep -l 'flag\.\|Fprint' cmd/$(BINARY)/*.go 2>/dev/null || true)"; \
-	test -z "$$hit" || { echo "layout-check: cmd/$(BINARY)/ must not parse flags or format output directly:"; echo "$$hit"; exit 1; }
-	@echo "layout-check: OK"
+layout-check: ## project-layout by numbers for every binary: cmd/<app>/ holds only main.go, <= 50 lines, no flags or output there.
+	@# Under `go_composition_root: main` (recorded in the layout ADR) drop this target from `ci`; the rule does not apply.
+	@rc=0; for d in cmd/*/; do app=$${d%/}; \
+	  extra="$$(find "$$app" -maxdepth 1 -name '*.go' ! -name '*_test.go' ! -name 'main.go')"; \
+	  test -z "$$extra" || { echo "layout-check: $$app/ has non-test files besides main.go:"; echo "$$extra"; rc=1; }; \
+	  lines=$$(wc -l < "$$app/main.go"); test "$$lines" -le 50 || { echo "layout-check: $$app/main.go is $$lines lines, must stay <= 50"; rc=1; }; \
+	  hit="$$(grep -l 'flag\.\|Fprint' "$$app"/*.go 2>/dev/null || true)"; \
+	  test -z "$$hit" || { echo "layout-check: $$app/ must not parse flags or format output directly:"; echo "$$hit"; rc=1; }; \
+	done; test $$rc -eq 0 && echo "layout-check: OK"
 
-arch-check: ## layer rule by the dependency graph (the same rule depguard enforces per file)
-	@bad="$$(go list -deps ./internal/domain/... 2>/dev/null | grep -E "$$(go list -m)/internal/(usecase|infrastructure|app)" || true)"; \
-	test -z "$$bad" || { echo "arch-check: internal/domain depends on outer layers:"; echo "$$bad"; exit 1; }
-	@bad="$$(go list -deps ./internal/usecase/... 2>/dev/null | grep -E "$$(go list -m)/internal/(infrastructure|app)" || true)"; \
-	test -z "$$bad" || { echo "arch-check: internal/usecase depends on infrastructure or app:"; echo "$$bad"; exit 1; }
-	@echo "arch-check: OK"
+arch-check: ## transitive direction check over the package graph (complements depguard, which checks direct imports per file and third-party packages)
+	@mod=$$(go list -m); \
+	deps=$$(go list -deps -test ./internal/domain/...) || exit 1; \
+	bad="$$(printf '%s\n' "$$deps" | grep "^$$mod/internal/" | grep -v "^$$mod/internal/domain" || true)"; \
+	test -z "$$bad" || { echo "arch-check: internal/domain reaches packages outside the domain:"; echo "$$bad"; exit 1; }; \
+	deps=$$(go list -deps -test ./internal/usecase/...) || exit 1; \
+	bad="$$(printf '%s\n' "$$deps" | grep -E "^$$mod/internal/(infrastructure|app)" || true)"; \
+	test -z "$$bad" || { echo "arch-check: internal/usecase reaches infrastructure or app:"; echo "$$bad"; exit 1; }; \
+	echo "arch-check: OK"
 
-ci: lint test coverage-gate layout-check arch-check ## everything CI runs
+ci: lint test coverage-gate layout-check arch-check ## the local gate: no network
+
+ci-full: ci ## what CI runs: the local gate plus the vulnerability scan (network)
 	govulncheck ./...

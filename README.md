@@ -3,7 +3,7 @@
 **Read in:** English · [Русский](docs/readme/README.ru.md) · [Español](docs/readme/README.es.md) · [Deutsch](docs/readme/README.de.md) · [中文](docs/readme/README.zh.md)
 
 Web Studio turns Claude Code into a full web development studio: 30 specialised agents in
-three tiers, 49 slash commands that form a pipeline from idea to production, hooks that guard
+three tiers, 50 slash commands that form a pipeline from idea to production, hooks that guard
 secrets and commit hygiene, path-scoped coding rules, document templates, a **dated reference of
 current stack versions and best practices**, and a framework for testing the agents themselves.
 It covers web applications and browser games alike.¹
@@ -233,7 +233,7 @@ in this repository or in a project installed with `--with-testing`. Details: [te
 ## 9. Repository layout
 ```
 .claude-plugin/   plugin.json + marketplace.json (this repository is both the marketplace and the plugin)
-agents/           30 agents        skills/     49 skills        hooks/      hooks.json + 10 scripts
+agents/           30 agents        skills/     50 skills        hooks/      hooks.json + 10 scripts
 rules/            13 path-scoped rules          docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, roster, workflow catalog, security baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          agent and skill testing framework      install.sh  copy-mode / new-project installer

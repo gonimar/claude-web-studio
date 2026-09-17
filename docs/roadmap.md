@@ -27,7 +27,7 @@ Statuses: `planned` · `in progress` · `shipped vX.Y.Z`.
 
 ## Toward 1.0
 
-1.0 is not a feature release. Functionally the studio is complete (49 commands, R-01..R-15 shipped); what 1.0 adds is
+1.0 is not a feature release. Functionally the studio is complete (50 commands, R-01..R-15 shipped); what 1.0 adds is
 **evidence that the studio does what its texts promise, on real projects, without an observer behind it**. Five conditions;
 each is ticked only with the artefact named next to it. The release that ticks the last one is 1.0, and its changelog says
 "nothing changed — everything verified".

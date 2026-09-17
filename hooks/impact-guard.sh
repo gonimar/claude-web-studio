@@ -25,7 +25,7 @@ sensitive() {
   case "$1" in
     */auth/*|*/security/*|*/middleware/*|*/nginx/*|*/Caddyfile|*.conf|*/payments/*|*/upload*/*|*/webhook*/*) return 0;;   # rules/security-sensitive.md globs
     */migrations/*|*/.github/workflows/*|.github/workflows/*|*/Dockerfile*|Dockerfile*|*compose*.yml|*compose*.yaml) return 0;;
-    */go.mod|go.mod|*/package.json|package.json|*/composer.json|composer.json|*/schema.graphql|schema.graphql|*/openapi.yaml|openapi.yaml|*/openapi.json|openapi.json) return 0;;
+    */go.mod|go.mod|*/package.json|package.json|*/composer.json|composer.json|*/schema.graphql|schema.graphql|*.graphqls|*/api/*.graphql|*/openapi.yaml|openapi.yaml|*/openapi.json|openapi.json) return 0;;
   esac
   return 1
 }
