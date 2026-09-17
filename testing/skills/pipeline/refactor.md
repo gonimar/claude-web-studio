@@ -24,8 +24,8 @@ characterisation tests and whose second is the tooling; `PLANNED (N steps, M sto
 **Fixture**: a Node project; then a Go project with a failing test. **Expected**: `BLOCKED (refactor supports Go and PHP in this version — …)` in one line; `BLOCKED (baseline red — fix first: <package>)` after the table.
 - [ ] stops with the reason · [ ] names the command to run instead · [ ] writes no files
 ### 3. Mode/argument variant — `tests`, `<package>`, no argument
-**Fixture**: tests with `time.Sleep` and `err.Error() ==`; a 2 000-line package; no argument. **Expected**: `tests` plans one step per smell class; `<package>` plans only that package; no argument runs layout → packages → tests and asks every question before the first step.
-- [ ] argument parsed · [ ] the full pass asks first, then runs through
+**Fixture**: tests with `time.Sleep` and `err.Error() ==`; a 2 000-line package; no argument on a project whose technical-preferences records every field. **Expected**: `tests` plans one step per smell class; `<package>` plans only that package; no argument asks every Phase 3 choice before the first step with the current value first ("keep", Recommended), creates no step for a kept value and an ADR-first step for a changed one, then runs layout → packages → tests.
+- [ ] argument parsed · [ ] the full pass asks everything first, current values first, then runs through · [ ] a kept value produces no step
 ### 4. Edge case — `--apply` without a plan, a red step
 **Fixture**: `--apply S-NNN` for a story without a plan document; a step whose tests go red. **Expected**: `BLOCKED (no plan — run /refactor --dry-run first)`; a red step is fixed by the same agent or reverted with `git restore`, never committed, never handed to a second agent.
 - [ ] no red commit · [ ] the parent wrote no code (audit log quoted)

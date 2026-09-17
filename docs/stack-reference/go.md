@@ -60,7 +60,7 @@ framework, a transport or a logger).
 | Layer | Package | Contains | Never |
 |---|---|---|---|
 | Domain | `internal/domain/<ctx>/` | Entities and aggregates as **rich models** (unexported fields, a validating constructor `New…`, operations as methods that keep the invariants, exported sentinel errors `ErrX`), value objects, domain events, and the **ports**: `Repository`, gateway interfaces the use cases need | Importing `usecase`/`infrastructure`; frameworks; SQL; HTTP; `context` is allowed in port signatures |
-| Use cases | `internal/usecase/<ctx>/` (`go_layers: per-context`) or `internal/usecase/` (`flat-usecase`) | **One struct per scenario** with one method `Execute(ctx, Input) (Output, error)`; a constructor taking the ports; orchestration, transactions (through a `TxManager` port), calls into the domain, emitting events | Importing `infrastructure`; business rules (they belong to the entity); knowing SQL, HTTP or GraphQL types |
+| Use cases | `internal/usecase/<ctx>/` (per bounded context, recommended) or one `internal/usecase/` package — the shape the layout ADR's tree shows | **One struct per scenario** with one method `Execute(ctx, Input) (Output, error)`; a constructor taking the ports; orchestration, transactions (through a `TxManager` port), calls into the domain, emitting events | Importing `infrastructure`; business rules (they belong to the entity); knowing SQL, HTTP or GraphQL types |
 | Infrastructure | `internal/infrastructure/postgres/`, `…/transport/graphql/`, `…/transport/http/`, `…/mail/`, … | Adapters implementing the ports (sqlc/pgx repositories, `Rehydrate`-style loading of entities), the gqlgen server and resolvers, chi/ServeMux handlers, clients; DTOs and mapping to/from the domain | Business rules; a resolver or handler that calls a repository directly instead of a use case |
 | Composition root | `internal/app/<app>/` | `Run`, config, the dependency graph (`newServices`), the HTTP server with timeouts and graceful shutdown, signal handling | Anything the four rows above own |
 | Entry | `cmd/<app>/main.go` | ≤ 50 lines: args/env → `Run` → exit code | Everything else (see "Project layout") |
@@ -72,9 +72,10 @@ both spellings as `layered`. The official "Organizing a Go module" page prescrib
 no exported packages; project-layout adds `/internal/app/<app>` and `/internal/pkg`. The go-structure-examples repository from the 2018 "How do you structure your Go apps" talks is cited
 by guides, but its README marks the talks as outdated — history, not a reference.
 
-Directory shape is a recorded choice, not taste (`/setup-stack` asks; `/refactor layout` asks again on a brownfield
-project): `go_layers: per-context` (recommended — one use-case package per bounded context, so `subscription.Activate`
-reads and dependencies stay small) or `flat-usecase` (one `usecase` package, simpler while the service is small).
+Directory shape is a recorded choice, not taste: `/setup-stack` shows the tree for the chosen shape and the layout ADR keeps
+it (`/refactor` asks again when the tree and the ADR disagree, or in a full pass): one use-case package per bounded context
+(recommended — `subscription.Activate` reads and dependencies stay small) or one `usecase` package (simpler while the
+service is small). New code follows the tree; there is no separate field to drift from it.
 `go_composition_root: internal/app` (the studio contract, checked by numbers) or `main` (the classic guide shape —
 the graph and the router assembled in `cmd/<app>/main.go`; the ≤ 50-line rule does not apply, `cmd/<app>` still holds one
 non-test file, and the choice is written into the layout ADR as an accepted deviation so the `LAYOUT` check reads it and stays silent).

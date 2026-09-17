@@ -47,7 +47,7 @@ For upgrades: path (e.g. `ng update`, three.js Migration Guide rNNN→rMMM, Go t
 
 ## Phase 4: Write
 Show the reference changes (updated lines, `updated:` and `sources:` in the header, new practices in the right section).
-"May I write [files]?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After "yes" also update `index.md` (table, the "latest on date" column and the date). Outdated statements are removed, not left beside new ones. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+"May I write [files]?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After "yes" also update `index.md` (the row: "latest on date", the `Verified` column with the file's new `updated:` date; the header `updated:` of the index is the date of this table edit). Outdated statements are removed, not left beside new ones. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 Then the commit gate of `git-workflow.md` § Documents: one `AskUserQuestion` offering `docs: refresh stack-reference (<scope>)` staging exactly the written files — never leave the files uncommitted in the hand-off.
 
 ## Phase 5: Project upgrade plan (optional)

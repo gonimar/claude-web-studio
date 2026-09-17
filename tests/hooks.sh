@@ -81,6 +81,15 @@ echo "$out" | grep -q 'TEST-ERRSTR' && pass=$((pass+1)) || { failn=$((failn+1));
 printf '<?php\nfinal class CleanTest extends TestCase { public function testY(): void { $this->expectException(\\RuntimeException::class); throw new \\RuntimeException("y"); } }\n' > CleanTest.php
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/CleanTest.php\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null)
 echo "$out" | grep -q 'TEST-' && { failn=$((failn+1)); echo "FAIL post-edit: clean PHP test flagged (false positive)"; } || pass=$((pass+1))
+# Vitest test smells: a fixed wait and a message-asserted error in *.spec.ts -> warning; a clean spec -> silent
+printf 'import { it, expect } from "vitest";\nit("waits", async () => {\n  await new Promise((r) => setTimeout(r, 500));\n  expect(() => f()).toThrow("boom");\n});\n' > smell.spec.ts
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/smell.spec.ts\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); code=$?
+expect "post-edit vitest smells never block" 0 $code
+echo "$out" | grep -q 'TEST-SLEEP' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: setTimeout wait in a spec not flagged"; }
+echo "$out" | grep -q 'TEST-ERRSTR' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: toThrow(string) not flagged"; }
+printf 'import { it, expect, vi } from "vitest";\nit("ok", () => {\n  vi.useFakeTimers();\n  expect(() => f()).toThrow(RangeError);\n});\n' > clean.spec.ts
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/clean.spec.ts\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null)
+echo "$out" | grep -q 'TEST-' && { failn=$((failn+1)); echo "FAIL post-edit: clean spec flagged (false positive)"; } || pass=$((pass+1))
 # docs-format (rules/docs-format.md): structure warnings, language-independent, warn-only
 mkdir -p docs/architecture production; printf '# ADR-0001: x\n\n## Context\nc\n## Decision\nd\n' > docs/architecture/adr-0001-x.md
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/docs/architecture/adr-0001-x.md\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); code=$?
