@@ -72,6 +72,15 @@ out=$(echo "{\"tool_input\":{\"file_path\":\"$T/root.graphqls\"}}" | bash "$H/po
 echo "$out" | grep -q 'GQL-ROOT' && { failn=$((failn+1)); echo "FAIL post-edit: real root Subscription flagged (false positive)"; } || pass=$((pass+1))
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/clean_test.go\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null)
 echo "$out" | grep -q 'TEST-' && { failn=$((failn+1)); echo "FAIL post-edit: clean test flagged (false positive)"; } || pass=$((pass+1))
+# PHP test smells (rules/tests.md): sleep() and a message assertion in a *Test.php -> warning; a clean test -> silent
+printf '<?php\nfinal class ATest extends TestCase { public function testX(): void { sleep(1); $e = new \\RuntimeException("x"); self::assertSame("x", $e->getMessage()); } }\n' > SmellTest.php
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/SmellTest.php\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); code=$?
+expect "post-edit php test smells never block" 0 $code
+echo "$out" | grep -q 'TEST-SLEEP' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: sleep() in a PHP test not flagged"; }
+echo "$out" | grep -q 'TEST-ERRSTR' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL post-edit: message-asserted exception not flagged"; }
+printf '<?php\nfinal class CleanTest extends TestCase { public function testY(): void { $this->expectException(\\RuntimeException::class); throw new \\RuntimeException("y"); } }\n' > CleanTest.php
+out=$(echo "{\"tool_input\":{\"file_path\":\"$T/CleanTest.php\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null)
+echo "$out" | grep -q 'TEST-' && { failn=$((failn+1)); echo "FAIL post-edit: clean PHP test flagged (false positive)"; } || pass=$((pass+1))
 # docs-format (rules/docs-format.md): structure warnings, language-independent, warn-only
 mkdir -p docs/architecture production; printf '# ADR-0001: x\n\n## Context\nc\n## Decision\nd\n' > docs/architecture/adr-0001-x.md
 out=$(echo "{\"tool_input\":{\"file_path\":\"$T/docs/architecture/adr-0001-x.md\"}}" | bash "$H/post-edit-check.sh" 2>/dev/null); code=$?

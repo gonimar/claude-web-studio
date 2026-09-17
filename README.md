@@ -8,7 +8,7 @@ secrets and commit hygiene, path-scoped coding rules, document templates, a **da
 current stack versions and best practices**, and a framework for testing the agents themselves.
 It covers web applications and browser games alike.¹
 
-Stack: Go 1.27 · PHP 8.5 / Yii3 · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
+Stack: Go 1.27 · PHP 8.5 (Yii3 reference; Symfony/Laravel/Slim by choice) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL first, REST where it fits · PostgreSQL 18 · three.js r185 /
 PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA.
 
@@ -136,7 +136,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/retrospective` — sprint retrospective from artefacts: planned vs shipped, estimate vs actual with the calibration ratio the next `/sprint-plan` applies, blockers, actions with owners.
 - `/qa-plan` — maps every story's acceptance criteria to test levels, tools and files for a sprint.
 - `/tech-debt` — inventories technical debt and proposes prioritised stories.
-- `/refactor` — refactors the maintained code without changing behaviour: a dry-run plan by numbers (build, tests, coverage, dependency graph, test smells), stories, and the execution from a story with characterisation tests first and one green step per commit; `layout` migrates a Go service to the layered architecture, `tests` brings tests to the rules.
+- `/refactor` — refactors the maintained code without changing behaviour: a dry-run plan by numbers (build, tests, coverage, dependency graph, test smells), stories, and the execution from a story with characterisation tests first and one green step per commit; `layout` migrates a Go or PHP service to the layered architecture, `tests` brings tests to the rules, `framework` (PHP) inventories and plans a move to another framework.
 - `/docs` — documentation for people through `tech-writer`: README, API reference generated from the contract, user guide from the feature specs, runbook; every command in the docs is run first.
 
 **Hardening**

@@ -1,16 +1,18 @@
 ---
-updated: 2026-09-10
+updated: 2026-09-17
 sources: [https://php.watch/versions, https://www.php.net/releases, https://www.yiiframework.com/news/777/yii3-is-released, https://github.com/yiisoft, https://www.php-fig.org/psr/, https://phpunit.de/supported-versions.html]
 ---
-# PHP 8.5 and Yii3 — versions, idioms, practices
+# Yii3 — the framework reference (`php_framework: yii3`)
 
-## PHP
-- **8.5 (2025-11-20, bug fixes until 2027-12-31)**: pipe operator `|>`; `clone()` with property updates; `#[\NoDiscard]`; `array_first()/array_last()`; the **URI** extension (`Uri\Rfc3986\Uri`, `Uri\WhatWg\Url`); closures and `static` closures in constant expressions; fatal-error backtraces; `php --ini=diff`.
-- **8.4**: property hooks, asymmetric visibility `public private(set)`, `new Foo()->m()` without parentheses, lazy objects, `#[\Deprecated]`, HTML5 DOM (`Dom\HTMLDocument`), `array_find`.
-- **8.3**: typed class constants, `#[\Override]`, `json_validate()`.
-- **8.6** expected 2026-11-19. 8.3 is security-only; 8.1 is EOL (2025-12-31). Minimum for new projects: **8.4**; target 8.5.
+The language, the layers, the tests and the tooling live in `php.md` and apply to every PHP project; this
+file is only what is specific to Yii3. Under `php_architecture: layered`, Yii3 is an Infrastructure detail:
+actions, `yiisoft/db`/Cycle adapters and the `config/` composition root; `App\Domain` and `App\Application`
+import nothing from `Yiisoft\` (deptrac layer `Framework`; `FRAMEWORK_NAMESPACES` = `Yiisoft\\|Cycle\\` in `docs/templates/php/deptrac.yaml`).
 
-Mandatory: `declare(strict_types=1)` in every file; `readonly` classes/properties; enums; constructor promotion; `final` by default; no `mixed` without a reason.
+## PHP (summary — the full section is in `php.md`)
+Minimum 8.4, target 8.5; `declare(strict_types=1)`, `readonly`, enums, `final`, property hooks and `public private(set)`;
+PER-CS 3.1; PHPUnit 13; the analyser, the coding-standard tool, deptrac and the per-layer coverage gate are recorded in
+technical-preferences and described in `php.md`.
 
 ## Yii3 (stable since 2025-12-31)
 Yii3 is a set of independent `yiisoft/*` packages with their own SemVer versions, built on PSR
@@ -38,18 +40,15 @@ not patched — look for a maintained alternative and document why.
 - Validation — `yiisoft/validator` (rules as attributes or objects); DTO hydration — `yiisoft/hydrator`.
 - Light DDD: `Domain` without framework dependencies → `Application` (use cases/handlers) → `Infrastructure` → `Web`/`Console`. No CQRS/event sourcing without a clear need.
 - Long operations go through `yiisoft/queue` with re-scheduling, not `sleep()`.
-- Static analysis — **Psalm** (the yiisoft ecosystem uses it) level ≤ 3, or PHPStan ≥ 8 for non-Yii projects; `php-cs-fixer` PSR-12/`@PER-CS`; PHPUnit **13** (12 still supported; 11 past bugfix support since 2026-02); Rector for upgrades.
+- Static analysis — the tool recorded as `php_static_analysis` (`php.md`): PHPStan level 9 by default, Psalm level 1 when the project follows the yiisoft ecosystem's own choice; coding standard **PER-CS 3.1** through `php_cs_tool` (ECS `perCs: true` or php-cs-fixer `@PER-CS`); PHPUnit **13**; Rector for upgrades.
+- DI bindings of ports to adapters live in `config/common/di/*.php` (or `config/web/di/*.php` for web-only), merged by `yiisoft/config` — not in a hand-named `config/di-web.php`.
+- Schema changes only as `yiisoft/db-migration` (or Cycle) migration files; a `CREATE TABLE` in a PHP class, a seed or a story is a finding (`rules/database.md`).
 
 ### For comparison (non-Yii projects)
 Symfony 7.4 LTS / 8.0 (2025-11), Laravel 13 (2026-02), Slim 4, Mezzio. Runtime: PHP-FPM + nginx classically; **FrankenPHP** (worker mode, HTTP/3) is the modern option for containers.
 
-## Security (PHP-specific)
-- Parameterised queries (`yiisoft/db` bound params; PDO prepared); `htmlspecialchars` / `yiisoft/html` for output.
-- `password_hash(PASSWORD_ARGON2ID)`, `random_bytes`, `hash_equals`.
-- CSRF middleware on every mutation; cookies `Secure/HttpOnly/SameSite`.
-- Uploads: MIME check by content, renaming, storage outside the webroot, size limits in `php.ini` and nginx.
-- Production `php.ini`: `display_errors=Off`, `expose_php=Off`, `open_basedir`, `disable_functions` as needed; `opcache.validate_timestamps=0` in containers.
-- `composer audit` in CI; `composer validate --strict`; `roave/security-advisories` in require-dev.
+## Security (Yii3-specific — the PHP list is in `php.md`)
+- `yiisoft/db` bound params; `yiisoft/html` for output; `yiisoft/csrf` middleware on every mutation; `yiisoft/security` for passwords (argon2id), random and crypt; `yiisoft/auth`/`yiisoft/user`/`yiisoft/rbac` instead of hand-rolled auth; `yiisoft/rate-limiter` on public endpoints.
 
-## PHP review checklist
-1. strict_types, readonly, types everywhere; 2. no logic in config or controllers (thin actions); 3. boundary validation; 4. domain exceptions + `FriendlyException`; 5. Psalm clean; 6. PHPUnit on domain and handlers; 7. packages checked for health.
+## Yii3 review checklist (in addition to `php.md`)
+1. config only through `yiisoft/config`, DI bindings in `config/common/di/*.php`; 2. invokable PSR-15 actions, no base-controller inheritance; 3. `yiisoft/validator` at the boundary, `yiisoft/hydrator` for DTOs; 4. `FriendlyException` for user-facing errors; 5. `yiisoft/queue` for long work; 6. migrations as `yiisoft/db-migration` files; 7. every `yiisoft/*` package health-checked (abandoned, tags, `dev-*` actually run).

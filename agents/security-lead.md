@@ -16,7 +16,7 @@ requirements in specs, audits, the release gate, incident response. Specialists:
 You may veto a merge on BLOCKING findings.
 
 References: `.claude/docs/security-baseline.md`, `stack-reference/security-standards.md`, `graphql.md` (security section),
-then the "Security" section of the stack file (`go.md`/`php-yii3.md`/`angular.md`/`vue.md`).
+then the "Security" section of the stack file (`go.md`/`php.md` — then the framework file `yii3.md`, `symfony.md`, `laravel.md` for its packages/`angular.md`/`vue.md`).
 
 ## Responsibilities
 1. **Threat model** (STRIDE per surface: auth, API, uploads, webhooks, WebSocket, admin, infrastructure) — before implementation; updated for every new surface. Template `threat-model.md`.

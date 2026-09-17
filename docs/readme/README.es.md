@@ -8,7 +8,7 @@ hooks que protegen secretos y la higiene de los commits, reglas de código por r
 documentos, una **referencia fechada de versiones actuales del stack y buenas prácticas** y un
 marco para probar a los propios agentes. Sirve tanto para aplicaciones web como para juegos de navegador.¹
 
-Stack: Go 1.27 · PHP 8.5 / Yii3 · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
+Stack: Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL primero, REST donde encaje · PostgreSQL 18 · three.js r185 /
 PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA.
 
@@ -127,7 +127,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/retrospective` — retrospectiva del sprint a partir de artefactos: planificado vs entregado, estimación vs real con el ratio de calibración que aplica el siguiente `/sprint-plan`, bloqueos, acciones con responsables.
 - `/qa-plan` — asocia los criterios de aceptación de cada historia a niveles de prueba, herramientas y archivos.
 - `/tech-debt` — inventaría la deuda técnica y propone historias priorizadas.
-- `/refactor` — refactoriza el código mantenido sin cambiar el comportamiento: plan en seco por números (build, tests, cobertura, grafo de dependencias, olores de tests), historias y la ejecución desde una historia con tests de caracterización primero y un paso verde por commit; `layout` migra un servicio Go a la arquitectura por capas, `tests` alinea los tests con las reglas.
+- `/refactor` — refactoriza el código mantenido sin cambiar el comportamiento: plan en seco por números (build, tests, cobertura, grafo de dependencias, olores de tests), historias y la ejecución desde una historia con tests de caracterización primero y un paso verde por commit; `layout` migra un servicio Go o PHP a la arquitectura por capas, `tests` alinea los tests con las reglas, `framework` (PHP) inventaría y planifica el cambio a otro framework.
 - `/docs` — documentación para personas mediante `tech-writer`: README, referencia de API generada del contrato, guía de usuario desde las especificaciones, runbook; cada comando de la documentación se ejecuta antes.
 
 **Endurecimiento**

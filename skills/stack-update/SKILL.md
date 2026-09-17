@@ -1,7 +1,7 @@
 ---
 name: stack-update
 description: "Refreshes the stack knowledge base — checks the latest versions of every technology in stack-reference (official llms.txt, release pages, endoflife.date, npm/packagist/pkg.go.dev), rewrites the reference files with dated facts and sources, compares with the project's lockfiles, and proposes an upgrade plan. Run when references are older than 60 days or before planning upgrades."
-argument-hint: "[all | <tech: go|php|yii3|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling>] [--check-only]"
+argument-hint: "[all | <tech: go|php|yii3|symfony|laravel|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling>] [--check-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, WebSearch, AskUserQuestion, Task
 model: sonnet
@@ -29,7 +29,7 @@ list current versions and `updated:`. Read the project lockfiles (`go.mod`, `com
 | Angular / Material / Taiga | `https://angular.dev/llms.txt`, `https://angular.dev/roadmap`, npm `@angular/core`, `@angular/material`, `taiga-ui.dev/llms.txt` |
 | Vue / Nuxt / Vite / Vitest | `vuejs.org/llms.txt`, `nuxt.com/llms.txt`, `vite.dev/llms.txt`, `vitest.dev/llms.txt`, GitHub releases |
 | Go | `go.dev/doc/devel/release`, `go.dev/doc/go1.NN` |
-| PHP / Yii3 | `php.watch/versions`, `yiiframework.com/news`, packagist `yiisoft/*` |
+| PHP / Yii3 / Symfony / Laravel | `php.watch/versions`, `php-fig.org` (PER-CS), `phpunit.de/supported-versions`, `yiiframework.com/news`, `symfony.com/releases`, `laravel.com/docs/releases`, packagist `yiisoft/*`, `symfony/framework-bundle`, `laravel/framework`, `phpstan/phpstan`, `vimeo/psalm`, `deptrac/deptrac`, `symplify/easy-coding-standard`, `friendsofphp/php-cs-fixer` |
 | TypeScript / Node | `devblogs.microsoft.com/typescript`, `nodejs.org/en/about/previous-releases`, `endoflife.date/nodejs` |
 | GraphQL | `spec.graphql.org`, GraphQL.js releases, gqlgen/Yoga/graphql-php releases |
 | three.js / Pixi / Babylon | GitHub releases + Migration Guide wiki, `pixijs.com/llms.txt`, `doc.babylonjs.com/llms.txt` |

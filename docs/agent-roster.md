@@ -33,7 +33,7 @@ The stack-reference file an agent reads first is listed in its description
 | Agent | Domain | When |
 |---|---|---|
 | `go-engineer` | Go 1.27 | HTTP services, `net/http` routing, `pgx`/`sqlc`, contexts, concurrency, `go test`, `govulncheck` |
-| `php-engineer` | PHP 8.5 / Yii3 | `yiisoft/*` packages, DI/config, middleware, Psalm, PHPUnit; Symfony/Laravel for comparison |
+| `php-engineer` | PHP 8.5 | Framework per `php_framework` (Yii3 with the studio reference; Symfony/Laravel/Slim from their docs), layered or framework architecture, rich models, use cases, PHPStan/Psalm, ECS/php-cs-fixer, deptrac, PHPUnit 13 by layer |
 | `node-engineer` | Node 24 / TS backend | Hono / NestJS / Fastify, BFF, SSR servers, WebSocket servers on Node |
 | `database-engineer` | PostgreSQL 18, Redis | Schema, migrations, indexes, query plans, transactions, backups |
 | `graphql-engineer` | GraphQL (priority API style) | SDL schema, resolvers (gqlgen / graphql-php / Yoga), DataLoader, cost limits, persisted operations, subscriptions, typed clients (Apollo Angular / villus), codegen |
@@ -48,7 +48,7 @@ The stack-reference file an agent reads first is listed in its description
 | `multiplayer-engineer` | Networked games | WebSocket/WebRTC, server-authoritative simulation (Go), ticks, interpolation, anti-cheat basics, matchmaking |
 | `appsec-engineer` | Code security | OWASP Top 10:2025 review, auth/sessions/JWT, injection, SSRF, uploads, SAST, security tests, dynamic testing of the project's own app |
 | `network-security-engineer` | Network and perimeter | TLS 1.3/HSTS, nginx/Caddy hardening, security headers/CSP, rate limiting, WAF, DNS, firewall/Docker networks |
-| `test-engineer` | Tests | Vitest 4, Playwright, PHPUnit 12, `go test`/testify, contract tests, fixtures, coverage |
+| `test-engineer` | Tests | Vitest 4, Playwright, PHPUnit 13, `go test`/testify, contract tests, fixtures, coverage |
 | `performance-engineer` | Performance | Core Web Vitals, Lighthouse, bundle analysis, Go/PHP profiling, caching, N+1 |
 | `devops-engineer` | Infra code | Multi-stage Dockerfiles, compose, GitHub Actions, secrets, health checks, logs/metrics |
 | `seo-specialist` (Haiku) | SEO/sharing | Meta tags, OG, structured data, sitemap, SSR/prerender, SPA indexing |

@@ -9,8 +9,14 @@
 - **Rendering**: [SPA | SSR | SSG | hybrid]
 
 ## Backend
-- **Language/runtime**: [TO BE CONFIGURED] (Go 1.27 | PHP 8.5 | Node 24 | none)
-- **Framework**: [net/http + chi | Yii3 | Hono | NestJS | …]
+- **Language/runtime**: [TO BE CONFIGURED] (Go 1.27 | PHP 8.5 — or `PHP 8.4 — <reason>, upgrade story S-NNN` when the hosting cannot run 8.5 yet | Node 24 | none)
+- **Framework**: [net/http + chi | Yii3 | Symfony | Laravel | Slim | Hono | NestJS | …]
+- **php_framework**: [yii3 (reference yii3.md) | symfony (symfony.md, stub) | laravel (laravel.md, stub) | slim | none — php-engineer works from the official docs where the reference is a stub or missing]
+- **php_architecture**: [layered (src/Domain → src/Application → src/Infrastructure, deptrac-enforced) | framework (the framework's own layout) — see stack-reference/php.md "Layered architecture"]
+- **php_layers**: [per-context (src/Domain/<Context>, src/Application/<Context> — recommended) | flat (one namespace per layer) | n/a]
+- **php_static_analysis**: [phpstan (level 9 new / baseline brownfield) | psalm (level 1)]
+- **php_cs_tool**: [ecs (perCs: true) | php-cs-fixer (@PER-CS)]
+- **php_domain_allow**: [non-PSR vendor namespaces the domain may use, e.g. Ramsey\Uuid, Brick\Money — mirrored into deptrac.yaml's Vendor layer; `none` = PHP only]
 - **Database**: [PostgreSQL 18 | …]  **Cache/queue**: [Redis 8 | …]
 - **API style**: [GraphQL (default for the client API; schema-first SDL) | REST/OpenAPI 3.1 (webhooks, files, integrations) | WebSocket/SSE (realtime) | gRPC]
 - **api_contract_path**: [api/schema.graphqls (Go module) | docs/architecture/api/schema.graphql | docs/architecture/api/openapi.yaml] — the one SDL/OpenAPI file every skill and the codegen read
@@ -32,12 +38,14 @@
 - **Frame budget**: [16.6 ms @60fps; draw calls ≤ N; memory ≤ N MB]
 
 ## Tests and quality
-- **Unit**: [Vitest 4 | PHPUnit 12 | go test]
+- **Unit**: [Vitest 4 | PHPUnit 13 (+ Pest 5) | go test]
 - **E2E**: [Playwright]
-- **Lint/format**: [ESLint 9 flat + Prettier | php-cs-fixer + Psalm | gofmt + golangci-lint]
-- **Coverage threshold**: [an indicator for non-layered stacks, e.g. 80 % for the domain layer; layered Go uses the two fields below as a gate]
+- **Lint/format**: [ESLint 9 flat + Prettier | ecs or php-cs-fixer + phpstan or psalm + deptrac | gofmt + golangci-lint]
+- **Coverage threshold**: [an indicator for non-layered stacks, e.g. 80 % for the domain layer; layered Go and PHP use the fields below as a gate]
 - **go_coverage_domain**: [90] — statement coverage of `internal/domain/...`; /test-setup writes it into the Makefile (`GO_COVERAGE_DOMAIN`), which is what `make coverage-gate` reads
 - **go_coverage_usecase**: [80] — the same for `internal/usecase/...` (`GO_COVERAGE_USECASE`)
+- **php_coverage_domain**: [90] — line coverage of `src/Domain/`; /test-setup writes it into the composer `coverage-gate` script, the one place the build reads it
+- **php_coverage_application**: [80] — the same for `src/Application/`
 
 ## Infrastructure
 - **Containers**: [Docker, compose v2]  **CI**: [GitHub Actions]
@@ -60,7 +68,7 @@
 
 ## Naming conventions
 - Go: lowercase packages, exported PascalCase, snake_case files, `_test.go`
-- PHP: PSR-12, PascalCase classes, `declare(strict_types=1)`, `*Test.php`
+- PHP: PER-CS 3.1, PascalCase classes, `declare(strict_types=1)`, `*Test.php`
 - TS: kebab-case files, PascalCase classes/types, camelCase variables, `*.spec.ts`
 - Angular: v20+ style by default — no suffixes (`user-profile.ts`, class `UserProfile`); or classic `feature.component.ts` — the choice is recorded here; selectors `app-*`
 - Vue: PascalCase SFCs (`UserCard.vue`), composables `useX.ts`, stores `useXStore`

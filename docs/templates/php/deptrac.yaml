@@ -1,0 +1,50 @@
+# deptrac — the layer rule of `php_architecture: layered` (stack-reference/php.md "Layered architecture").
+# Web Studio template; installed by /setup-stack or /test-setup as deptrac.yaml in the PHP root.
+# Run: vendor/bin/deptrac analyse (composer script `arch-check`, part of `composer ci`).
+# FRAMEWORK_NAMESPACES is replaced with the regex alternative the framework file names, backslashes doubled
+# as PCRE inside a single-quoted YAML scalar requires — yii3.md: `Yiisoft\\|Cycle\\`; symfony.md:
+# `Symfony\\(?!Component\\Uid)|Doctrine\\|Twig\\`; laravel.md: `Illuminate\\|Laravel\\`; slim/none (php.md): `Slim\\`.
+# A single backslash (`Yiisoft\`) is an invalid pattern and deptrac aborts. The framework is an Infrastructure
+# detail: only Infrastructure may touch it. Third-party namespaces that are not the framework (GraphQL\, Monolog\,
+# Ramsey\ …) are simply uncovered — that is allowed; do not run `--fail-on-uncovered`.
+deptrac:
+  paths:
+    - ./src
+  exclude_files:
+    - '#.*Test\.php$#'
+  layers:
+    - name: Domain
+      collectors:
+        - type: directory
+          value: src/Domain/.*
+    - name: Application
+      collectors:
+        - type: directory
+          value: src/Application/.*
+    - name: Infrastructure
+      collectors:
+        - type: directory
+          value: src/Infrastructure/.*
+    - name: Framework
+      collectors:
+        - type: classNameRegex
+          value: '#^(FRAMEWORK_NAMESPACES)#'
+    - name: Vendor
+      # PSR interfaces plus the value libraries recorded in technical-preferences `php_domain_allow`
+      # (/test-setup appends them here, e.g. `|Ramsey\\Uuid|Brick\\Money`); nothing else is pre-approved.
+      collectors:
+        - type: classNameRegex
+          value: '#^(Psr)\\#'
+  ruleset:
+    # The domain depends on nothing outside itself — PHP, PSR interfaces and the value libraries
+    # listed in technical-preferences `php_domain_allow` (add their namespaces to the Vendor layer).
+    Domain:
+      - Vendor
+    Application:
+      - Domain
+      - Vendor
+    Infrastructure:
+      - Domain
+      - Application
+      - Framework
+      - Vendor
