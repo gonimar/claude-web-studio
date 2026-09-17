@@ -22,7 +22,7 @@ works from the official documentation and says so in every result until a projec
 | Tests | `symfony/phpunit-bridge` not required with PHPUnit 13; `KernelTestCase`/`WebTestCase` only under `tests/Integration` |
 
 ## deptrac
-`FRAMEWORK_NAMESPACES` = `Symfony\\|Doctrine\\|Twig\\` in `docs/templates/php/deptrac.yaml`; `Symfony\\Component\\Uid` may be listed in `php_domain_allow`.
+`FRAMEWORK_NAMESPACES` = `Symfony\\(?!Component\\Uid)|Doctrine\\|Twig\\` in `docs/templates/php/deptrac.yaml` — the negative look-ahead keeps `Symfony\Component\Uid` out of the Framework layer so it can be listed in `php_domain_allow` (a class in both layers would still violate).
 
 ## Open (to fill from a real project)
 Idioms, the package rule (which bundles by default), security specifics, the review checklist.

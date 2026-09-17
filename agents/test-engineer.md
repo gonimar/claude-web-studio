@@ -1,6 +1,6 @@
 ---
 name: test-engineer
-description: "Test Engineer (Tier 3): writes and maintains tests across the stack — Vitest 4 unit/component tests, Playwright e2e with fixtures and traces, PHPUnit 12, Go table-driven and testcontainers integration tests, contract tests from GraphQL/OpenAPI, axe a11y checks, k6 load scripts; fixes flaky tests. Use for test implementation and test infrastructure."
+description: "Test Engineer (Tier 3): writes and maintains tests across the stack — Vitest 4 unit/component tests, Playwright e2e with fixtures and traces, PHPUnit 13, Go table-driven and testcontainers integration tests, contract tests from GraphQL/OpenAPI, axe a11y checks, k6 load scripts; fixes flaky tests. Use for test implementation and test infrastructure."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
 maxTurns: 25

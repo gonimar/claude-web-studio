@@ -14,19 +14,19 @@ still applies — the framework is an Infrastructure detail, never the shape of 
 - **8.5 (2025-11-20, bug fixes until 2027-12-31)**: pipe operator `|>`; `clone()` with property updates; `#[\NoDiscard]`; `array_first()/array_last()`; the **URI** extension (`Uri\Rfc3986\Uri`, `Uri\WhatWg\Url`); closures and `static` closures in constant expressions; fatal-error backtraces; `php --ini=diff`.
 - **8.4**: **property hooks** and **asymmetric visibility** (`public private(set)`) — the two features that make a rich model possible without getter/setter boilerplate; `new Foo()->m()` without parentheses; lazy objects; `#[\Deprecated]`; HTML5 DOM (`Dom\HTMLDocument`); `array_find`.
 - **8.3**: typed class constants, `#[\Override]`, `json_validate()`.
-- **8.6** expected 2026-11-19. 8.3 is security-only; 8.1 is EOL (2025-12-31). **New projects run on 8.5** (`php_version`, recommended in `/setup-stack`); 8.4 is the floor — the version where property hooks and asymmetric visibility appeared — for a project that cannot move yet; a brownfield project records what it runs and upgrades through a story.
+- **8.6** expected 2026-11-19. 8.3 is security-only; 8.1 is EOL (2025-12-31). **New projects run on 8.5** (recommended in `/setup-stack`, recorded in **Language/runtime**); 8.4 is the floor — the version where property hooks and asymmetric visibility appeared — for a project that cannot move yet; a brownfield project records what it runs and upgrades through a story.
 
 Mandatory in every file: `declare(strict_types=1)`; `readonly` classes/properties; enums; constructor promotion; `final` by default; no `mixed` without a reason; **PER Coding Style 3.1** (the current edition — it extends and replaces PSR-12; `@PER-CS` in php-cs-fixer, `perCs: true` in ECS).
 
 ## Studio default set
 | Task | Choice | Why |
 |---|---|---|
-| PHP version | `php_version`: **8.5** (recommended and the studio's target) · 8.4 (minimum) — chosen in `/setup-stack`, recorded by `/adopt` from `composer.json` `require.php` and the lockfile's `platform` | 8.5 is the current release with bug fixes until 2027-12; every tool below runs on it (PHPUnit 13 needs ≥ 8.4, Symfony 8 ≥ 8.4, Laravel 13 ≥ 8.3, PHPStan 2 / Psalm 6 / deptrac 4 / ECS 13 support 8.5); the rich-model form below needs 8.4 features, so 8.4 is the floor, not the target |
+| PHP version | **8.5** (recommended and the studio's target) · 8.4 (minimum) — chosen in `/setup-stack` and recorded in technical-preferences **Language/runtime** (`PHP 8.5`, or `PHP 8.4 — <reason>, upgrade story S-NNN`); `/adopt` reads it from `composer.json` `require.php` and `composer show --locked` | 8.5 is the current release with bug fixes until 2027-12; every tool below runs on it (PHPUnit 13 needs ≥ 8.4, Symfony 8 ≥ 8.4, Laravel 13 ≥ 8.3, PHPStan 2 / Psalm 6 / deptrac 4 / ECS 13 support 8.5); the rich-model form below needs 8.4 features, so 8.4 is the floor, not the target |
 | Framework | `php_framework`: **yii3** (reference `yii3.md`) · symfony (`symfony.md`, stub) · laravel (`laravel.md`, stub) · slim · none — chosen in `/setup-stack` | Only Yii3 has a full studio reference and a package rule; Symfony and Laravel have stubs (versions, where the layers live) and `php-engineer` works from the official docs until a project fills them; Slim and none have no file |
 | Architecture | `php_architecture`: **layered** (`src/Domain` → `src/Application` → `src/Infrastructure`, deptrac-enforced) · framework (the framework's own layout: controllers/models/services); `php_layers`: **per-context** (`src/Application/<Context>/`) · flat (one `App\Application` namespace) | See "Layered architecture"; a brownfield project keeps `framework` until `/refactor layout` |
 | Static analysis | `php_static_analysis`: **PHPStan** level 9 (new projects) · Psalm level 1 (the yiisoft ecosystem's own tool) | Template `docs/templates/php/phpstan.neon` / `psalm.xml`; a brownfield project starts from a baseline and raises one level per story |
 | Coding standard | `php_cs_tool`: **ECS** (`perCs: true`) · php-cs-fixer (`@PER-CS`) | Templates `ecs.php` / `.php-cs-fixer.dist.php`; ECS runs PHP_CodeSniffer and PHP-CS-Fixer rules through one config |
-| Architecture check | **deptrac** (`deptrac/deptrac` — the `qossmic/deptrac-shim` package has not moved since 2022) · phparkitect (rules as PHP) · phpat (rules inside PHPStan) | Template `deptrac.yaml`: layers by directory, the framework namespaces as a layer only Infrastructure may use |
+| Architecture check | **deptrac** (`deptrac/deptrac` — the `qossmic/deptrac-shim` package has not moved since 2022) · phparkitect (rules as PHP) · phpat (rules inside PHPStan) | Template `deptrac.yaml`: layers by directory, the framework namespaces as a layer only Infrastructure may use (`FRAMEWORK_NAMESPACES`: the value each framework file names; slim/none: `Slim\\`); other vendor namespaces stay uncovered on purpose — never `--fail-on-uncovered` |
 | Tests | **PHPUnit 13** (PHP ≥ 8.4; 12 in bugfix support until 2027-02, 11 out since 2026-02) · Pest 5 on top of it when the project prefers the `it()` style | Data providers for table-driven tests; `createMock` for ports; a real Postgres in compose for infrastructure |
 | Coverage | pcov (fast) or xdebug; clover → `scripts/coverage-gate.php` | Per-layer thresholds as a gate, see "Tests by layer" |
 | Upgrades | Rector 2 | Language and PHPUnit migrations by rule set |
@@ -77,8 +77,9 @@ namespaces before anyone commits to it.
 
 Rules for every PHP test: `expectException(ExceptionClass::class)` — never `assertSame('message', $e->getMessage())`; test
 method names in English (`testActivationFailsOnZeroBalance`); no `sleep()`/`usleep()` to wait — a clock interface with a fake
-in tests, or a polling helper with a deadline for external systems; `composer ci` (`lint → stan → arch-check → tests with
-coverage → coverage-gate → audit`) after every change, a red step means the change is not done. `scripts/coverage-gate.php`
+in tests, or a polling helper with a deadline for external systems; `composer ci` (`validate → lint → stan → arch-check → tests with
+coverage → coverage-gate`, no network; `composer ci-full` adds `composer audit` for CI) once before a result — after each
+change only the tests of the classes touched — and a red step means the change is not done. `scripts/coverage-gate.php`
 (template `docs/templates/php/coverage-gate.php`) reads the clover report, prints one line per layer and fails below the
 thresholds — verified on a fixture: `Domain 100.0% >= 90% OK`, `Application 83.3% < 100%` fails.
 

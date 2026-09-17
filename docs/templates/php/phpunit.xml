@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- PHPUnit 13, Web Studio template (stack-reference/php.md "Tests by layer"). Coverage needs pcov (or xdebug);
      `composer ci` runs phpunit with the clover option (see composer-scripts.json) and then scripts/coverage-gate.php.
+     Both suite directories must exist (an empty one keeps a .gitkeep); PHPUnit fails on a missing directory.
      XML comments must not contain a double hyphen. -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"

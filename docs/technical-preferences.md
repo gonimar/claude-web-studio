@@ -9,9 +9,8 @@
 - **Rendering**: [SPA | SSR | SSG | hybrid]
 
 ## Backend
-- **Language/runtime**: [TO BE CONFIGURED] (Go 1.27 | PHP 8.5 | Node 24 | none)
+- **Language/runtime**: [TO BE CONFIGURED] (Go 1.27 | PHP 8.5 — or `PHP 8.4 — <reason>, upgrade story S-NNN` when the hosting cannot run 8.5 yet | Node 24 | none)
 - **Framework**: [net/http + chi | Yii3 | Symfony | Laravel | Slim | Hono | NestJS | …]
-- **php_version**: [8.5 (recommended, the studio target) | 8.4 (minimum — reason and upgrade story recorded)]
 - **php_framework**: [yii3 (reference yii3.md) | symfony (symfony.md, stub) | laravel (laravel.md, stub) | slim | none — php-engineer works from the official docs where the reference is a stub or missing]
 - **php_architecture**: [layered (src/Domain → src/Application → src/Infrastructure, deptrac-enforced) | framework (the framework's own layout) — see stack-reference/php.md "Layered architecture"]
 - **php_layers**: [per-context (src/Domain/<Context>, src/Application/<Context> — recommended) | flat (one namespace per layer) | n/a]

@@ -7,6 +7,6 @@ declare(strict_types=1);
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
-    ->withPaths([__DIR__ . '/src', __DIR__ . '/tests', __DIR__ . '/config'])
+    ->withPaths(array_filter([__DIR__ . '/src', __DIR__ . '/app', __DIR__ . '/tests', __DIR__ . '/config'], 'is_dir'))
     ->withRootFiles()
     ->withPreparedSets(perCs: true, arrays: true, namespaces: true, cleanup: true);

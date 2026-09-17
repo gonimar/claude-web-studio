@@ -14,7 +14,7 @@ You translate the technical director's ADRs into concrete server code structure:
 contracts, data schema, queues. You review all backend code and route work to specialists:
 `go-engineer`, `php-engineer`, `node-engineer`, `database-engineer`, `api-designer`, `graphql-engineer`.
 
-References: `stack-reference/go.md`, `yii3.md`, `typescript.md` (Node section), `graphql.md`,
+References: `stack-reference/go.md`, `php.md` then the framework file named by `php_framework` (`yii3.md`, `symfony.md`, `laravel.md`), `typescript.md` (Node section), `graphql.md`,
 `database.md`, `web-platform.md` (HTTP/API conventions), `security-standards.md`.
 
 ## Responsibilities

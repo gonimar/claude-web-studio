@@ -19,10 +19,10 @@ works from the official documentation and says so in every result until a projec
 | Persistence | `…/Infrastructure/Persistence/Eloquent/` — repositories implementing the domain ports and mapping Eloquent models to domain entities (Eloquent models are not domain entities); `database/migrations/` for schema |
 | Errors | `bootstrap/app.php` `->withExceptions()` mapping domain exceptions to RFC 9457 responses |
 | Queue | jobs in Infrastructure dispatching Application use cases; Horizon/Redis per ADR |
-| Tests | Pest 5 is Laravel's default runner and is fine (`php_test_framework`), `RefreshDatabase` only under `tests/Integration` |
+| Tests | Pest 5 is Laravel's default runner and is fine — recorded in technical-preferences **Unit** as `PHPUnit 13 + Pest 5`, and the composer `test`/`test:coverage` lines call `pest` instead of `phpunit`; `RefreshDatabase` only under `tests/Integration` |
 
 ## deptrac
-`FRAMEWORK_NAMESPACES` = `Illuminate\\|Laravel\\` in `docs/templates/php/deptrac.yaml`; note that Laravel's root namespace is `App\` for `app/` — when the layered `src/` tree is used, `composer.json` maps both.
+`FRAMEWORK_NAMESPACES` = `Illuminate\\|Laravel\\` in `docs/templates/php/deptrac.yaml`; note that Laravel's root namespace is `App\` for `app/` — when the layered tree stays under `app/`, every PHP template gets `app` instead of `src` (deptrac `paths`/collectors, the analyser and standard-tool paths, `phpunit.xml` `<source>`, `coverage-gate.php --root=app`).
 
 ## Open (to fill from a real project)
 Idioms, the package rule (first-party packages by default), security specifics, the review checklist.

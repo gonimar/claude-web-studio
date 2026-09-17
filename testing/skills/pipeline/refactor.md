@@ -37,8 +37,8 @@ characterisation tests and whose second is the tooling; `PLANNED (N steps, M sto
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output in every table)
 
 ### 6. PHP — `framework` mode
-**Fixture**: a Yii3 project with `php_architecture: layered`, `Yiisoft\` imported in three Infrastructure classes and one Application class. **Expected**: the Phase 2 table names the Application import as the first thing to move; the plan lists one step per Infrastructure sub-namespace and the composition root; no plan is written before `/architecture-decision` is named in the hand-off.
-- [ ] framework dependencies counted per layer from `grep`/deptrac output · [ ] the ADR is a precondition, not an afterthought
+**Fixture**: a Yii3 project with `php_architecture: layered`, `Yiisoft\` imported in three Infrastructure classes and one Application class. **Expected**: the Phase 2 framework table shows 1 import in Application and 3 in Infrastructure, and the plan's first non-ADR step moves the Application one; the target framework is asked even though every `php_*` field is recorded; the plan's step 1 is `/architecture-decision`, the hand-off recommends it, and `--apply S-NNN` on that plan is refused while the ADR is not `Accepted`; `php_framework` in technical-preferences is unchanged after the dry-run.
+- [ ] framework dependencies counted per layer from deptrac or the `grep -rcE` output · [ ] the ADR is step 1 and the apply gate · [ ] no write to `php_framework` before the last apply step
 
 ## Coverage notes
 PHP rules under test: `stack-reference/php.md` "Layered architecture" and "Tests by layer"; templates in `docs/templates/php/`. Layered rules under test: `stack-reference/go.md` "Layered architecture" and "Tests by layer"; the templates in `docs/templates/go/`.

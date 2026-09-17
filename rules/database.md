@@ -1,5 +1,5 @@
 ---
-paths: ["**/migrations/**", "**/migration/**", "**/*.sql", "**/schema.prisma", "**/drizzle/**", "**/db/**", "**/src/Infrastructure/Persistence/**"]
+paths: ["**/migrations/**", "**/migration/**", "**/*.sql", "**/schema.prisma", "**/drizzle/**", "**/db/**"]
 ---
 # Database and migration rules
 - Forward-only, idempotent migrations in git, applied before the app starts; destructive changes as expand → migrate → contract.

@@ -7,7 +7,7 @@ sources: [https://php.watch/versions, https://www.php.net/releases, https://www.
 The language, the layers, the tests and the tooling live in `php.md` and apply to every PHP project; this
 file is only what is specific to Yii3. Under `php_architecture: layered`, Yii3 is an Infrastructure detail:
 actions, `yiisoft/db`/Cycle adapters and the `config/` composition root; `App\Domain` and `App\Application`
-import nothing from `Yiisoft\` (deptrac layer `Framework`).
+import nothing from `Yiisoft\` (deptrac layer `Framework`; `FRAMEWORK_NAMESPACES` = `Yiisoft\\|Cycle\\` in `docs/templates/php/deptrac.yaml`).
 
 ## PHP (summary — the full section is in `php.md`)
 Minimum 8.4, target 8.5; `declare(strict_types=1)`, `readonly`, enums, `final`, property hooks and `public private(set)`;

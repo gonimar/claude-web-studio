@@ -25,7 +25,7 @@ targets), `docs/git-workflow.md`.
 
 ## Phase 1: Mode, scope, stack
 Argument → mode: `<package|namespace|file>` (local), `layout` (architecture migration), `tests` (test hygiene),
-`framework` (PHP only: what would move if the framework changed); none → **full pass**: every mode that
+`framework` (PHP only: what would move if the framework changed — never part of the full pass, it runs only when asked for); none → **full pass**: every mode that
 applies, in the order layout → packages → tests, each announced before it runs. Stack from
 technical-preferences: Go and PHP in this version — anything else → `BLOCKED (refactor supports Go and PHP in
 this version — inventory with /tech-debt, changes through /dev-story)`, one line, no plan. Read the stack's
@@ -38,14 +38,14 @@ applies (batched by group, see Phase 3); the write gate for the plan is the one 
 because it asks about tables that do not exist yet.
 
 ## Phase 2: Baseline by numbers
-Nothing is planned from an impression. Run and tabulate. PHP, from the PHP root: `composer validate --strict`;
-`php -l` over `src` and `tests`; the recorded analyser (`vendor/bin/phpstan analyse` / `vendor/bin/psalm`, error
-count and level); the recorded standard tool in check mode; `vendor/bin/deptrac analyse` when a `deptrac.yaml`
-exists, else `grep -rln 'use Yiisoft\\|use Symfony\\|use Illuminate\\|use App\\Infrastructure' src/Domain
-src/Application`; `vendor/bin/phpunit` (tests, assertions, failures) with `--coverage-clover` when pcov/xdebug is
-available and `scripts/coverage-gate.php` on it; class sizes (`wc -l` per `src/**/*.php`, classes over 400
-lines); framework dependencies by layer (`grep -rc 'use Yiisoft\\' src/Domain src/Application src/Infrastructure`
-or the namespaces of `php_framework`); test smells (`grep -rnE '\b(u?sleep)\(' tests`, `grep -rn 'getMessage()'
+Nothing is planned from an impression. Run and tabulate. PHP, from the PHP root: `composer ci` once when the
+composer scripts exist (it prints validate, the analyser, the standard tool, deptrac, phpunit with coverage and the
+gate in one run); without them, the same commands one by one (`composer validate --strict`, the recorded analyser,
+the recorded standard tool in check mode, `vendor/bin/deptrac analyse` when a `deptrac.yaml` exists, else
+`grep -rlE 'use (FRAMEWORK_NAMESPACES|App\\Infrastructure)\\' src/Domain src/Application` with the namespaces of the
+recorded `php_framework`, `vendor/bin/phpunit` with `--coverage-clover` when pcov/xdebug is available and
+`composer coverage-gate` on it); class sizes (`wc -l` per `src/**/*.php`, classes over 400 lines); framework
+dependencies by layer (`grep -rcE 'use (FRAMEWORK_NAMESPACES)' src/Domain src/Application src/Infrastructure`); test smells (`grep -rnE '\b(u?sleep)\(' tests`, `grep -rn 'getMessage()'
 tests`, `TestCase`s without data providers whose methods differ only in data, mocks under `tests/Unit/Domain`, a
 booted framework under `tests/Unit/Application`); DDL outside migration files (`grep -rln 'CREATE TABLE\|ALTER TABLE'
 src`). Go, from the Go root: `go build ./...`; `go vet ./...`;
@@ -63,7 +63,7 @@ Domain / Application / Infrastructure — the first two columns are what a frame
 before the last one, and under `layered` they must be zero. A red build or a failing test stops here: `BLOCKED (baseline red — fix first: <package>)`;
 refactoring starts from green.
 
-## Phase 3: Choices (`layout` mode; skipped when technical-preferences already records them)
+## Phase 3: Choices (`layout` mode: asked for the fields technical-preferences does not record yet; `framework` mode: always asks the target)
 The same choices `/setup-stack` records, batched into three `AskUserQuestion`s — architecture and shape ·
 transport (router, GraphQL models) · thresholds and allow-list — recommendation first, the current tree as
 evidence for the recommendation: `go_architecture` layered | modular (staying modular ends the
@@ -71,11 +71,12 @@ mode with `PLANNED (no migration — modular confirmed)`); `go_layers` per-conte
 `go_composition_root` internal/app | main; ports in the domain (the layered rule) — shown, not asked;
 `go_router` chi | ServeMux; `graphql_models` dto | bind; `go_domain_allow`; coverage thresholds. PHP:
 `php_architecture` layered | framework (staying `framework` ends the mode the same way); `php_layers` per-context | flat; `php_static_analysis`
-phpstan | psalm; `php_cs_tool` ecs | php-cs-fixer; `php_domain_allow`; coverage thresholds; in `framework` mode
-the target `php_framework` — and the plan is written only after `/architecture-decision` has recorded the move.
-The answers are written into `technical-preferences.md` under the plan's write gate (Phase 4) and the
-architecture decision goes through `/architecture-decision` (named in the hand-off) — `/refactor`
-never writes an ADR itself.
+phpstan | psalm; `php_cs_tool` ecs | php-cs-fixer; `php_domain_allow`; coverage thresholds. `framework` mode asks one
+thing only — the target framework (yii3 · symfony · laravel · slim · none) — and writes nothing into
+technical-preferences: the current `php_framework` stays the truth until the ADR is accepted and the last apply step
+lands. The `layout` answers are written into `technical-preferences.md` under the plan's write gate (Phase 4);
+the architecture decision goes through `/architecture-decision` (named in the hand-off) — `/refactor` never writes
+an ADR itself.
 
 ## Phase 4: Plan (the dry-run deliverable)
 A table of steps, each small enough for one `go-engineer` call and green on its own: step · what moves
@@ -93,12 +94,14 @@ plus the gate or `arch-check` once they exist) · size (files, lines). Fixed ord
    services; tooling (`deptrac.yaml`, the analyser at its baseline, the standard tool, `phpunit.xml`,
    `scripts/coverage-gate.php`, composer scripts); `App\Domain` extraction (entities with `public private(set)`
    state, domain exceptions, ports); use cases; adapters into `App\Infrastructure` with the ORM mapping;
-   composition root in the framework config; transport calling use cases. PHP `framework`: after the `layout`
-   steps are done (or when the project is already `layered`), one step per Infrastructure sub-namespace
-   (`Transport\Http`, `Transport\GraphQL`, `Persistence`, `Mail`, …) plus the composition root and
-   `public/index.php`, each replacing one framework's adapters with the target's, with the deptrac `Framework`
-   layer switched to the target's namespaces so the old framework fails the build the moment it is no longer
-   allowed. `tests` mode plans one step per smell class (sleep → polling/synctest or a fake clock, string
+   composition root in the framework config; transport calling use cases. PHP `framework`: requires `php_architecture: layered` (else
+   `PLANNED (layout first — run /refactor layout)`); step 1 is always "ADR: `/architecture-decision` records the move
+to <target>" and `--apply` refuses while that ADR is not `Accepted`; then one step per Infrastructure
+   sub-namespace (`Transport\Http`, `Transport\GraphQL`, `Persistence`, `Mail`, …) plus the composition root and
+   `public/index.php`, each replacing one framework's adapters with the target's; the last step switches the deptrac
+   `Framework` layer and `php_framework` to the target, so the old framework fails the build the moment it is no
+   longer allowed. The plan document is written like every other mode's (Phase 4 gate); the ADR is its first step,
+   not a precondition of writing it. `tests` mode plans one step per smell class (sleep → polling/synctest or a fake clock, string
    compare → `errors.Is` / `expectException(Class::class)`, ad-hoc → table-driven / data providers, doubles by
    layer, thresholds). `<package|namespace>` mode plans the split/move of that package or namespace only.
 Every step names the `ARCH-NNN`/tech-debt row it closes. Steps that would change behaviour, a contract,
@@ -134,6 +137,6 @@ against the baseline); no new dependency in `go.mod` / `composer.json` beyond th
 Push with consent (`git push -u origin refactor/S-NNN-<slug>`), draft PR when a workflow starts on
 `pull_request` (as `/dev-story` Phase 6). Story status → `Review`. Verdict: `PLANNED (…)` | `COMPLETE` |
 `PARTIAL (open: …)` | `BLOCKED (…)`. Next step — one `AskUserQuestion`: after a dry-run
-`/architecture-decision` when Phase 3 changed the style (Recommended then), else `/create-stories <plan-path>`
-(Recommended) · show the plan · stop here; after an apply `/code-review --diff` (Recommended) · show the before/after table ·
+`/architecture-decision` when Phase 3 changed the style or the mode was `framework` (Recommended then), else
+`/create-stories <plan-path>` (Recommended) · show the plan · stop here; after an apply `/code-review --diff` (Recommended) · show the before/after table ·
 stop here.

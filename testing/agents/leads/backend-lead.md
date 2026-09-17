@@ -7,7 +7,7 @@
 **Does not own**: Client (frontend-lead), product scope, production infrastructure (devops-lead)
 **Escalates to**: technical-director
 **Delegates to**: go-engineer, php-engineer, node-engineer, database-engineer, api-designer, graphql-engineer
-**Reference**: `stack-reference/go.md / yii3.md / typescript.md / database.md / graphql.md`
+**Reference**: `stack-reference/go.md / php.md (+ yii3.md, symfony.md, laravel.md) / typescript.md / database.md / graphql.md`
 **Verdict vocabulary**: APPROVED / NEEDS CHANGES (review)
 
 ## Static checks

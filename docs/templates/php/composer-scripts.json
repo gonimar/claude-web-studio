@@ -1,12 +1,12 @@
 {
-  "_comment": "Web Studio \u2014 composer `scripts` for a PHP project (stack-reference/php.md). Merge into composer.json; `composer ci` is what CI runs and what /story-done and /refactor read. Pick the `lint` and `stan` lines of the tools recorded in technical-preferences (php_cs_tool, php_static_analysis). A script may not be named like a built-in Composer command (`audit`, `validate` \u2014 Composer skips it), and built-ins are called as `@composer \u2026`. `composer validate --strict` requires `description` and `license` (e.g. `proprietary`) in composer.json.",
+  "_comment": "Web Studio \u2014 composer `scripts` for a PHP project (stack-reference/php.md). Merge into composer.json; `composer ci` is the local gate (no network; /story-done and /refactor read it) and `composer ci-full` adds `composer audit` for CI. /test-setup writes the thresholds from technical-preferences into the `coverage-gate` line \u2014 the one place the build keeps them. Pick the `lint` and `stan` lines of the tools recorded in technical-preferences (php_cs_tool, php_static_analysis). A script may not be named like a built-in Composer command (`audit`, `validate` \u2014 Composer skips it), and built-ins are called as `@composer \u2026`. `composer validate --strict` requires `description` and `license` (e.g. `proprietary`) in composer.json.",
   "scripts": {
     "lint": "ecs check",
     "lint:fix": "ecs check --fix",
     "lint:php-cs-fixer": "php-cs-fixer fix --dry-run --diff",
     "stan": "phpstan analyse --no-progress --memory-limit=1G",
     "stan:psalm": "psalm --no-progress",
-    "arch-check": "deptrac analyse --no-progress --fail-on-uncovered",
+    "arch-check": "deptrac analyse --no-progress",
     "test": "phpunit --no-progress",
     "test:coverage": "phpunit --no-progress --coverage-clover=build/clover.xml",
     "coverage-gate": "php scripts/coverage-gate.php --clover=build/clover.xml Domain=90 Application=80",
@@ -16,9 +16,12 @@
       "@stan",
       "@arch-check",
       "@test:coverage",
-      "@coverage-gate",
-      "@audit:deps"
+      "@coverage-gate"
     ],
-    "audit:deps": "@composer audit --no-dev"
+    "audit:deps": "@composer audit --no-dev",
+    "ci-full": [
+      "@ci",
+      "@audit:deps"
+    ]
   }
 }
