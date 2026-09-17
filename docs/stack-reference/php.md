@@ -1,6 +1,6 @@
 ---
 updated: 2026-09-17
-sources: [https://www.php.net/releases/8.4/en.php, https://php.watch/versions, https://www.php-fig.org/per/coding-style/, https://www.php-fig.org/psr/, https://phpunit.de/supported-versions.html, https://docs.phpunit.de, https://phpstan.org/user-guide/rule-levels, https://psalm.dev/docs, https://github.com/deptrac/deptrac, https://github.com/easy-coding-standard/easy-coding-standard, https://github.com/PHP-CS-Fixer/PHP-CS-Fixer, https://github.com/phparkitect/arkitect, https://webonyx.github.io/graphql-php/, packagist.org]
+sources: [https://www.php.net/releases/8.5/en.php, https://www.php.net/releases/8.4/en.php, https://php.watch/versions, https://www.php-fig.org/per/coding-style/, https://www.php-fig.org/psr/, https://phpunit.de/supported-versions.html, https://docs.phpunit.de, https://phpstan.org/user-guide/rule-levels, https://psalm.dev/docs, https://github.com/deptrac/deptrac, https://github.com/easy-coding-standard/easy-coding-standard, https://github.com/PHP-CS-Fixer/PHP-CS-Fixer, https://github.com/phparkitect/arkitect, https://webonyx.github.io/graphql-php/, packagist.org]
 ---
 # PHP 8.5 — the language, the layers, the tests (framework-independent)
 
@@ -14,13 +14,14 @@ still applies — the framework is an Infrastructure detail, never the shape of 
 - **8.5 (2025-11-20, bug fixes until 2027-12-31)**: pipe operator `|>`; `clone()` with property updates; `#[\NoDiscard]`; `array_first()/array_last()`; the **URI** extension (`Uri\Rfc3986\Uri`, `Uri\WhatWg\Url`); closures and `static` closures in constant expressions; fatal-error backtraces; `php --ini=diff`.
 - **8.4**: **property hooks** and **asymmetric visibility** (`public private(set)`) — the two features that make a rich model possible without getter/setter boilerplate; `new Foo()->m()` without parentheses; lazy objects; `#[\Deprecated]`; HTML5 DOM (`Dom\HTMLDocument`); `array_find`.
 - **8.3**: typed class constants, `#[\Override]`, `json_validate()`.
-- **8.6** expected 2026-11-19. 8.3 is security-only; 8.1 is EOL (2025-12-31). Minimum for new projects: **8.4**; target 8.5.
+- **8.6** expected 2026-11-19. 8.3 is security-only; 8.1 is EOL (2025-12-31). **New projects run on 8.5** (`php_version`, recommended in `/setup-stack`); 8.4 is the floor — the version where property hooks and asymmetric visibility appeared — for a project that cannot move yet; a brownfield project records what it runs and upgrades through a story.
 
 Mandatory in every file: `declare(strict_types=1)`; `readonly` classes/properties; enums; constructor promotion; `final` by default; no `mixed` without a reason; **PER Coding Style 3.1** (the current edition — it extends and replaces PSR-12; `@PER-CS` in php-cs-fixer, `perCs: true` in ECS).
 
 ## Studio default set
 | Task | Choice | Why |
 |---|---|---|
+| PHP version | `php_version`: **8.5** (recommended and the studio's target) · 8.4 (minimum) — chosen in `/setup-stack`, recorded by `/adopt` from `composer.json` `require.php` and the lockfile's `platform` | 8.5 is the current release with bug fixes until 2027-12; every tool below runs on it (PHPUnit 13 needs ≥ 8.4, Symfony 8 ≥ 8.4, Laravel 13 ≥ 8.3, PHPStan 2 / Psalm 6 / deptrac 4 / ECS 13 support 8.5); the rich-model form below needs 8.4 features, so 8.4 is the floor, not the target |
 | Framework | `php_framework`: **yii3** (reference `yii3.md`) · symfony (`symfony.md`, stub) · laravel (`laravel.md`, stub) · slim · none — chosen in `/setup-stack` | Only Yii3 has a full studio reference and a package rule; Symfony and Laravel have stubs (versions, where the layers live) and `php-engineer` works from the official docs until a project fills them; Slim and none have no file |
 | Architecture | `php_architecture`: **layered** (`src/Domain` → `src/Application` → `src/Infrastructure`, deptrac-enforced) · framework (the framework's own layout: controllers/models/services); `php_layers`: **per-context** (`src/Application/<Context>/`) · flat (one `App\Application` namespace) | See "Layered architecture"; a brownfield project keeps `framework` until `/refactor layout` |
 | Static analysis | `php_static_analysis`: **PHPStan** level 9 (new projects) · Psalm level 1 (the yiisoft ecosystem's own tool) | Template `docs/templates/php/phpstan.neon` / `psalm.xml`; a brownfield project starts from a baseline and raises one level per story |
@@ -50,9 +51,9 @@ Dependencies point inwards only. `deptrac.yaml` says who may depend on whom and 
 | Composition root | the framework's config (`config/` in Yii3, `config/services.yaml` in Symfony, providers in Laravel) and `public/index.php` | Port → adapter bindings, middleware pipeline, routes | Anything the three rows above own |
 
 **Rich model, concretely.** `public bool $isActive` with an `activate()` that checks it is half-way: any class can still write
-`$m->isActive = true`. The studio form (PHP 8.4+): `public private(set) bool $isActive = false`, `public readonly string $id`,
+`$m->isActive = true`. The studio form (needs 8.4 features, written for 8.5): `public private(set) bool $isActive = false`, `public readonly string $id`,
 `public private(set) int $balance`, `activate(): void` throwing `ZeroBalanceException`; reads stay plain property reads, writes
-compile only inside the class. Verified on PHP 8.4.25: a write from outside throws `Error`. A rehydrating named constructor
+compile only inside the class. Verified on PHP 8.5 and 8.4.25 (docker `php:8.5-cli`, `php:8.4-cli`): a write from outside throws `Error`. A rehydrating named constructor
 (`Membership::fromState(...)`) lets a repository rebuild an entity without re-running the creation rules.
 
 **GraphQL** (`webonyx/graphql-php`): the SDL lives at `api_contract_path` (default `api/schema.graphqls`), loaded with
