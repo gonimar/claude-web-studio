@@ -68,7 +68,7 @@ tree as evidence for the recommendation. Go: `go_architecture` layered | modular
 mode with `PLANNED (no migration — modular confirmed)`); `go_layers` per-context | flat-usecase;
 `go_composition_root` internal/app | main; ports in the domain (the layered rule) — shown, not asked;
 `go_router` chi | ServeMux; `graphql_models` dto | bind; `go_domain_allow`; coverage thresholds. PHP:
-`php_architecture` layered | framework (staying `framework` ends the mode the same way); `php_static_analysis`
+`php_architecture` layered | framework (staying `framework` ends the mode the same way); `php_layers` per-context | flat; `php_static_analysis`
 phpstan | psalm; `php_cs_tool` ecs | php-cs-fixer; `php_domain_allow`; coverage thresholds; in `framework` mode
 the target `php_framework` — and the plan is written only after `/architecture-decision` has recorded the move.
 The answers are written into `technical-preferences.md` under the plan's write gate (Phase 4) and the

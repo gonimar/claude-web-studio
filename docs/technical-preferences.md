@@ -11,8 +11,9 @@
 ## Backend
 - **Language/runtime**: [TO BE CONFIGURED] (Go 1.27 | PHP 8.5 | Node 24 | none)
 - **Framework**: [net/http + chi | Yii3 | Symfony | Laravel | Slim | Hono | NestJS | …]
-- **php_framework**: [yii3 (reference php-yii3.md) | symfony | laravel | slim | none — php-engineer works from the official docs when no studio reference exists]
+- **php_framework**: [yii3 (reference yii3.md) | symfony (symfony.md, stub) | laravel (laravel.md, stub) | slim | none — php-engineer works from the official docs where the reference is a stub or missing]
 - **php_architecture**: [layered (src/Domain → src/Application → src/Infrastructure, deptrac-enforced) | framework (the framework's own layout) — see stack-reference/php.md "Layered architecture"]
+- **php_layers**: [per-context (src/Domain/<Context>, src/Application/<Context> — recommended) | flat (one namespace per layer) | n/a]
 - **php_static_analysis**: [phpstan (level 9 new / baseline brownfield) | psalm (level 1)]
 - **php_cs_tool**: [ecs (perCs: true) | php-cs-fixer (@PER-CS)]
 - **php_domain_allow**: [non-PSR vendor namespaces the domain may use, e.g. Ramsey\Uuid, Brick\Money — mirrored into deptrac.yaml's Vendor layer; `none` = PHP only]

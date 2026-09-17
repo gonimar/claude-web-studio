@@ -6,7 +6,7 @@
 **Domain**: PHP 8.5 in the framework recorded as `php_framework` (Yii3 with the studio reference: yiisoft/* packages, DI, middleware, validator, queue; Symfony/Laravel/Slim from their docs), layered or framework architecture, rich models, use cases, PHPStan/Psalm, ECS/php-cs-fixer, deptrac, PHPUnit 13 by layer
 **Does not own**: Architecture (backend-lead), frontend
 **Escalates to**: the relevant lead; security → security-lead
-**Reference**: `stack-reference/php.md`, then the framework file (`php-yii3.md`)
+**Reference**: `stack-reference/php.md`, then the framework file (`yii3.md`)
 **Verdict vocabulary**: COMPLETE / PARTIAL / BLOCKED (work result)
 
 ## Static checks

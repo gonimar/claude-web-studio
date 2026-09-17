@@ -5,7 +5,7 @@ sources: [https://www.php.net/releases/8.4/en.php, https://php.watch/versions, h
 # PHP 8.5 — the language, the layers, the tests (framework-independent)
 
 This file is about PHP itself. The framework is a separate choice recorded as `php_framework` in
-technical-preferences, with its own reference file when the studio has one: `php-yii3.md` (Yii3 —
+technical-preferences, with its own reference file when the studio has one: `yii3.md` (Yii3 —
 the only framework reference today). Symfony, Laravel, Slim and "none" are valid choices: `php-engineer`
 then works from the framework's official documentation, says so in every result, and everything below
 still applies — the framework is an Infrastructure detail, never the shape of the code.
@@ -21,8 +21,8 @@ Mandatory in every file: `declare(strict_types=1)`; `readonly` classes/propertie
 ## Studio default set
 | Task | Choice | Why |
 |---|---|---|
-| Framework | `php_framework`: **yii3** (reference `php-yii3.md`) · symfony · laravel · slim · none — chosen in `/setup-stack` | Only Yii3 has a studio reference and a package rule today; the others work through `php-engineer` alone with the official docs, and get their own file when a project needs it |
-| Architecture | `php_architecture`: **layered** (`src/Domain` → `src/Application` → `src/Infrastructure`, deptrac-enforced) · framework (the framework's own layout: controllers/models/services) | See "Layered architecture"; a brownfield project keeps `framework` until `/refactor layout` |
+| Framework | `php_framework`: **yii3** (reference `yii3.md`) · symfony (`symfony.md`, stub) · laravel (`laravel.md`, stub) · slim · none — chosen in `/setup-stack` | Only Yii3 has a full studio reference and a package rule; Symfony and Laravel have stubs (versions, where the layers live) and `php-engineer` works from the official docs until a project fills them; Slim and none have no file |
+| Architecture | `php_architecture`: **layered** (`src/Domain` → `src/Application` → `src/Infrastructure`, deptrac-enforced) · framework (the framework's own layout: controllers/models/services); `php_layers`: **per-context** (`src/Application/<Context>/`) · flat (one `App\Application` namespace) | See "Layered architecture"; a brownfield project keeps `framework` until `/refactor layout` |
 | Static analysis | `php_static_analysis`: **PHPStan** level 9 (new projects) · Psalm level 1 (the yiisoft ecosystem's own tool) | Template `docs/templates/php/phpstan.neon` / `psalm.xml`; a brownfield project starts from a baseline and raises one level per story |
 | Coding standard | `php_cs_tool`: **ECS** (`perCs: true`) · php-cs-fixer (`@PER-CS`) | Templates `ecs.php` / `.php-cs-fixer.dist.php`; ECS runs PHP_CodeSniffer and PHP-CS-Fixer rules through one config |
 | Architecture check | **deptrac** (`deptrac/deptrac` — the `qossmic/deptrac-shim` package has not moved since 2022) · phparkitect (rules as PHP) · phpat (rules inside PHPStan) | Template `deptrac.yaml`: layers by directory, the framework namespaces as a layer only Infrastructure may use |
@@ -45,7 +45,7 @@ Dependencies point inwards only. `deptrac.yaml` says who may depend on whom and 
 | Layer | Namespace / directory | Contains | Never |
 |---|---|---|---|
 | Domain | `App\Domain\<Context>\` — `src/Domain/<Context>/` | Entities and aggregates as **rich models**: `readonly` identity, `public private(set)` state, a validating constructor or named constructor, operations as methods that keep the invariants and throw domain exceptions; value objects; domain events; the **ports** (`<Entity>RepositoryInterface`, gateway interfaces) | Framework, ORM attributes/annotations on entities, PSR-7, SQL, HTTP; only PHP and the value libraries in `php_domain_allow` |
-| Application | `App\Application\<Context>\` — `src/Application/<Context>/` | **One class per use case** (`ActivateMembership`) with one method `execute(Input): Output` (or `__invoke`); a constructor taking the ports; orchestration, transactions through a port, calls into the domain, events | Framework, ORM, HTTP types; business rules (they belong to the entity) |
+| Application | `App\Application\<Context>\` — `src/Application/<Context>/` (`php_layers: per-context`, recommended) or `App\Application\` flat (`flat`) | **One class per use case** (`ActivateMembership`) with one method `execute(Input): Output` (or `__invoke`); a constructor taking the ports; orchestration, transactions through a port, calls into the domain, events | Framework, ORM, HTTP types; business rules (they belong to the entity) |
 | Infrastructure | `App\Infrastructure\` — `src/Infrastructure/{Persistence,Transport/Http,Transport/GraphQL,Mail,…}/` | Adapters implementing the ports (Cycle/Doctrine/`yiisoft/db` repositories with the mapping kept here), invokable PSR-15 actions and GraphQL resolvers that call use cases, DTOs and mapping, clients | Business rules; an action or resolver that calls a repository directly |
 | Composition root | the framework's config (`config/` in Yii3, `config/services.yaml` in Symfony, providers in Laravel) and `public/index.php` | Port → adapter bindings, middleware pipeline, routes | Anything the three rows above own |
 
