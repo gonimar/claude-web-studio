@@ -293,10 +293,15 @@ roadmap story. Sprint end: `/retrospective NN` (planned vs shipped, the calibrat
 ```
 Never mix an upgrade with features in one story.
 
-**Large refactoring / rewriting a module.** `/tech-debt <area>` (inventory with estimates) → `/impact`
-→ an ADR "why and where the boundary is" → `/api-contract` if the contract changes → stories, the
-first of which is "pin the behaviour with tests" (characterisation tests), only then the rewrite.
-`/architecture-review` at the end.
+**Refactoring / migrating a Go service to the layered architecture.** `/refactor --dry-run` (or
+`/refactor layout`, `/refactor <package>`, `/refactor tests`): the baseline by numbers, the architecture
+choices as in `/setup-stack`, a step plan whose first step is always characterisation tests →
+`/architecture-decision` when the style changes → `/create-stories` (one story per step group) →
+`/refactor --apply S-NNN` in `refactor/S-NNN-<slug>`, one green step per commit, a before/after table →
+`/code-review --diff` → `/story-done`. A step that would change behaviour, a contract or a schema is not
+a refactoring step: `/impact` first. **Rewriting a module** (behaviour changes): `/tech-debt <area>` →
+`/impact` → an ADR "why and where the boundary is" → `/api-contract` if the contract changes → stories,
+the first of which pins the behaviour with tests, only then the rewrite. `/architecture-review code` at the end.
 
 **A new sensitive surface** (login/OAuth, payments, file uploads, webhooks, WebSocket, admin,
 e-mail): `/feature-spec` with its mandatory Security section → `/threat-model <surface>` →

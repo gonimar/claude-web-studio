@@ -16,16 +16,16 @@ Writes only after "May I write?". If `.claude/docs/` is missing, run `/init` fir
 
 ## Phase 1: Stack detection (`stack` / `full`)
 Say "Scanning the project…", then read:
-- `go.mod` (Go version, router, pgx/sqlc, gqlgen), `composer.json` (PHP, `yiisoft/*`, Symfony/Laravel, graphql-php), `package.json` (Angular/Vue/Nuxt/Vite versions, TS, three, pixi, GraphQL clients), `angular.json`, `nuxt.config.*`, `vite.config.*`, `gqlgen.yml`, `*.graphql`, `openapi*.yaml`, `compose*.yaml`, `Dockerfile*`, `.github/workflows/*`, existing deploy/advisor skills in `.claude/skills`.
+- `go.mod` (Go version, router, pgx/sqlc, gqlgen), `composer.json` (PHP, `yiisoft/*`, Symfony/Laravel, graphql-php), `package.json` (Angular/Vue/Nuxt/Vite versions, TS, three, pixi, GraphQL clients), `angular.json`, `nuxt.config.*`, `vite.config.*`, `gqlgen.yml` (its `schema:` entry names `api_contract_path`), `*.graphql`, `*.graphqls`, `openapi*.yaml`, `compose*.yaml`, `Dockerfile*`, `.github/workflows/*`, existing deploy/advisor skills in `.claude/skills`.
 - Compare versions with `.claude/docs/stack-reference/index.md`: outdated majors → a table "now → current → upgrade path (reference section)".
-- Go projects: compare the tree with `go.md` "Project layout" (golang-standards/project-layout adapted) — `src/`, `utils/`/`common/`, logic in `cmd/`, an unused `pkg/` → INFO/MEDIUM findings with a migration note; record the actual variant as `go_layout` in technical-preferences (never restructure during adoption).
+- Go projects: compare the tree with `go.md` "Project layout" (golang-standards/project-layout adapted) — `src/`, `utils/`/`common/`, logic in `cmd/`, an unused `pkg/` → INFO/MEDIUM findings with a migration note; record the actual variant as `go_layout` in technical-preferences (never restructure during adoption). Record the architecture style from the tree, never from a wish: `internal/domain/` + `internal/usecase/` present (or the go-clean-template spelling `internal/entity/` + `internal/usecase/` + `internal/repo/`) **and** the graph is clean — `go list -deps ./internal/domain/... | grep '<module>/internal/' | grep -v internal/domain` prints nothing, and usecase reaches neither infrastructure nor app (the `arch-check` target) → `go_architecture: layered`; a layered tree with cross-layer imports is recorded as `modular` with an INFO "layered by name, N cross-layer imports — /refactor layout"; otherwise `modular`. Detection by the mechanism that will enforce it, never by folder names alone. `go_router` from `go.mod` (chi / none → ServeMux); `graphql_models` from `gqlgen.yml` (`models:` bound to `internal/domain` → bind, else dto); `api_contract_path` from `gqlgen.yml` `schema:` (or the OpenAPI file's real location) — never from the studio default. A `.golangci.yml` in v1 format (`linters-settings:`, no `version: "2"`) is a MEDIUM finding — golangci-lint v2 rejects it. Moving to `layered` is offered as `/refactor layout` in the adoption plan, not done here.
 
 **Fill `technical-preferences.md` in this run.** Every field the files answer is written from the facts:
 Project type and Rendering (from the framework and routes), Backend (language/runtime, framework,
 database and cache from compose, API style from schema/openapi/routes, authentication if visible),
 Frontend (framework, build, styles; `vanilla` or `none` when there is none), Tests and quality (from
-`phpunit.xml`, `vitest.config`, `go test`, lint configs), Infrastructure (containers, CI, deploy from
-compose/workflows/deploy skills — **Deploy target and delegate** by `docs/deploy-target-contract.md`: an agent `.claude/agents/*-ops.md` with `deploy-target:` in its frontmatter or a `scripts/deploy/*.sh`; a kit that only ships a slash command is noted as `none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent or a `scripts/deploy/<target>.sh`"; **Infra repo / Proxy config** asked when the host is shared), Layout (`backend_root`, `frontend_root`, `go_layout`). `[TO BE CONFIGURED]`
+`phpunit.xml`, `vitest.config`, `go test`, lint configs; Go: coverage thresholds only when a gate script or CI step enforces them, else `indicator`), Infrastructure (containers, CI, deploy from
+compose/workflows/deploy skills — **Deploy target and delegate** by `docs/deploy-target-contract.md`: an agent `.claude/agents/*-ops.md` with `deploy-target:` in its frontmatter or a `scripts/deploy/*.sh`; a kit that only ships a slash command is noted as `none` with the reason "kit ships only a slash command — add `deploy-target:` to its agent or a `scripts/deploy/<target>.sh`"; **Infra repo / Proxy config** asked when the host is shared), Layout (`backend_root`, `frontend_root`, `go_layout`, `go_architecture` and its companions). `[TO BE CONFIGURED]`
 may remain only for fields no file answers; ask those in one `AskUserQuestion` (project type, API style,
 layout — whatever is still unknown).
 
@@ -49,7 +49,7 @@ Do not defer to `/setup-stack`: after `/adopt` the stack counts as chosen, and t
 | product spec | `docs/specs/product-spec.md`, README | template sections |
 | feature specs | `docs/specs/features/*.md` | Given/When/Then criteria, "Security" section |
 | ADRs | `docs/architecture/adr-*.md`, `docs/adr/` | Status/Context/Options/Decision/Consequences |
-| contract | `docs/architecture/api/`, `schema.graphql`, `openapi*.yaml` | present, diff check in CI |
+| contract | `docs/architecture/api/api-contract.md` + the file at `api_contract_path` (`api/schema.graphqls`, `schema.graphql`, `openapi*.yaml`) | present, one copy, diff check in CI |
 | threat model | `docs/architecture/threat-model.md` | STRIDE table |
 | test strategy | `docs/architecture/test-strategy.md` | tools per level |
 | roadmap/stories | `production/roadmap.md`, `production/stories/` | checkbox format |

@@ -40,7 +40,7 @@ testing/
 | `onboarding` | init, start, help, adopt, setup-stack, stack-update, update, skill-test, skill-improve | state detection before questions; one next step; project data never overwritten; language chosen by the user |
 | `authoring` | brainstorm, product-spec, feature-spec, ux-spec, design-system, game-concept, architecture-decision, api-contract, data-model, threat-model, test-setup | template from `templates/`; section by section; "May I write?"; security/accessibility sections |
 | `review` | architecture-review, code-review | read-only; routing to specialists; BLOCKING/WARNING/INFO; ADR conformance |
-| `pipeline` | create-stories, dev-story, story-done | input checks (spec/contract/ADR); criterion ↔ test; BLOCKED on missing inputs |
+| `pipeline` | create-stories, dev-story, story-done, refactor | input checks (spec/contract/ADR); criterion ↔ test; BLOCKED on missing inputs |
 | `sprint` | sprint-plan, sprint-status, changelog, release-checklist, qa-plan | status from artefacts; verdict word; no self-advancing gates |
 | `analysis` | security-audit, dependency-audit, perf-audit, a11y-audit, tech-debt, pentest, harden | tools with output; findings with file:line/severity/fix; templated report; pentest only on the project's own systems |
 | `team` | team-feature, team-security, team-release, team-game | parallel independent Tasks; BLOCKED surfaced; partial report |

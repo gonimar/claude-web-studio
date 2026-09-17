@@ -1,6 +1,6 @@
 # API Contract: [Area]
 
-> Style: GraphQL (SDL) | REST (OpenAPI 3.1) | AsyncAPI · File: `docs/architecture/api/…` · ADR: · Date:
+> Style: GraphQL (SDL) | REST (OpenAPI 3.1) | AsyncAPI · File: `<api_contract_path>` (the one schema file; this document links to it, never copies it) · ADR: · Date:
 
 ## 1. Purpose and consumers
 Who calls it (web, game client, integrations), permissions.

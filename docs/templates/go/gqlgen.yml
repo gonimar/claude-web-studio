@@ -1,0 +1,35 @@
+# gqlgen configuration — Web Studio template (stack-reference/graphql.md, go.md "Layered architecture").
+# Installed by /api-contract or the first GraphQL story; MODULE_PATH is replaced with the module path.
+# The schema is read in place from `api_contract_path` — never copied.
+# gqlgen is a go.mod tool, not a global binary: `go get -tool github.com/99designs/gqlgen@latest`,
+# then `go tool gqlgen generate` (also as `//go:generate go tool gqlgen generate`).
+schema:
+  - api/schema.graphqls
+
+exec:
+  filename: internal/infrastructure/transport/graphql/generated.go
+  package: graphql
+
+resolver:
+  layout: follow-schema
+  dir: internal/infrastructure/transport/graphql
+  package: graphql
+  filename_template: "{name}.resolvers.go"
+
+# graphql_models: dto (recommended) — generated models are transport DTOs, mapped to and from the
+# domain in the resolvers. Delete the `models:` block below.
+model:
+  filename: internal/infrastructure/transport/graphql/model/models_gen.go
+  package: model
+
+struct_fields_always_pointers: false
+omit_slice_element_pointers: true
+omit_getters: false
+
+# graphql_models: bind — schema types bound to domain types. Unexported fields are reached through
+# getter methods (gqlgen resolves `Balance()` for the field `balance`). Never bind a type named
+# Query, Mutation or Subscription: those are the root operation types.
+# models:
+#   Membership:
+#     model:
+#       - MODULE_PATH/internal/domain/membership.Membership

@@ -13,6 +13,8 @@
 - **Framework**: [net/http + chi | Yii3 | Hono | NestJS | …]
 - **Database**: [PostgreSQL 18 | …]  **Cache/queue**: [Redis 8 | …]
 - **API style**: [GraphQL (default for the client API; schema-first SDL) | REST/OpenAPI 3.1 (webhooks, files, integrations) | WebSocket/SSE (realtime) | gRPC]
+- **api_contract_path**: [api/schema.graphqls (Go module) | docs/architecture/api/schema.graphql | docs/architecture/api/openapi.yaml] — the one SDL/OpenAPI file every skill and the codegen read
+- **graphql_models**: [dto (generated models mapped in resolvers — recommended) | bind (domain types bound in gqlgen.yml) | n/a]
 - **GraphQL server/client**: [gqlgen | graphql-php | Yoga 5] / [Apollo Angular | villus/urql | graphql-request]
 - **Authentication**: [sessions | OIDC | JWT+BFF | …]
 
@@ -33,7 +35,9 @@
 - **Unit**: [Vitest 4 | PHPUnit 12 | go test]
 - **E2E**: [Playwright]
 - **Lint/format**: [ESLint 9 flat + Prettier | php-cs-fixer + Psalm | gofmt + golangci-lint]
-- **Coverage threshold**: [e.g. 80 % for the domain layer]
+- **Coverage threshold**: [an indicator for non-layered stacks, e.g. 80 % for the domain layer; layered Go uses the two fields below as a gate]
+- **go_coverage_domain**: [90] — statement coverage of `internal/domain/...`; /test-setup writes it into the Makefile (`GO_COVERAGE_DOMAIN`), which is what `make coverage-gate` reads
+- **go_coverage_usecase**: [80] — the same for `internal/usecase/...` (`GO_COVERAGE_USECASE`)
 
 ## Infrastructure
 - **Containers**: [Docker, compose v2]  **CI**: [GitHub Actions]
@@ -45,6 +49,11 @@
 ## Layout
 - **backend_root**: [./backend | ./ | …]
 - **go_layout**: [project-layout (cmd/, internal/, pkg/ only when exported, api/, configs/, scripts/, build/, deployments/, test/) | minimal (main.go + go.mod) | none — see stack-reference/go.md "Project layout"]
+- **go_architecture**: [layered (internal/domain → usecase → infrastructure, depguard-enforced) | modular (internal/<domain>/ with handler → service → repository) — see stack-reference/go.md "Architecture style"]
+- **go_layers**: [per-context (internal/usecase/<ctx>/ — recommended) | flat-usecase (one internal/usecase package) | n/a]
+- **go_composition_root**: [internal/app (studio contract, cmd/<app>/main.go ≤ 50 lines) | main (graph and router assembled in cmd/<app>/main.go; recorded in the layout ADR as an accepted deviation)]
+- **go_router**: [chi v5 (recommended) | net/http ServeMux]
+- **go_domain_allow**: [non-stdlib packages the domain layer may import, e.g. github.com/google/uuid, github.com/shopspring/decimal; `none` = stdlib only. The list is written into `.golangci.yml` depguard by /test-setup; growing it is a technical-preferences change (one AskUserQuestion, the field, then /test-setup regenerates the allow-list) — never a hand edit of the linter config alone]
 - **frontend_root**: [./frontend | ./web | …]
 - **game_root**: [./game | none]
 - **shared_packages**: [./packages | none]

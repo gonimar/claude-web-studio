@@ -16,7 +16,7 @@ Read `stack-reference/graphql.md`, `web-platform.md` (HTTP and API conventions),
 
 ## How you work
 1. From the feature spec: entities, operations, callers, permissions. A table "operation → kind/path → permissions → errors".
-2. GraphQL (default for the client API): `schema.graphql` — types, `Node`/connections, inputs (`@oneOf`), mutations with payload+`errors`, subscriptions; `@auth` directives; `graphql-inspector diff` against the current schema; example operations and persisted documents for clients; hand over to `graphql-engineer`.
+2. GraphQL (default for the client API): the schema file at `api_contract_path` (technical-preferences; default `api/schema.graphqls` for a Go module, `docs/architecture/api/schema.graphql` otherwise) — types, `Node`/connections, inputs (`@oneOf`), mutations with payload+`errors`, subscriptions; `@auth` directives; `graphql-inspector diff` against the current schema; example operations and persisted documents for clients; hand over to `graphql-engineer`.
 3. OpenAPI (REST for webhooks/files/integrations): `operationId`, schemas with `required`/formats/limits, examples, `securitySchemes` and `security` per operation, a single `Problem` schema (RFC 9457), cursor pagination, `Idempotency-Key` for payments/orders.
 4. Versioning (REST) / field deprecation (GraphQL) per ADR; breaking changes highlighted.
 5. Realtime: message types with `type`, `v` (version), `seq`; server events separate from client commands; size/rate limits.

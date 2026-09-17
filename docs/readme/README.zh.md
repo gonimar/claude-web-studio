@@ -114,6 +114,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/retrospective` — 依据产物做冲刺回顾：计划与交付、估算与实际及下一次 `/sprint-plan` 使用的校准系数、阻塞、带负责人的行动项。
 - `/qa-plan` — 把每个故事的验收标准映射到测试层级、工具和文件。
 - `/tech-debt` — 盘点技术债务并提出按优先级排序的故事。
+- `/refactor` — 在不改变行为的前提下重构所维护的代码：按数字给出演练计划（构建、测试、覆盖率、依赖图、测试异味）、生成故事，并从故事执行——先写特征化测试，每次提交一个绿色步骤；`layout` 将 Go 服务迁移到分层架构，`tests` 使测试符合规则。
 - `/docs` — 通过 `tech-writer` 编写面向人的文档：README、由契约生成的 API 参考、基于功能规格的用户指南、runbook；文档中的每条命令都先运行。
 
 **加固**

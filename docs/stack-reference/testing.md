@@ -1,12 +1,12 @@
 ---
-updated: 2026-09-10
+updated: 2026-09-17
 sources: [https://vitest.dev/llms.txt, https://playwright.dev/docs/intro, https://phpunit.de/supported-versions.html, https://go.dev/doc/tutorial/add-a-test, https://testing-library.com, https://k6.io/docs]
 ---
 # Testing — tools and pyramid
 
 | Level | Go | PHP | TS / frontend |
 |---|---|---|---|
-| Unit | `testing` table-driven, `testify`, `synctest` for time | PHPUnit **13** (released 2026-02-06, requires PHP ≥ 8.4; 12 still in bugfix support until 2027-02, **11 left bugfix support 2026-02-06** — life-support/PHP-compat fixes only), data providers, minimal mocking | Vitest 4 (`describe/it`, `vi.fn`), Testing Library (Angular/Vue) |
+| Unit | `testing` table-driven, `testify`, `synctest` for time, `moq` for ports of more than three methods (func-field fakes below that); `errors.Is` against sentinels, never error strings | PHPUnit **13** (released 2026-02-06, requires PHP ≥ 8.4; 12 still in bugfix support until 2027-02, **11 left bugfix support 2026-02-06** — life-support/PHP-compat fixes only), data providers, minimal mocking | Vitest 4 (`describe/it`, `vi.fn`), Testing Library (Angular/Vue) |
 | Integration | `testcontainers-go` (Postgres/Redis), `httptest` | PHPUnit + a real Postgres in compose | Vitest + MSW (mock HTTP) or a real API in compose |
 | Contract | GraphQL: codegen validation + N+1 test; REST: `oapi-codegen` schema checks; Pact with several consumers | `league/openapi-psr7-validator` middleware in tests; GraphQL schema snapshot | `graphql-codegen` fails on incompatibility; `openapi-typescript` types + Schemathesis (fuzz) |
 | E2E | — | — | **Playwright** (Chromium/WebKit/Firefox), fixtures, `trace on-first-retry`, test-id selectors |
@@ -20,6 +20,8 @@ sources: [https://vitest.dev/llms.txt, https://playwright.dev/docs/intro, https:
 - Pyramid: many unit tests on the domain, a medium number of integration tests at boundaries (DB, HTTP), few e2e tests on key journeys (login, purchase, game save).
 - Deterministic tests: time/randomness injected; network mocked or containerised; a flaky test is a priority bug.
 - CI: lint → unit → integration → build → e2e (on the built artefact) → security scan; artefacts (traces, coverage) are kept.
-- Coverage is an indicator, not a goal; a threshold for the domain layer (e.g. 80 %), not for everything.
+- Coverage is an indicator, not a goal; a threshold for the domain layer, not for everything. Go under `go_architecture: layered`: the threshold is a gate — `scripts/coverage-gate.sh` (template `docs/templates/go/coverage-gate.sh`) fails `make ci` below `go_coverage_domain` (default 90 %) and `go_coverage_usecase` (default 80 %); infrastructure has no threshold.
+- No `time.Sleep` to wait for an asynchronous result — `testing/synctest` for code that waits on time, a polling helper with a deadline (`require.Eventually` or a local one) for external systems; a sleep in a test is a `/code-review` WARNING and a `post-edit` hint.
+- Doubles by layer (Go, layered): none in domain tests; ports only in use-case tests; real containers in infrastructure tests — `stack-reference/go.md` "Tests by layer".
 - Naming: `TestX_Scenario_Expected` (Go), `testItDoesXWhenY` (PHP), `it('does X when Y')` (TS).
 - Game code: unit tests on the simulation (deterministic step), golden tests for balance, a perf test "N frames ≤ budget".

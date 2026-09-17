@@ -13,7 +13,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 
 Agent `tech-writer` (rules: README structure, runbook structure, every command run, no duplication of CLAUDE.md
 or the stack reference). Sources: `technical-preferences.md`, `docs/specs/product-spec.md`, `docs/specs/features/*.md`,
-`docs/architecture/api/*`, `docs/ops/deploy.md` (template `deploy-runbook.md`), `docs/ops/incidents/*`, `CHANGELOG.md`.
+the API contract (`docs/architecture/api/api-contract.md` and the schema file at `api_contract_path` (technical-preferences; default `api/schema.graphqls` for a Go module, `docs/architecture/api/schema.graphql` otherwise)), `docs/ops/deploy.md` (template `deploy-runbook.md`), `docs/ops/incidents/*`, `CHANGELOG.md`.
 Writes only after "May I write?". Documentation is derived from the pipeline's documents, never the other way round —
 a fact missing from a spec or the contract is a spec gap (`/feature-spec`, `/api-contract`), not something to invent here.
 

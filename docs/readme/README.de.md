@@ -127,6 +127,7 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 - `/retrospective` — Sprint-Retrospektive aus Artefakten: geplant vs. geliefert, Schätzung vs. Ist mit dem Kalibrierungsfaktor für den nächsten `/sprint-plan`, Blocker, Maßnahmen mit Verantwortlichen.
 - `/qa-plan` — ordnet die Akzeptanzkriterien jeder Story Testebenen, Werkzeugen und Dateien zu.
 - `/tech-debt` — inventarisiert technische Schulden und schlägt priorisierte Stories vor.
+- `/refactor` — refaktoriert den betreuten Code ohne Verhaltensänderung: Dry-Run-Plan nach Zahlen (Build, Tests, Abdeckung, Abhängigkeitsgraph, Test-Smells), Stories und die Ausführung aus einer Story mit Charakterisierungstests zuerst und einem grünen Schritt pro Commit; `layout` migriert einen Go-Dienst auf die Schichtenarchitektur, `tests` bringt Tests auf die Regeln.
 - `/docs` — Dokumentation für Menschen über `tech-writer`: README, API-Referenz aus dem Vertrag, Benutzerhandbuch aus den Spezifikationen, Runbook; jeder Befehl in der Doku wird vorher ausgeführt.
 
 **Härtung**
