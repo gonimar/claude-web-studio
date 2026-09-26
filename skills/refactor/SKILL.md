@@ -146,7 +146,7 @@ Dry-run verdict: `PLANNED (N steps)`.
 
 ## Phase 5: Apply (`--apply S-NNN` only)
 1. **Story check.** The story must be Ready and reference a plan document; otherwise `BLOCKED (no plan — run /refactor --dry-run first)`. For a `framework` plan, the step-1 ADR must be `Accepted`; otherwise `BLOCKED (ADR not Accepted — /architecture-decision)`.
-2. **Consent.** One `AskUserQuestion`: start — branch `refactor/S-NNN-<slug>`, update the session state, then run the plan's steps with one commit per green step (Recommended) · show the plan first · stop. The "start" answer is the "May I write?" consent for the branch, the session state, the step commits and the files the plan names; `touch .claude/.write-consent` after it.
+2. **Consent.** One `AskUserQuestion`: start — branch `refactor/S-NNN-<slug>`, update the session state, then run the plan's steps with one commit per green step (Recommended) · show the plan first · stop. The "start" answer is the "May I write?" consent for the branch, the session state, the step commits and the files the plan names; `touch .claude/.write-consent` after it and again before each step's `Task` call.
 3. **Branch** per `git-workflow.md` ("Refactor" lane), from an up-to-date default branch:
    1. `git fetch origin`.
    2. `git switch <default> && git pull --ff-only origin <default>`.

@@ -15,11 +15,14 @@ pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
   "CI is green, merge?" before the PR that starts a `pull_request` workflow existed.
 - **`/story-done` pushes its close commit** before the merge (`gh pr merge` merges the remote head, so the
   `docs: close` commit was lost with the local branch), waits for CI on the PR's latest commit, and marks a draft PR
-  from `/dev-story` ready before `gh pr merge`, which refuses drafts.
+  from `/dev-story` ready before `gh pr merge`, which refuses drafts. The PR number is read (or the PR created) before
+  the close edits that cite it; "close without the PR" skips the merge phase; red CI on the close commit leaves the
+  close in place and says "closed, not merged".
 - **`git pull --ff-only origin <default>`** in `/dev-story`, `/story-done`, `/release-checklist` and git-workflow:
   a local default branch without an upstream refused the bare pull in both fixture runs.
 - **Gates and modes the specs expected but the skills lacked**: `/release-checklist`'s first-release
-  observability gate, and its tag as a separate question on `READY` with `-m` (no editor); `/deploy rollback`
+  observability gate, a `docs: release` commit before the tag so the tag contains the release document, and the
+  tag as a separate question on `READY` with `-m` (no editor), pushed to origin; `/deploy rollback`
   (the playbook and the delegate contract already relied on it); `REJECTED` in `/architecture-decision`; BLOCKED
   stops in `/feature-spec`, `/data-model`, `/create-stories`, `/sprint-plan`, `/api-contract`, `/stack-update`,
   `/docs`, `/migrate`, `/hotfix`, `/test-setup` that the verdict lines named but no step produced; write gates for
@@ -28,8 +31,14 @@ pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
 - **Commands that did not do what they said**: `/migrate`'s ID check used ERE syntax with `grep -o` and matched
   nothing; `/update --dry-run` ran `claude plugin update` in plugin mode; `/skill-improve`'s revert could discard
   kept iterations and the user's uncommitted edits; `/changelog` failed in a repository without tags;
-  `/team-release`'s "any FAIL stops" never matched `/perf-audit`'s `OVER BUDGET`.
-- **Namespaces**: `/team-feature`, `/team-game` hand off to `/web-studio:code-review`, `/start` to
+  `/team-release`'s "any FAIL stops" never matched `/perf-audit`'s `OVER BUDGET` or `/dependency-audit`'s
+  `ACTION REQUIRED`.
+- **Plan-level consent is in the rules, not only in the skills**: coordination-rules rule 7 says the caller's plan
+  answer approves the files the plan names (with `.write-consent` touched before each `Task` batch), and the agents'
+  protocol item 4 says the brief's files carry the "yes".
+- The run-evidence numbers that explained individual rules ("35 %", "126 vs 5", "966 k", …) left the skill bodies under
+  the new CONTRIBUTING rule; the rules stay, the numbers remain in the 0.12 section of this changelog.
+- **Namespaces**: `/team-feature`, `/team-game`, `/hotfix` hand off to `/web-studio:code-review`, `/start` to
   `/web-studio:init` in plugin mode (the bare names are Claude Code built-ins).
 - `/refactor`: the `go doc ./pkg/...` API baseline never worked (`go doc` takes no package patterns) and was never
   captured before Phase 6 compared against it — now saved in Phase 2 with `go list | xargs go doc -all`; `--apply`

@@ -32,7 +32,7 @@ One `AskUserQuestion` at a time, recommendation first. `--quick` accepts all rec
 4. **Frontend**: **Angular 22** (+ Material 22 | Taiga UI 5) | **Vue 3.5 / Nuxt 4** (+ UI kit) | vanilla TS (a game without a UI framework). For Angular, also the file naming style: v20+ without suffixes | classic.
 5. **Game** (type game): three.js r185 (3D) | PixiJS 8 (2D) | Phaser | Babylon 8; networking: none | server-authoritative.
 6. **Data**: PostgreSQL 18 (+ Redis 8) — confirm; auth: sessions | OIDC | JWT+BFF.
-7. **Infra**: Docker + compose, GitHub Actions — confirm. Then the deploy target (contract `docs/deploy-target-contract.md`):
+7. **Infra**: Docker + compose, GitHub Actions — confirm. Then the deploy target (contract `.claude/docs/deploy-target-contract.md`):
    - **Deploy target**, one `AskUserQuestion`: `compose-ssh` (reference script shipped — recommended for a single server) · `kubernetes` · `cloud:<name>` · a container-platform kit if one is installed (e.g. `portainer`) · `manual`.
    - **Deploy delegate** follows from the target: `agent <name>` (from `.claude/agents/*-ops.md` with `deploy-target:`), `script scripts/deploy/<target>.sh`, or `none`.
    - `compose-ssh` adds two files to the Phase 3 write: `.claude/docs/templates/deploy/compose-ssh.sh` copied to `scripts/deploy/compose-ssh.sh`, and a new `docs/deploy/compose-ssh.md`.

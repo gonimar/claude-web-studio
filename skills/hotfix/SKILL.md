@@ -18,7 +18,7 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 - `--chore`: the toolchain is broken or in the way — a red runner, a linter that blocks every commit, a dependency that must move now. It skips the release machinery and follows the chore/infra lane of `git-workflow.md`:
   1. branch `chore/<slug>` (`git fetch origin`, then `git switch -c chore/<slug> origin/<default>`);
   2. commits `ci(…)` / `chore(…)`;
-  3. a PR with `/code-review --diff` (workflow files → `devops-engineer`); experimental commits are squashed or rebased away before the merge;
+  3. a PR with `/web-studio:code-review --diff` (copy mode `/code-review --diff`; workflow files → `devops-engineer`); experimental commits are squashed or rebased away before the merge;
   4. the outcome recorded as a finding (`production/findings.md`) or a backlog entry (`production/backlog.md`).
 
 Neither path is a place for a feature: work that changes what the product does is a story, however small it looks at the moment it is asked for.
@@ -37,7 +37,7 @@ Neither path is a place for a feature: work that changes what the product does i
 ## Phase 3: Expedited gate
 1. Package tests + e2e smoke.
 2. `/changelog` patch version.
-3. `/deploy` with confirmation (delegate verbs `deploy`/`rollback` by `docs/deploy-target-contract.md`).
+3. `/deploy` with confirmation (delegate verbs `deploy`/`rollback` by `.claude/docs/deploy-target-contract.md`).
 4. Backport to the default branch (`<default>`, `master`/`main`) through a PR.
 
 ## Phase 4: Postmortem note
