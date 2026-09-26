@@ -24,6 +24,6 @@ Before the first edit, record whether the file already had uncommitted changes (
 Repeat the checks; score improved → keep, otherwise revert this iteration's edit with an explanation: apply the reverse of the Phase 3 diff, or `git checkout -- <file>` only when Phase 3 recorded no uncommitted changes and this is the first iteration (otherwise it also discards the kept iterations and the user's own edits). Up to `--max-iterations` (default 2).
 
 ## Phase 5: Catalog
-Update `last_*` in the framework's `catalog.yaml` (the framework directory as `/skill-test` defines it: `./testing`, `./web-studio-testing` or the plugin root's `testing/`), with consent; if no spec exists — offer to create one from the framework's `templates/skill-test-spec.md` (for an agent `agent-test-spec.md`).
+Update `last_*` in the framework's `catalog.yaml` (the framework directory as `/skill-test` defines it: `./testing`, `./web-studio-testing` or the plugin root's `testing/`) behind one `AskUserQuestion` — update the catalog (Recommended) · do not write — with `touch .claude/.write-consent` after the "update" answer; if no spec exists — offer to create one from the framework's `templates/skill-test-spec.md` (for an agent `agent-test-spec.md`).
 
 Verdict: `IMPROVED (a→b)` | `NO CHANGE` | `REVERTED`. Next step — one `AskUserQuestion`: `/skill-test audit` (Recommended) · `/skill-improve <next name>` · stop here.

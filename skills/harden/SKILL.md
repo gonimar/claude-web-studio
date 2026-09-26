@@ -38,7 +38,7 @@ Per item: status and a verification command.
 
 ## Phase 3: Changes (`--apply`, or with consent)
 Without `--apply`, ask one `AskUserQuestion` after Phase 2: apply the fixes (Recommended) · checklist only · stop.
-1. **Show the config diffs** and write each one only after its own "May I write `<path>`?" (`touch .claude/.write-consent` after the answer):
+1. **Show the config diffs** and write each one only after its own "May I write `<path>`?" — one `AskUserQuestion` per file: write (Recommended) · show the full diff first · skip this file; `touch .claude/.write-consent` after the "write" answer:
    - config in this repository (proxy, compose, Dockerfile, workflows) → the diff here;
    - proxy in the declared infra repo → the diff there ("May I write `<infra repo path/file>`?");
    - neither → no write: the exact snippet for the owner of the proxy.
