@@ -54,7 +54,7 @@ skills:
   - {name: incident, category: ops, priority: high, spec: testing/skills/ops/incident.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: "", last_category: "", last_category_result: "", last_eval: "", last_eval_result: ""}
 agents:
   - {name: technical-director, tier: directors, spec: testing/agents/directors/technical-director.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
-  - {name: product-director, tier: directors, spec: testing/agents/directors/product-director.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
+  - {name: product-director, tier: directors, spec: testing/agents/directors/product-director.md, last_static: "2026-09-26", last_static_result: "WARNINGS", last_spec: "", last_spec_result: ""}
   - {name: backend-lead, tier: leads, spec: testing/agents/leads/backend-lead.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: frontend-lead, tier: leads, spec: testing/agents/leads/frontend-lead.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: design-lead, tier: leads, spec: testing/agents/leads/design-lead.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
@@ -70,16 +70,16 @@ agents:
   - {name: graphql-engineer, tier: backend, spec: testing/agents/backend/graphql-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: angular-engineer, tier: frontend, spec: testing/agents/frontend/angular-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: vue-engineer, tier: frontend, spec: testing/agents/frontend/vue-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
-  - {name: typescript-engineer, tier: frontend, spec: testing/agents/frontend/typescript-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
-  - {name: css-engineer, tier: frontend, spec: testing/agents/frontend/css-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
+  - {name: typescript-engineer, tier: frontend, spec: testing/agents/frontend/typescript-engineer.md, last_static: "2026-09-26", last_static_result: "WARNINGS", last_spec: "", last_spec_result: ""}
+  - {name: css-engineer, tier: frontend, spec: testing/agents/frontend/css-engineer.md, last_static: "2026-09-26", last_static_result: "WARNINGS", last_spec: "", last_spec_result: ""}
   - {name: accessibility-specialist, tier: frontend, spec: testing/agents/frontend/accessibility-specialist.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: seo-specialist, tier: frontend, spec: testing/agents/frontend/seo-specialist.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: threejs-engineer, tier: game, spec: testing/agents/game/threejs-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
-  - {name: web-game-engineer, tier: game, spec: testing/agents/game/web-game-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
+  - {name: web-game-engineer, tier: game, spec: testing/agents/game/web-game-engineer.md, last_static: "2026-09-26", last_static_result: "WARNINGS", last_spec: "", last_spec_result: ""}
   - {name: multiplayer-engineer, tier: game, spec: testing/agents/game/multiplayer-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: appsec-engineer, tier: security, spec: testing/agents/security/appsec-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: network-security-engineer, tier: security, spec: testing/agents/security/network-security-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
   - {name: test-engineer, tier: quality-ops, spec: testing/agents/quality-ops/test-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
-  - {name: performance-engineer, tier: quality-ops, spec: testing/agents/quality-ops/performance-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
+  - {name: performance-engineer, tier: quality-ops, spec: testing/agents/quality-ops/performance-engineer.md, last_static: "2026-09-26", last_static_result: "WARNINGS", last_spec: "", last_spec_result: ""}
   - {name: devops-engineer, tier: quality-ops, spec: testing/agents/quality-ops/devops-engineer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
-  - {name: tech-writer, tier: quality-ops, spec: testing/agents/quality-ops/tech-writer.md, last_static: "2026-09-26", last_static_result: "COMPLIANT", last_spec: "", last_spec_result: ""}
+  - {name: tech-writer, tier: quality-ops, spec: testing/agents/quality-ops/tech-writer.md, last_static: "2026-09-26", last_static_result: "WARNINGS", last_spec: "", last_spec_result: ""}
