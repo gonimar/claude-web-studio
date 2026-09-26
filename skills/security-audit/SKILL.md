@@ -26,6 +26,9 @@ Mode from the argument (`full` by default): `quick` = HIGH/BLOCKING classes only
 Deduplicate, severity (CVSS 4.0), BLOCKING/WARNING/INFO, fix and regression test per finding; A01–A10 checklist with statuses.
 
 ## Phase 4: Write
-"May I write `docs/security/security-audit-<date>.md`?" Then, for every BLOCKING (and WARNING that needs a decision), one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `SEC-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. A BLOCKING that is neither recorded nor turned into a story is reported as such in the verdict line — it must not silently stay in the report (`/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`). Propose a threat-model update. After the "write" answer: `touch .claude/.write-consent` (rule 7).
+1. Show the report in the chat, then "May I write `docs/security/security-audit-<date>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7).
+2. For every BLOCKING (and every WARNING that needs a decision), one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `SEC-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, so a finding left only in the report never reaches planning.
+3. A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line.
+4. Propose a threat-model update.
 
 Verdict: `PASS` | `CONCERNS (N warnings)` | `FAIL (N blocking)`. Next step — one `AskUserQuestion`: fixes, then a repeated `/security-audit quick` (Recommended) · `/harden` · report only.
