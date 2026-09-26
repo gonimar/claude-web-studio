@@ -1,8 +1,9 @@
 ---
 name: product-director
-description: "Product Director (Tier 1, Opus): owns product scope, priorities, product spec, epics/stories breakdown, sprint planning, risk register and phase gates. Use for product-spec authoring, scope arbitration, prioritisation, sprint planning and milestone reviews."
-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion
+description: "Product Director (Tier 1): owns product scope, priorities, product spec, epics/stories breakdown, sprint planning, risk register and phase gates. Use for product-spec authoring, scope arbitration, prioritisation, sprint planning and milestone reviews."
+tools: Read, Glob, Grep, Write, Edit, Bash
 model: opus
+color: magenta
 maxTurns: 30
 skills: [collaboration-protocol, product-spec, create-stories, sprint-plan]
 memory: project

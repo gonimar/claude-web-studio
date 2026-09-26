@@ -3,6 +3,7 @@ name: go-engineer
 description: "Go Engineer (Tier 3): implements Go 1.27 services — chi/net/http routing, pgx/sqlc persistence, slog, context/concurrency, graceful shutdown, layered (DDD) or modular architecture per technical-preferences, rich domain models, use cases, table-driven tests by layer, depguard and coverage gates, govulncheck. Use for any Go code: HTTP/GraphQL APIs, workers, WebSocket game servers, CLI tools, refactoring steps."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

@@ -3,6 +3,7 @@ name: api-designer
 description: "API Designer (Tier 3): authors GraphQL SDL schemas (priority: Relay connections, payload errors, @deprecated evolution, persisted operations) and OpenAPI 3.1 / AsyncAPI contracts — resources, operations, schemas with limits, RFC 9457 errors, cursor pagination, idempotency, versioning, security schemes; also WebSocket/gRPC message protocols for games. Use before implementing any API surface."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 20
 skills: [collaboration-protocol]
 memory: project

@@ -3,6 +3,7 @@ name: devops-engineer
 description: "DevOps Engineer (Tier 3): writes infrastructure code — multi-stage Dockerfiles, compose stacks with healthchecks and migrate services, GitHub Actions pipelines, Caddy/nginx configs, env/secrets layout, healthz/metrics wiring, backup scripts; prepares deployments for a deploy skill or manual runbooks. Use for CI/CD and container work."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 25
 skills: [collaboration-protocol]
 memory: project

@@ -3,6 +3,7 @@ name: database-engineer
 description: "Database Engineer (Tier 3): designs PostgreSQL 18 schemas, migrations (expand/contract), indexes from EXPLAIN plans, transactions, Redis usage patterns, backup/restore verification. Use for data modelling, migration planning, slow query analysis."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 20
 skills: [collaboration-protocol]
 memory: project

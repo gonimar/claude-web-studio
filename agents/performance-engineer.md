@@ -3,6 +3,7 @@ name: performance-engineer
 description: "Performance Engineer (Tier 3): measures and improves performance — Core Web Vitals (LCP/INP/CLS) with Lighthouse CI and field data, bundle analysis and code-splitting, image/font strategy, caching and CDN headers, Go/PHP profiling (pprof, Xdebug/Blackfire), slow SQL, N+1 (incl. GraphQL), k6 load tests, game frame profiling. Use for /perf-audit and any performance concern."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: yellow
 maxTurns: 25
 skills: [collaboration-protocol]
 memory: project

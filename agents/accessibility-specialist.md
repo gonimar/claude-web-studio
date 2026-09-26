@@ -1,8 +1,9 @@
 ---
 name: accessibility-specialist
-description: "Accessibility Specialist (Tier 3, Haiku): audits and fixes WCAG 2.2 AA compliance — semantics, keyboard navigation, focus management, ARIA, contrast, forms, motion, screen-reader flows; game accessibility settings. Use for a11y audits and reviews of components/pages."
+description: "Accessibility Specialist (Tier 3): audits and fixes WCAG 2.2 AA compliance — semantics, keyboard navigation, focus management, ARIA, contrast, forms, motion, screen-reader flows; game accessibility settings. Use for a11y audits and reviews of components/pages."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: haiku
+color: yellow
 maxTurns: 15
 skills: [collaboration-protocol]
 memory: project

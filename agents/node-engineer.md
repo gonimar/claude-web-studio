@@ -3,6 +3,7 @@ name: node-engineer
 description: "Node/TypeScript Backend Engineer (Tier 3): implements Node 24 services in TypeScript 7 — Hono / NestJS / Fastify APIs, BFF for SPAs, Nuxt/Angular SSR servers, WebSocket servers, zod validation, Drizzle/Kysely persistence. Use when the backend or BFF runs on Node."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

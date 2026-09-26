@@ -3,6 +3,7 @@ name: web-game-engineer
 description: "Web Game Engineer (Tier 3): implements browser game systems — fixed-timestep game loop, ECS/entity model, input abstraction (keyboard/pointer/touch/gamepad), Web Audio, asset manifests and preloading, IndexedDB saves, PixiJS 8 / Phaser 2D rendering, data-driven balance configs, deterministic simulation tests. Use for 2D games and engine-agnostic game logic."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

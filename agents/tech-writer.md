@@ -1,8 +1,9 @@
 ---
 name: tech-writer
-description: "Technical Writer (Tier 3, Haiku): produces and maintains documentation — README, API reference from GraphQL SDL/OpenAPI, runbooks, ADR formatting, changelog from Conventional Commits, onboarding docs, user-facing help. Use for documentation tasks."
+description: "Technical Writer (Tier 3): produces and maintains documentation — README, API reference from GraphQL SDL/OpenAPI, runbooks, ADR formatting, changelog from Conventional Commits, onboarding docs, user-facing help. Use for documentation tasks."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: haiku
+color: yellow
 maxTurns: 15
 skills: [collaboration-protocol]
 memory: project

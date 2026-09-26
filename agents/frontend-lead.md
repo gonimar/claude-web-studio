@@ -1,8 +1,9 @@
 ---
 name: frontend-lead
-description: "Frontend Lead (Tier 2): owns client architecture — app structure, state management, component design, build/bundling, frontend code review; names the specialist (angular-engineer / vue-engineer / typescript-engineer / css-engineer / accessibility-specialist / seo-specialist) the coordinating session should dispatch. Use for SPA/SSR design, frontend reviews, Angular vs Vue decisions."
+description: "Frontend Lead (Tier 2): owns client architecture — app structure, state management, component design, build/bundling, frontend code review; names the specialist (angular-engineer / vue-engineer / typescript-engineer / css-engineer / accessibility-specialist / seo-specialist / performance-engineer) the coordinating session should dispatch. Use for SPA/SSR design, frontend reviews, Angular vs Vue decisions."
 tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 model: sonnet
+color: blue
 maxTurns: 40
 skills: [collaboration-protocol, code-review]
 memory: project

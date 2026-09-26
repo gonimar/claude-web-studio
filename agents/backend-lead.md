@@ -3,6 +3,7 @@ name: backend-lead
 description: "Backend Lead (Tier 2): owns server-side architecture — domain modules, API contracts, persistence, queues, backend code review; names the specialist (go-engineer / php-engineer / node-engineer / database-engineer / api-designer / graphql-engineer) the coordinating session should dispatch for each step. Use for backend design, backend code review, choosing Go vs PHP vs Node for a service."
 tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 model: sonnet
+color: blue
 maxTurns: 40
 skills: [collaboration-protocol, code-review, api-contract]
 memory: project

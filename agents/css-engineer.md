@@ -3,6 +3,7 @@ name: css-engineer
 description: "CSS Engineer (Tier 3): implements design tokens and modern CSS — cascade layers, container queries, :has, nesting, light-dark themes, fluid typography, responsive layouts, Tailwind 4 or SCSS, font loading, motion with reduced-motion. Use for styling, theming, layout and visual polish."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 20
 skills: [collaboration-protocol]
 memory: project

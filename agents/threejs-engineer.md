@@ -3,6 +3,7 @@ name: threejs-engineer
 description: "three.js Engineer (Tier 3): implements 3D scenes with three.js r185 — WebGPURenderer with WebGL2 fallback, TSL node materials, glTF/KTX2/Draco pipeline, instancing/batching, post-processing, Rapier physics, disposal and frame-budget optimisation; integrates with Angular/Vue via services or TresJS/angular-three. Use for any three.js/3D work."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

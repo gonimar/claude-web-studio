@@ -35,7 +35,7 @@ runs on the session model. An agent's `model:` is its own and applies inside `Ta
 
 ## Subagents
 
-Orchestrating skills (`/team-*`, `/dev-story`) spawn subagents via `Task`. Every agent with `memory: project` writes under `.claude/agent-memory/<agent>/`; those files are part of the work and are committed with it (git-workflow § Agent memory), never stashed and never reverted by a later session. Independent tasks are
+Orchestrating skills (`/team-*`, `/dev-story`) spawn subagents via `Task`. Every agent with `memory: project` writes under `.claude/agent-memory/<agent>/` (`web-studio-<agent>` in plugin mode); those files are part of the work and are committed with it (git-workflow § Agent memory), never stashed and never reverted by a later session. Independent tasks are
 launched in one batch and run in parallel; results are collected before dependent phases; a
 `BLOCKED` from any agent is surfaced immediately and a partial report is mandatory.
 **`subagent_type` is always a studio agent** (`web-studio:<name>` in plugin mode, `<name>` in copy mode). A

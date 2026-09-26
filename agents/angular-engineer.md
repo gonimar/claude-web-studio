@@ -3,6 +3,7 @@ name: angular-engineer
 description: "Angular Engineer (Tier 3): implements Angular 22 applications — standalone components, signals and Signal Forms, zoneless, new control flow, lazy routing, SSR/hydration, Angular Material 22 (M3 theming) and Taiga UI 5, Angular ARIA/CDK a11y, Apollo Angular GraphQL clients, Vitest tests. Use for any Angular code."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

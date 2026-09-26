@@ -3,6 +3,7 @@ name: typescript-engineer
 description: "TypeScript Tooling Engineer (Tier 3): owns TS 7 configuration, ESLint 9 flat config, Prettier/Biome, Vite 8/Rolldown builds, pnpm monorepo workspaces, shared packages (contracts/ui), library bundling (tsdown), bundle analysis, dependency hygiene. Use for build/tooling/monorepo/config work and cross-framework TS libraries."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

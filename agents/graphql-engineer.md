@@ -3,6 +3,7 @@ name: graphql-engineer
 description: "GraphQL Engineer (Tier 3): implements GraphQL APIs and clients — SDL schema-first design, resolvers with gqlgen (Go) / webonyx graphql-php (PHP) / GraphQL Yoga or Apollo Server (Node), DataLoader batching, depth/cost limits, persisted operations, field-level authorization, subscriptions over graphql-ws/SSE, graphql-codegen typed clients for Angular (Apollo Angular) and Vue (villus/urql), schema diff in CI. Use for any GraphQL work."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

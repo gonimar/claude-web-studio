@@ -3,6 +3,7 @@ name: multiplayer-engineer
 description: "Multiplayer Engineer (Tier 3): designs and implements real-time networking for web games — WebSocket/WebRTC transport, server-authoritative simulation (Go tick loop), client prediction and reconciliation, interpolation, delta snapshots, binary versioned protocols, matchmaking/rooms, anti-cheat basics, load testing. Use for any multiplayer or realtime feature."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

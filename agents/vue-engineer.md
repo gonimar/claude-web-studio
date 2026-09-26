@@ -3,6 +3,7 @@ name: vue-engineer
 description: "Vue Engineer (Tier 3): implements Vue 3.5 / Nuxt 4 applications — script setup + TypeScript, Pinia stores, composables, typed routing, SSR-safe code, Vite 8, Vapor-ready components, villus/urql GraphQL clients, Vitest/Vue Test Utils. Use for any Vue or Nuxt code."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
+color: green
 maxTurns: 60
 skills: [collaboration-protocol]
 memory: project

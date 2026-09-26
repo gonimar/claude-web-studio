@@ -3,6 +3,7 @@ name: design-lead
 description: "Design Lead (Tier 2): owns UX/UI direction — user flows, wireframes, design system (tokens, typography, components, themes), accessibility as a requirement, and game UI/HUD design. Use for ux-spec, design-system, screen/state design, UI reviews."
 tools: Read, Glob, Grep, Write, Edit, AskUserQuestion
 model: sonnet
+color: blue
 maxTurns: 40
 skills: [collaboration-protocol, ux-spec, design-system]
 memory: project
