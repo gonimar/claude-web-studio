@@ -49,6 +49,13 @@ pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
   Go items that sat under PHP, names unrecorded HIGH items in the verdict and gates its Phase 3–4 writes.
 - `/game-concept` no longer carries stack versions (they live in `docs/stack-reference/`); `/skill-test` takes spec
   paths from the catalog and accepts `PLANNED` like the linter.
+- `install.sh` without `rsync` copied the excluded `hooks.json` into a fresh install (the fallback protected the file
+  only when it already existed); `tests/installer.sh` failed on every machine without rsync. `/update` in copy mode
+  compared the kit's version with the skill directory's name, which carries none — it now compares with the version the
+  gate named and re-asks when the kit moved on. `/story-done`'s "the studio's review ran" grep missed reviewers with two
+  hyphens (`web-game-engineer`). `/setup-stack` no longer carries stack versions in its interview; the numbers come from
+  `stack-reference/index.md` at question time, as the rule for version facts says. `tests/run-all.sh` lints
+  `testing/e2e/*.sh` and `testing/e2e/fixtures/*.sh` too.
 - Testing: `testing/e2e/fixtures/make-story-fixture.sh` builds a story-ready synthetic project (`happy`,
   `no-strategy`, `merged-spike`) for comparing two versions of a pipeline skill; dev-story spec gains two cases;
   `validate-structure` checks hooks called as `<hooks>session-state.sh …` too.

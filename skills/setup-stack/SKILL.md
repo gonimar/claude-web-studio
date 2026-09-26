@@ -23,15 +23,15 @@ Big forks are recorded as ADRs via `/architecture-decision`.
 One `AskUserQuestion` at a time, recommendation first. `--quick` accepts all recommendations without questions and shows the summary; the Phase 3 write gate still applies.
 
 1. **Project type** (argument or question), platforms (desktop/mobile-web/PWA), rendering (SPA/SSR/SSG).
-2. **Backend**: **Go 1.27** (services, realtime, games) | **PHP 8.5** (content systems, existing PHP ecosystem) | **Node 24** (BFF/SSR) | none. Recommendation by type. For PHP, two more questions:
-   - The version: **8.5** (Recommended — the studio target per `php.md`) | 8.4 (the floor per `php.md`; only when the hosting cannot run 8.5 yet — recorded in **Language/runtime** with the reason and an upgrade story).
+2. **Backend**: **Go** (services, realtime, games) | **PHP** (content systems, existing PHP ecosystem) | **Node** (BFF/SSR) | none — the version of each is the one `stack-reference/index.md` names today (the question quotes it; the skill carries no version of its own). Recommendation by type. For PHP, two more questions:
+   - The version: the studio target per `php.md` (Recommended) | the floor per `php.md` (only when the hosting cannot run the target yet — recorded in **Language/runtime** with the reason and an upgrade story). Both numbers are read from `php.md` at question time.
    - `php_framework`: **Yii3** (Recommended — the only framework with a full studio reference, `yii3.md`) | Symfony (`symfony.md`, stub) | Laravel (`laravel.md`, stub) | Slim | none (PSR-15 pipeline only). Any choice but Yii3 is recorded with the line "php-engineer works from the official documentation; the studio reference is a stub".
 3. **API style**: **GraphQL (SDL, default for the client API)** | REST/OpenAPI | both (GraphQL + REST for files/webhooks). Then:
    - `api_contract_path`: for a Go module `api/schema.graphqls` (Recommended; gqlgen reads it in place), otherwise `docs/architecture/api/schema.graphql`.
    - With gqlgen, `graphql_models`: **dto** (generated models mapped in resolvers — Recommended) | bind (domain types in `gqlgen.yml`).
-4. **Frontend**: **Angular 22** (+ Material 22 | Taiga UI 5) | **Vue 3.5 / Nuxt 4** (+ UI kit) | vanilla TS (a game without a UI framework). For Angular, also the file naming style: v20+ without suffixes | classic.
-5. **Game** (type game): three.js r185 (3D) | PixiJS 8 (2D) | Phaser | Babylon 8; networking: none | server-authoritative.
-6. **Data**: PostgreSQL 18 (+ Redis 8) — confirm; auth: sessions | OIDC | JWT+BFF.
+4. **Frontend**: **Angular** (+ Material | Taiga UI) | **Vue / Nuxt** (+ UI kit) | vanilla TS (a game without a UI framework). For Angular, also the file naming style: v20+ without suffixes | classic.
+5. **Game** (type game): three.js (3D) | PixiJS (2D) | Phaser | Babylon; networking: none | server-authoritative.
+6. **Data**: PostgreSQL (+ Redis) — confirm; auth: sessions | OIDC | JWT+BFF.
 7. **Infra**: Docker + compose, GitHub Actions — confirm. Then the deploy target (contract `.claude/docs/deploy-target-contract.md`):
    - **Deploy target**, one `AskUserQuestion`: `compose-ssh` (reference script shipped — recommended for a single server) · `kubernetes` · `cloud:<name>` · a container-platform kit if one is installed (e.g. `portainer`) · `manual`.
    - **Deploy delegate** follows from the target: `agent <name>` (from `.claude/agents/*-ops.md` with `deploy-target:`), `script scripts/deploy/<target>.sh`, or `none`.
