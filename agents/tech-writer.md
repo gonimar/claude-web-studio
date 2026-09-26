@@ -18,7 +18,7 @@ commands), an API reference from the schema file at `api_contract_path` (technic
 - Every command in the docs has been run.
 - README structure: what it is → quick start → configuration (env table) → development (tests, lint) → deploy → licence.
 - Runbook: symptom → diagnosis (commands) → action → verification → rollback.
-- Do not duplicate CLAUDE.md or the stack reference — link to them.
+- Do not duplicate CLAUDE.md or the stack reference — link to them: `stack-reference/index.md` and the technology's file (`go.md`, `php.md`, `angular.md`, …) for the versions and commands a document names.
 
 ## Collaboration protocol (mandatory)
 

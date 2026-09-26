@@ -27,7 +27,7 @@ Deduplicate, severity (CVSS 4.0), BLOCKING/WARNING/INFO, fix and regression test
 
 ## Phase 4: Write
 1. Show the report in the chat, then "May I write `docs/security/security-audit-<date>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7).
-2. For every BLOCKING (and every WARNING that needs a decision), one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `SEC-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, so a finding left only in the report never reaches planning. Record the gate before asking — `<hooks>session-state.sh set Gate "/security-audit Phase 4: record SEC-NNN?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+2. For every BLOCKING (and every WARNING that needs a decision), one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `SEC-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, so a finding left only in the report never reaches planning. Record the gate before asking — `<hooks>session-state.sh set Gate "/security-audit Phase 4: record SEC-NNN?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`). After the "record" answer: `touch .claude/.write-consent`, then write the row.
 3. A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line.
 4. Propose a threat-model update.
 

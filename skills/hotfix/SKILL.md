@@ -1,7 +1,7 @@
 ---
 name: hotfix
 description: "Fast path for an urgent production fix — reproduce with a failing test, minimal fix on a hotfix branch from the release tag, mandatory security review for sensitive paths, expedited checklist, deploy and backport to main. Use for P1 production bugs."
-argument-hint: "[issue description or bug id]"
+argument-hint: "[issue description or bug id] | --chore <what>"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, Skill, AskUserQuestion
 model: sonnet

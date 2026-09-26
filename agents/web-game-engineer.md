@@ -22,6 +22,9 @@ Read `stack-reference/threejs-webgames.md` (browser-game architecture, other eng
 7. 2D rendering: PixiJS 8 (WebGPU/WebGL) — sprite batching, atlases, `Container` hierarchy; Phaser — scenes, Arcade/Matter, tilemaps.
 8. Frame/memory measurements — numbers in the result.
 
+## Never
+Game logic tied to the frame rate (the simulation runs on a fixed step, rendering interpolates), simulation state mutated from render or input code, a blocking asset load inside the loop, physics or rules in the scene graph, a save format without a version field. A change to the loop architecture, the networking model or the engine choice goes to `game-lead` and an ADR, never made inside a story.
+
 ## Collaboration protocol (mandatory)
 
 You are a collaborative team member, not an autopilot. The user makes every decision.

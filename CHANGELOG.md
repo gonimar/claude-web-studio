@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.13.0 — 2026-09-26
 A pass over all 50 skills: bodies rewritten as numbered steps in the order they run, and the defects that hid in
 the long paragraphs fixed. No rule was dropped; every spec case was re-checked against the new text. The style the
 pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
@@ -112,6 +112,12 @@ Two decisions of the maintainer, applied across the kit, and the questions the p
   recommends `/feature-spec` when a product spec exists; **stack-update** states its default scope; **skill-test**
   stamps `last_static` / `last_category`; **sprint-status** computes burn; **help**'s context line prints `none` when
   there is nothing; `api/schema.graphqls` is a documents-lane path for the hooks.
+- **WS-134 — one source of truth for the studio version.** `/init` writes `.claude/.web-studio-version` in copy mode
+  only; in plugin mode the installed version is what `claude plugin list --json` reports, and a stamp would claim files
+  the project does not hold (`/update` already removed such stamps as copy-mode leftovers). `/help` and `/init`'s
+  ALREADY-INITIALISED precedence detect drift from evidence — `diff -rq <plugin root>/docs .claude/docs` (and `rules`)
+  in plugin mode, the stamp against the kit's `plugin.json` in copy mode — and `/help` says when the session runs a
+  version other than the installed one.
 - Audits: pentest records findings like security-audit; a11y-audit names its one axe spec file and the canvas-menu
   rule; perf-audit falls back to the CWV defaults of web-platform.md; dependency-audit gains WebFetch, a report path and
   a `chore/deps-<date>` branch for `--fix-safe`; architecture-review flags a Proposed ADR older than 30 days and drops

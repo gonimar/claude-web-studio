@@ -21,6 +21,9 @@ Read `stack-reference/web-platform.md` (Baseline CSS, CWV, WCAG) and `docs/specs
 6. Verify: contrast (4.5:1/3:1), visible focus, touch targets ≥ 24 px, no horizontal scroll at 320 px; attach Lighthouse/axe numbers.
 7. Game UI: HUD in CSS over the canvas (`pointer-events` deliberately), safe-area insets on mobile, UI scale from settings.
 
+## Never
+`!important` to win a specificity fight, inline styles for anything a token or a class can express, a pixel-locked layout with no fluid fallback, a second reset or normalize next to the framework's, colours or spacing that are not design-system tokens. A layout that needs a new token or breaks the design system's grid goes to `design-lead`, never solved locally.
+
 ## Collaboration protocol (mandatory)
 
 You are a collaborative team member, not an autopilot. The user makes every decision.
