@@ -1,5 +1,49 @@
 # Changelog
 
+## Unreleased
+A pass over all 50 skills: bodies rewritten as numbered steps in the order they run, and the defects that hid in
+the long paragraphs fixed. No rule was dropped; every spec case was re-checked against the new text. The style the
+pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
+- **Consent is collected by the parent.** Eight skills told delegated agents to "follow the same protocol" or to
+  "show code before writing (the user approves)" — a `Task` subagent cannot ask the user, so the rule either stalled
+  or was silently skipped. The plan / Proceed answer now names the agents and the files each will write and covers
+  those files; a specialist that needs more stops and reports, and the parent asks. On a `/dev-story` fixture run
+  this cut the happy path from five questions to three with the same result.
+- **Steps that ran before their inputs existed.** `/dev-story` waited for CI in Phase 5, before the Phase 6 push;
+  `/code-review` re-reviewed a fix commit it had not made yet; `/test-setup` generated configs before asking to
+  write them; `/sprint-status` ran `agent-stats --since` before it knew the sprint's start date; `/story-done` asked
+  "CI is green, merge?" before the PR that starts a `pull_request` workflow existed.
+- **`/story-done` pushes its close commit** before the merge (`gh pr merge` merges the remote head, so the
+  `docs: close` commit was lost with the local branch), waits for CI on the PR's latest commit, and marks a draft PR
+  from `/dev-story` ready before `gh pr merge`, which refuses drafts.
+- **`git pull --ff-only origin <default>`** in `/dev-story`, `/story-done`, `/release-checklist` and git-workflow:
+  a local default branch without an upstream refused the bare pull in both fixture runs.
+- **Gates and modes the specs expected but the skills lacked**: `/release-checklist`'s first-release
+  observability gate, and its tag as a separate question on `READY` with `-m` (no editor); `/deploy rollback`
+  (the playbook and the delegate contract already relied on it); `REJECTED` in `/architecture-decision`; BLOCKED
+  stops in `/feature-spec`, `/data-model`, `/create-stories`, `/sprint-plan`, `/api-contract`, `/stack-update`,
+  `/docs`, `/migrate`, `/hotfix`, `/test-setup` that the verdict lines named but no step produced; write gates for
+  `/impact`'s findings and backlog rows, `/perf-audit`, `/a11y-audit`, `/security-audit`, `/harden`'s in-repo
+  config edits, `/setup-stack`'s stage change and compose-ssh files.
+- **Commands that did not do what they said**: `/migrate`'s ID check used ERE syntax with `grep -o` and matched
+  nothing; `/update --dry-run` ran `claude plugin update` in plugin mode; `/skill-improve`'s revert could discard
+  kept iterations and the user's uncommitted edits; `/changelog` failed in a repository without tags;
+  `/team-release`'s "any FAIL stops" never matched `/perf-audit`'s `OVER BUDGET`.
+- **Namespaces**: `/team-feature`, `/team-game` hand off to `/web-studio:code-review`, `/start` to
+  `/web-studio:init` in plugin mode (the bare names are Claude Code built-ins).
+- `/refactor`: the `go doc ./pkg/...` API baseline never worked (`go doc` takes no package patterns) and was never
+  captured before Phase 6 compared against it — now saved in Phase 2 with `go list | xargs go doc -all`; `--apply`
+  has one start question before the branch and a push question; PHP gets its own check column and engineer.
+- `/architecture-review` could not do what it asked: it runs `go list`, `make arch-check` and records findings, yet
+  had neither Bash nor Write/Edit — `allowed-tools` gains them, with the findings row behind a gate.
+- `/help` applies the findings and game-gate overrides while choosing NEXT, not after printing it; `/adopt` moves the
+  Go items that sat under PHP, names unrecorded HIGH items in the verdict and gates its Phase 3–4 writes.
+- `/game-concept` no longer carries stack versions (they live in `docs/stack-reference/`); `/skill-test` takes spec
+  paths from the catalog and accepts `PLANNED` like the linter.
+- Testing: `testing/e2e/fixtures/make-story-fixture.sh` builds a story-ready synthetic project (`happy`,
+  `no-strategy`, `merged-spike`) for comparing two versions of a pipeline skill; dev-story spec gains two cases;
+  `validate-structure` checks hooks called as `<hooks>session-state.sh …` too.
+
 ## 0.12.0 — 2026-09-26
 Findings of a week-long manual run on a real project (Web Studio 0.11.1, ten sessions, 250 agent runs) and of an
 external PHP project. Nothing new to learn: the same commands, the same agents — cheaper, and harder to bypass.
