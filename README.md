@@ -89,7 +89,7 @@ yet is listed in [docs/roadmap.md](docs/roadmap.md).
   sensitive path gets an application-security review; the release gate requires clean audits.
 - **The stack reference is the source of truth for versions**: agents read
   `.claude/docs/stack-reference/<technology>.md` before working and warn when it is older than
-  60 days. `/stack-update` refreshes it from official sources.
+  60 days. `/stack-update` refreshes it from official sources; `llm-integration.md` covers Claude API / MCP product features and the prompt-injection surface.
 
 ---
 

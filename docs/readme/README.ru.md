@@ -87,7 +87,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
   чувствительный путь проходит ревью безопасности; гейт релиза требует чистых аудитов.
 - **Справочник стека — источник правды о версиях**: агенты читают
   `.claude/docs/stack-reference/<технология>.md` до работы и предупреждают, если ему больше
-  60 дней. `/stack-update` обновляет его из официальных источников.
+  60 дней. `/stack-update` обновляет его из официальных источников; `llm-integration.md` покрывает продуктовые функции на Claude API / MCP и поверхность prompt injection.
 
 ---
 

@@ -17,6 +17,7 @@ Language, `<hooks>`, `<default>`, agent and command namespaces, gate mechanics (
 Glossary:
 - `<tag>` — the release currently deployed (the newest `production/releases/vX.Y.Z.md` whose `Result:` line reads `DEPLOYED` (what `/deploy` Phase 4 writes), else the newest `v*` tag after `git fetch origin --tags`; none → `BLOCKED (no release tag — nothing is deployed)`); `vX.Y.Z` — its patch number + 1.
 - `<slug>` — the bug in a few words (`hotfix/<slug>`); `<scope>` — the scope of the fix commit `fix(<scope>): <bug>`, which `/code-review` uses where a story would give `S-NNN`.
+- **GitHub MCP** — with the GitHub MCP available (`mcp__plugin_web-studio_github__*`), PR creation, merge and run watch (steps 3.5, 3.7) may use its tools instead of `gh`; the gates and the order do not change.
 - **Gate recording** — before every commit, tag or push question (each step below names its `Gate "…"` string): `<hooks>session-state.sh set Task "/hotfix <slug>" Gate "/hotfix Phase N: <question>"`; after the answer `<hooks>session-state.sh set Gate "—"`. An open gate survives the turn: a resumed session continues at that question, never at `Next:` (rule 7).
 
 **Two kinds of urgent, one skill.** `production` (default): broken for users — Phases 1–4. `--chore`: the toolchain is broken or in the way (a red runner, a blocking linter, a dependency that must move now) — read and follow `references/chore-lane.md`; Phases 1–4 do not run, verdict `DONE (chore — PR open)`. Neither path is a place for a feature: what changes the product's behaviour is a story, however small it looks.

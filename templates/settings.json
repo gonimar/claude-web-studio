@@ -145,6 +145,16 @@
         ]
       },
       {
+        "matcher": "mcp__(plugin_web-studio_)?github__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/secret-guard.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Write|Edit|Bash",
         "hooks": [
           {

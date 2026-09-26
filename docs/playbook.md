@@ -100,6 +100,25 @@ Variations:
 - **A `settings.json` existed before the install** → `.claude/settings.web-studio.json` is written
   next to it; `/start` and `/adopt settings` show the diff and merge (foreign hooks are kept).
 
+### 2.3 MCP servers (optional)
+
+The plugin declares two stdio MCP servers in its `.mcp.json`; both are optional — every skill keeps
+its CLI path (`npx playwright`, `gh`) as the default, and nothing fails when a server is absent.
+
+| Server | What it adds | How to enable |
+|---|---|---|
+| `playwright` (`npx @playwright/mcp@latest --headless --isolated`) | `/a11y-audit`, `/perf-audit` and `/pentest` drive the live page through `browser_navigate`, `browser_snapshot` (accessibility tree), `browser_console_messages`, `browser_network_requests` and quote the output as evidence | Node ≥ 18; the server starts with the plugin (`/mcp` lists `plugin:web-studio:playwright`) |
+| `github` (the official GitHub MCP server, `ghcr.io/github/github-mcp-server` via Docker) | `/story-done` and `/hotfix` may open, merge and watch PRs through its tools instead of `gh`; the gates and their order do not change | Docker running and `GITHUB_PERSONAL_ACCESS_TOKEN` exported in the shell that starts Claude Code (never written into a file); `GITHUB_TOOLSETS` defaults to `repos,pull_requests,actions` |
+
+Tools appear as `mcp__plugin_web-studio_playwright__*` and `mcp__plugin_web-studio_github__*`; the
+`secret-guard` hook also watches the GitHub server's file-writing tools. Without Docker or the token
+the `github` server simply reports as failed in `/mcp` and the skills use `gh`. Copy mode ships no
+`.mcp.json` (it would be project data): add the servers yourself with `claude mcp add playwright --
+npx -y @playwright/mcp@latest --headless` and the GitHub server per its README; their tools are then
+`mcp__playwright__*` / `mcp__github__*`. An LLM feature **in the product** (the app calling a model or
+taking part in MCP) is a different matter: `technical-preferences.md` § LLM features and
+`stack-reference/llm-integration.md`.
+
 ---
 
 ## 3. A new project from scratch — every step

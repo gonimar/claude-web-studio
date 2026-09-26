@@ -63,6 +63,14 @@
   - **health_endpoints**: [/healthz (liveness, process only) + /readyz (readiness: db, cache, migrations)]
 - **Supply chain** (`stack-reference/supply-chain.md`): **sbom_tool**: [syft (CycloneDX JSON, studio default) | trivy | none]  **signing**: [cosign keyless (GitHub OIDC, verified by digest before deploy) | cosign key | none]  **provenance**: [actions/attest | none — <reason, e.g. private repo without Enterprise Cloud>]  **update_bot**: [renovate (studio policy, docs/templates/supply-chain/renovate.json) | dependabot | none]  **release_age**: [7 days | 3 days | none]
 
+## LLM features
+- **LLM features**: none (default) — the product calls no model and takes no part in MCP; the fields below stay empty. Otherwise `yes` and every field is filled (stack-reference/llm-integration.md)
+- **llm_provider_sdk**: [none | Anthropic — @anthropic-ai/sdk | anthropic (pip) | anthropic-sdk-go | anthropic-ai/sdk (composer) | REST]
+- **llm_model**: [none | claude-opus-5-5 (studio default) | claude-sonnet-5 | claude-haiku-4-5 | …] — the pinned id; a change goes through the eval set, never a story
+- **mcp_role**: [none | client (the app consumes MCP servers: connector or own client) | server (the app exposes an MCP server) | client+server]
+- **llm_eval_set**: [none | path, e.g. tests/llm/eval-set.jsonl — inputs, runner, grader; provenance tagged]
+- **llm_injection_controls**: [none | list: untrusted content in tool_result only · input/output screens · least-privilege tools · human confirmation for side effects · host/path/command allow-lists · per-call logging] — mirrored as a `/threat-model` surface
+
 ## Layout
 - **backend_root**: [./backend | ./ | …]
 - **go_layout**: [project-layout (cmd/, internal/, pkg/ only when exported, api/, configs/, scripts/, build/, deployments/, test/) | minimal (main.go + go.mod) | none — see stack-reference/go.md "Project layout"]

@@ -11,7 +11,7 @@ model: opus
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `.claude/docs/templates/threat-model.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
+Template `.claude/docs/templates/threat-model.md`; `security-baseline.md`, `security-standards.md`, `graphql.md` (security), `llm-integration.md` (Security) for LLM/MCP surfaces. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: System
 1. **Scope** from the argument: `full` (default) walks every surface; `<surface>` analyses only that surface and updates its rows in the existing model.
@@ -24,6 +24,7 @@ Template `.claude/docs/templates/threat-model.md`; `security-baseline.md`, `secu
    - **Data export / deletion**, when the data model classifies personal data: who may request, how identity is verified, what is exported (and what must not be), how deletion propagates to replicas, backups and logs, and the evidence kept.
    - **GraphQL**: introspection, complexity, batching, field authorisation, persisted ops.
    - **Games**: anti-cheat, modified clients, chat spam, room DoS.
+   - **LLM features** — when technical-preferences § LLM features is not `none`, or the code imports an LLM/MCP SDK (`@anthropic-ai/sdk`, `anthropic`, `anthropic-sdk-go`, `anthropic-ai/sdk`, `@modelcontextprotocol/*`, `mcp`, `mcp/sdk`): read `references/llm-surface.md` and add its rows — trust boundaries for model inputs (direct and indirect prompt injection), tool-call side effects and exfiltration, RAG / document ingestion, and every MCP server the product runs or connects to — with the same STRIDE, likelihood/impact and status columns; absent when neither signal exists.
 3. `appsec-engineer` and `network-security-engineer` via Task in parallel complete their areas.
 
 ## Phase 3: Priorities

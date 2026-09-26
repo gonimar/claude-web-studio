@@ -80,7 +80,7 @@ maßgebliche Plan ist `production/roadmap.md` (Checkbox-Liste); Sprints und Stor
   jeder sensible Pfad erhält ein Security-Review; das Release-Gate verlangt saubere Audits.
 - **Die Stack-Referenz ist die Wahrheitsquelle für Versionen**: Agenten lesen vor der Arbeit
   `.claude/docs/stack-reference/<technologie>.md` und warnen, wenn sie älter als 60 Tage ist.
-  `/stack-update` erneuert sie aus offiziellen Quellen.
+  `/stack-update` erneuert sie aus offiziellen Quellen; `llm-integration.md` deckt Claude-API-/MCP-Produktfunktionen und die Prompt-Injection-Angriffsfläche ab.
 
 ---
 

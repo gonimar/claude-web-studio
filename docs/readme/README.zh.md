@@ -67,7 +67,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - **所有代理遵循同一协议**：规格不清先提问 → 给出 2–3 个带成本的方案 → 由你决定 → 展示草稿 → "可以写入吗？" → 通过运行测试和命令验证。
 - **没有证据不算完成**：验收标准映射到测试，`/story-done` 会运行它们。
 - **内置安全**：钩子阻止提交和文件中的密钥以及强制推送；每条敏感路径都经过应用安全评审；发布关卡要求审计干净。
-- **技术栈参考是版本的唯一事实来源**：代理在工作前读取 `.claude/docs/stack-reference/<technology>.md`，超过 60 天会提醒。`/stack-update` 从官方来源刷新它。
+- **技术栈参考是版本的唯一事实来源**：代理在工作前读取 `.claude/docs/stack-reference/<technology>.md`，超过 60 天会提醒。`/stack-update` 从官方来源刷新它；`llm-integration.md` 覆盖 Claude API / MCP 产品功能与 prompt injection 攻击面。
 
 ---
 

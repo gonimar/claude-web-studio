@@ -80,7 +80,7 @@ de referencia es `production/roadmap.md` (lista de casillas); sprints e historia
   ruta sensible pasa una revisión de seguridad; la puerta de release exige auditorías limpias.
 - **La referencia del stack es la fuente de verdad sobre versiones**: los agentes leen
   `.claude/docs/stack-reference/<tecnología>.md` antes de trabajar y avisan si tiene más de 60 días.
-  `/stack-update` la refresca desde fuentes oficiales.
+  `/stack-update` la refresca desde fuentes oficiales; `llm-integration.md` cubre las funciones de producto con Claude API / MCP y la superficie de prompt injection.
 
 ---
 
