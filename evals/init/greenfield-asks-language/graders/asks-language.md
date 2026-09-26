@@ -1,6 +1,6 @@
 ---
 type: regex
 pattern: "language"
-target: last_message
+target: trace
 flags: i
 ---

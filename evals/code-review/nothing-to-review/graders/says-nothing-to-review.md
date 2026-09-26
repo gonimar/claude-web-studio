@@ -1,6 +1,6 @@
 ---
 type: regex
 pattern: "nothing to review|no changes|empty|no diff"
-target: last_message
+target: trace
 flags: i
 ---

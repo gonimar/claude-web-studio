@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "Recommended"
-target: last_message
+target: trace
 ---

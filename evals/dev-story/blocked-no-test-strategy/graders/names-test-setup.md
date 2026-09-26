@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "test-setup"
-target: last_message
+target: trace
 ---
