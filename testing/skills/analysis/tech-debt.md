@@ -30,5 +30,9 @@ Debt inventory across code, dependencies, ADRs, audits.
 **Fixture**: report written and the top 5 added to the roadmap while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write gate one commit gate offers `docs: tech debt <date>` staging exactly `docs/ops/tech-debt-<date>.md` and `production/roadmap.md`, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); nothing is committed without the answer.
 - [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] only the written documents staged
 
+### TODOs by id and comment history (0.13)
+**Fixture**: `TODO(S-020): …` where S-020 is `[x]`, `TODO(S-999)` with no such line, three bare `TODO:`, and a package whose non-test comments carry 42 lines with `S-0NN`/`used to`; `go doc -all` shows 15 such lines. **Expected**: one row each for S-020 (closed) and S-999 (unknown), one row "3 TODOs without an id — /backlog add", one row for the package with 42 / 15 and the proposed story `chore(<package>): comments per rules/comments.md`; nothing proposed as a drive-by in a feature story.
+- [ ] ids checked against roadmap/backlog · [ ] history counted per package · [ ] rendered go doc counted
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

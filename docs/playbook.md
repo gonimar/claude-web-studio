@@ -272,12 +272,16 @@ the stories are small. Still finish with `/story-done` per story (merge and road
 /sprint-plan 02 --days 10     capacity is asked BEFORE the gate; dependency queue; story selection; production/sprints/sprint-02.md
 /qa-plan sprint 02            test levels, data, regression set, risks → production/sprints/qa-plan-02.md
 … stories …
-/sprint-status 02             ON TRACK | AT RISK | OFF TRACK; "Done without a test/PR" on its own line
-/sprint-plan 03               unfinished work carried over, retro actions read
+/sprint-status 02             ON TRACK | AT RISK | OFF TRACK | OVER (not closed); "Done without a test/PR" and "sprint file ≠ roadmap" on their own lines
+/retrospective 02             planned vs shipped, ratio, actions — and the close: unfinished stories back to the Backlog, block folded, Status: closed
+/sprint-plan 03               refuses while sprint 02 is open; carried-over stories compete from the Backlog, retro actions read
 ```
 
 Sprints are optional: `/create-stories` → `/dev-story` directly works; `/help` offers the next open
-roadmap story. Sprint end: `/retrospective NN` (planned vs shipped, the calibration ratio the next `/sprint-plan` applies).
+roadmap story. Sprint end: `/retrospective NN` — planned vs shipped, the calibration ratio the next `/sprint-plan` applies, **and
+the close**: it is the only command that closes a sprint (unfinished stories move back to the Backlog with their markers, the
+block folds, the sprint file reads `Status: closed`). `/story-done` recommends it after the last story, `/help` prints an
+`Attention:` for a sprint that is over and not closed, `/sprint-plan NN+1` is `BLOCKED` until it has run.
 
 ### 5.5 Other core processes (not "one story")
 
@@ -447,7 +451,8 @@ changelog → checklist → deploy → post-deploy verification. Verdict `RELEAS
 | Every session (start) | read the hook output → `/help` | orientation; open gate; branch state |
 | Every session (end) | commit on the branch + `active.md` | §9 |
 | Every day in a sprint | `/sprint-status` | blockers, "Done without a test", dependency queue |
-| Sprint start | `/sprint-plan NN` → `/qa-plan sprint NN` | plan + Dependabot triage |
+| Sprint start | `/sprint-plan NN` → `/qa-plan sprint NN` | plan + Dependabot triage; BLOCKED while the previous sprint is open |
+| Sprint end | `/retrospective NN` | ratio, actions, the close (only here) |
 | Every story | `/dev-story` → `/code-review --diff` → `/story-done` | §5 |
 | Any proposal outside a story | `/impact "<…>"` | change class before code |
 | A new surface (auth, payments, uploads, webhooks, WebSocket) | `/threat-model <surface>` → `/team-security full` | STRIDE on the new surface |

@@ -43,7 +43,10 @@ markers and links change. `/adopt` classifies the gap, this skill closes it.
    - **Stories**: missing sections are added with `n/a — reason` or filled from the card's prose (criteria in prose → the Given/When/Then table, one row per criterion, test column `[to map]`); status and links kept.
    - **ADRs**: `/architecture-decision retrofit` semantics applied in bulk — an option list of at least two (the rejected alternative reconstructed from the text when it is there, otherwise `[not recorded]`), Verification added as `[to define]`; Status kept.
    - **Specs**: sections renumbered to the template, missing ones `n/a — reason`; acceptance criteria never dropped.
-   - **Sprints**: the `## Retrospective` and `## Dependency updates` sections added empty where missing.
+   - **Sprints**: the `## Retrospective` and `## Dependency updates` sections added empty where missing; the header gets
+     `Status:` — `closed <date>` (the date of the retrospective commit, else of the last `⏱`/`🔗` story) when the sprint's
+     roadmap block is folded or every one of its lines is `[x]`, `active` otherwise; `## Stories` rows take their status
+     from the roadmap lines (the file's own column drifts as soon as a story closes without `/story-done` writing it).
 2. **Questions before the render.** Anything that cannot be mapped mechanically is listed and asked as one `AskUserQuestion` with the real alternatives. Never guess it.
 
 ## Phase 3: Dry run

@@ -82,7 +82,7 @@ for pair in "package.json:pnpm-lock.yaml package-lock.json yarn.lock bun.lock" "
   if echo "$STAGED" | grep -qx "$m"; then ok=0; for l in $locks; do echo "$STAGED" | grep -qx "$l" && ok=1; done; [ $ok = 0 ] && WARN="$WARN\nDEPS: $m changed but no lockfile ($locks) is staged."; fi
 done
 for f in $(echo "$STAGED" | grep -E '\.(go|php|ts|tsx|vue|js|scss|css)$'); do
-  [ -f "$f" ] && grep -nE '(TODO|FIXME|HACK)[^(]' "$f" >/dev/null 2>&1 && WARN="$WARN\nSTYLE: $f has TODO/FIXME without an owner — use TODO(name)."
+  [ -f "$f" ] && grep -nE '(TODO|FIXME|HACK)[^(]' "$f" >/dev/null 2>&1 && WARN="$WARN\nSTYLE: $f has TODO/FIXME without an id — use TODO(S-NNN) or TODO(I-NNN) (rules/comments.md)."
 done
 # Commit message: plain -m "…", or the heredoc form -m "$(cat <<'EOF' … EOF)" — take the heredoc's first
 # non-empty line (WS-069: the heredoc opener used to be parsed as the message and always warned).

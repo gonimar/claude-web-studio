@@ -48,5 +48,9 @@ Review with routing by file type and security for sensitive paths.
 **Fixture**: `--diff` on story S-002 (a `/forecast` endpoint): besides `forecast.go` and its test, the diff moves the legacy `/` handler of `main.go` into a new `newMux()` and fixes a pre-existing unchecked error there; one import block is reordered in an untouched file. **Expected**: the report lists `main.go` hunks that serve no criterion as WARNING `SCOPE` (revert here, record through `/backlog add` or findings), the reordered imports as INFO `SCOPE-STYLE`; the route line the story needs is not a finding; the new route falling through to the legacy catch-all keeps its WARNING (a behaviour the new code exposes is inside the criteria, not "pre-existing"); the `git diff --stat` next to the story's files is in the report.
 - [ ] story criteria reach the reviewers · [ ] SCOPE for the refactor, not for the route line · [ ] SCOPE-STYLE is INFO · [ ] stat printed
 
+### Comments are checked on the added lines (0.13)
+**Fixture**: the diff adds `// TODO: handle IPv6 later`, `// pre-S-050 this was in cmd/` in `internal/app/api/api.go`, `// Regression: OPS-008.` in `api_test.go`, and a 40-line doc comment on an exported `Bootstrap`. **Expected**: WARNING `TODO-NOID` for the first, INFO `COMMENT-HISTORY` for the second, nothing for the test line, INFO `COMMENT-LONG` for the doc comment; the counts appear in the report; an old `// used to …` line not touched by the diff is not a finding.
+- [ ] added lines only · [ ] test exception honoured · [ ] counts printed even when zero
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

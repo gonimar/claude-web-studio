@@ -1,11 +1,14 @@
 # Sprint NN: [Sprint goal]
 
-> Dates: YYYY-MM-DD → YYYY-MM-DD · Capacity: · Review mode: · Calibration ratio applied: (from `/retrospective` NN-1, or "n/a — insufficient data")
+> Status: active · Dates: YYYY-MM-DD → YYYY-MM-DD · Capacity: · Review mode: · Calibration ratio applied: (from `/retrospective` NN-1, or "n/a — insufficient data")
+<!-- Status: active (written by /sprint-plan) → closed YYYY-MM-DD (written by /retrospective, the only command that closes a sprint) -->
 
 ## Goal
 One verifiable statement (what the user can do at the end).
 
 ## Stories
+<!-- Status column kept in step with the roadmap: In Progress by /dev-story and /refactor --apply, `Done · ⏱ Nh · PR #N` by /story-done,
+     `carried over → Backlog` / `cancelled` by /retrospective at close. /sprint-status counts a row that differs from the roadmap as drift. -->
 | ID | Title | Size | Owner agent | Dependencies | Status |
 |---|---|---|---|---|---|
 

@@ -21,7 +21,7 @@ Read `stack-reference/typescript.md` ("Node/TS backend"), `database.md`, `securi
 6. Vitest + supertest/`app.request()`; integration against a real Postgres; `pnpm audit` clean.
 
 ## Never
-`any`, floating promises, CommonJS, secrets in code, `eval`/dynamic `Function`, synchronous I/O in handlers.
+`any`, floating promises, CommonJS, secrets in code, `eval`/dynamic `Function`, synchronous I/O in handlers. A comment that tells the story's history instead of the contract or the reason — a story or finding ID outside a test, `pre-S-NNN`, `used to`, `previously`, what a review round asked, what is out of this story's scope (`rules/comments.md`); a `TODO` without a `(S-NNN)`/`(I-NNN)` id.
 
 ## Collaboration protocol (mandatory)
 

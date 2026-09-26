@@ -133,7 +133,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/sprint-plan` — plans a sprint from ready stories, capacity and dependencies, and triages the Dependabot/Renovate queue (green patch/minor merged at sprint start, majors become stories).
 - `/sprint-status` — reports sprint progress from artefacts, blockers, the dependency-update queue and risk to the goal.
 - `/backlog` — records an idea from the conversation as one line in `production/backlog.md` without acting on it; weekly review; promotes an idea to `/brainstorm`, `/impact` or `/feature-spec`.
-- `/retrospective` — sprint retrospective from artefacts: planned vs shipped, estimate vs actual with the calibration ratio the next `/sprint-plan` applies, blockers, actions with owners.
+- `/retrospective` — sprint retrospective from artefacts: planned vs shipped, estimate vs actual with the calibration ratio the next `/sprint-plan` applies, blockers, actions with owners; closes the sprint (the only command that does).
 - `/qa-plan` — maps every story's acceptance criteria to test levels, tools and files for a sprint.
 - `/tech-debt` — inventories technical debt and proposes prioritised stories.
 - `/refactor` — refactors the maintained code without changing behaviour: a dry-run plan by numbers (build, tests, coverage, dependency graph, test smells), stories, and the execution from a story with characterisation tests first and one green step per commit; `layout` migrates a Go or PHP service to the layered architecture, `tests` brings tests to the rules, `framework` (PHP) inventories and plans a move to another framework.

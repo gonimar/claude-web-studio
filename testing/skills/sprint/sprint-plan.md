@@ -65,5 +65,12 @@ Sprint plan by capacity and dependencies.
 **Fixture**: sprint 03 is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: sprint 03` staging exactly the written files (`production/sprints/sprint-03.md` and `production/roadmap.md`, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
 - [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
 
+### Previous sprint open → BLOCKED (0.13)
+**Fixture**: `sprint-04.md` header `Status: active`, roadmap block of sprint 04 not folded, one `- [ ]` line left; `/sprint-plan 05`. **Expected**: `BLOCKED (sprint 04 open — run /retrospective 04 first)` in Phase 1, before capacity is asked; nothing written, the sprint 04 block untouched. Variant: `sprint-04.md` without a `Status:` line (pre-0.13) and the block folded → not blocked, one line saying the file predates 0.13 and `/migrate sprints` adds the line.
+- [ ] blocked before any gate · [ ] previous block never folded here · [ ] pre-0.13 fallback by the folded block
+### New sprint file is active, previous untouched (0.13)
+**Fixture**: sprint 04 closed by `/retrospective`; `/sprint-plan 05` writes. **Expected**: `sprint-05.md` header `Status: active`; the `## Docs` → *production/sprints/* block gains a `⏳ … active` row and its count is recalculated; `git diff` of the roadmap shows no change inside the sprint 04 `<details>` block.
+- [ ] Status: active · [ ] Docs row added · [ ] sprint 04 block byte-identical
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

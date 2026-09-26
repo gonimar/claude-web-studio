@@ -273,13 +273,17 @@ security review → code review; независимые части паралл�
 /sprint-plan 02 --days 10     capacity спрашивается ДО гейта; очередь зависимостей; выбор историй; production/sprints/sprint-02.md
 /qa-plan sprint 02            уровни тестов, данные, регрессия, риски → production/sprints/qa-plan-02.md
 … истории …
-/sprint-status 02             ON TRACK | AT RISK | OFF TRACK; «Done без теста/PR» отдельной строкой
-/sprint-plan 03               незакрытое переносится, retro-actions читаются
+/sprint-status 02             ON TRACK | AT RISK | OFF TRACK | OVER (not closed); «Done без теста/PR» и «sprint file ≠ roadmap» отдельными строками
+/retrospective 02             план и факт, коэффициент, действия — и закрытие: незавершённое обратно в Backlog, блок свёрнут, Status: closed
+/sprint-plan 03               отказывается, пока спринт 02 открыт; перенесённые истории конкурируют из Backlog, retro-actions читаются
 ```
 
 Без спринтов работать можно: `/create-stories` → `/dev-story` напрямую; `/help` будет
-предлагать следующую открытую историю roadmap. Конец спринта: `/retrospective NN` (план и факт, коэффициент
-калибровки, который применит следующий `/sprint-plan`).
+предлагать следующую открытую историю roadmap. Конец спринта: `/retrospective NN` — план и факт, коэффициент
+калибровки, который применит следующий `/sprint-plan`, **и закрытие**: это единственная команда, которая закрывает спринт
+(незавершённые истории возвращаются в Backlog со своими маркерами, блок сворачивается, в файле спринта `Status: closed`).
+`/story-done` рекомендует её после последней истории, `/help` печатает `Attention:` для просроченного незакрытого спринта,
+`/sprint-plan NN+1` — `BLOCKED`, пока она не прошла.
 
 ### 5.5 Другие основные процессы (не «одна история»)
 
@@ -830,7 +834,7 @@ proxy` (лимиты, WebSocket-защита) → истории; серверн
 | `/backlog add\|review\|promote` | `production/backlog.md` (`I-NNN`) | | любое «а может»; раз в неделю |
 | `/migrate [тип] [--dry-run]` | документы в текущих шаблонах | | после `/adopt`, при дрейфе шаблонов |
 | `/docs [readme\|api\|guide\|runbook]` | `README.md`, справочник API, руководство, `docs/ops/deploy.md` | | перед передачей или релизом |
-| `/retrospective NN` | `## Retrospective` в файле спринта, действия в roadmap | | конец спринта |
+| `/retrospective NN` | `## Retrospective` в файле спринта, действия в roadmap, закрытие спринта (`Status: closed`, блок свёрнут, незавершённое в Backlog) | | конец спринта — единственная команда, которая закрывает спринт |
 | `/architecture-review code`, `/harden secrets`, `/api-contract --deprecate` | находки дрейфа, чеклист ротации, deprecation в контракте | | brownfield / утечка / ломающее изменение |
 
 ---

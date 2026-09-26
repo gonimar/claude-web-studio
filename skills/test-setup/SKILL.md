@@ -53,7 +53,7 @@ In the steps below, `<templates>` is `.claude/docs/templates/` in copy mode and 
 3. `phpunit.xml`, with `tests/Unit/` and `tests/Integration/` created and a `.gitkeep` in the empty one.
 4. `scripts/coverage-gate.php`.
 5. The `scripts` block from `composer-scripts.json` merged into `composer.json`, with the lines of the chosen tools, and the thresholds from technical-preferences written into the `coverage-gate` line.
-6. `require-dev`: `deptrac/deptrac`, the analyser, the standard tool and `phpunit/phpunit:^13`; pcov in the CI image.
+6. `require-dev`: `deptrac/deptrac`, the analyser, the standard tool (with `slevomat/coding-standard` when it is `ecs` — the template's comment sniffs need it) and `phpunit/phpunit:^13`; pcov in the CI image.
 7. `composer ci` runs once and its output is in the result; the run also shows `composer coverage-gate -- Domain=100` failing on the current numbers.
 
 **CI** stages follow the Phase 2 budget rules. Every command run in this phase has its output in the result.

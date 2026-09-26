@@ -9,7 +9,10 @@ DOC_SUBJECT_RE='^docs(\([A-Za-z0-9/_.-]+\))?!?: '
 # docs/architecture/api/ (already inside docs/, listed for clarity). Other files under api/ and graph/ are
 # code, and a contract at any path not listed here is outside the lane: /api-contract commits it as
 # chore(contract) on a chore/<slug> branch. This list is the source of truth for docs/git-workflow.md § Rules.
-DOC_PATH_RE='^(docs/|docs/architecture/api/|production/|CLAUDE\.md$|\.claude/docs/|\.claude/rules/|\.claude/\.web-studio-version$|README|CHANGELOG\.md$|api/schema\.graphqls$|graph/schema\.graphqls$|api/openapi\.yaml$)'
+# Agent memory (.claude/agent-memory/**, `memory: project`) changes on every agent run and rides the commit of the
+# work that produced it (git-workflow § Agent memory); a docs: commit of an audit that only moved memory files is the
+# documents lane too. .claude/agent-memory-local/ is gitignored and never committed.
+DOC_PATH_RE='^(docs/|docs/architecture/api/|production/|CLAUDE\.md$|\.claude/docs/|\.claude/rules/|\.claude/agent-memory/|\.claude/\.web-studio-version$|README|CHANGELOG\.md$|api/schema\.graphqls$|graph/schema\.graphqls$|api/openapi\.yaml$)'
 
 # docs_lane_paths: reads paths on stdin, returns 0 when every one of them is a pipeline document.
 docs_lane_paths() { ! grep -v '^$' | grep -qvE "$DOC_PATH_RE"; }

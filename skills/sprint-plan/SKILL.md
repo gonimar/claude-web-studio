@@ -15,12 +15,13 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Templates (`.claude/docs/templates/`): `sprint-plan.md`, `roadmap.md`. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: State
-1. **Arguments**: the sprint number `NN` (default: the last sprint in `production/sprints/` + 1); `--days N` is read as the sprint length in working days — the same value step 5 would otherwise ask for, so with it only hours per day and the start date are asked. It is never a deadline or a number of stories.
-2. **Ready stories** (`production/stories/**`). None → stop with `BLOCKED (no Ready stories — run /create-stories)` and write nothing.
-3. **Read**: the roadmap (priority and blocker markers), the last sprint (unfinished work, retro actions), `production/findings.md` (open BLOCKING findings and their stories).
-4. **Backlog**: `production/backlog.md` → one line `Backlog: N open ideas — /backlog review`. An idea enters a sprint only after promotion, never from here.
-5. **Capacity and dates**: ask now — days (unless `--days` gave them), hours per day, start date. Parameters are asked here, before any gate, never in the same message as one (rule 7: one turn, one gate).
-6. **Calibration**, one sample worded identically in both skills: the **last six closed stories of the roadmap** that carry both `~Nh` and `⏱ Nh`, whichever sprint they belong to. `/retrospective` prints this same rolling ratio next to its own sprint-only one and labels which is which; two skills quoting different numbers under the same name is how a plan stops being trusted.
+1. **Arguments**: the sprint number `NN` (default: the last sprint in `production/sprints/` + 1); `--days N` is read as the sprint length in working days — the same value step 6 would otherwise ask for, so with it only hours per day and the start date are asked. It is never a deadline or a number of stories.
+2. **The previous sprint is closed**: `Status: closed` in its `production/sprints/sprint-NN.md` header. A file written before 0.13 has no `Status:` line: it counts as closed when its roadmap block is folded in `<details>`, open otherwise (`/migrate sprints` adds the line). Open → stop with `BLOCKED (sprint NN open — run /retrospective NN first)` and write nothing: the retrospective is the only writer of a sprint's close, and a plan that folds the previous block as a side effect leaves sprints open and stories counted in two blocks. A project with no sprint file yet is not blocked.
+3. **Ready stories** (`production/stories/**`). None → stop with `BLOCKED (no Ready stories — run /create-stories)` and write nothing.
+4. **Read**: the roadmap (priority and blocker markers — the stories `/retrospective` carried back to the Backlog are there with their `🔥`/`⛔` intact and compete like any other), the last sprint (retro actions), `production/findings.md` (open BLOCKING findings and their stories).
+5. **Backlog**: `production/backlog.md` → one line `Backlog: N open ideas — /backlog review`. An idea enters a sprint only after promotion, never from here.
+6. **Capacity and dates**: ask now — days (unless `--days` gave them), hours per day, start date. Parameters are asked here, before any gate, never in the same message as one (rule 7: one turn, one gate).
+7. **Calibration**, one sample worded identically in both skills: the **last six closed stories of the roadmap** that carry both `~Nh` and `⏱ Nh`, whichever sprint they belong to. `/retrospective` prints this same rolling ratio next to its own sprint-only one and labels which is which; two skills quoting different numbers under the same name is how a plan stops being trusted.
    - Ratio = Σ⏱ / Σ~, never rounded towards a nicer plan.
    - Three or more such stories → apply it to this sprint's estimates (calibrated estimate = `~Nh` × ratio) and show one line: `Calibration: ratio R over N stories — capacity fits ~X h of estimates`.
    - Fewer than three → "insufficient data, estimates taken as written".
@@ -50,7 +51,7 @@ Its own turn — never on the merge answer.
 1. **Show the plan** rendered (rule 7), from `sprint-plan.md`: the header with dates, capacity, review mode and the calibration ratio applied; the stories; risks and blockers; the `## Dependency updates` section (what was merged, which majors became stories, what was deferred and why, what stays open red).
 2. **Gate**, one `AskUserQuestion`: "May I write `production/sprints/sprint-NN.md` and update the roadmap?" — write (Recommended) · show the draft/diff first · not now.
 3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
-4. **Write** `production/sprints/sprint-NN.md`.
+4. **Write** `production/sprints/sprint-NN.md` with `Status: active` in its header.
 5. **Update the roadmap** per `templates/roadmap.md`:
    - **Move** the selected stories: add them under a `## Sprint NN (YYYY-MM-DD → YYYY-MM-DD) — goal` subheading **and remove them from the Backlog block in the same edit**, never leaving them in both. A story counted twice makes every later count wrong.
    - Recalculate the `<summary>` count of each block.
@@ -58,8 +59,8 @@ Its own turn — never on the merge answer.
    - Mark the active story ⏳ and the first one 🔥.
    - Markers inline in the legend's order, IDs as inline links, no prose ordering.
    - Refresh the `Updated:` line.
-   - When this closes the *previous* sprint (every one of its stories now `[x]`), wrap that sprint's list in `<details><summary>closed · N stories — expand</summary>`, with a blank line after `<summary>` or GitHub won't render the list inside.
-   - Add a row for the new sprint to the roadmap's `## Docs` → *production/sprints/* block.
+   - The previous sprint's block is already folded by `/retrospective`; this skill never edits it.
+   - Add a row for the new sprint (`⏳ … active`) to the roadmap's `## Docs` → *production/sprints/* block and recalculate its `<summary>` count.
 6. **Close the write with the numbers**: `Backlog: N → M, Sprint: 0 → K, overlap none`.
 
 ## Phase 5: Commit (documents lane)
@@ -70,6 +71,6 @@ Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.m
 
 Nothing is committed without the answer.
 
-Verdict: `READY` | `BLOCKED`.
+Verdict: `READY` | `BLOCKED (sprint NN open — run /retrospective NN first)` | `BLOCKED (no Ready stories — run /create-stories)`.
 
-Next step — one `AskUserQuestion`: `/qa-plan NN` (Recommended) · `/dev-story` directly · revise the sprint. On `BLOCKED`: `/create-stories` (Recommended) · stop here.
+Next step — one `AskUserQuestion`: `/qa-plan NN` (Recommended) · `/dev-story` directly · revise the sprint. On `BLOCKED`: the command the verdict names (Recommended) · stop here.
