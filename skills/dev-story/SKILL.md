@@ -39,7 +39,7 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
 3. **Ask one `AskUserQuestion`**: continue — branch `feat/S-NNN-slug` and start (Recommended) · change the plan (say what) · stop. Include `/sprint-plan` when Phase 1 step 3 flagged it. The "continue" answer is the consent for the branch, the state update, the story-card edit and the files named in the plan.
 4. **Branch** per `.claude/docs/git-workflow.md`:
    1. `git fetch origin`.
-   2. If the current branch is the default branch, or is already merged into `origin/<default>` (session-start prints "no commits beyond"; check with `git merge-base --is-ancestor HEAD origin/<default>`): `git switch <default> && git pull --ff-only`. Never continue on a merged branch.
+   2. If the current branch is the default branch, or is already merged into `origin/<default>` (session-start prints "no commits beyond"; check with `git merge-base --is-ancestor HEAD origin/<default>`): `git switch <default> && git pull --ff-only origin <default>`. Never continue on a merged branch.
    3. `git switch -c feat/S-NNN-slug`.
 5. **Record the start.**
    - Session state goes through the studio's writer, never a hand-built `sed` / `python3 -c` one-liner: `<hooks>session-state.sh set Task "S-NNN …" Branch feat/S-NNN-slug Next "/code-review"`. It keeps every template field, fills untouched ones with `—` and prints the result, so a failed write is visible instead of silent. If it refuses because it cannot round-trip the file, the project's `active.md` has grown into a working document. Leave it alone and suggest moving its durable parts into their own documents. Never force the writer.

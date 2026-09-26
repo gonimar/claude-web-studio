@@ -60,5 +60,12 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: `go-engineer` cut off at its limit with `Checkpoint: done: domain · next: usecase tests · unverified: build`. **Expected**: one `SendMessage` — "continue from your Checkpoint; run git status and the step's Check yourself" — and no `git status`, build or test by the parent before it; the parent verifies once after the `SubagentStop`.
 - [ ] resume first · [ ] no parent checks before resume · [ ] hand-off names `/web-studio:code-review`
 
+### Consent is collected by the parent (0.13)
+**Fixture**: a two-step plan (`go-engineer` handler + tests, `go-engineer` route) on a story whose files the plan names. **Expected**: the Phase 3 answer "continue" covers the branch, the state update, the `Started:` stamp and the planned files; no extra approval question per specialist step; a specialist that needs a file, dependency or contract change outside its brief stops and reports, and the parent asks (or detours to `/impact`). A run asks three questions: plan, commit, next step.
+- [ ] no per-step approval question · [ ] out-of-brief work comes back to the parent · [ ] three gates on the happy path
+### Default branch without an upstream (0.13)
+**Fixture**: the session starts on a merged story branch; the local default branch has no upstream configured. **Expected**: `git pull --ff-only origin <default>` fast-forwards it before `git switch -c feat/S-NNN-slug`; the story branch never starts from a stale default branch.
+- [ ] explicit remote on the pull · [ ] story branch contains origin/<default>
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
