@@ -32,7 +32,8 @@ Statuses: `planned` · `in progress` · `shipped vX.Y.Z`.
 each is ticked only with the artefact named next to it. The release that ticks the last one is 1.0, and its changelog says
 "nothing changed — everything verified".
 
-- [ ] **1. Verified, not "fixed".** Every defect closed since 0.5 has either a live confirmation in a session trace or a
+- [ ] **1. Verified, not "fixed".** *(0.14: the eleven restructured skills were verified old-vs-new on the same
+  graders; `last_spec` is still empty for every skill and `last_eval` reads `PENDING-CI` until the first CI run.)* Every defect closed since 0.5 has either a live confirmation in a session trace or a
   behavioural spec case that fails without the fix and runs in CI (the `evals` job of `ci.yml`). No entry left as "fixed — verify on the next run".
   *Evidence:* the defect register of the observing lab shows zero `fixed` rows without `verified`; `testing/catalog.yaml`
   carries a `last_spec_result: PASS` for every skill and agent.
@@ -52,7 +53,9 @@ each is ticked only with the artefact named next to it. The release that ticks t
   and in the VS Code extension, not assumed from documentation.
   *Evidence:* a channel matrix in `testing/e2e/` (channel × client → observed on date) with a hook test per row; the
   0.9.0 lesson (SessionStart stdout reached nobody for three months) never repeats.
-- [ ] **5. The studio can repair itself.** `/skill-test spec` passes for all skills and agents; `/skill-improve` closes a
+- [ ] **5. The studio can repair itself.** *(0.14: half — the `evals` CI job runs the behavioural cases of ten skills
+  nightly and on demand, `tests/validate-structure.py` mirrors `/skill-test static` on every push; `/skill-test spec`
+  has still never been run for all skills and `/skill-improve` has no recorded demo.)* `/skill-test spec` passes for all skills and agents; `/skill-improve` closes a
   deliberately broken case in a demo; a user who finds a defect has a documented path from symptom to an issue with
   evidence (playbook §10.16); the plugin's CI runs the behavioural cases, not only the linter and the hook tests.
   *Evidence:* the `evals` job of `ci.yml` (nightly and on demand, `claude plugin eval`); one issue filed by the documented path and fixed through `/skill-improve`.
