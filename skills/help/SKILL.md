@@ -70,6 +70,7 @@ Also available: /stack-update, /team-feature …
 Docs: /help commands (every command) · /help guide (what to run in every situation) · /help guide 10.7 (one section)
 ```
 The `Docs:` line is always printed — it is how a user discovers the reference modes.
+**Every command is printed with its namespace in plugin mode** (`/web-studio:product-spec`, `/web-studio:code-review`; the "Plugin root:" line of the session-start context says the plugin is running; copy mode prints `/<name>`): a bare `/code-review` in plugin mode is Claude Code's built-in review, not the studio's — it ran that way on a real project, with no routing table and no appsec, and the story was closed on its word.
 If the stack reference is older than 60 days — one line recommending `/stack-update`.
 Version drift: `.claude/.web-studio-version` records what seeded this project; the running plugin
 version is the last path segment of the "Plugin root:" line the session-start hook prints (copy mode —
@@ -84,4 +85,4 @@ Game project (technical-preferences type game / game+backend): when every story 
 
 Every command named anywhere in the answer comes from the catalog or from a skill's own frontmatter, never from memory: a sub-command is named only when its skill's `argument-hint` lists it. There is no `/dev-story complete S-NNN` — a story is closed by `/story-done`, and inventing the shape of a command sends the user to a dead end with the studio's own authority behind it. The session-start context is data, not decoration: a merged branch, a template placeholder left in CLAUDE.md, a stack reference older than 60 days or an open `Gate:` printed there is repeated here as one line each — the user reads this answer, not the startup block a second time.
 
-Verdict: `READY`. Next step — one `AskUserQuestion` about the pipeline only: the "Next" command (Recommended) · up to two "Also available" commands relevant to the phase · nothing now. Run nothing without that answer; `Attention:` items are not options here.
+Verdict: `READY`. Next step — one `AskUserQuestion` about the pipeline only: the "Next" command (Recommended) · up to two "Also available" commands relevant to the phase · nothing now. **The answer is not executed here**: help runs on Haiku, and a skill started from its answer inherits the model of the turn — a `/code-review` and a `/story-done` ran on Haiku that way and closed a story with invented numbers. After the answer print one line, `Run: /web-studio:<command> <args>` (copy mode `/<command>`), and end the turn; the user sends it as the next message. `Attention:` items are not options here.

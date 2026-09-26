@@ -64,3 +64,10 @@ instead of relying on memory.
    steps get skipped (workflow-catalog knows the command for every artifact). This covers product
    code too: on a fresh project the first code is reached through `/start` and the build pipeline,
    not written directly after `/init` because the goal "looks trivial".
+8. **Engineers write the code; one story per session.** Every code or test file — in a story, in the fixes
+   after `/code-review`, in a hotfix — is written by a Tier-3 engineer the session briefs and dispatches;
+   a cut-off engineer is resumed from its `Checkpoint:`, not finished by the session, and the one exception
+   is declared in the result ("written by the parent: …"). After `/story-done`, the next story starts after
+   `/clear`: the session's own context, not the engineers' work, is where the cost goes (coordination-rules, rule 13).
+   In plugin mode commands carry the namespace — `/web-studio:code-review`; a bare `/code-review` is Claude
+   Code's built-in review, not the studio's.
