@@ -168,6 +168,36 @@ out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/vali
 echo '{"hook_event_name":"SubagentStop"}' | bash "$H/log-agent.sh"
 grep -q 'SubagentStop | builtin' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent: a Stop without a type is not marked builtin"; }
 grep -q '| unknown |' production/session-logs/agent-audit.log && { failn=$((failn+1)); echo "FAIL log-agent: still writes unknown"; } || pass=$((pass+1))
+# 0.12 cases (WS-123, WS-103 second form, WS-085 second form, WS-133, WS-124, WS-135)
+git checkout -q master 2>/dev/null; git update-ref refs/remotes/origin/master HEAD
+mkdir -p internal/auth; printf 'package auth\n\nvar password = "correct-horse-battery-staple" // fixture\n' > internal/auth/x_test.go; git add internal/auth/x_test.go
+out=$(echo '{"tool_input":{"command":"git commit -m \"test: fixture\""}}' | bash "$H/validate-commit.sh" 2>&1); code=$?
+expect "commit allows a secret-shaped fixture in _test.go" 0 $code; echo "$out" | grep -q 'SECRET?' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: no SECRET? warning on a test fixture"; }
+git rm -q --cached internal/auth/x_test.go; printf 'package auth\n\nvar password = "correct-horse-battery-staple"\n' > internal/auth/cfg.go; git add internal/auth/cfg.go
+echo '{"tool_input":{"command":"git commit -m \"feat: cfg\""}}' | bash "$H/validate-commit.sh" >/dev/null 2>&1; expect "commit still blocks a secret-shaped string in product code" 2 $?
+git rm -q --cached internal/auth/cfg.go; printf 'package auth\n\nfunc TestY() { k := "ghp_%s"; _ = k }\n' "$(printf 'B%.0s' $(seq 1 36))" > internal/auth/y_test.go; git add internal/auth/y_test.go
+echo '{"tool_input":{"command":"git commit -m \"test: y\""}}' | bash "$H/validate-commit.sh" >/dev/null 2>&1; expect "commit blocks a provider token even in a test" 2 $?
+git rm -q --cached internal/auth/y_test.go; rm -rf internal
+mkdir -p production/stories; printf 'S-1\n' > production/stories/S-001.md
+out=$(printf '%s' '{"tool_input":{"command":"git add production/stories/S-001.md && git commit -q -F - <<EOF\ndocs: story S-001\n\nbody\nEOF\ngit push -q origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'pushing directly' && { failn=$((failn+1)); echo "FAIL push: docs commit+push in one call warned on master"; } || pass=$((pass+1))
+printf 'code\n' > z.go
+out=$(printf '%s' '{"tool_input":{"command":"git add z.go && git commit -m \"feat: z\" && git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'pushing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL push: code commit+push to master not warned"; }
+rm -f z.go production/stories/S-001.md
+rm -f .claude/.write-consent
+out=$(printf '%s' '{"tool_input":{"command":"python3 - <<PY\np='"'"'production/roadmap.md'"'"'\ns=open(p).read()\nopen(p,'"'"'w'"'"').write(s)\nPY"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: a python write through a path variable is invisible"; }
+out=$(printf '%s' '{"tool_input":{"command":"touch .claude/.write-consent && sed -i \"3s/Status: Ready/Status: In Progress/\" production/stories/S-001.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent-guard: warned although the marker is set in the same command"; } || pass=$((pass+1))
+out=$(echo '{"tool_input":{"file_path":"production/stories/S-001.md","old_string":"> Status: In Progress · Started: 2026-01-01T10:00","new_string":"> Status: Review · Started: 2026-01-01T10:00"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent-guard: warned on a Status metadata line"; } || pass=$((pass+1))
+out=$(echo '{"tool_input":{"file_path":"production/stories/S-001.md","old_string":"## Plan\nold","new_string":"## Plan\nnew"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: a body edit of a story card passed silently"; }
+out=$(echo '{"tool_input":{"file_path":"docs/ops/measurements/2026-01-01-bench.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && { failn=$((failn+1)); echo "FAIL consent-guard: warned on a measurement file (rule 12)"; } || pass=$((pass+1))
+out=$(echo '{"tool_input":{"file_path":"docs/ops/deploy.md"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: docs/ops/deploy.md no longer protected"; }
+rm -f production/session-logs/agent-audit.log
+echo '{"session_id":"s1","transcript_path":"/h/.claude/projects/p/s1.jsonl","tool_name":"Edit","tool_input":{"file_path":"backend/internal/user/login.go"}}' | bash "$H/parent-write.sh" 2>/dev/null | isjson PreToolUse "PARENT-WRITE:" && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL parent-write: no warning for code written by the session"; }
+grep -q '| ParentWrite | backend/internal/user/login.go' production/session-logs/agent-audit.log 2>/dev/null && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL parent-write: no ParentWrite line in the audit log"; }
+out=$(echo '{"session_id":"s1","transcript_path":"/h/.claude/projects/p/s1/subagents/agent-a1.jsonl","tool_name":"Edit","tool_input":{"file_path":"backend/internal/user/login.go"}}' | bash "$H/parent-write.sh" 2>&1); [ -z "$out" ] && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL parent-write: warned on a subagent's write"; }
+out=$(echo '{"session_id":"s1","transcript_path":"/h/.claude/projects/p/s1.jsonl","tool_name":"Edit","tool_input":{"file_path":"docs/architecture/adr-0001.md"}}' | bash "$H/parent-write.sh" 2>&1); [ -z "$out" ] && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL parent-write: warned on a document"; }
+out=$(echo '{"tool_name":"Edit","tool_input":{"file_path":"a.go"}}' | bash "$H/parent-write.sh" 2>&1); [ -z "$out" ] && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL parent-write: warned without a transcript path"; }
+out=$(bash "$H/agent-stats.sh" 2>&1); echo "$out" | grep -q 'written by the session itself' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL agent-stats: ParentWrite lines are not counted"; }
+[ -x "$H/session-state.sh" ] && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL session-state.sh is not executable (skills call it as a command)"; }
 # WS-085: the guards see a document written through Bash, not only through Write/Edit
 rm -f .claude/.write-consent
 out=$(printf '%s' '{"tool_input":{"command":"cat > production/roadmap.md <<EOF\n# Roadmap\nEOF"}}' | bash "$H/consent-guard.sh" 2>&1); echo "$out" | grep -q 'CONSENT:' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL consent-guard: a heredoc write to a protected document is invisible"; }
