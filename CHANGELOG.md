@@ -40,6 +40,16 @@ pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
   Go items that sat under PHP, names unrecorded HIGH items in the verdict and gates its Phase 3–4 writes.
 - `/game-concept` no longer carries stack versions (they live in `docs/stack-reference/`); `/skill-test` takes spec
   paths from the catalog and accepts `PLANNED` like the linter.
+- **The smallest change that meets the criteria** — CLAUDE.md template principle 9, adapted from two of the four
+  principles of andrej-karpathy-skills (MIT; attribution in NOTICE). No feature, abstraction, option or error path
+  the story does not ask for; neighbouring code keeps its style, comments and dead code, and what an engineer notices
+  there is reported under "Outside the brief" (and goes to `/backlog` or findings), not fixed in the story's diff.
+  All 30 agents' collaboration protocol gains the rule, and its "Ask" / "Show a draft" items now say what a `Task`
+  subagent does instead — the questions go into its result for the caller, and the brief's files carry the "yes".
+  `/code-review` gains a Scope check: hunks that serve no acceptance criterion are WARNING `SCOPE` / `SCOPE-SPEC`,
+  reformatting of untouched code INFO `SCOPE-STYLE`; reviewers now receive the story's criteria. Existing projects:
+  copy principle 9 into your CLAUDE.md by hand if you want it there — `/update` never edits CLAUDE.md; the agents
+  and `/code-review` carry the rule either way.
 - Testing: `testing/e2e/fixtures/make-story-fixture.sh` builds a story-ready synthetic project (`happy`,
   `no-strategy`, `merged-spike`) for comparing two versions of a pipeline skill; dev-story spec gains two cases;
   `validate-structure` checks hooks called as `<hooks>session-state.sh …` too.

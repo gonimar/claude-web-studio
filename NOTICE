@@ -11,6 +11,10 @@ Attributions
 - Go directory conventions follow golang-standards/project-layout
   (https://github.com/golang-standards/project-layout), a community convention and not an official
   Go standard; summarised and adapted in docs/stack-reference/go.md with a link, no text copied.
+- CLAUDE.md template principle 9 ("the smallest change that meets the criteria"), the agents' scope rule and
+  the `/code-review` Scope check adapt two of the four principles of andrej-karpathy-skills
+  (https://github.com/multica-ai/andrej-karpathy-skills), MIT License, themselves drawn from Andrej Karpathy's
+  public notes on LLM coding pitfalls. Rewritten for the studio's gates; no text copied.
 - Claude Code, Claude and the Claude Agent SDK are products of Anthropic; this project is an
   independent community plugin and is not affiliated with or endorsed by Anthropic.
 - Product and project names (Go, PHP, Yii, Angular, Vue, Nuxt, Vite, three.js, PixiJS, Phaser,

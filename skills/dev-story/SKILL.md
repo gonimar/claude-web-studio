@@ -57,7 +57,7 @@ Read:   <file>:<start>-<end>, … (the files this step touches or depends on, wi
 Write:  <files to create or change>
 Check:  <exact commands to run before reporting>
 Skip:   <what not to read or run: the full suite, the whole reference, unrelated packages>
-Report: decisions, surprises, numbers, and a final `Checkpoint:` line (done · next · unverified)
+Report: decisions, surprises, numbers, what you noticed "Outside the brief" (reported, not fixed), and a final `Checkpoint:` line (done · next · unverified)
 ```
 Do not send a brief without line ranges in `Read:`. An agent that has to find its files spends half its budget on `grep`.
 
