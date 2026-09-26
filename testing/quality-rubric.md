@@ -87,7 +87,7 @@ clearly ensures the criterion; WARN when partially; FAIL when absent or contradi
 | G1 — Domain and boundaries | States what it owns and does not; delegates to leads |
 | G2 — Options with cost | Decisions through 2–3 options, a recommendation, an ADR |
 | G3 — Advisory gates | PASS/CONCERNS/FAIL verdict without self-advancing |
-| G4 — Protocol | The "Collaboration protocol" block is present |
+| G4 — Protocol | The "Collaboration protocol" section is present and the `collaboration-protocol` skill is preloaded |
 
 ### `agents:leads`
 | Metric | PASS |

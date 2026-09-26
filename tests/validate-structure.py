@@ -30,6 +30,7 @@ for a in agents:
         if k not in d: fail(f'agents/{a}.md: missing {k}')
     if d.get('name') != a: fail(f'agents/{a}.md: name mismatch')
     if 'Collaboration protocol' not in body: fail(f'agents/{a}.md: no collaboration protocol')
+    if 'collaboration-protocol' not in open(f'agents/{a}.md').read().split('---')[1]: fail(f'agents/{a}.md: collaboration-protocol skill not preloaded (skills: [collaboration-protocol, …])')
     if 'stack-reference' not in body and a != 'tech-writer': warn(f'agents/{a}.md: no stack-reference link')
     for s in re.findall(r'^skills:\s*\[(.*)\]', open(f'agents/{a}.md').read(), re.M):
         for sk in [x.strip() for x in s.split(',') if x.strip()]:
@@ -38,10 +39,18 @@ for a in agents:
 # Skills — static linter (mirrors /skill-test static)
 VERDICTS = r'\b(PASS|FAIL|CONCERNS|APPROVED|ACCEPTED|PROPOSED|NEEDS (REVISION|CHANGES)|BLOCKED|COMPLETE|READY|DONE|UPDATED|CLEAN|RELEASED|DEPLOYED|HARDENED|PLAYABLE|COMPLIANT|INITIALISED|RESOLVED|MITIGATED|(WITHIN|OVER) BUDGET|ON TRACK|AT RISK|OFF TRACK|FIXED|IMPROVED|PLANNED)\b'
 skills = sorted(os.listdir('skills'))
+preload = set()  # user-invocable: false — background knowledge preloaded into agents, not a command
 for s in skills:
     p = f'skills/{s}/SKILL.md'
     if not os.path.isfile(p): fail(f'{p}: missing'); continue
     d, body = fm(p)
+    if str(d.get('user-invocable', 'true')).strip().lower() == 'false':
+        preload.add(s)
+        for k in ('name', 'description'):
+            if k not in d: fail(f'{p}: missing {k}')
+        if d.get('name') != s: fail(f'{p}: name mismatch')
+        if re.search(r'[\u0400-\u04ff]', body): fail(f'{p}: non-English text')
+        continue
     for k in ('name', 'description', 'argument-hint', 'user-invocable', 'allowed-tools'):
         if k not in d: fail(f'{p}: missing {k}')
     if d.get('name') != s: fail(f'{p}: name mismatch')
@@ -64,7 +73,7 @@ cat = open('testing/catalog.yaml').read()
 cs = set(re.findall(r'\{name: ([\w-]+), category', cat)); ca = set(re.findall(r'\{name: ([\w-]+), tier', cat))
 for n, sp in re.findall(r'\{name: ([\w-]+), (?:category|tier): [\w-]+.*?spec: (\S+)\}', cat):
     if not os.path.isfile(sp): fail(f'catalog: spec missing {sp}')
-if set(skills) - cs: fail(f'skills not in catalog: {sorted(set(skills) - cs)}')
+if set(skills) - preload - cs: fail(f'skills not in catalog: {sorted(set(skills) - preload - cs)}')
 if set(agents) - ca: fail(f'agents not in catalog: {sorted(set(agents) - ca)}')
 if cs - set(skills): fail(f'catalog skills without files: {sorted(cs - set(skills))}')
 if ca - set(agents): fail(f'catalog agents without files: {sorted(ca - set(agents))}')
@@ -92,7 +101,7 @@ if hp != hc: fail(f'hook registrations differ: plugin-only {sorted(hp - hc)}, co
 # README command coverage
 for r in ['README.md'] + [f'docs/readme/{f}' for f in os.listdir('docs/readme') if f.startswith('README')]:  # PLAYBOOK.* translations are not READMEs
     txt = open(r, encoding='utf-8').read()
-    miss = [s for s in skills if f'`/{s}`' not in txt]
+    miss = [s for s in skills if s not in preload and f'`/{s}`' not in txt]
     if miss: fail(f'{r}: commands not documented: {miss}')
 
 # Stack reference dated

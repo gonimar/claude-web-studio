@@ -44,8 +44,12 @@ tokens or references to private projects.
 2. Body structure used by every agent: a one-paragraph role statement naming the lead it reports to
    and the stack-reference file it reads first; `## How you work` (numbered: spec → questions →
    sketch → code → tests → run with output) or `## Responsibilities` for leads; `## Never` with
-   stack-specific prohibitions; and the shared **Collaboration protocol** block copied verbatim
-   from any existing agent (the structure linter requires it).
+   stack-specific prohibitions; and a `## Collaboration protocol (mandatory)` section that points
+   to the preloaded skill `collaboration-protocol` (`skills/collaboration-protocol/SKILL.md`, the
+   one definition of the protocol; `skills: [collaboration-protocol, …]` in the frontmatter loads
+   it into the agent — the structure linter requires both the section and the preload). A skill
+   with `user-invocable: false` is background knowledge for agents, not a command: no phases,
+   verdicts, catalog entry or README line are required of it.
 3. Register it: a row in `docs/agent-roster.md`; mention it in the lead that delegates to it and in
    the skills that route to it (`/dev-story`, `/code-review`, `/team-*`); add it to the README agent
    tables (all languages).
