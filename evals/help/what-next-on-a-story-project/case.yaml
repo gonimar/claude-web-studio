@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: help-what-next
+description: "Spec help cases 1/5/16: on a project with a Ready story the orientation block (phase, next step, Run line) is printed, verdict READY, nothing written, the answer is not executed in this turn."
+tags: [help,critical]
+context:
+  scaffold_script: scaffold.sh

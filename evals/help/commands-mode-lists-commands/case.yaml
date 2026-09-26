@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: help-commands-mode
+description: "Spec help case 14: `help commands` lists every command with its description and ends with a text line, no question."
+tags: [help]
+context:
+  scaffold_script: scaffold.sh

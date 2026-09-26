@@ -1,0 +1,5 @@
+---
+type: regex
+pattern: "/web-studio:[a-z-]+|Run:"
+target: trace
+---
