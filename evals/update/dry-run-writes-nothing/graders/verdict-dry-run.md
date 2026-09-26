@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "DRY RUN"
+pattern: "DRY RUN|--kit"
 target: last_message
 ---
