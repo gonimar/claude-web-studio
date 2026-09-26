@@ -14,7 +14,7 @@ Run every command and tabulate its output (metric · value · rule it is measure
    - `vendor/bin/deptrac analyse` when a `deptrac.yaml` exists, else `grep -rlE 'use (FRAMEWORK_NAMESPACES|App\\Infrastructure)\\' src/Domain src/Application` with the namespaces of the recorded `php_framework`;
    - `vendor/bin/phpunit`, with `--coverage-clover` when pcov/xdebug is available, and `composer coverage-gate` on it.
 3. Class sizes: `wc -l` per `src/**/*.php`, classes over 400 lines.
-4. Framework dependencies by layer: `grep -rcE 'use (FRAMEWORK_NAMESPACES)' src/Domain src/Application src/Infrastructure`.
+4. Framework dependencies by layer: `grep -rcE 'use (FRAMEWORK_NAMESPACES)' src/Domain src/Application src/Infrastructure` — on a Laravel root the directories are `app/Domain app/Application app/Infrastructure` and the global-helper grep from `laravel.md` "deptrac" is a second row; on a Symfony root `#[ORM\` under `src/Domain` is counted as a third row (`symfony.md` "Where the layers live").
 5. Test smells: `grep -rnE '\b(u?sleep)\(' tests`, `grep -rn 'getMessage()' tests`, `TestCase`s without data providers whose methods differ only in data, mocks under `tests/Unit/Domain`, a booted framework under `tests/Unit/Application`.
 6. DDL outside migration files: `grep -rln 'CREATE TABLE\|ALTER TABLE' src`.
 

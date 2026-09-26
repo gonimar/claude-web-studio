@@ -6,7 +6,7 @@ Web Studio 把 Claude Code 变成一个完整的 Web 开发工作室：三层共
 流水线的斜杠命令、保护密钥与提交规范的钩子、按路径生效的编码规则、文档模板、**带日期的技术栈版本与最佳实践
 参考**，以及用于测试代理本身的框架。既适用于 Web 应用，也适用于浏览器游戏。¹
 
-技术栈：Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22（Material、Taiga UI）·
+技术栈：Go 1.27 · PHP 8.5（Yii3、Symfony、Laravel 参考；Slim 可选） · TypeScript 7 / Node 24 · Angular 22（Material、Taiga UI）·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL 优先，REST 按需 · PostgreSQL 18 · three.js r185 / PixiJS 8 / Phaser ·
 Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · SBOM + 签名镜像（Sigstore） · OWASP Top 10:2025 · WCAG 2.2 AA。
 

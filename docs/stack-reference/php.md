@@ -5,9 +5,9 @@ sources: [https://www.php.net/releases/8.5/en.php, https://www.php.net/releases/
 # PHP 8.5 — the language, the layers, the tests (framework-independent)
 
 This file is about PHP itself. The framework is a separate choice recorded as `php_framework` in
-technical-preferences, with its own reference file when the studio has one: `yii3.md` (Yii3 —
-the only framework reference today). Symfony, Laravel, Slim and "none" are valid choices: `php-engineer`
-then works from the framework's official documentation, says so in every result, and everything below
+technical-preferences, with its own reference file: `yii3.md`, `symfony.md`, `laravel.md`. Slim and "none"
+are valid choices too: `php-engineer` then works from the framework's official documentation, says so in
+every result, and everything below
 still applies — the framework is an Infrastructure detail, never the shape of the code.
 
 ## Language by version (so we do not write old-style code)
@@ -22,7 +22,7 @@ Mandatory in every file: `declare(strict_types=1)`; `readonly` classes/propertie
 | Task | Choice | Why |
 |---|---|---|
 | PHP version | **8.5** (recommended and the studio's target) · 8.4 (minimum) — chosen in `/setup-stack` and recorded in technical-preferences **Language/runtime** (`PHP 8.5`, or `PHP 8.4 — <reason>, upgrade story S-NNN`); `/adopt` reads it from `composer.json` `require.php` and `composer show --locked` | 8.5 is the current release with bug fixes until 2027-12; every tool below runs on it (PHPUnit 13 needs ≥ 8.4, Symfony 8 ≥ 8.4, Laravel 13 ≥ 8.3, PHPStan 2 / Psalm 6 / deptrac 4 / ECS 13 support 8.5); the rich-model form below needs 8.4 features, so 8.4 is the floor, not the target |
-| Framework | `php_framework`: **yii3** (reference `yii3.md`) · symfony (`symfony.md`, stub) · laravel (`laravel.md`, stub) · slim · none — chosen in `/setup-stack` | Only Yii3 has a full studio reference and a package rule; Symfony and Laravel have stubs (versions, where the layers live) and `php-engineer` works from the official docs until a project fills them; Slim and none have no file |
+| Framework | `php_framework`: **yii3** (reference `yii3.md`) · symfony (`symfony.md`) · laravel (`laravel.md`) · slim · none — chosen in `/setup-stack` | Yii3, Symfony and Laravel have full studio references (Yii3 also a package rule); Slim and none have no file — `php-engineer` works from the official docs and says so |
 | Architecture | `php_architecture`: **layered** (`src/Domain` → `src/Application` → `src/Infrastructure`, deptrac-enforced) · framework (the framework's own layout: controllers/models/services); use cases per context (`src/Application/<Context>/`, recommended) or flat — the shape the layout ADR's tree shows | See "Layered architecture"; a brownfield project keeps `framework` until `/refactor layout` |
 | Static analysis | `php_static_analysis`: **PHPStan** level 9 (new projects) · Psalm level 1 (the yiisoft ecosystem's own tool) | Template `docs/templates/php/phpstan.neon` / `psalm.xml`; a brownfield project starts from a baseline and raises one level per story |
 | Coding standard | `php_cs_tool`: **ECS** (`perCs: true`) · php-cs-fixer (`@PER-CS`) | Templates `ecs.php` / `.php-cs-fixer.dist.php`; ECS runs PHP_CodeSniffer and PHP-CS-Fixer rules through one config |

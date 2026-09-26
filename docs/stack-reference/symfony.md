@@ -1,28 +1,107 @@
 ---
-updated: 2026-09-17
-sources: [https://symfony.com/releases, https://symfony.com/doc/current/index.html, https://packagist.org/packages/symfony/framework-bundle]
+updated: 2026-09-26
+sources: [https://symfony.com/releases (unreachable on the date — release process read from https://github.com/symfony/symfony-docs contributing/community/releases.rst), https://github.com/symfony/symfony-docs (branch 8.1 — the source of symfony.com/doc/current: setup, configuration, configuration/secrets, service_container, controller, doctrine, messenger, security, security/voters, security/csrf, security/access_token, rate_limiter, cache, http_cache, performance, testing, serializer, object_mapper, frontend, setup/upgrade_major, contributing/code/bc), https://github.com/symfony/symfony/security/advisories, https://github.com/symfony/maker-bundle/blob/main/docs/index.rst, https://github.com/symfony/ux (Turbo), https://github.com/doctrine/orm/blob/3.7.x/UPGRADE.md, https://github.com/api-platform/core/blob/main/CHANGELOG.md, https://github.com/api-platform/docs (core/graphql.md), https://github.com/symfony/panther, https://github.com/rectorphp/rector-symfony, https://repo.packagist.org/p2/symfony/framework-bundle.json (and symfony/symfony, doctrine/orm, doctrine/doctrine-bundle, doctrine/doctrine-migrations-bundle, api-platform/core, symfony/object-mapper, symfony/ux-turbo, symfony/flex, symfony/maker-bundle, symfony/test-pack, symfony/phpunit-bridge, dama/doctrine-test-bundle, symfony/panther, rector/rector)]
 ---
-# Symfony — the framework reference (`php_framework: symfony`) — stub
+# Symfony — the framework reference (`php_framework: symfony`)
 
-The language, the layers, the tests and the tooling live in `php.md`; under `php_architecture: layered` Symfony is
-an Infrastructure detail. This file is a **stub**: versions and where things go, no idioms yet — `php-engineer`
-works from the official documentation and says so in every result until a project fills this file (`/stack-update symfony`).
+The language, the layers, the tests and the tooling live in `php.md` and apply to every PHP project; this
+file is only what is specific to Symfony. Under `php_architecture: layered`, Symfony is an Infrastructure
+detail: controllers, Doctrine adapters, Messenger handlers and the `config/` composition root; `App\Domain`
+and `App\Application` import nothing from `Symfony\`, `Doctrine\` or `Twig\` (deptrac layer `Framework`,
+see "deptrac" below). Under `php_architecture: framework` the framework's own layout applies (`src/Controller`,
+`src/Entity`, `src/Repository`, `src/Service`, …) with thin controllers and the rules of `php.md`.
 
-## Versions (packagist, 2026-09-17)
-- **8.1** (2026-09, PHP ≥ 8.4) — current; **8.0** (2025-11); **7.4 LTS** (2025-11, PHP ≥ 8.2, supported until 2028-11). New projects: 8.x on PHP 8.5; an existing 7.4 project stays on the LTS until its own upgrade story.
+## PHP (summary — the full section is in `php.md`)
+Minimum 8.4, target 8.5; `declare(strict_types=1)`, `readonly`, enums, `final`, property hooks and `public private(set)`;
+PER-CS 3.1; PHPUnit 13; the analyser, the coding-standard tool, deptrac and the per-layer coverage gate are recorded in
+technical-preferences and described in `php.md`. Symfony 8 requires PHP ≥ 8.4.1 (`symfony/symfony` `composer.json`), so
+the studio target and floor both run it.
 
-## Where the layers live
-| Layer | Symfony place |
-|---|---|
-| Composition root | `config/services.yaml` (autowire + `App\Domain\*RepositoryInterface: '@App\Infrastructure\…'` aliases), `config/packages/*`, `public/index.php`, `src/Kernel.php` |
-| Transport | `src/Infrastructure/Transport/Http/` — invokable controllers (`#[Route]`, `#[AsController]`), no `AbstractController` inheritance in a layered project; API Platform only via an ADR |
-| Persistence | `src/Infrastructure/Persistence/Doctrine/` — repositories implementing the domain ports, mapping in XML/PHP (`config/doctrine/`), never attributes on domain entities; Doctrine Migrations for schema |
-| Errors | an `ExceptionListener`/`kernel.exception` subscriber mapping domain exceptions to RFC 9457 (`symfony/http-kernel` problem responses) |
-| Queue | Messenger with a transport (Doctrine/AMQP/Redis), handlers in Application, transport config in Infrastructure |
-| Tests | `symfony/phpunit-bridge` not required with PHPUnit 13; `KernelTestCase`/`WebTestCase` only under `tests/Integration` |
+## Versions and support (packagist and the release process, 2026-09-26)
+Symfony ships a minor every six months (May and November), a major every two years in November of odd years, and the
+last minor of a major (x.4) is the **LTS**. Standard versions get bug and security fixes for 8 months; an LTS gets bug
+fixes for 3 years and security fixes for 4 years (release-process page). Dates below marked "computed" follow from those
+rules and the packagist release dates — symfony.com/releases was unreachable on the date: **unverified — check
+https://symfony.com/releases**.
+
+| Version | Released (packagist) | PHP | Maintenance |
+|---|---|---|---|
+| **8.1** — current | 2026-05-29 (`symfony/framework-bundle` 8.1.7 on 2026-09-14) | ≥ 8.4.1 | bug + security fixes until 2027-01 (computed) |
+| 8.0 | 2025-11-27 | ≥ 8.4 | out of maintenance since 2026-07 (computed) — an 8.0 project moves to 8.1 |
+| **7.4 LTS** | 2025-11-27 (7.4.19 on 2026-09-14) | ≥ 8.2 | bug fixes until 2028-11, security fixes until 2029-11 (computed) |
+| 6.4 LTS | 2023-11-29 (6.4.46 on 2026-09-13) | ≥ 8.1 | bug fixes until 2026-11, security fixes until 2027-11 (computed) |
+| 8.2 | expected 2026-11; 8.4 LTS expected 2027-11 with 9.0 | | unverified — check https://symfony.com/releases |
+
+**New projects: 8.1 on PHP 8.5** (`symfony new <dir> --version="8.1.*"`, no `--webapp` for an API — the studio's front is
+Angular/Vue). A brownfield project on **7.4 LTS stays there** until its own upgrade story (8.x removes what 7.x deprecated,
+nothing else); a project on 6.4 plans the move to 7.4 now — its bug-fix window closes in 2026-11.
+
+## Studio default set
+| Task | Choice | Why |
+|---|---|---|
+| Skeleton | **Symfony Flex** (`symfony/flex` 2.11) with the official recipes; `symfony.lock` committed; contrib recipes only after a look at the recipe | Flex is how every bundle is installed and configured (`composer require <alias>`); the lock file is what `composer recipes:update` diffs against |
+| Scaffolding | **MakerBundle** (`symfony/maker-bundle` 1.68, require-dev) for `make:entity`, `make:migration`, `make:voter`, `make:message`, `make:test`, `make:command` — the output is a scaffold: moved into the layered tree, `AbstractController` and ORM attributes removed where the layer forbids them | "Generated code can never be perfect for everyone" (MakerBundle docs); it saves typing, not decisions |
+| Configuration style | **PHP attributes** everywhere (`#[Route]`, `#[AsMessageHandler]`, `#[AsEventListener]`, `#[Autowire]`, `#[Target]`, `#[IsGranted]`, `#[MapRequestPayload]`, `#[When]`); YAML for what has no attribute (`framework`, `security`, `messenger`, `doctrine` packages; the port → adapter aliases) | Annotations are gone: Doctrine ORM 3 removed the annotation driver, Symfony 7+ has no annotation routing; PHP config builders are an option a project may record, not the default |
+| ORM | **Doctrine ORM 3** (3.7, DBAL 4, `doctrine/doctrine-bundle` 3.3 — PHP ≥ 8.4; `doctrine/doctrine-migrations-bundle` 4.0) with **XML mapping** in `config/doctrine/` for domain entities under `layered`; attributes on entities only under `framework` | ORM 3 supports attributes, XML and `StaticPHPDriver` — XML keeps `App\Domain` free of `Doctrine\` imports (a deptrac `Framework` violation otherwise); Symfony 8.1 itself conflicts with `doctrine/orm < 3.4` |
+| DTO ↔ entity | **Manual mapping** in the adapter (a named constructor or `fromState()` on the entity, `toArray`/DTO on the way out); `symfony/object-mapper` (`#[Map]`, stable component, class-map generated automatically since 8.1) only for field-for-field DTO ↔ DTO copies, recorded in technical-preferences | The rehydrating constructor is the single entry into a rich model; a mapper writing private state bypasses the invariants the model exists for |
+| Async work | **Messenger** for every job and long operation: `doctrine://` transport by default (no extra infrastructure), `redis://`/AMQP by ADR; `failure_transport` always configured; retries with `multiplier`/`jitter`; workers under Supervisor/systemd with `--time-limit`/`--memory-limit`, `messenger:stop-workers` on deploy | "A message can be delivered more than once under normal operating conditions" — handlers are idempotent (stable business keys); `sleep()` is never the answer (`php.md`) |
+| Front | **Angular/Vue SPA against a pure API** (`angular.md`/`vue.md`); Symfony UX (Stimulus, Turbo 3.5, Live/Twig Components) and AssetMapper only for a project whose pages are Twig-rendered — an ADR | The frontend docs name that split themselves ("using Symfony as a pure API"); AssetMapper is the no-build default there, Encore legacy, Reprise experimental |
+| REST API | **API Platform 5** (`api-platform/core` 5.0.1, Symfony ^7.4/^8.0, ORM ^3.3, `api-platform/test` for `ApiTestCase`) by ADR when the API style is REST with OpenAPI/JSON:API/JSON-LD; resources are Infrastructure DTOs with state providers/processors calling use cases — never the domain entities; without API Platform: invokable controllers + `#[MapRequestPayload]` DTOs + RFC 9457 errors | 5.0 answers validation failures with 422 + `ConstraintViolation`, drops Symfony 6.4; exposing entities as resources ties the contract to the schema |
+| GraphQL API | **`webonyx/graphql-php` with the SDL at `api_contract_path`** (`php.md`, `graphql.md`) — not API Platform's GraphQL | API Platform's GraphQL is code-first ("your schema … is automatically built" from resources, `api:graphql:export` derives the SDL); the studio is contract-first |
+| Security | The **Security bundle**: authenticators (`form_login`, `json_login`, `access_token` with an `AccessTokenHandlerInterface` or the OIDC handlers, custom `AbstractAuthenticator` → `Passport` + badges), **voters** for object-level rules, `password_hashers: auto`, `login_throttling` (needs `symfony/rate-limiter`), `#[IsGranted]` on controllers | Hand-rolled auth is a finding (`php.md`); voters keep the "may this user edit this post" rule in one class the review can read |
+| Rate limiting | `framework.rate_limiter` policies (`sliding_window` default for public endpoints, `token_bucket` for bursty APIs), `#[RateLimit('<name>')]` on controllers (8.1), `lock_factory` set | Storage in `cache.rate_limiter`, the lock prevents the race between concurrent requests |
+| Tests | **PHPUnit 13** via `symfony/test-pack`; `symfony/phpunit-bridge` only for the deprecation report; `dama/doctrine-test-bundle` 8.6 for transaction rollback; `symfony/panther` 2.4 optional for end-to-end | See "Testing" |
+| Runtime | FrankenPHP with the Symfony runtime (worker mode) for containers, PHP-FPM + nginx classically (`php.md`) | |
+
+## Where the layers live (`php_architecture: layered`)
+| Layer | Symfony place | Idioms |
+|---|---|---|
+| Domain | `src/Domain/<Context>/` | Plain PHP only (`php.md`): entities, value objects, domain exceptions, the ports (`<Entity>RepositoryInterface`); `Symfony\Component\Uid` (`Uuid`, `Ulid`) and `Clock\DatePoint` only when `php_domain_allow` lists them — deptrac's look-ahead keeps `Symfony\Component\Uid` out of the `Framework` layer for that purpose |
+| Application | `src/Application/<Context>/` | One class per use case with `execute(Input): Output`; messages for Messenger are plain classes here (an `Input` is a fine message) **without** `#[AsMessage]` — routing goes into `messenger.yaml` so the class stays framework-free; transactions through a port (`TransactionInterface`), never `EntityManagerInterface` |
+| Transport | `src/Infrastructure/Transport/Http/` — invokable controllers (`#[AsController]`, `#[Route]`), no `AbstractController` inheritance (`ControllerHelper` methods via `#[AutowireMethodOf]` when a helper is needed); `#[MapRequestPayload]`/`#[MapQueryString]` into request DTOs with Validator constraints (422 on failure); `#[IsGranted]` and `#[RateLimit]` as attributes; GraphQL in `src/Infrastructure/Transport/GraphQL/` | A controller calls one use case and maps its output; the DTO is the boundary — never deserialize into an entity |
+| Persistence | `src/Infrastructure/Persistence/Doctrine/` — repositories implementing the domain ports (`EntityManagerInterface` injected, no `ServiceEntityRepository` inheritance), XML mapping in `config/doctrine/<Context>/`, `DoctrineTransaction` implementing the transaction port, Doctrine Migrations in `migrations/` (`make:migration` → reviewed → `doctrine:migrations:migrate`) | ORM 3: `flush()` takes no entity argument, `PARTIAL` DQL is gone, `merge()` is gone, `QueryBuilder::setParameters()` takes an `ArrayCollection`; lazy ghost objects are the proxy mechanism on PHP 8.4+ (3.5) |
+| Messaging | `src/Infrastructure/Messaging/` — `#[AsMessageHandler]` classes with `__invoke(<Message>)` that call the use case; `messenger.yaml` routes the Application message classes to transports | Handler = adapter; retries/failed transport are Infrastructure config, idempotency is the use case's |
+| Errors | `src/Infrastructure/Transport/Http/ProblemExceptionListener` on `kernel.exception` (`#[AsEventListener]`) mapping domain exceptions to RFC 9457 `application/problem+json`; the domain `NotFoundException` → 404, validation → 422 | One listener, not a try/catch per controller |
+| Composition root | `config/services.yaml` (`_defaults: autowire, autoconfigure`; `App\: resource: '../src/'` with `exclude` for `src/Domain/**/{Entity,ValueObject}`; the port aliases `App\Domain\…\XRepositoryInterface: '@App\Infrastructure\Persistence\Doctrine\XRepository'` or `_defaults.bind`), `config/packages/*.yaml`, `config/bundles.php`, `src/Kernel.php`, `public/index.php` | Services are private by default — keep them so; `#[When(env: 'test')]` for test doubles registered as services |
+| Tests | `tests/Unit/{Domain,Application}` plain `TestCase`; `tests/Integration/` for `KernelTestCase`/`WebTestCase` | `php.md` "Tests by layer" |
 
 ## deptrac
-`FRAMEWORK_NAMESPACES` = `Symfony\\(?!Component\\Uid)|Doctrine\\|Twig\\` in `docs/templates/php/deptrac.yaml` — the negative look-ahead keeps `Symfony\Component\Uid` out of the Framework layer so it can be listed in `php_domain_allow` (a class in both layers would still violate).
+`FRAMEWORK_NAMESPACES` = `Symfony\\(?!Component\\Uid)|Doctrine\\|Twig\\` in `docs/templates/php/deptrac.yaml` — the negative look-ahead keeps `Symfony\Component\Uid` out of the Framework layer so it can be listed in `php_domain_allow` (a class in both layers would still violate). `Symfony\Contracts\*` and `Psr\*` interfaces the Application needs (`Clock`, `Cache` contracts) are added to `php_domain_allow`, never to `deptrac.yaml` by hand.
 
-## Open (to fill from a real project)
-Idioms, the package rule (which bundles by default), security specifics, the review checklist.
+## Configuration and secrets
+- `config/packages/*.yaml` per bundle, `when@prod`/`when@test` blocks instead of per-environment directories; `%env(...)%` with processors (`resolve`, `int`, `bool`, `json`, `default`, `file`, `base64`, `enum`) — parameters are typed at the edge, `getenv()` never appears in `src/`.
+- `.env` (committed defaults) → `.env.local` (not committed) → `.env.<env>` → `.env.<env>.local`; real environment variables win over all of them; `composer dump-env prod` writes `.env.local.php` in production. `.env.local` is not loaded in the `test` environment — `.env.test` holds `DATABASE_URL` for the test database.
+- **Secrets vault** for production credentials: `secrets:generate-keys`, `secrets:set`, `secrets:list --reveal`, `secrets:generate-keys --rotate`; `config/secrets/prod/prod.encrypt.public.php` is committed, `prod.decrypt.private.php` never (`SYMFONY_DECRYPTION_SECRET` on the host); environment variables override vault entries of the same name. `secrets:decrypt-to-local` only on a developer machine.
+- Preferences (`technical-preferences.md`) record the transport (`doctrine`/`redis`/`amqp`), the cache adapter and the session handler; the YAML carries no values that differ by host.
+
+## Testing (in addition to `php.md` "Tests by layer")
+- `composer require --dev symfony/test-pack` installs PHPUnit; `php bin/phpunit`; `phpunit.dist.xml` and `tests/bootstrap.php` come from the Flex recipe — the studio's `docs/templates/php/phpunit.xml` replaces them so the per-layer suites and the clover report match `coverage-gate.php`.
+- Domain and Application tests are plain `TestCase` — no kernel; a `KernelTestCase` under `tests/Unit` is a finding.
+- `tests/Integration/`: `KernelTestCase` (`static::getContainer()`, service replacement with `$container->set()`; since 8.1 also for non-shared services) for adapters against a real Postgres (`doctrine:database:create --env=test`, migrations, `dama/doctrine-test-bundle` wrapping each test in a rolled-back transaction); `WebTestCase` for the HTTP pipeline (`createClient()`, `request()`, `jsonRequest()`/`xmlHttpRequest()`, `loginUser()`, `assertResponseIsSuccessful()`, `assertResponseStatusCodeSame()`, `assertJsonContains` via API Platform's `ApiTestCase` when installed).
+- Messenger: `in-memory://` transport in `when@test` and `messenger:consume` assertions on the transport's `getSent()`; a use case is tested without the bus.
+- Deprecations: `symfony/phpunit-bridge` (8.1.6) with `SYMFONY_DEPRECATIONS_HELPER` for the report before an upgrade story; it is not required to run PHPUnit 13.
+- End-to-end with real browsers only by ADR: `symfony/panther` (`PantherTestCase`, WebDriver, Chrome/Firefox) — the studio's E2E default is Playwright against the SPA (`testing.md`).
+
+## Performance
+- OPcache per `php.md` plus Symfony's numbers: `opcache.preload=<project>/config/preload.php` (Flex writes it), `opcache.preload_user`, `opcache.memory_consumption=256`, `opcache.max_accelerated_files=32531`, `opcache.interned_strings_buffer=32`, `opcache.validate_timestamps=0`; `realpath_cache_size=4096K`, `realpath_cache_ttl=600`; `composer dump-autoload --no-dev --classmap-authoritative`; `.container.dumper.inline_factories: true` and `framework.enabled_locales` restricted.
+- **Cache pools**: `cache.app` for application data, `cache.system` for Symfony's own; a named pool per concern (`framework.cache.pools`, Redis adapter, `tags: true` when invalidation by tag is needed), injected with `#[Target('<pool>')] CacheInterface` (injection by argument name is deprecated in 8.1); `get($key, fn (ItemInterface $item) => …)` with `expiresAfter()`/`tag()` and the stampede-prevention `$beta`; `withSubNamespace()` for per-user or versioned keys. Cache lives in Infrastructure — a port (`CacheInterface` from `symfony/cache-contracts` in `php_domain_allow`, or an own interface) when a use case needs it.
+- **HTTP cache**: `#[Cache(public: true, maxage: …, smaxage: …, mustRevalidate: true)]` or `Response::setPublic()/setEtag()/isNotModified()` on read endpoints; a real reverse proxy (Varnish, the CDN) in production, `framework.http_cache: true` (the PHP `HttpCache` kernel) only where none is available; ESI for fragments of Twig pages.
+- Doctrine: metadata and query caches on the system pool in prod (the bundle's default with `cache.system`), result cache explicit per query; N+1 queries are caught by the profiler's Doctrine panel in dev and by an integration test's query count.
+- Profiling: the web debug toolbar/profiler in dev only, Stopwatch or Blackfire when a number is needed (`performance-engineer`).
+
+## Security (Symfony-specific — the PHP list is in `php.md`)
+- **CSRF**: forms carry `_token` automatically; every non-form mutation uses `#[IsCsrfTokenValid('<id>', tokenKey: …, methods: ['POST'])]` or `isCsrfTokenValid()`; the SPA case uses `framework.csrf_protection.stateless_token_ids` (Origin/Referer check) with `check_header: true` + `cookie_name` (double-submit cookie) — or a token-authenticated API (`access_token`) with no session at all, which is the studio's default for Angular/Vue.
+- **Authentication**: `access_token` authenticator with the `header` extractor only (query-string and body extractors leak tokens into logs); JWT through `OidcTokenHandler` (`web-token/jwt-library`, `algorithms`, `keyset`/`discovery`, `audience`, `issuers`) or a handler that checks signature, `exp`/`nbf`/`iat` and revocation; `login_throttling` (`max_attempts`, per IP + username) on every password login; `password_hashers: auto` (bcrypt today, migrates on login); `remember_me` only with `secure: true`.
+- **Authorization**: voters (`supports()`/`voteOnAttribute()`, `$vote?->addReason()` for the log) for every object-level rule, `access_control` for coarse URL rules, `role_hierarchy` instead of role lists in code, `security.access_decision_manager.strategy: unanimous` when several voters cover one attribute; `IS_AUTHENTICATED_FULLY` for sensitive actions.
+- **Deserialization**: `#[MapRequestPayload]` into DTOs with constraints; `allow_extra_attributes: false` in the serializer default context; never `DISABLE_TYPE_ENFORCEMENT` on external input; `COLLECT_DENORMALIZATION_ERRORS` (and `COLLECT_EXTRA_ATTRIBUTES_ERRORS`, 8.1) for a complete 422; `unserialize()` of untrusted data is a finding (`php.md`); the session user's `__serialize()` excludes the password hash (compare a `crc32c` instead).
+- **HtmlSanitizer** for user HTML, `UrlGenerator`/`IpUtils` kept current — the 2026-05-27 batch of advisories touched exactly these (GHSA-x5qj-865h-mgvm, GHSA-v3wm-qf9p-c549, GHSA-h5x3-xfc9-m39h, GHSA-38cx-cq6f-5755); `composer audit` in CI, `symfony check:security` locally, `roave/security-advisories` in require-dev. **Advisories**: https://github.com/symfony/symfony/security/advisories (the blog category https://symfony.com/blog/category/security-advisories mirrors it — unreachable on the date).
+- `APP_DEBUG=0` and `APP_ENV=prod` on every non-dev host; the profiler and the web debug toolbar never in prod; `framework.trusted_proxies`/`trusted_headers` set behind a load balancer; `symfony/html-sanitizer` and `symfony/http-foundation` `Response` headers (`Content-Security-Policy` through a listener or `nelmio/security-bundle` by ADR).
+
+## Upgrade path
+- Symfony's BC promise covers minors: only majors break; a feature deprecated in a minor is removed in the next major; `@internal`, `@experimental` (one minor) and security fixes are outside the promise; `@final since x.y` announces a class becoming final.
+- Order of a major story (`setup/upgrade_major`): (1) last minor of the current major (`7.4.*`), (2) zero deprecations — the profiler's log panel, the phpunit-bridge report (`SYMFONY_DEPRECATIONS_HELPER=max[self]=0`), (3) `extra.symfony.require: "8.1.*"` and `composer update "symfony/*"`, (4) `rm -rf var/cache/*`, (5) `UPGRADE-8.0.md`/`UPGRADE-8.1.md` in `symfony/symfony`, (6) `composer recipes:update` per recipe, diff reviewed.
+- **Rector 2** (`rector/rector` 2.6, rector-symfony bundled): `->withComposerBased(symfony: true)` picks the version set from `composer.lock`; `->withPreparedSets(symfonyCodeQuality: true)` and `SymfonySetList::SYMFONY_CODE_QUALITY`; `->withSymfonyContainerXml(__DIR__.'/var/cache/dev/App_KernelDevDebugContainer.xml')` for the container-aware rules; the annotations-to-attributes set once when leaving 6.x. Doctrine ORM 2 → 3: `UPGRADE.md` (annotation driver, `merge()`, `PARTIAL`, `flush($entity)` removed) — a story of its own before the Symfony 8 story.
+- One major per story (`6.4 → 7.4`, then `7.4 → 8.1`); `composer ci` green and the deptrac count unchanged at every step.
+
+## Symfony review checklist (in addition to `php.md`)
+1. no `Symfony\`, `Doctrine\`, `Twig\` import in `src/Domain` or `src/Application` (deptrac `Framework` layer; `Uid` only via `php_domain_allow`); Messenger messages without `#[AsMessage]`, routed in `messenger.yaml`; 2. controllers invokable, `#[MapRequestPayload]`/`#[MapQueryString]` DTOs at the boundary, one use case per controller, no `AbstractController` under `layered`, no entity deserialized from a request; 3. Doctrine mapping as XML under `layered` (attributes only under `framework`), migrations generated and reviewed, no `flush()` in a use case (transaction port); 4. Messenger: `failure_transport` set, handler idempotent, retries configured, worker limits in the process manager; 5. security: an authenticator (no custom login controller), voters for object rules, `#[IsGranted]` present on every non-public controller, `login_throttling`/`#[RateLimit]` on public and login endpoints, CSRF strategy matches the client (stateless ids + `check_header`, or a token API); 6. secrets in the vault or the host environment, never in `config/*.yaml` or `.env` committed values; `APP_DEBUG=0` in prod; 7. cache: named pools with `#[Target]`, `expiresAfter` on every entry, HTTP cache headers on public reads; 8. tests: no kernel under `tests/Unit`, `dama/doctrine-test-bundle` under `tests/Integration`, `in-memory://` transport in `when@test`; 9. the deprecation report empty before an upgrade story, `composer audit` clean, the advisories page checked when a `symfony/*` package is pinned below latest.

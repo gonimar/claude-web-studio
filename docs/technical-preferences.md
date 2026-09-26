@@ -11,7 +11,7 @@
 ## Backend
 - **Language/runtime**: [TO BE CONFIGURED] (Go 1.27 | PHP 8.5 — or `PHP 8.4 — <reason>, upgrade story S-NNN` when the hosting cannot run 8.5 yet | Node 24 | none)
 - **Framework**: [net/http + chi | Yii3 | Symfony | Laravel | Slim | Hono | NestJS | …]
-- **php_framework**: [yii3 (reference yii3.md) | symfony (symfony.md, stub) | laravel (laravel.md, stub) | slim | none — php-engineer works from the official docs where the reference is a stub or missing]
+- **php_framework**: [yii3 (yii3.md — PSR-15 `yiisoft/*` packages, the studio default) | symfony (symfony.md — Flex, Doctrine ORM 3 with XML mapping, Messenger, Security bundle authenticators + voters; API Platform for REST by ADR) | laravel (laravel.md — Eloquent as an Infrastructure adapter, Form Requests + policies, Sanctum, Redis queues + Horizon) | slim | none — php-engineer works from the official docs where no reference exists]
 - **php_architecture**: [layered (src/Domain → src/Application → src/Infrastructure, deptrac-enforced) | framework (the framework's own layout) — see stack-reference/php.md "Layered architecture"]
 - **php_static_analysis**: [phpstan (level 9 new / baseline brownfield) | psalm (level 1)]
 - **php_cs_tool**: [ecs (perCs: true) | php-cs-fixer (@PER-CS)]

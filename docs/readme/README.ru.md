@@ -8,7 +8,7 @@ Web Studio превращает Claude Code в полноценную студи
 справочник актуальных версий стека и лучших практик** и фреймворк для тестирования самих агентов.
 Подходит и для веб-приложений, и для браузерных игр.¹
 
-Стек: Go 1.27 · PHP 8.5 (справочник Yii3; Symfony/Laravel/Slim по выбору) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
+Стек: Go 1.27 · PHP 8.5 (справочники Yii3, Symfony и Laravel; Slim по выбору) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL в приоритете, REST где уместно · PostgreSQL 18 · three.js r185 /
 PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · SBOM + подписанные образы (Sigstore) · OWASP Top 10:2025 · WCAG 2.2 AA.
 

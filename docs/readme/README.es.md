@@ -8,7 +8,7 @@ hooks que protegen secretos y la higiene de los commits, reglas de código por r
 documentos, una **referencia fechada de versiones actuales del stack y buenas prácticas** y un
 marco para probar a los propios agentes. Sirve tanto para aplicaciones web como para juegos de navegador.¹
 
-Stack: Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
+Stack: Go 1.27 · PHP 8.5 (referencias de Yii3, Symfony y Laravel; Slim a elección) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL primero, REST donde encaje · PostgreSQL 18 · three.js r185 /
 PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · SBOM + imágenes firmadas (Sigstore) · OWASP Top 10:2025 · WCAG 2.2 AA.
 

@@ -5,7 +5,7 @@ Ask the questions in order, one `AskUserQuestion` each, recommendation first. Ev
 ## Version and framework (Phase 2 step 2)
 For PHP, two more questions:
 - The version: the studio target per `php.md` (Recommended) | the floor per `php.md` (only when the hosting cannot run the target yet — recorded in **Language/runtime** with the reason and an upgrade story). Both numbers are read from `php.md` at question time.
-- `php_framework`: **Yii3** (Recommended — the only framework with a full studio reference, `yii3.md`) | Symfony (`symfony.md`, stub) | Laravel (`laravel.md`, stub) | Slim | none (PSR-15 pipeline only). Any choice but Yii3 is recorded with the line "php-engineer works from the official documentation; the studio reference is a stub".
+- `php_framework`: **Yii3** (Recommended — `yii3.md`: PSR-15 `yiisoft/*` packages, the smallest framework surface) | Symfony (`symfony.md`: the current major on the studio PHP target, Flex, Doctrine ORM 3 with XML mapping, Messenger, Security bundle; API Platform by ADR) | Laravel (`laravel.md`: the current major on the studio PHP target, Eloquent as an Infrastructure adapter, Form Requests + policies, Sanctum, Redis queues + Horizon; PHPUnit 13 with Pest 5 optional) | Slim | none (PSR-15 pipeline only). The version numbers in the options are read from the framework file at question time. Slim and none are recorded with the line "php-engineer works from the official documentation; the studio has no reference for this framework".
 
 ## Architecture (Phase 2 step 9)
 **PHP architecture** (`php.md`), one `AskUserQuestion` each, recommendation first:
