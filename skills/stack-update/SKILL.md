@@ -1,7 +1,7 @@
 ---
 name: stack-update
 description: "Refreshes the stack knowledge base — checks the latest versions of every technology in stack-reference (official llms.txt, release pages, endoflife.date, npm/packagist/pkg.go.dev), rewrites the reference files with dated facts and sources, compares with the project's lockfiles, and proposes an upgrade plan. Run when references are older than 60 days or before planning upgrades."
-argument-hint: "[project | all | <tech: go|php|yii3|symfony|laravel|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling>] [--check-only]"
+argument-hint: "[project | all | <tech: go|php|yii3|symfony|laravel|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling|kubernetes|observability>] [--check-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, WebSearch, AskUserQuestion, Task
 ---
@@ -36,6 +36,8 @@ facts only from official sources, with a date and a link.
 | GraphQL | `spec.graphql.org`, GraphQL.js releases, gqlgen/Yoga/graphql-php releases |
 | three.js / Pixi / Babylon | GitHub releases + Migration Guide wiki, `pixijs.com/llms.txt`, `doc.babylonjs.com/llms.txt` |
 | PostgreSQL / Redis | `postgresql.org/docs`, `endoflife.date/postgresql`, `redis.io` |
+| Kubernetes / Helm | `kubernetes.io/releases` (source: `kubernetes/website` `data/releases/schedule.yaml`), `kubernetes.io/releases/version-skew-policy`, `dl.k8s.io/release/stable.txt`, `helm.sh/docs/topics/version_skew`, `helm.sh/blog` (Helm 3 EOL), GitHub tags `helm/helm`, `kubernetes-sigs/gateway-api`, `external-secrets/external-secrets`, `bitnami-labs/sealed-secrets`; the site pages are rendered from `kubernetes/website` and `helm/helm-www` — read those when the sites are unreachable |
+| Observability | `opentelemetry.io/status` (source: `opentelemetry.io` repo `data/instrumentation.yaml`), `opentelemetry.io/docs/languages/{go,php,js}`, `open-telemetry/semantic-conventions` tags, `open-telemetry/opentelemetry-collector-releases` tags, `prometheus.io/docs` (naming, clientlibs, exposition formats, LTS; source: `prometheus/docs`), GitHub `prometheus/prometheus` (CHANGELOG, LTS), `prometheus/client_golang`, `prometheus/client_js`, `PromPHP/prometheus_client_php`; registries: `go.opentelemetry.io/otel` (+ `sdk/log`, `contrib/…/otelhttp`), npm `@opentelemetry/api`, `@opentelemetry/sdk-node`, `@prometheus-io/client`, `pino`, packagist `open-telemetry/sdk`, `open-telemetry/opentelemetry-auto-*`, `promphp/prometheus_client_php`, `monolog/monolog` |
 | Security | `owasp.org/Top10`, ASVS releases, Mozilla guidelines |
 | Web platform | `web-features` Baseline, `web.dev` CWV, W3C WCAG |
 For each: latest stable version and date, next expected, EOL, key changes (breaking!), new best practices.

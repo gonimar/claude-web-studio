@@ -1,6 +1,6 @@
 ---
 name: setup-stack
-description: "Selects and pins the technology stack — project type, backend (Go/PHP-Yii3/Node), frontend (Angular/Vue/Nuxt), UI kit (Material/Taiga), API style (GraphQL default), game engine (three.js/Pixi/Phaser), database, tests, CI, layout — and writes technical-preferences.md with exact versions from the stack reference. Run once at project start or when the stack changes."
+description: "Selects and pins the technology stack — project type, backend (Go/PHP-Yii3/Node), frontend (Angular/Vue/Nuxt), UI kit (Material/Taiga), API style (GraphQL default), game engine (three.js/Pixi/Phaser), database, tests, CI, deploy target (compose-ssh/kubernetes), observability, layout — and writes technical-preferences.md with exact versions from the stack reference. Run once at project start or when the stack changes."
 argument-hint: "[type: site|spa|api|fullstack|game|game+backend] [--quick]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
@@ -30,12 +30,12 @@ One `AskUserQuestion` at a time, recommendation first. `--quick` takes every Rec
 4. **Frontend**: **Angular** (+ Material | Taiga UI) | **Vue / Nuxt** (+ UI kit) | vanilla TS (a game without a UI framework). For Angular, also the file naming style: v20+ without suffixes | classic.
 5. **Game** (type game): three.js (3D) | PixiJS (2D) | Phaser | Babylon; networking: none | server-authoritative.
 6. **Data**: PostgreSQL (+ Redis) — confirm; auth: sessions | OIDC | JWT+BFF.
-7. **Infra**: Docker + compose, GitHub Actions — confirm. Then the **deploy target** and its **delegate**: read `references/deploy-target.md` (contract `.claude/docs/deploy-target-contract.md`) and ask its one `AskUserQuestion` — `compose-ssh` Recommended for a single server; a shared host with its own proxy repository → also ask `Infra repo` and `Proxy config`.
+7. **Infra**: Docker + compose, GitHub Actions — confirm. Then the **deploy target** and its **delegate**: read `references/deploy-target.md` (contract `.claude/docs/deploy-target-contract.md`) and ask its one `AskUserQuestion` — `compose-ssh` Recommended for a single server; a shared host with its own proxy repository → also ask `Infra repo` and `Proxy config`; `kubernetes` → also its § Kubernetes questions (chart path, environments, secrets, routing). Then **observability**: read `references/observability.md` and ask its one question — the studio stack Recommended.
 8. **Layout**: monorepo (`apps/`, `packages/`) | current structure — show a proposal. Go backend → also `go_layout` from `references/interview-go.md` § Layout, the directory tree shown.
 9. **Architecture**: PHP chosen → read `references/interview-php.md` § Architecture, Go chosen → `references/interview-go.md` § Architecture; ask its questions in order, then show the resulting tree.
 
 ## Phase 3: Draft and write
-1. **Draft** the full `technical-preferences.md`: exact versions from the reference, naming conventions for the chosen languages (the Angular file style from Phase 2), performance budgets, and the `Deploy target` / `Deploy delegate` (plus `Infra repo` / `Proxy config`) fields. Show it whole.
+1. **Draft** the full `technical-preferences.md`: exact versions from the reference, naming conventions for the chosen languages (the Angular file style from Phase 2), performance budgets, the `Deploy target` / `Deploy delegate` (plus `Infra repo` / `Proxy config`; the `Kubernetes` sub-block, or `n/a`) and the `Observability` block with its four fields. Show it whole.
 2. **Ask** "May I write `.claude/docs/technical-preferences.md`?" as one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. The question also names, when they apply, the two `compose-ssh` files of step 4 and `production/stage.txt` → `specification` — only when the product spec exists **and** the current stage is `discovery` (a brownfield stage is never lowered).
 3. After the "write" answer: `touch .claude/.write-consent`.
 4. **Write** exactly the files the answer covered: `technical-preferences.md`; for `compose-ssh`, `cp .claude/docs/templates/deploy/compose-ssh.sh scripts/deploy/compose-ssh.sh` and create `docs/deploy/compose-ssh.md`; `production/stage.txt` when step 2 named it.

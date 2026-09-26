@@ -1,6 +1,6 @@
 ---
 name: adopt
-description: "Brownfield onboarding — detects the real stack of an existing project (Go/PHP/Node, Angular/Vue/Nuxt, GraphQL/REST, three.js), fills technical-preferences from the facts, audits existing artifacts against studio formats, merges settings/CLAUDE.md, and produces a numbered adoption plan. Run when installing the studio into an existing project."
+description: "Brownfield onboarding — detects the real stack of an existing project (Go/PHP/Node, Angular/Vue/Nuxt, GraphQL/REST, three.js, Kubernetes charts, OpenTelemetry/Prometheus), fills technical-preferences from the facts, audits existing artifacts against studio formats, merges settings/CLAUDE.md, and produces a numbered adoption plan. Run when installing the studio into an existing project."
 argument-hint: "[full | stack | docs | settings]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
@@ -34,7 +34,7 @@ A phase a mode skips is named as skipped in the result, never silently absent. I
 
 ## Phase 1: Stack detection (`stack` / `full`)
 Say "Scanning the project…", then:
-1. **Read the manifests and configs**: `go.mod` (Go version, router, pgx/sqlc, gqlgen), `composer.json` (PHP, `yiisoft/*`, Symfony/Laravel, graphql-php), `package.json` (Angular/Vue/Nuxt/Vite versions, TS, three, pixi, GraphQL clients), `angular.json`, `nuxt.config.*`, `vite.config.*`, `gqlgen.yml`, `*.graphql`, `*.graphqls`, `openapi*.yaml`, `compose*.yaml`, `Dockerfile*`, `.github/workflows/*`, existing deploy/advisor skills in `.claude/skills`.
+1. **Read the manifests and configs**: `go.mod` (Go version, router, pgx/sqlc, gqlgen), `composer.json` (PHP, `yiisoft/*`, Symfony/Laravel, graphql-php), `package.json` (Angular/Vue/Nuxt/Vite versions, TS, three, pixi, GraphQL clients), `angular.json`, `nuxt.config.*`, `vite.config.*`, `gqlgen.yml`, `*.graphql`, `*.graphqls`, `openapi*.yaml`, `compose*.yaml`, `Dockerfile*`, `.github/workflows/*`, `Chart.yaml`, `kustomization.yaml`, `deploy/k8s/**`, `charts/**` (deploy target `kubernetes`), the OpenTelemetry/Prometheus/logging packages in the manifests (`references/fill-technical-preferences.md` → Observability), existing deploy/advisor skills in `.claude/skills`.
 2. **Versions**: compare with `.claude/docs/stack-reference/index.md`. Outdated majors → a table "now → current → upgrade path (reference section)".
 3. **Go projects**: read `references/detect-go.md`; record `go_layout`, `go_architecture` (tree and dependency graph, never folder names alone), `go_router`, `graphql_models` and the findings it names. Restructuring is a plan item (`/refactor layout`), never done here.
 4. **PHP projects**: read `references/detect-php.md`; record the PHP version, `php_framework`, `php_architecture` (tree and dependency direction), `php_static_analysis`, `php_cs_tool`, deptrac presence and the findings it names. Moving to `layered` or another framework is a plan item (`/refactor layout` / `/refactor framework --dry-run`), never done here.

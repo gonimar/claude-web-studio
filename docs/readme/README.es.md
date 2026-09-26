@@ -10,7 +10,7 @@ marco para probar a los propios agentes. Sirve tanto para aplicaciones web como 
 
 Stack: Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL primero, REST donde encaje · PostgreSQL 18 · three.js r185 /
-PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA.
+PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · OWASP Top 10:2025 · WCAG 2.2 AA.
 
 El idioma de conversación se elige por proyecto (`/init` lo pregunta); el código, los
 identificadores y los mensajes de commit se mantienen en inglés.

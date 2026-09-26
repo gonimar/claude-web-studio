@@ -1,5 +1,5 @@
 ---
-updated: 2026-09-18
+updated: 2026-09-26
 refresh: /stack-update
 ---
 # Stack Reference — index
@@ -31,6 +31,8 @@ not a claim about every row. Agents read the relevant file before working. "Late
 | PixiJS / Babylon.js | 8.x / 8.x | — | [threejs-webgames.md](threejs-webgames.md) | 2026-09-05 | https://pixijs.com/llms.txt, https://doc.babylonjs.com/llms.txt |
 | PostgreSQL / Redis | 18 / 8 | PG 18.6, **19 Beta 3** (2026-08-13, GA ~Sep/Oct 2026); Redis **8.10** (2026-07-29), Valkey **9.1** (2026-09-01) | [database.md](database.md) | 2026-09-10 | none — postgresql.org/docs |
 | Hono / NestJS | 4.x / 11.x | — | [typescript.md](typescript.md) | 2026-09-05 | https://hono.dev/llms.txt, https://docs.nestjs.com/llms.txt |
+| Kubernetes / Helm | 1.37 (2026-08-26); 1.34–1.37 supported, 1.34 EOL 2026-10-27; **Helm 4.3** (Helm 3: final feature release 3.22, security fixes end 2027-02-10); Gateway API 1.6 (`HTTPRoute`), External Secrets 2.11 / Sealed Secrets 0.40 | v1.37.1 / 1.36.5 / 1.35.9 / 1.34.12 (2026-09-23, dl.k8s.io + tags); helm v4.3.0, v3.22.0 (2026-09-09, tags) | [kubernetes.md](kubernetes.md) | 2026-09-26 | not checked — kubernetes.io, helm.sh unreachable on the date; facts from kubernetes/website, helm/helm-www |
+| Observability (OpenTelemetry / Prometheus) | OTel Go SDK 1.46 (logs RC 1.47), JS api 1.9 / SDK 2.11 (experimental 0.222), PHP SDK 1.15; semconv 1.44; Collector 0.161; Prometheus 3.15 (LTS 3.13); client_golang 1.24, `@prometheus-io/client` 0.16, promphp 2.15; slog / monolog 3.12 / pino 10 | otel v1.46.0 (2026-08-25, proxy.golang.org); `@opentelemetry/sdk-node` 0.222.0 (2026-08-31, npm); `open-telemetry/sdk` 1.15.0 (2026-07-14, packagist); prometheus v3.15.0 (2026-09-25, tag) | [observability.md](observability.md) | 2026-09-26 | not checked — opentelemetry.io, prometheus.io unreachable on the date; facts from the source repositories |
 | OWASP Top 10 | 2025 (final 2026-01) | confirmed current, categories unchanged (2026-09-10, owasp.org/Top10/2025) | [security-standards.md](security-standards.md) | 2026-09-10 | none — owasp.org/Top10/2025 |
 | WCAG | 2.2 AA | no newer AA revision (2026-09-10) | [web-platform.md](web-platform.md) | 2026-09-10 | none — w3.org/TR/WCAG22 |
 | Claude Code | docs | — | — | — | https://code.claude.com/docs/llms.txt |

@@ -27,11 +27,13 @@ lint → typecheck → unit → build → integration (services: postgres, redis
 - Small servers: compose stacks from the repository (optionally through a container-platform deploy skill), an env file outside git, a migrate service before the app, health-check dependencies (`depends_on: condition: service_healthy`).
 - Strategy: a built image tagged `sha`/`vX.Y.Z`; rollback = redeploy the previous tag; backward-compatible migrations (expand/contract).
 - Zero-downtime when needed: two replicas behind the proxy or Caddy graceful reload.
+- Kubernetes (`Deploy target: kubernetes`): the deploy shape, versions and rollout/rollback commands are in `kubernetes.md`.
 
 ## Observability
+Versions, the studio default set, idioms per language, security notes and the review checklist: **`observability.md`**. The summary:
 - Logs: JSON to stdout, collected by Loki/Vector (or a simple log viewer on small servers); `request_id` end to end.
-- Metrics: `/metrics` for Prometheus (Go `prometheus/client_golang`, PHP via `promphp`), Grafana dashboards; RED metrics (rate, errors, duration) per service.
-- Tracing: OpenTelemetry SDK with more than two services; export to Tempo/Jaeger.
+- Metrics: `/metrics` for Prometheus (Go `prometheus/client_golang`, PHP via `promphp`, Node `@prometheus-io/client`) on the internal listener, Grafana dashboards; RED metrics (rate, errors, duration) per service.
+- Tracing: OpenTelemetry SDK from the first service, OTLP/HTTP to a Collector; export to Tempo/Jaeger from there.
 - Health: `/healthz` (liveness) and `/readyz` (dependencies), no secrets in the response.
 - Alerts: error rate, p95 latency, disk, certificate expiry, queue lag.
 

@@ -10,6 +10,10 @@ paths: ["**/*.php"]
 - No logic in controllers, actions or config; schema changes only as migration files (`rules/database.md`).
 - Errors: domain exceptions (incl. a domain `NotFoundException`) mapped to RFC 9457 in the error-handler middleware.
 - Parameterised SQL; escaped output; CSRF on mutations; argon2id passwords.
+- Logs: Monolog `StreamHandler('php://stdout')` + `JsonFormatter` + `PsrLogMessageProcessor`, one event per line with `time`, `level`, `msg`, `service`, `env`, `trace_id`, `span_id`, `request_id` (a processor reads the current span); PSR-3 `{placeholders}` with context, never interpolated strings; no PII, tokens or bodies.
+- Metrics: `promphp/prometheus_client_php` with the adapter recorded in `metrics` (APCu | Redis), `/metrics` on a route the proxy does not expose; names `<app>_<what>_<unit>[_total]`, histograms in seconds; labels from a bounded set — never ids, paths, IPs.
+- Tracing: `open-telemetry/sdk` + `exporter-otlp` (OTLP/HTTP to the Collector), auto-instrumentation `opentelemetry-auto-psr15`/`psr18` (plus the framework package where it is ≥ 1.0), a span per use case and job; `traceparent` propagated on every outgoing call.
+- `/healthz` returns without touching a dependency; `/readyz` checks DB, cache and migrations; neither returns secrets or versions. Details and the review checklist: `.claude/docs/stack-reference/observability.md`.
 - Tests per `rules/tests.md` and `php.md` "Tests by layer"; `phpunit --filter` on the classes touched after each change, `composer ci` once before the result (`ci-full` with `composer audit` once per story).
 - The recorded analyser (`php_static_analysis`) clean at its level on the lines the story's diff touches — a finding the story introduces is fixed in the same story; one that predates the branch (the same line red on `<base>`) is reported under *Outside the brief* (CLAUDE.md principle 9), never fixed in passing. Formatting is the post-edit hook's job.
 - Reference: `.claude/docs/stack-reference/php.md`, then the framework file.

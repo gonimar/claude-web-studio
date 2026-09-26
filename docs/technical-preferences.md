@@ -51,7 +51,16 @@
 - **Deploy target**: [compose-ssh | kubernetes | cloud:<name> | portainer | manual]  **Environments**: [dev, staging, prod]
 - **Deploy delegate**: [agent <name> | script <path> | none] — see `deploy-target-contract.md`
 - **Infra repo**: [path or URL of the repository holding the proxy/host config | none]  **Proxy config**: [file inside it, e.g. caddy/Caddyfile | none]
-- **Observability**: [JSON logs, /healthz, Prometheus metrics, OpenTelemetry]
+- **Kubernetes** (only when the deploy target is `kubernetes` — `stack-reference/kubernetes.md`; otherwise `n/a`):
+  - **k8s_chart_path**: [deploy/k8s/charts/<service> (one chart per service — recommended) | charts/<service> (single-service repository)]
+  - **k8s_environments**: [staging, prod — `values-<env>.yaml` per chart, one namespace per environment; the names match **Environments** above]
+  - **k8s_secrets**: [external-secrets (ExternalSecret → the owner's secret manager — recommended) | sealed-secrets (kubeseal, no secret manager) — with the reason]
+  - **k8s_routing**: [gateway-api (HTTPRoute — recommended; Ingress is frozen) | ingress — `<reason>`, ADR-NNNN]
+- **Observability**: [studio stack (recommended: JSON logs + Prometheus /metrics + OpenTelemetry traces + /healthz /readyz — `stack-reference/observability.md`) | minimal (JSON logs + /healthz /readyz only — a PoC or a static site; `metrics`/`tracing` below become `none`) | custom — `<what and why>`]
+  - **log_format**: [json — Go `log/slog` JSONHandler | PHP monolog JsonFormatter | Node pino; keys `time`, `level`, `msg`, `service`, `env`, `trace_id`, `span_id`, `request_id`]
+  - **metrics**: [prometheus — Go `client_golang` | PHP `promphp/prometheus_client_php` (APCu | Redis adapter) | Node `@prometheus-io/client`; `/metrics` on the internal listener | none]
+  - **tracing**: [opentelemetry — OTLP/HTTP to a Collector; sampler `parentbased_always_on` (dev/staging), `parentbased_traceidratio` `<ratio>` (prod) | none]
+  - **health_endpoints**: [/healthz (liveness, process only) + /readyz (readiness: db, cache, migrations)]
 
 ## Layout
 - **backend_root**: [./backend | ./ | …]
