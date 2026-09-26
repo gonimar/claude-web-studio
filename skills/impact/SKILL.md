@@ -32,7 +32,7 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
    - **product** — user-visible behaviour absent from the feature spec; a changed acceptance criterion; scope the product spec lists as out.
    - **routine** — none of the above: a change inside existing decisions and surfaces.
 2. **Render the table** (class · trigger · evidence) in the chat message before anything else happens (rule 7).
-3. **`--classify-only`**: stop after the table with the verdict `CLASSIFIED (<classes>)` and go to the next step. No `Task` is spawned. Useful when the user only wants to know whether a director must look.
+3. **`--classify-only`**: stop after the table with the verdict `CLASSIFIED (<classes>)` and go to the closing Next-step question; Phase 3 does not run and no `Task` is spawned. Useful when the user only wants to know whether a director must look.
 
 ## Phase 3: Verification by the class owner
 1. **Review mode scopes the step** (review-workflow.md):

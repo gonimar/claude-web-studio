@@ -20,7 +20,7 @@ A studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode; 
 `/web-studio:<command>` in plugin mode and `/<command>` in copy mode (coordination-rules § Subagents).
 
 ## Phase 1: Collect
-1. **Scope from the argument**: `adrs` → the ADR checks only; `contracts` → the contract and what it must cover; `code` → Phase 2 step 6; `full` or none → Phase 2 steps 1–5.
+1. **Scope from the argument**: `adrs` → the ADR checks only; `contracts` → the contract and what it must cover; `code` → Phase 2 steps 1–5 and step 6 (the repository checks come on top of the document checks, as before); `full` or none → Phase 2 steps 1–5.
 2. **Read**: all `docs/architecture/adr-*.md`; `docs/architecture/api/*` and the schema file at `api_contract_path` (technical-preferences; default `api/schema.graphqls` for a Go module, `docs/architecture/api/schema.graphql` otherwise); `data-model.md`; `threat-model.md`; `test-strategy.md`; `docs/specs/features/*.md`; `technical-preferences.md`; `stack-reference/index.md` (and `go.md` / `php.md` in `code` mode).
 
 ## Phase 2: Checks

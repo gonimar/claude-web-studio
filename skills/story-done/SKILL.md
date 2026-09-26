@@ -44,14 +44,18 @@ Only on `DONE`.
    - **Roadmap line**: tick `[x]`, add `🔗 [PR #N](url)` inline (same rule as the ID: a file-relative link, not a `## Links` reference-definition), and refresh the `Updated:` line.
    - **`## Docs` → *production/stories/* block**: the story's row becomes `✅ … Done · PR #N`.
 2. Before editing, count `grep -c "⏱" production/roadmap.md` and `grep -c "🔗 \[PR #" production/roadmap.md`.
-3. After the "yes": `touch .claude/.write-consent`; make the edits.
-4. **Prove the edit instead of assuming it**: run the two counts again and re-read the story's row in the `## Docs` block. A story closed without its `⏱` and `🔗 PR` in **both** places is an unfinished DoD item, printed as such in the report with the numbers quoted: an answer can carry numbers that never reached the file.
-5. `git commit -m "docs: close S-NNN — Done, PR #N"`, then `git push`, so the PR carries the close commit.
-6. No PR yet and the answer was "close and open the PR" → `gh pr create`.
+3. After the "yes": `touch .claude/.write-consent`. Then **get the PR number before editing**, because the roadmap link, the `## Docs` row and the commit message all carry it:
+   - a PR exists (the draft `/dev-story` opened, or one opened by hand) → `gh pr view --json number,url`;
+   - no PR and the answer was "close and open the PR" → `gh pr create --fill` now (it needs only the pushed branch), then read its number and URL;
+   - "close without the PR" → no PR number anywhere: the roadmap line gets no `🔗`, the `## Docs` row reads `✅ … Done`, the commit is `docs: close S-NNN — Done`.
+   Then make the edits.
+4. **Prove the edit instead of assuming it**: run the two counts again and re-read the story's row in the `## Docs` block. A story closed with a PR but without its `⏱` and `🔗 PR` in **both** places is an unfinished DoD item, printed as such in the report with the numbers quoted: an answer can carry numbers that never reached the file.
+5. `git commit -m "docs: close S-NNN — Done, PR #N"` (without the PR: `docs: close S-NNN — Done`), then `git push`, so the PR carries the close commit.
 
 ## Phase 5: Merge (`.claude/docs/git-workflow.md`, step "Merge")
 Only on `DONE` and only after Phase 4 is finished.
-1. **Wait for CI** on the PR's latest commit (see above). Red → `NOT DONE (CI red)`; nothing is merged.
+No PR ("close without the PR", or no `gh` and none opened by hand) → Phase 5 is skipped: say how to finish later — open the PR, then re-run `/story-done S-NNN`, which goes straight to the merge question for a story already Done.
+1. **Wait for CI** on the PR's latest commit (see above). Red → `NOT DONE (CI red)`; nothing is merged. The Phase 4 close stays as it is — the story met its DoD on green CI in Phase 3, and a red run on the close commit is a new failure of the branch, not a reopened story. The report says so in one line ("closed, not merged: CI red on <commit>"); after the fix, re-running `/story-done S-NNN` goes straight to this phase.
 2. **Merge gate**, a separate `AskUserQuestion`: "PR #N is open and CI is green. Merge it into `<default>` and delete the branch now?" — merge now (Recommended when CI is green) · leave the PR open.
 3. "yes":
    1. A draft PR (opened by `/dev-story` Phase 6) → `gh pr ready <n>` first.

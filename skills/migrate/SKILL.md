@@ -49,7 +49,7 @@ markers and links change. `/adopt` classifies the gap, this skill closes it.
 ## Phase 3: Dry run
 1. **Render each converted document in the chat message** (rule 7: a roadmap as its list, a criteria table as a table).
 2. **Summary line per file**: `N lines → M lines · K IDs kept · sections added: … · questions: 0`.
-3. **Compare IDs and links before and after.** Every ID of the original must still be there: `grep -oE '\b[A-Z]+-[0-9]+\b' <file> | sort -u` on the original and on the converted files; name any missing ID and fix the conversion before the write gate. IDs the migration introduces (`D-NN`, `I-NNN`) are listed separately.
+3. **Compare IDs and links before and after.** Every ID of the original must still be there: `grep -oE '\b[A-Z]{1,4}-[0-9]+\b' <file> | sort -u` on the original and on the converted files; name any missing ID and fix the conversion before the write gate. IDs the migration introduces (`D-NN`, `I-NNN`) are listed separately.
 4. `--dry-run` stops here with the verdict `DRY RUN (N documents ready, M questions)`.
 
 ## Phase 4: Write (one type per gate)

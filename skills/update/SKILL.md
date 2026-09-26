@@ -35,13 +35,14 @@ With `--dry-run`, the plugin update command is shown and not run, and the skill 
    - Take the install scope (`user` | `project` | `local`) from this project's row.
    - Update in that scope: `claude plugin update web-studio --scope <scope>` (`-y` as well when the session is non-interactive). The bare command assumes `user` and fails with `Plugin "web-studio" is not installed at scope user` in every project installed with `--scope local`.
    - If the scope cannot be read, print the candidates and let the owner choose. Never guess.
+   - Running `/update` is the consent for this command: it changes only the plugin's own install, never a file of the project. The project's files change only after the Phase 3 gate.
    - The update brings agents/skills/hooks. Then compare the plugin's `docs/` and `rules/` with `.claude/docs` and `.claude/rules` (`diff -rq`). List the files that differ and whether each difference is a local edit (present only in the project) or an upstream update.
 2. **Copy mode**: `install.sh <project> --dry-run`, and the same diff for locally edited files.
 3. **Template drift.** For every file under `docs/templates/` that this update changes or adds, list the project documents of that type (`rules/docs-format.md` table) whose structure predates it: fewer second-level sections than the template, a roadmap without the `roadmap-format:` header, story cards without a criteria table. Show a table "document → template → drift". These documents are never edited here; they are `/migrate`'s work.
 
 ## Phase 3: Apply
 1. **Print the locally edited files** before the question: present only in the project, or differing from the plugin in a way the plugin's own history does not explain (e.g. a project column added to `agent-roster.md`).
-2. **Ask** one `AskUserQuestion`: "Update v[X] → v[Y]? Locally edited files [list] would be overwritten — keep copies in `.claude/local-overrides/`?" The options always include "keep copies in `.claude/local-overrides/` and re-apply after seeding". The skill never decides on its own that a local edit "is duplicated elsewhere" and may be dropped.
+2. **Ask** one `AskUserQuestion`: "Seed v[Y] into the project (v[X] files now)? Locally edited files [list] would be overwritten — keep copies in `.claude/local-overrides/`?" The options always include "keep copies in `.claude/local-overrides/` and re-apply after seeding". The skill never decides on its own that a local edit "is duplicated elsewhere" and may be dropped.
 3. **Re-read the installed version** after "yes", before copying anything. The gate may have stayed open for a long time and the plugin may have been updated meanwhile; seeding from the session's cache would then stamp `.claude/.web-studio-version` with a version that is no longer installed.
    - Plugin mode: `claude plugin list --json` again, selecting this project's row by `projectPath` exactly as Phase 1 did. Copy mode: the kit's `.claude-plugin/plugin.json`.
    - Compare it with the version this session's skills come from (the last path segment of the skill's base directory or of the "Plugin root:" line).

@@ -12,11 +12,11 @@ agent: devops-lead
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes". After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). A delegate never asks the user itself: the consent is collected here and passed on as `--confirmed` (`docs/deploy-target-contract.md` § 5).
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes". After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). A delegate never asks the user itself: the consent is collected here and passed on as `--confirmed` (`.claude/docs/deploy-target-contract.md` § 5).
 
-Prerequisites & secrets per `docs/deploy-target-contract.md`: verify registry access, exact image names and the stack method before the first mutation; secrets never through the chat — offer the env/file channel yourself; a refused path stays refused.
+Prerequisites & secrets per `.claude/docs/deploy-target-contract.md`: verify registry access, exact image names and the stack method before the first mutation; secrets never through the chat — offer the env/file channel yourself; a refused path stays refused.
 
-**Calling the delegate** (`docs/deploy-target-contract.md` § 4), for any verb below (`deploy <tag>`, `rollback [tag]`, `logs`):
+**Calling the delegate** (`.claude/docs/deploy-target-contract.md` § 4), for any verb below (`deploy <tag>`, `rollback [tag]`, `logs`):
 - `agent <name>` → `Task` to that agent with the prompt `<verb> <args> --confirmed`;
 - `script <path>` → `Bash` `<path> <verb> <args> --confirmed`;
 - `none` / `manual` → the runbook steps for the user / `devops-engineer`.
@@ -28,7 +28,7 @@ Prerequisites & secrets per `docs/deploy-target-contract.md`: verify registry ac
 1. **Release file**: `production/releases/vX.Y.Z.md`. Missing → stop: `BLOCKED (no release file — run /release-checklist vX.Y.Z)`, nothing written.
 2. **Artefacts**: the tag exists; CI is green on the tag (`gh run`); the image is built and available.
 3. **Runbook**: `docs/ops/deploy.md`.
-4. **Delegate**: the deploy target and delegate from `technical-preferences.md` (Infrastructure) and `docs/deploy/<target>.md` — contract: `docs/deploy-target-contract.md`. A delegate declared but not found (no agent file, no script) → `BLOCKED (delegate <name> not found — fix technical-preferences or run /setup-stack)`, never a guess. A companion slash command alone (`/<kit> deploy`) is not a delegate: skills cannot call skills.
+4. **Delegate**: the deploy target and delegate from `technical-preferences.md` (Infrastructure) and `docs/deploy/<target>.md` — contract: `.claude/docs/deploy-target-contract.md`. A delegate declared but not found (no agent file, no script) → `BLOCKED (delegate <name> not found — fix technical-preferences or run /setup-stack)`, never a guess. A companion slash command alone (`/<kit> deploy`) is not a delegate: skills cannot call skills.
 With `rollback`, steps 1–2 apply to the target tag, which is already released.
 
 ## Phase 2: Plan
