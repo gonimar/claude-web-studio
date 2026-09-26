@@ -13,7 +13,7 @@ model: haiku
 
 Read-only. Not a full audit (that is `/adopt`), a quick orientation. Reply in the project conversation language.
 
-The `context:` line of the frontmatter is evaluated by the harness before the skill starts (the `!` prefix), not by the skill: `Bash` is not in `allowed-tools`, and help runs no command of its own — the stage, review mode, studio version, reference date and newest adoption plan arrive as text in the context. Each field falls back to `not set` / `lean` / `?` / `none` when the file is absent; the pipelines are wrapped in a subshell and `grep .` so that an empty result, not `tail`'s exit status, triggers the fallback.
+The frontmatter `context:` line is a convenience, not a dependency. Its shell line falls back to `not set` / `lean` / `?` / `none` per field when a file is absent (the pipelines are wrapped in a subshell and `grep .` so that an empty result, not `tail`'s exit status, triggers the fallback), but the skill never relies on that text being there: Phase 1 step 3 reads the stack-reference date, the newest adoption plan, the roadmap's first open item, the stage and the review mode itself with `Read`/`Glob`. `Bash` is not in `allowed-tools`, and help runs no command of its own.
 
 Names used below:
 - `<plugin root>` is the path on the "Plugin root:" line of the session-start context. That line is printed only in plugin mode; without it the project runs in copy mode.
@@ -45,6 +45,7 @@ Verdict for both: `READY`. End with a text line, not a question.
 ## Phase 1: Catalog
 1. Read `.claude/docs/workflow-catalog.yaml`: phases, steps, `artifact.glob`. Missing → the studio is not initialised: answer "run `/init`" and stop.
 2. `technical-preferences.md` whose `**Type**` field is still `[TO BE CONFIGURED]`, on a project that has code → the studio was initialised but not adopted: NEXT is `/adopt full`. Check the field itself, never a grep of the whole file: the template's header comment names the placeholder, and every configured project keeps that line.
+3. **Reads of its own** (`Read`/`Glob`, no command): `production/stage.txt` and `production/review-mode.txt`; the `updated:` line of `.claude/docs/stack-reference/index.md` (absent → `?`); the newest `docs/adoption-plan-*.md` by name (none → `none`); and, when `production/roadmap.md` exists, its first open `- [ ]` line and the count of open lines — the roadmap template promises "`/help` reads the first open item". That line is a NEXT candidate (Phase 2 step 7) and is always printed in the report as `Roadmap: N open — first: <line>`.
 
 ## Phase 2: Where we are
 1. **Stage** from `production/stage.txt`; otherwise infer it from artefacts (the first phase with an unmet required step).
@@ -60,6 +61,7 @@ Verdict for both: `READY`. End with a text line, not a question.
 6. **NEXT overrides.**
    - `production/findings.md` has open BLOCKING findings without a story → NEXT is `/create-stories`; they take precedence over the next feature.
    - Game project (technical-preferences type game / game+backend): when every story of the first feature is Done and `production/releases/gate-prototype.md` is missing → NEXT is `/game-concept gate`, not the next feature.
+7. **Roadmap.** When no unmet required step, no open adoption-plan item (step 5) and no override (step 6) claims NEXT, the roadmap's first open line from Phase 1 step 3 is NEXT: `/dev-story S-NNN` for a story line, the line's own command otherwise (a `⛔ [D-NN]` marker → `/backlog review`/the decision named, never the blocked story).
 
 ## Phase 3: Uncatalogued skills
 1. Glob `.claude/skills/*/SKILL.md` (copy mode) and `<plugin root>/skills/*/SKILL.md`; compare `name:` with the catalog's `command:`. Show up to 8 relevant to the phase as "Also available".
@@ -72,6 +74,7 @@ Stage: [label] ([N/M] required done)
 ⬜ /product-spec — no docs/specs/product-spec.md   ← NEXT
 🔁 /feature-spec — 2 specs exist
 Adoption plan: 3 open — first: /threat-model (docs/adoption-plan-2026-09-08.md #2)
+Roadmap: 12 open — first: S-012 · Repository layer (production/roadmap.md)
 Next: /product-spec  (why: nothing to check features against without it)
 Also available: /stack-update, /team-feature …
 Docs: /help commands (every command) · /help guide (what to run in every situation) · /help guide 10.7 (one section)

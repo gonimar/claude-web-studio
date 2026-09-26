@@ -1,10 +1,10 @@
 # Deploy target contract
 
 How `/deploy`, `/team-release`, `/hotfix` and `/incident` hand the live-stack mutation to a
-deployment delegate. A skill cannot call another skill, so a companion kit that only ships a
-slash command (`/portainer deploy`) is **not** a usable delegate — it must also provide one of the
-two forms below. Without a declared delegate the pipeline produces manual runbook steps, which
-is a valid, explicit outcome.
+deployment delegate. A companion kit that only ships a slash command (`/portainer deploy`) is
+**not** a usable delegate: `/deploy` does not list `Skill` in its `allowed-tools`, so it cannot run
+a slash command — the kit must also provide one of the two forms below. Without a declared
+delegate the pipeline produces manual runbook steps, which is a valid, explicit outcome.
 
 ## 1. Declaration (`technical-preferences.md` → Infrastructure)
 ```
@@ -34,12 +34,18 @@ installed kit's docs). The roster's Tier 0 row lists the delegate.
 | `deploy` | `<tag> [--env <name>]` | yes | `DEPLOYED <tag>` · `FAILED (reason, state)` |
 | `rollback` | `[tag] [--env <name>]` (default: previous release) | yes | `ROLLED BACK <tag>` · `FAILED (reason)` |
 | `logs` | `[service] [--since <duration>] [--env <name>]` | no | `LOGS (n lines)` |
-
-`--env <name>` names the environment when the target has several (`/deploy --env`); a delegate that serves one environment ignores it (the reference `compose-ssh.sh` does), one that serves several must honour it and fail on an unknown name.
 | `env` (optional) | `list` · `set KEY` (value from stdin) | set: yes | `ENV (…)`; absent → `NOT SUPPORTED` |
 | `backup` (optional) | — | no | `BACKUP <id>` ; absent → `NOT SUPPORTED` |
+
 Every verb returns evidence, not only the verdict: container/service list, image tags, the smoke
 request result. Unsupported optional verbs answer `NOT SUPPORTED`, never silently succeed.
+
+`--env <name>` names the environment when the target has several (`/deploy --env`; the names come
+from `docs/ops/deploy.md` → Environments and `docs/deploy/<target>.md`, never from a fixed list). A
+delegate that serves one environment strips the two tokens `--env <name>` from every verb's arguments
+and ignores them — the reference `compose-ssh.sh` records the name in `ENV_NAME`, echoes it as
+evidence and never lets it become a tag or a service name; one that serves several must honour it and
+fail on an unknown name.
 
 ## 4. Invocation forms
 - **Agent**: `.claude/agents/<target>-ops.md` (kit or project) with frontmatter `deploy-target: <target>`

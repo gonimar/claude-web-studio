@@ -12,7 +12,7 @@ agent: product-director
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Templates (`.claude/docs/templates/`): `story.md`, `roadmap.md`, `deploy-runbook.md`, `findings.md`. Files are written only after "May I write?" (Phase 4).
+Templates (`.claude/docs/templates/`): `story.md`, `roadmap.md`, `deploy-runbook.md`, `findings.md`. Files are written only after "May I write?" (Phase 4). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 This skill spawns no subagent: the criteria it slices were reviewed with the feature spec (`/feature-spec` Phase 3) and the test level per criterion is checked again by `/qa-plan`; slicing is the parent's own work, so `Task` is not among its tools.
 
@@ -50,7 +50,7 @@ This skill spawns no subagent: the criteria it slices were reviewed with the fea
 5. **Findings**: set `story: S-NNN` on each finding the stories cover.
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: stories S-NNN..S-MMM`, staging exactly the written files — the story files, the roadmap lines and the `story:` fields set in `production/findings.md`.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: stories S-NNN..S-MMM`, staging exactly the written files — the story files, the roadmap lines and the `story:` fields set in `production/findings.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/create-stories Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit.

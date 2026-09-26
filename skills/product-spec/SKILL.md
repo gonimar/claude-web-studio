@@ -13,7 +13,7 @@ agent: product-director
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 Template: `.claude/docs/templates/product-spec.md` (sections 1–10). Section by section: questions → section draft → edits → next.
-The file is written once at the end (or per section, the user's choice), always after "May I write?".
+The file is written once at the end (or per section, the user's choice), always after "May I write?". In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Context
 1. **Read** `docs/specs/concept-brief.md` (if any), `technical-preferences.md`, `production/roadmap.md` and `production/stage.txt`.
@@ -39,7 +39,7 @@ For each section, in template order:
 2. **CONCERNS/FAIL**: show the findings and propose edits. Never advance the stage automatically.
 3. **Re-review the edits.** The edits go back to the same verifier (same contract, a short answer to one question: "do the findings still stand?"). The document's verdict is the verdict of the **last** review, not the first one with a list of fixes claimed against it: a spec rewritten "according to all eight comments" has been checked by nobody. When the user chooses to skip the second review, say so plainly and record the verdict as `FAIL (edits unverified)`.
 4. **The skill verdict follows the last review's.** PASS → `APPROVED`. CONCERNS → `APPROVED` with the concerns listed in the verdict line, or `NEEDS REVISION` when a concern is on §1–3 (goals, users, scope — a concern there changes what every later section is about). FAIL, including `FAIL (edits unverified)`, → `NEEDS REVISION`, the qualifier carried over. No review ran (`solo`, or `lean` with nothing to review) → `APPROVED`, and the verdict line says "no review".
-5. **Open items reach `production/findings.md`.** For every BLOCKING and HIGH item of the verdict, one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `ARCH-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs via `/create-stories` (a hand-off: this skill does not run it — the closing question names it) · keep it in the spec only. Write the row only after the "record" answer; that answer is the write consent, so `touch .claude/.write-consent` first (rule 7). A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line: `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, and nobody reads §8 of the spec for open decisions.
+5. **Open items reach `production/findings.md`.** For every BLOCKING and HIGH item of the verdict, one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `ARCH-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs — through `/feature-spec F-NNN` for the first feature the item touches (a hand-off: this skill does not run it; the stories come from `/create-stories` once that spec has acceptance criteria, and `/create-stories` blocks without a feature spec with criteria — the closing question names `/feature-spec F-NNN` when this option was chosen) · keep it in the spec only. Write the row only after the "record" answer; that answer is the write consent, so `touch .claude/.write-consent` first (rule 7). Record the gate before asking — `<hooks>session-state.sh set Gate "/product-spec Phase 3: record ARCH-NNN?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`). A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line: `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, and nobody reads §8 of the spec for open decisions.
 
 ## Phase 4: Write
 1. Render the draft (or the diff) in the chat.
@@ -48,11 +48,11 @@ For each section, in template order:
 4. **Stage.** Propose `production/stage.txt` = `specification` **only when the current stage is earlier than `specification` in the catalog**. On a project already in `build`/`operate` the stage is never proposed backwards.
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: product spec`, staging exactly the written files — `docs/specs/product-spec.md`, the `production/findings.md` rows recorded in Phase 3 and `production/stage.txt` when it changed; a spec written per section gets one gate, after the last section.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: product spec`, staging exactly the written files — `docs/specs/product-spec.md`, the `production/findings.md` rows recorded in Phase 3 and `production/stage.txt` when it changed; a spec written per section gets one gate, after the last section. Record the gate before asking — `<hooks>session-state.sh set Gate "/product-spec Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit.
 
 Nothing is committed without the answer.
 
-Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/feature-spec` for the Must features (Recommended) · `/game-concept` (game) · revise the spec.
+Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/feature-spec` for the Must features (Recommended) · `/game-concept` (game) · revise the spec. When Phase 3 step 5 chose story stubs for an item, the first option reads `/feature-spec F-NNN` for that feature (Recommended) and says that `/create-stories` follows once the spec has acceptance criteria — it blocks without them.

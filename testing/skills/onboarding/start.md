@@ -31,8 +31,8 @@ Onboarding for a new project: detect → "where are you" → type/review mode �
 - [ ] mode read before asking · [ ] not re-asked · [ ] file not overwritten
 
 ### 7. Documents lane (commit after write)
-**Fixture**: review mode and stage written, `production/roadmap.md` created in Phase 4, HEAD is `feat/S-001-…`. **Expected**: right after the write one commit gate offers `docs: initialise web studio` staging exactly those files, names the current branch and asks where it belongs (switch to the default branch Recommended · commit here · leave uncommitted); a merged `.claude/settings.json` is named for the chore lane, never staged in the `docs:` commit; nothing is committed without the answer.
-- [ ] commit gate follows the write · [ ] exact files staged · [ ] settings.json kept out of the docs commit
+**Fixture**: review mode and stage written, `production/roadmap.md` created in Phase 4, HEAD is `feat/S-001-…`. **Expected**: right after the write one commit gate offers `docs: initialise web studio` staging exactly those files, names the current branch and asks where it belongs (switch to the default branch Recommended · commit here · leave uncommitted); `Gate: /start Phase 5: commit?` is recorded in session-state before the question and cleared after the answer; a merged `.claude/settings.json` is named for the chore lane, never staged in the `docs:` commit; nothing is committed without the answer; `Bash` is used for the consent touch after the Phase 3 write answer and for this commit and its gate record, nowhere else.
+- [ ] commit gate follows the write · [ ] exact files staged · [ ] settings.json kept out of the docs commit · [ ] gate recorded and cleared · [ ] Bash uses named
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

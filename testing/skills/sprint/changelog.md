@@ -27,8 +27,12 @@ CHANGELOG from Conventional Commits.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] gate and hand-off are `AskUserQuestion`s, not text
 
 ### 6. Commit gate
-**Fixture**: `CHANGELOG.md` written for 1.2.0 while HEAD is `feat/S-040-…`. **Expected**: one `docs: changelog v1.2.0` commit gate staging exactly `CHANGELOG.md` that names the story branch and offers: switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing committed without the answer; no other file staged.
-- [ ] commit gate after the write · [ ] branch named and choice offered · [ ] only CHANGELOG.md staged
+**Fixture**: `CHANGELOG.md` written for 1.2.0 while HEAD is `feat/S-040-…`. **Expected**: one `docs: changelog v1.2.0` commit gate staging exactly `CHANGELOG.md`, recorded as `Gate "/changelog Phase 3: commit?"` through `session-state.sh` before it is asked and cleared to `—` after the answer, that names the story branch and offers: switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing committed without the answer; no other file staged.
+- [ ] commit gate after the write · [ ] branch named and choice offered · [ ] only CHANGELOG.md staged · [ ] gate recorded before, cleared after
+
+### 7. Commit gate on a hotfix branch
+**Fixture**: `/hotfix` runs `/changelog 1.4.3` through the `Skill` tool while HEAD is `hotfix/login-500`. **Expected**: the commit gate names the hotfix branch and offers: commit here (Recommended — the patch tag `v1.4.3` is created on the hotfix branch and must contain this commit; the backport PR carries it to `<default>`) · switch to the default branch and commit there (with the note that the tag would not contain the entry) · leave uncommitted; on "commit here" `docs: changelog v1.4.3` lands on `hotfix/login-500` with only `CHANGELOG.md` staged.
+- [ ] hotfix branch recognised · [ ] commit here Recommended · [ ] only CHANGELOG.md staged
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

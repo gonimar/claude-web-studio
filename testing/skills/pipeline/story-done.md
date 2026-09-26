@@ -37,6 +37,14 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: `/story-done` without an argument; `production/session-state/active.md` has `Task: S-014 …`; separately no `Task:` line and two stories in `Review`; separately an argument naming a story still `In Progress`. **Expected**: with the `Task:` line the skill names S-014 in the first line of the report and proceeds; without it, one `AskUserQuestion` lists the `Review` stories (most recently started first, Recommended) before any test runs; the `In Progress` story ends with `NOT DONE (story not in Review — run /dev-story S-NNN, then /code-review)` and nothing is written.
 - [ ] argument · `Task:` · ask, in that order · [ ] resolved story named in the report · [ ] wrong status → NOT DONE, no writes
 
+### Implemented but never set to Review
+**Fixture**: `/story-done S-021`; the card reads `Status: In Progress`, `git log origin/master..feat/S-021-slug` holds `feat(S-021): …` and `gh pr list --head feat/S-021-slug` shows an open PR. **Expected**: `NOT DONE (implemented but never set to Review — set it and re-run)` — the reason names the evidence (the commit and the PR); the skill does not stamp `Review` itself and writes nothing; after the user sets `Review` a re-run proceeds normally.
+- [ ] the implemented-but-unstamped case is named, not the generic "not in Review" line · [ ] status not changed by the skill · [ ] no writes
+
+### An open gate survives the turn
+**Fixture**: the Phase 4 close question is asked and the session ends before the answer; separately the Phase 5 merge question. **Expected**: before each question `production/session-state/active.md` holds `Gate: /story-done Phase 4: close S-NNN?` (or `Phase 5: merge PR #N?`) written through `<hooks>session-state.sh set Gate`; a resumed session continues at that question instead of reading `Next:`; after the answer the gate reads `—`.
+- [ ] gate recorded before the close and merge gates · [ ] cleared after the answer · [ ] resume continues the gate
+
 ### 7. Actual time recorded
 **Fixture**: story card `Started: 2026-09-10T09:00`, closing at 11:40. **Expected**: `⏱ 2.5h` on the roadmap line and `Actual: 2.5h` in the card inside the Phase 4 gate; a card without `Started:` gets `⏱ ?` and one line naming the omission — never a guessed number.
 - [ ] ⏱ computed from Started · [ ] unknown stays unknown

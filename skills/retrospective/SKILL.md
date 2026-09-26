@@ -13,7 +13,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 
 Template `.claude/docs/templates/sprint-plan.md` (`## Retrospective` section); roadmap markers `~Nh` (estimate) and
 `⏱ Nh` (actual, written by `/story-done`) per `.claude/docs/templates/roadmap.md`. Blameless: causes are in the system
-and the process, never in a person or an agent by name. Writes only after "May I write?".
+and the process, never in a person or an agent by name. Writes only after "May I write?". In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Data
 1. **Pick the sprint**: `sprint NN` from the argument, else the latest `production/sprints/sprint-*.md`. No sprint file
@@ -60,7 +60,7 @@ without an owner and a place is not an action. Show the list, then one `AskUserQ
 3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker), then
    write.
 4. One commit gate: `docs: retrospective sprint NN` staging exactly the written files, on the default branch
-   (documents lane of git-workflow; when HEAD is a story branch, say so and ask as that lane prescribes).
+   (documents lane of git-workflow; when HEAD is a story branch, say so and ask as that lane prescribes). Record the gate before asking — `<hooks>session-state.sh set Gate "/retrospective Phase 4: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 
 Verdict: `COMPLETE (ratio R over N stories, M actions)` | `COMPLETE (insufficient data for the ratio)` | `BLOCKED (no
 sprint file — run /sprint-plan NN first)`. Next step — one `AskUserQuestion`: `/sprint-plan NN+1` (Recommended) ·

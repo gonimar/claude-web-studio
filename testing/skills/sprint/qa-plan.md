@@ -20,7 +20,7 @@ Criteria → tests matrix for a sprint.
 **Fixture**: F-NNN instead of a sprint. **Expected**: behaviour differs from case 1 according to the argument.
 - [ ] argument parsed · [ ] the difference matches the skill description
 ### 4. Edge case
-**Fixture**: criterion without a possible automated test → manual, flagged. **Expected**: handled explicitly, never silently skipped: level `manual` with steps, tester and evidence in the row, counted in the risks section.
+**Fixture**: criterion without a possible automated test → manual, flagged. **Expected**: handled explicitly, never silently skipped: level `manual` (a value of the template's Level column) with steps, tester and evidence in the row's `Manual (steps · tester · evidence)` column, `—` on automated rows, counted in the risks section.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
 **Fixture**: written after consent. **Expected**: the user decides; stage/statuses never change automatically.

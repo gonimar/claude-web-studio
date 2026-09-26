@@ -27,8 +27,8 @@ Measurements against budgets; ranking; before/after.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
 ### 6. Commit gate on the documents lane
-**Fixture**: report written and one `PERF-NNN` row recorded while HEAD is `feat/S-001-…` (a story branch); a k6 scenario was created in Phase 1. **Expected**: right after the write one commit gate offers `docs: perf audit <date>` staging exactly `docs/ops/perf-audit-<date>.md`, `production/findings.md` and the measurement file, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); the k6 scenario and any fix are named and offered a story or the chore lane, never staged; nothing is committed without the answer.
-- [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] code never rides the `docs:` commit
+**Fixture**: report written and one `PERF-NNN` row recorded while HEAD is `feat/S-001-…` (a story branch); a k6 scenario was created in Phase 1. **Expected**: the Phase 4 write question named both `docs/ops/perf-audit-<date>.md` and `docs/ops/measurements/<date>-perf-audit.md` (rule 12); right after the write one commit gate offers `docs: perf audit <date>` staging exactly `docs/ops/perf-audit-<date>.md`, `docs/ops/measurements/<date>-perf-audit.md` and `production/findings.md`, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); the k6 scenario and any fix are named and offered a story or the chore lane, never staged; nothing is committed without the answer.
+- [ ] measurement file named in the write question · [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] code never rides the `docs:` commit
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

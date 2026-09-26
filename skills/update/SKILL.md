@@ -11,7 +11,7 @@ model: haiku
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-In the steps below, `<cache>/<version>` is `~/.claude/plugins/cache/claude-web-studio/web-studio/<version>/`, and **this project's row** is the entry of `claude plugin list --json` selected in Phase 1 step 1.
+In the steps below, `<cache>/<version>` is `~/.claude/plugins/cache/claude-web-studio/web-studio/<version>/`, **this project's row** is the entry of `claude plugin list --json` selected in Phase 1 step 1, and `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Detect the mode and versions
 1. **Plugin mode — select this project's row.**
@@ -66,4 +66,4 @@ With `--dry-run`, the plugin update command is shown and not run, and the skill 
     5. Close the step with one line: "restart the session — removing `.claude/skills` empties the skill registry of the session that is running".
 12. **Project data** (`docs/specs`, `docs/architecture`, `production/`, a configured `technical-preferences.md`, and `CLAUDE.md` outside its two studio-owned sections) is never touched; the studio sections of `CLAUDE.md` change only behind the step 8 gate, with the previous file kept in `.claude/local-overrides/`. State it in the output only after the step 6 check has run.
 
-Verdict: `UPDATED` | `UPDATED (N documents need /migrate)` | `UPDATED (hybrid install removed — restart the session)` | `HYBRID INSTALL` (reported, removal declined) | `UP TO DATE` | `DRY RUN` | `RESTART REQUIRED`. Next step — one `AskUserQuestion`: commit the update (Recommended) · `/migrate all --dry-run` (Recommended instead when documents drifted — the update is not finished while `/help` cannot read them) · `/skill-test static all` (if the testing framework is installed) · stop here.
+Verdict: `UPDATED` | `UPDATED (N documents need /migrate)` | `UPDATED (hybrid install removed — restart the session)` | `HYBRID INSTALL` (reported, removal declined) | `UP TO DATE` | `DRY RUN` | `RESTART REQUIRED`. Next step — one `AskUserQuestion`: commit the update (Recommended) · `/migrate all --dry-run` (Recommended instead when documents drifted — the update is not finished while `/help` cannot read them) · `/skill-test static all` (if the testing framework is installed) · stop here. The "commit the update" option is this skill's commit gate (`docs: update Web Studio vX -> vY`, staging exactly the seeded files — `.claude/docs/`, `.claude/rules/`, the `CLAUDE.md` studio sections and, in copy mode, `.claude/.web-studio-version`; git-workflow.md § Documents): before asking, record it — `<hooks>session-state.sh set Gate "/update Phase 3: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`); nothing is committed without the answer.

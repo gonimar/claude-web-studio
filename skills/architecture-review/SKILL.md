@@ -18,7 +18,7 @@ reading the tree in `code` mode (`go list`, `make arch-check`, `wc -l`), never f
 the `git` of the Phase 3 commit gate, which stages nothing but the recorded rows.
 
 A studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode; a command in a hand-off is
-`/web-studio:<command>` in plugin mode and `/<command>` in copy mode (coordination-rules § Subagents).
+`/web-studio:<command>` in plugin mode and `/<command>` in copy mode (coordination-rules § Subagents). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Collect
 1. **Scope from the argument**: `adrs` → the ADR checks only; `contracts` → the contract and what it must cover; `code` → Phase 2 steps 1–5 and step 6 (the repository checks come on top of the document checks, as before); `full` or none → Phase 2 steps 1–5.
@@ -42,8 +42,8 @@ A studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode; 
 
 ## Phase 3: Report
 1. **Table** "document → status → findings (BLOCKING/WARNING/INFO)", then the verdict `PASS` / `CONCERNS` / `FAIL` with reasons.
-2. **Findings sink** (`code` mode): for every BLOCKING finding, one `AskUserQuestion` — record it in `production/findings.md` (template `findings.md`; id `ARCH-NNN`, severity, area, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. The "record" answer is the "May I write `production/findings.md`?" consent: after it, `touch .claude/.write-consent` (rule 7), then write the row; never before the answer. `/create-stories` and `/sprint-plan` read that file, not this report.
-3. **Commit gate for the rows** (rule 7 (4), `.claude/docs/git-workflow.md` § Documents), right after the rows are written and only when at least one was: `docs: architecture review findings <date>`, staging exactly `production/findings.md`.
+2. **Findings sink** (`code` mode): for every BLOCKING finding, one `AskUserQuestion` — record it in `production/findings.md` (template `findings.md`; id `ARCH-NNN`, severity, area, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. The "record" answer is the "May I write `production/findings.md`?" consent: after it, `touch .claude/.write-consent` (rule 7), then write the row; never before the answer. `/create-stories` and `/sprint-plan` read that file, not this report. Record the gate before asking — `<hooks>session-state.sh set Gate "/architecture-review Phase 3: record ARCH-NNN?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+3. **Commit gate for the rows** (rule 7 (4), `.claude/docs/git-workflow.md` § Documents), right after the rows are written and only when at least one was: `docs: architecture review findings <date>`, staging exactly `production/findings.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/architecture-review Phase 3: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
    - On the default branch when no story work is in progress: one `AskUserQuestion` — commit (Recommended) · leave uncommitted.
    - When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the rows belong to this story) · leave uncommitted.
    - Nothing else is staged: the review changes no code, and the report itself lives in the chat.

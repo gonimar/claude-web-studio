@@ -19,6 +19,7 @@ Tests the studio's own skills and agents (not the project).
   `testing/` prefix of that path stands for the framework directory.
 - **Sources** — skills: `./skills/*/SKILL.md` (kit repo), `.claude/skills/*/SKILL.md` (copy mode) or the plugin root's
   `skills/`; agents likewise (`agents/*.md`, `.claude/agents/*.md`).
+- **Catalog gates are recorded** (rule 7): before each "May I update `catalog.yaml`…?" / "May I write the result…?" question below, `<hooks>session-state.sh set Gate "/skill-test Phase 2X: update catalog?"` (`./hooks/` in the kit repository; otherwise `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode), cleared after the answer with `<hooks>session-state.sh set Gate "—"` — one sentence per gate, so a session that resumes with the question open continues here.
 
 | Mode | What | Cost |
 |---|---|---|
@@ -45,18 +46,18 @@ Tests the studio's own skills and agents (not the project).
 8. Language: body in English, no project-specific or personal references (hostnames, names, private repo names) — WARN.
 9. A "Reply in the project conversation language" line (the skill honours CLAUDE.md → Language regardless of its own English text) — WARN.
 Output: a table of checks, `COMPLIANT | WARNINGS | NON-COMPLIANT`; for `all` — a summary table.
-**Catalog record** (only with a framework — `static` without one has no catalog and writes nothing): the catalog carries `last_static` / `last_static_result` per skill for exactly this run. After the table, "May I update `catalog.yaml` (`last_static` = today, `last_static_result` = the verdict, for N skill(s))?" as one `AskUserQuestion`: update the catalog (Recommended) · do not write. After the "update" answer: `touch .claude/.write-consent` (rule 7), then edit only those two fields of the tested rows; nothing else in the catalog changes. `audit` reads the fields back.
+**Catalog record** (only with a framework — `static` without one has no catalog and writes nothing): the catalog carries `last_static` / `last_static_result` per skill for exactly this run. After the table, record the gate (`<hooks>session-state.sh set Gate "/skill-test Phase 2A: update catalog?"`), then "May I update `catalog.yaml` (`last_static` = today, `last_static_result` = the verdict, for N skill(s))?" as one `AskUserQuestion`: update the catalog (Recommended) · do not write; clear the gate after the answer. After the "update" answer: `touch .claude/.write-consent` (rule 7), then edit only those two fields of the tested rows; nothing else in the catalog changes. `audit` reads the fields back.
 
 ## Phase 2B: spec — behavioural evaluation
 1. Read SKILL.md and the spec at the catalog's `spec:` path (`skills/<category>/<name>.md` inside the framework).
 2. For every case and assertion, find the instructions in the skill text that satisfy it: PASS/FAIL/PARTIAL with a quoted line.
 3. Totals per case and protocol.
-4. "May I write the result to `results/<name>-<date>.md` and update `catalog.yaml`?" as one `AskUserQuestion`: results and catalog (Recommended) · results only · do not write.
+4. Record the gate (`<hooks>session-state.sh set Gate "/skill-test Phase 2B: write results and catalog?"`), then "May I write the result to `results/<name>-<date>.md` and update `catalog.yaml`?" as one `AskUserQuestion`: results and catalog (Recommended) · results only · do not write; clear the gate after the answer.
 5. After the "write" answer: `touch .claude/.write-consent` (rule 7), then write.
 
 ## Phase 2C: category — rubric
 The category section of `quality-rubric.md` → each metric PASS/WARN/FAIL with justification; the category's verdict is `COMPLIANT | WARNINGS | NON-COMPLIANT` from the worst metric.
-**Catalog record**, as in 2A: "May I update `catalog.yaml` (`last_category` = today, `last_category_result` = the verdict, for the N skill(s) of the category)?" — one `AskUserQuestion`: update the catalog (Recommended) · do not write. After the "update" answer: `touch .claude/.write-consent` (rule 7), then edit only those two fields.
+**Catalog record**, as in 2A: record the gate (`<hooks>session-state.sh set Gate "/skill-test Phase 2C: update catalog?"`), then "May I update `catalog.yaml` (`last_category` = today, `last_category_result` = the verdict, for the N skill(s) of the category)?" — one `AskUserQuestion`: update the catalog (Recommended) · do not write; clear the gate after the answer. After the "update" answer: `touch .claude/.write-consent` (rule 7), then edit only those two fields.
 
 ## Phase 2D: agent
 Static: the agent file exists, `name/description/model/tools`, the collaboration protocol block, a stack-reference link, domain and "never"/escalation described. Then evaluate against the agent's spec at the catalog's `spec:` path (`agents/<tier>/<name>.md`, 5 cases) as in 2B, including its write gate. `all` runs every catalogued agent and ends with a summary table; an agent without a spec is listed as such, never skipped silently.

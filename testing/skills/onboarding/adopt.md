@@ -55,8 +55,8 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 - [ ] /migrate named per type · [ ] no manual rewrite
 
 ### 13. Documents lane (commit after write)
-**Fixture**: `full` mode; `technical-preferences.md`, `production/findings.md`, `CLAUDE.md` and `docs/adoption-plan-<date>.md` written, `.gitignore` and `.claude/settings.json` merged, HEAD is `feat/S-004-…`. **Expected**: after the last write one commit gate offers `docs: adopt web studio (full)` staging exactly the four documents, names the branch and asks where it belongs (switch to the default branch Recommended · commit here · leave uncommitted); `.gitignore` and `settings.json` are named for the chore lane and never staged in the `docs:` commit; the proposed `.gitignore` lines include `.claude/agent-memory-local/`.
-- [ ] commit gate follows the last write · [ ] exact documents staged · [ ] settings/.gitignore kept out · [ ] agent-memory-local line proposed
+**Fixture**: `full` mode; `technical-preferences.md`, `production/findings.md`, `CLAUDE.md` and `docs/adoption-plan-<date>.md` written, `.gitignore` and `.claude/settings.json` merged, HEAD is `feat/S-004-…`. **Expected**: after the last write one commit gate offers `docs: adopt web studio (full)` staging exactly the four documents, names the branch and asks where it belongs (switch to the default branch Recommended · commit here · leave uncommitted); `.gitignore` and `settings.json` are named for the chore lane and never staged in the `docs:` commit; `Gate: /adopt Phase 5: commit?` is recorded in session-state before the question and cleared after the answer; the proposed `.gitignore` lines include `.claude/agent-memory-local/`.
+- [ ] commit gate follows the last write · [ ] exact documents staged · [ ] settings/.gitignore kept out · [ ] gate recorded and cleared · [ ] agent-memory-local line proposed
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

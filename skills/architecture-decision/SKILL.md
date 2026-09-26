@@ -12,7 +12,7 @@ agent: technical-director
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `.claude/docs/templates/adr.md`; files `docs/architecture/adr-NNNN-<slug>.md`. Version facts come from `.claude/docs/stack-reference/` (`stack-reference/` below). A studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode. The review mode is `--review`, else `production/review-mode.txt`.
+Template `.claude/docs/templates/adr.md`; files `docs/architecture/adr-NNNN-<slug>.md`. Version facts come from `.claude/docs/stack-reference/` (`stack-reference/` below). A studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode. The review mode is `--review`, else `production/review-mode.txt`. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 0: Mode
 1. **`retrofit <path>`** (no path → ask which ADR): read the existing ADR and find the missing sections — Status is BLOCKING; Options, Consequences and Verification are HIGH.
@@ -50,7 +50,7 @@ Template `.claude/docs/templates/adr.md`; files `docs/architecture/adr-NNNN-<slu
    - Open task lines carrying `⛔ [ADR-NNNN](path)` now name an accepted decision, not a pending one. Leave the marker, because it still names *why* the dependency exists; this decision no longer holds those stories back.
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: ADR-NNNN <slug>`, staging exactly the written files — the ADR, the decision-log line in `technical-preferences.md` and, when the roadmap step applied, `production/roadmap.md`.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: ADR-NNNN <slug>`, staging exactly the written files — the ADR, the decision-log line in `technical-preferences.md` and, when the roadmap step applied, `production/roadmap.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/architecture-decision Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit.

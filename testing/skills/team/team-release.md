@@ -23,12 +23,15 @@ Release end to end.
 **Fixture**: no tag → created with consent. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: stage → operate with consent. **Expected**: the user decides; stage/statuses never change automatically; the `production/stage.txt` write is followed by its own `docs:` commit gate.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: stage → operate with consent. **Expected**: the user decides; stage/statuses never change automatically; the `production/stage.txt` write is followed by its own `docs:` commit gate, recorded as `Gate "/team-release Phase 4: commit?"` through `session-state.sh` before it is asked and cleared to `—` after the answer.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] gate recorded before, cleared after
 
 ### 6. Skills run one after another
 **Fixture**: Phase 1 on a project where `/a11y-audit all` returns `FAIL`. **Expected**: `Skill` is in `allowed-tools`; `/perf-audit full` finished before `/a11y-audit all` started; the sequence stops at the `FAIL` — `/security-audit quick` and `/dependency-audit` are named as not run; no two skills at once.
 - [ ] `Skill` listed · [ ] sequential, verdict read before the next · [ ] stop at the first failing verdict
 
+### 7. `NOT READY` from the checklist
+**Fixture**: `/release-checklist v1.2.0` ends `NOT READY (security-audit FAIL)` and writes `production/releases/v1.2.0.md` with `Verdict: NOT READY (security-audit FAIL)`. **Expected**: `ABORTED (stage 2: release-checklist NOT READY — security-audit FAIL)` with the ❌ items; `/deploy` is not run (it would read the `Verdict:` line as BLOCKED anyway); no tag, no stage change.
+- [ ] stops at stage 2 · [ ] ❌ items named · [ ] no deploy, no stage change
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

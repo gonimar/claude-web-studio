@@ -187,7 +187,7 @@ Then the plan items one by one, usually in this order:
 
 | Gap | Command | Note |
 |---|---|---|
-| No ADRs / old ones in their own format | `/architecture-decision retrofit docs/adr/old.md` | Keeps the decision, fixes the format, adds verification |
+| No ADRs / old ones in their own format | `/architecture-decision retrofit docs/adr/old.md` | Keeps the decision, adds the missing sections and verification, and runs the Phase 3 review on them (conformance with what is implemented) |
 | No threat model | `/threat-model` | Required before the first story; `/dev-story` is `BLOCKED` otherwise |
 | No test strategy | `/test-setup --apply` | Same; `/create-stories` will not offer `/dev-story` without it |
 | No contract, but an API exists | `/api-contract --style rest` (or graphql) | Captures the contract from the code, adds a diff check in CI |

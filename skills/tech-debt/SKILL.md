@@ -12,7 +12,7 @@ agent: technical-director
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-References `stack-reference/index.md` (and `php.md` / `go.md` for the code-shape numbers). This skill delegates nothing: the inventory is command and grep output, the scoring is the director's own, so no `Task` — the stories it proposes are `/create-stories`' work, not a subagent's.
+References `stack-reference/index.md` (and `php.md` / `go.md` for the code-shape numbers). This skill delegates nothing: the inventory is command and grep output, the scoring is the director's own, so no `Task` — the stories it proposes are `/create-stories`' work, not a subagent's. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Collect (Bash + Grep)
 1. **Scope**: the argument names an area (a package, a directory, a layer); `full` or no argument scans the whole repository. An area limits every search below to that subset.
@@ -35,7 +35,7 @@ Table "debt → impact (security/velocity/risk) → effort → priority → prop
 3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker), then write.
 
 ## Phase 4: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: tech debt <date>`, staging exactly the written files — `docs/ops/tech-debt-<date>.md` and `production/roadmap.md` when the top 5 were added to it.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: tech debt <date>`, staging exactly the written files — `docs/ops/tech-debt-<date>.md` and `production/roadmap.md` when the top 5 were added to it. Record the gate before asking — `<hooks>session-state.sh set Gate "/tech-debt Phase 4: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress: one `AskUserQuestion` — commit (Recommended) · leave uncommitted.
 - When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - The inventory is read-only: no code changes exist to stage; a debt item fixed on the way would be a story or the chore lane (git-workflow.md § Chore / infra), never part of the `docs:` commit.

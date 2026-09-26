@@ -112,6 +112,7 @@ Right after the last write of the run, one commit gate (rule 7, `.claude/docs/gi
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - `.claude/settings.json` and `.gitignore` (Phase 3) are toolchain work, not documents: they do not ride the `docs:` commit. Name them in the result and offer the chore lane for them (git-workflow.md § Chore / infra).
+- Before asking, record the gate — `<hooks>session-state.sh set Gate "/adopt Phase 5: commit?"` (`<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 
 Nothing is committed without the answer; a run that wrote no document has no commit gate.
 

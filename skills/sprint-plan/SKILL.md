@@ -36,7 +36,7 @@ Templates (`.claude/docs/templates/`): `sprint-plan.md`, `roadmap.md`. In the co
 5. **Record the gate** before asking: `<hooks>session-state.sh set Task "/sprint-plan Phase 2" Gate "/sprint-plan Phase 2: merge #…?"`. A session that resumes with this `Gate:` open continues here: it merges or not, and never implements a story (rule 7).
 6. **Ask**, alone in its message, one `AskUserQuestion`: merge the green safe PRs now (Recommended) · turn them into one story · leave them.
 7. **After the answer**: clear the gate (`<hooks>session-state.sh set Gate "—"`). On "merge": `gh pr merge <n> --squash`, one PR at a time, with the output in the message.
-8. **Default-branch CI.** After the batch, `gh run list --branch <default> --limit 1`: the default branch's CI should be green before the first story branch starts. This skill **reports** that state — green, red or not run — in the message and, when red, under the plan's risks with the failing job; it does not enforce it: nothing here blocks the plan, and no skill stops the first story branch on a red run. Fixing it is toolchain work (`/hotfix --chore`), named in the plan.
+8. **Default-branch CI.** After the batch, `gh run list --branch <default> --limit 1`: the default branch's CI should be green before the first story branch starts. This skill **reports** that state — green, red or not run — in the message and, when red, under the plan's risks with the failing job; it does not enforce it: nothing here blocks the plan. The check that holds a story branch back on a red run lives in `/dev-story` Phase 3 (the branch step runs the same `gh run list --branch <default> --limit 1` before creating the branch); fixing it is toolchain work (`/hotfix --chore`), named in the plan.
 
 ## Phase 3: Selection
 1. **The sprint goal** as one verifiable statement.
@@ -63,7 +63,7 @@ Its own turn — never on the merge answer.
 6. **Close the write with the numbers**: `Backlog: N → M, Sprint: 0 → K, overlap none`.
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: sprint NN`, staging exactly the written files — `production/sprints/sprint-NN.md` and `production/roadmap.md`.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: sprint NN`, staging exactly the written files — `production/sprints/sprint-NN.md` and `production/roadmap.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/sprint-plan Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit; the Phase 2 merges are their own commits on the default branch already.

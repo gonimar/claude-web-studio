@@ -57,6 +57,7 @@ For upgrades: path (e.g. `ng update`, three.js Migration Guide rNNN→rMMM, Go t
 5. **Commit gate** (rule 7, `git-workflow.md` § Documents), right after the write: one `AskUserQuestion` offering `docs: refresh stack-reference (<scope>)`, staging exactly the written files (the reference files and `index.md`).
    - On the default branch when no story work is in progress.
    - When HEAD is a story branch, name it and ask: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+   - Before asking, record the gate — `<hooks>session-state.sh set Gate "/stack-update Phase 4: commit?"` (`<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
    - Nothing is committed without the answer, and the files are never left uncommitted silently: a "leave uncommitted" answer is repeated in the result.
 
 ## Phase 5: Project upgrade plan (optional)

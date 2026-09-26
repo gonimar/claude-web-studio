@@ -12,7 +12,7 @@ agent: game-lead
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `.claude/docs/templates/game-concept.md`. Reference `threejs-webgames.md`.
+Template `.claude/docs/templates/game-concept.md`. Reference `threejs-webgames.md`. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Pitch and loop
 Questions: genre, the player's "verb", session (minutes), platform (mobile web first?), single/multiplayer, references. Three core-loop variants with "why it is fun to repeat".
@@ -39,7 +39,7 @@ Accessibility settings; retention metrics; prototype plan: what playability vali
 "May I write `docs/specs/game-concept.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose an engine ADR (`/architecture-decision`). After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 6: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: game concept`, staging exactly the written files — `docs/specs/game-concept.md` (for `gate`: the message and files Phase 4b step 4 names).
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: game concept`, staging exactly the written files — `docs/specs/game-concept.md` (for `gate`: the message and files Phase 4b step 4 names). Record the gate before asking — `<hooks>session-state.sh set Gate "/game-concept Phase 6: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit.

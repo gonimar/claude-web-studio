@@ -12,7 +12,7 @@ agent: design-lead
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `.claude/docs/templates/design-system.md`. References: `web-platform.md` (WCAG, CSS Baseline), `angular.md`/`vue.md` (UI-kit themes).
+Template `.claude/docs/templates/design-system.md`. References: `web-platform.md` (WCAG, CSS Baseline), `angular.md`/`vue.md` (UI-kit themes). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Base and principles
 Base from `technical-preferences.md` or the argument; questions: tone (strict/playful), density, brand colours (if any), dark theme needed?, target devices.
@@ -32,7 +32,7 @@ Inventory from the needs of the product spec/feature specs (or the Phase 1 answe
 Show the tokens table and the inventory in the chat, then "May I write `docs/specs/design-system.md` and `[frontend_root]/src/styles/tokens.css`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now — the CSS is written by `css-engineer` via Task after consent. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: design system`, staging exactly `docs/specs/design-system.md`.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: design system`, staging exactly `docs/specs/design-system.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/design-system Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress: one `AskUserQuestion` — commit (Recommended) · leave uncommitted.
 - When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - `[frontend_root]/src/styles/tokens.css` (and a Material theme SCSS) is code, not a document: it never rides the `docs:` commit — name it and offer the chore lane (git-workflow.md § Chore / infra, branch `chore/design-tokens`) or the first UI story it belongs to.

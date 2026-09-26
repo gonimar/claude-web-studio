@@ -26,7 +26,9 @@ under "Out of scope — /impact" (Phase 4 step 3); during an apply it runs throu
 Names used below: `<engineer>` is `go-engineer` for Go and `php-engineer` for PHP; a studio agent is
 `web-studio:<name>` in plugin mode and `<name>` in copy mode; `<hooks>` is `.claude/hooks/` in copy mode and
 `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode; a command in a hand-off is `/web-studio:<command>` in plugin
-mode and `/<command>` in copy mode (coordination-rules § Subagents). Another studio skill runs only through
+mode and `/<command>` in copy mode (coordination-rules § Subagents). **An open gate survives the next turn** (rule 7):
+before each commit or push gate below the skill records it — `<hooks>session-state.sh set Gate "/refactor Phase N: <question>"` —
+and clears it after the answer (`<hooks>session-state.sh set Gate "—"`), so a resumed session continues at that question. Another studio skill runs only through
 the `Skill` tool (same naming), keeps all of its phases and gates, and runs after the current `Task` has
 returned — never alongside one; `/create-stories`, `/architecture-decision` and `/code-review` are hand-offs
 in the closing `AskUserQuestion`, never run from here.
@@ -145,14 +147,14 @@ hand-off; `/refactor` never writes an ADR itself.
    - `<package|namespace|file>`: the split/move of that package, namespace or file only.
 3. **Traceability and scope.** Every step names the `ARCH-NNN`/tech-debt row it closes. Steps that would change behaviour, a contract, a schema or a dependency are listed under **Out of scope — /impact** with the reason, never absorbed.
 4. **Write gate.** Render the tables in the chat, then one `AskUserQuestion`: "May I write `docs/ops/refactor-<date>-<scope>.md` (the tables above) and the Phase 3 answers into `technical-preferences.md`?" — write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7; the consent-guard hook checks the marker).
-5. **Commit gate** (rule 7, `git-workflow.md` documents lane): one `AskUserQuestion` offering `docs: refactor plan <scope>` staging exactly the written files, on the branch the documents lane prescribes (commit (Recommended) · leave uncommitted).
+5. **Commit gate** (rule 7, `git-workflow.md` documents lane), recorded first as `Gate "/refactor Phase 4: commit the plan?"` and cleared after the answer: one `AskUserQuestion` offering `docs: refactor plan <scope>` staging exactly the written files, on the branch the documents lane prescribes (commit (Recommended) · leave uncommitted).
 6. **Stories are not written here.** The plan document is the spec `/create-stories <plan-path>` slices: one story per step group, layer `backend`, the title prefixed `refactor:`, the story card citing the plan. That command owns its own gate.
 
 Dry-run verdict: `PLANNED (N steps)`.
 
 ## Phase 5: Apply (`--apply S-NNN` only)
-1. **Story check.** The story must be Ready and reference a plan document; otherwise `BLOCKED (no plan — run /refactor --dry-run first)`. For a `framework` plan, the step-1 ADR must be `Accepted`; otherwise `BLOCKED (ADR not Accepted — /architecture-decision)`.
-2. **Consent.** One `AskUserQuestion`: start — branch `refactor/S-NNN-<slug>`, update the session state, stamp the story card, then run the plan's steps with one commit per green step (Recommended) · show the plan first · stop. The "start" answer is the "May I write?" consent for the branch, the session state, the story card's two status stamps and their `docs:` commits (steps 4 and Phase 7 step 1), the step commits and the files the plan names; `touch .claude/.write-consent` after it and again before each step's `Task` call.
+1. **Story check.** The story must be `Ready` or `In Progress` (as `/dev-story` Phase 1 step 2 — a re-run after step 4 stamped the card finds it `In Progress`) and reference a plan document; otherwise `BLOCKED (no plan — run /refactor --dry-run first)`. For a `framework` plan, the step-1 ADR must be `Accepted`; otherwise `BLOCKED (ADR not Accepted — /architecture-decision)`.
+2. **Consent.** One `AskUserQuestion`, recorded first as `Gate "/refactor Phase 5: start S-NNN?"` and cleared after the answer (it is the gate for every commit of the apply): start — branch `refactor/S-NNN-<slug>`, update the session state, stamp the story card, then run the plan's steps with one commit per green step (Recommended) · show the plan first · stop. The "start" answer is the "May I write?" consent for the branch, the session state, the story card's two status stamps and their `docs:` commits (steps 4 and Phase 7 step 1), the step commits and the files the plan names; `touch .claude/.write-consent` after it and again before each step's `Task` call.
 3. **Branch** per `git-workflow.md` ("Refactor" lane), from an up-to-date default branch:
    1. `git fetch origin`.
    2. `git switch <default> && git pull --ff-only origin <default>`.
@@ -183,9 +185,9 @@ A metric that moved the wrong way is a `PARTIAL (…)` with the metric named.
 ## Phase 7: Report and hand-off
 1. **After an apply**, in this order:
    1. **Story status → `Review`**, session state `Next: /code-review` (through `<hooks>session-state.sh`), and one more `docs:` commit on the refactor branch: `git commit -m "docs: refactor S-NNN — Review"` staging exactly the story card. This is the commit that carries the status change — never the last step commit, whose diff stays a pure move — and it comes before the push so the PR carries it. The Phase 5 "start" answer covers it.
-   2. **Push** with consent, one `AskUserQuestion`: push (Recommended) · not now. Then `git push -u origin refactor/S-NNN-<slug>`. "Not now" → the report says the branch is local and the status commit is on it.
-   3. **Find out what starts CI** before waiting for anything (as `/dev-story` Phase 6 step 5): `grep -l "pull_request" .github/workflows/*.yml` and each workflow's `on:`. When the PR is what starts the checks, open it as a draft now (`gh pr create --draft --fill`); `/story-done` marks it ready and merges it. Without `gh`, or with a push-triggered workflow, say which run to expect and its id.
-   4. **Wait for CI** only for a run that exists: one background `gh run watch <run-id> --exit-status` (as `/dev-story` Phase 6 step 6 and `/story-done`). No polling `Monitor`, and no `AskUserQuestion` used as a pause. If the queue is slow, end the turn with a one-line status; a red run is named in the report and the verdict is `PARTIAL (open: CI red on <commit>)`.
+   2. **Push** with consent, one `AskUserQuestion`, recorded first as `Gate "/refactor Phase 7: push?"` and cleared after the answer: push (Recommended) · not now. Then `git push -u origin refactor/S-NNN-<slug>`. "Not now" → the report says the branch is local and the status commit is on it.
+   3. **Find out what starts CI** before waiting for anything (as `/dev-story` Phase 6 step 6): `grep -l "pull_request" .github/workflows/*.yml` and each workflow's `on:`. When the PR is what starts the checks, open it as a draft now (`gh pr create --draft --fill`); `/story-done` marks it ready and merges it. Without `gh`, or with a push-triggered workflow, say which run to expect and its id.
+   4. **Wait for CI** only for a run that exists: one background `gh run watch <run-id> --exit-status` (as `/dev-story` Phase 6 step 7 and `/story-done`). No polling `Monitor`, and no `AskUserQuestion` used as a pause. If the queue is slow, end the turn with a one-line status; a red run is named in the report and the verdict is `PARTIAL (open: CI red on <commit>)`.
 2. **Verdict**: `PLANNED (…)` | `COMPLETE` | `PARTIAL (open: …)` | `BLOCKED (…)`.
 3. **Next step**, one `AskUserQuestion`:
    - after a dry-run: `/architecture-decision` when Phase 3 changed the style or the mode was `framework` (Recommended then), else `/create-stories <plan-path>` (Recommended) · show the plan · stop here;

@@ -27,8 +27,12 @@ Supply chain: audit tools, abandoned, versions, licences.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] report path named
 
 ### 6. Commit gate on the documents lane
-**Fixture**: `--fix-safe` applied two patch updates on `chore/deps-<date>`, then the report was written. **Expected**: right after the write one commit gate offers `docs: dependency audit <date>` staging exactly `docs/ops/dependency-audit-<date>.md`, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); the lockfile changes stay in the `chore(deps)` commit and are never staged with the document; nothing is committed without the answer.
+**Fixture**: `--fix-safe` applied two patch updates on `chore/deps-<date>`, then the report was written and one `DEP-NNN` row recorded. **Expected**: right after the write one commit gate offers `docs: dependency audit <date>` staging exactly `docs/ops/dependency-audit-<date>.md` and `production/findings.md`, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); the lockfile changes stay in the `chore(deps)` commit and are never staged with the document; nothing is committed without the answer.
 - [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] lockfile never rides the `docs:` commit
+
+### 7. High findings reach findings.md
+**Fixture**: `pnpm audit` reports one high CVE and Packagist marks one direct package abandoned with no replacement. **Expected**: for each of the two, one `AskUserQuestion` (record in `production/findings.md` as `DEP-NNN` Recommended · story stubs via `/create-stories` · report only); the row is written only after the "record" answer; a declined high is named in the `ACTION REQUIRED (N high)` verdict line as unrecorded — the report alone never counts as the record.
+- [ ] one question per high finding · [ ] `findings.md` row follows the template · [ ] unrecorded high appears in the verdict line
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

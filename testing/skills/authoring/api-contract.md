@@ -31,8 +31,12 @@ Contract: GraphQL SDL by default / OpenAPI / WS; diff; codegen.
 - [ ] deprecation in the contract · [ ] CI date rule · [ ] removal story and BREAKING entry
 
 ### 7. Documents lane (commit after write)
-**Fixture**: Go module, `api_contract_path` = `api/schema.graphqls`; schema and `docs/architecture/api/api-contract.md` written on the default branch with no story in progress. **Expected**: right after the write one commit gate offers `docs: api contract F-002` staging exactly the two files, on the default branch (the hooks' documents lane lists `api/schema.graphqls`, so the commit raises no branch warning); on a story branch the three options (switch and commit there Recommended · commit here · leave uncommitted); generated types and the codegen task are named for the chore lane or the first story, never staged in the `docs:` commit; nothing is committed without the answer.
-- [ ] commit gate follows the write · [ ] schema outside docs/ still in the docs commit · [ ] codegen kept out
+**Fixture**: Go module, `api_contract_path` = `api/schema.graphqls`; schema and `docs/architecture/api/api-contract.md` written on the default branch with no story in progress. **Expected**: right after the write one commit gate offers `docs: api contract F-002` staging exactly the two files, on the default branch (the hooks' documents lane lists `api/schema.graphqls`, `graph/schema.graphqls` and `api/openapi.yaml`, so the commit raises no branch warning); `Gate: /api-contract Phase 5: commit?` is recorded in session-state before the question and cleared after the answer; on a story branch the three options (switch and commit there Recommended · commit here · leave uncommitted); generated types and the codegen task are named for the chore lane or the first story, never staged in the `docs:` commit; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] schema outside docs/ still in the docs commit · [ ] codegen kept out · [ ] gate recorded and cleared
+
+### 8. Contract path outside the documents lane
+**Fixture**: `/adopt` set `api_contract_path` = `internal/graph/schema.graphqls` from `gqlgen.yml`; schema and `api-contract.md` written. **Expected**: the gate question says the schema path is outside the hooks' documents lane; the schema is committed as `chore(contract): F-002` on a `chore/<slug>` branch with a PR, never as `docs:` on the default branch; the `docs:` commit carries `api-contract.md` (and technical-preferences) only.
+- [ ] lane membership stated · [ ] `chore(contract)` on a chore branch · [ ] docs commit without the schema
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

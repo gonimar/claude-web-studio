@@ -174,6 +174,25 @@ out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/vali
 printf 'package api\n' > api/handler.go; git add api/handler.go
 out=$(echo '{"tool_input":{"command":"git commit -m \"docs: api handler\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: code under api/ rode the documents lane"; }
 git rm -q --cached api/handler.go; rm -rf api
+# api_contract_path outside docs/ in its other real shapes: gqlgen's default graph/schema.graphqls and a REST contract at
+# api/openapi.yaml are documents too (go.md § api/); a schema anywhere else is outside the lane and still warns.
+mkdir -p graph api; printf 'type Query { ping: Boolean! }\n' > graph/schema.graphqls; git add graph/schema.graphqls
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: api contract F-003\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: graph/schema.graphqls not recognised as the documents lane"; } || pass=$((pass+1))
+git rm -q --cached graph/schema.graphqls; printf 'openapi: 3.1.0\n' > api/openapi.yaml; git add api/openapi.yaml
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: api contract F-004\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: api/openapi.yaml not recognised as the documents lane"; } || pass=$((pass+1))
+git commit -q -m "docs: api contract F-004"
+out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'WARNING: pushing directly' && { failn=$((failn+1)); echo "FAIL push: docs-lane push of api/openapi.yaml to master warned"; } || pass=$((pass+1))
+mkdir -p internal/graph; printf 'type Query { ping: Boolean! }\n' > internal/graph/schema.graphqls; git add internal/graph/schema.graphqls
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: api contract F-005\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: a schema outside the listed paths rode the documents lane"; }
+git rm -q --cached internal/graph/schema.graphqls; rm -rf graph api internal
+# hotfix/* is branched from a release tag inside the default branch's history by design (git-workflow § Rules):
+# its first commit is not "already merged"; any other branch cut from the same tag still is.
+git update-ref refs/remotes/origin/master HEAD; git tag -f v1.0.0 HEAD~1 >/dev/null
+git checkout -q -b hotfix/login-500 v1.0.0; printf 'h\n' > hot.txt; git add hot.txt
+out=$(echo '{"tool_input":{"command":"git commit -m \"fix(auth): login 500\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'already merged' && { failn=$((failn+1)); echo "FAIL commit: hotfix branch from a release tag reported as already merged"; } || pass=$((pass+1))
+git rm -q --cached hot.txt; rm -f hot.txt; git checkout -q -b fix/from-tag v1.0.0; printf 'f\n' > fx.txt; git add fx.txt
+out=$(echo '{"tool_input":{"command":"git commit -m \"fix: from tag\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'already merged' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: the hotfix exemption leaked to a fix/* branch cut from the tag"; }
+git rm -q --cached fx.txt; rm -f fx.txt; git checkout -q master 2>/dev/null
 # WS-089: a Stop with no agent type is built-in tooling, not a lost studio agent
 echo '{"hook_event_name":"SubagentStop"}' | bash "$H/log-agent.sh"
 grep -q 'SubagentStop | builtin' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent: a Stop without a type is not marked builtin"; }

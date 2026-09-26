@@ -83,7 +83,7 @@ Two decisions of the maintainer, applied across the kit, and the questions the p
   create-stories, sprint-plan, architecture-decision, product-spec, brainstorm, game-concept, ux-spec), the audits
   (threat-model, security-audit, pentest, a11y-audit, perf-audit, harden, dependency-audit, architecture-review,
   qa-plan, design-system, tech-debt), impact, incident, changelog, init, start, adopt, setup-stack, api-contract, and
-  the findings rows of dev-story and hotfix — modelled on test-setup: `docs: <what>` staging exactly the written files,
+  the findings rows of dev-story — modelled on test-setup: `docs: <what>` staging exactly the written files,
   the default branch when no story is in progress, the three options on a story branch, nothing committed without the
   answer. Code, configs, lockfiles, scripts and the axe spec never ride a `docs:` commit; they are offered the chore
   lane. `Bash` joins the `allowed-tools` where the gate needs git. Each spec gains a commit-gate case.
@@ -98,14 +98,17 @@ Two decisions of the maintainer, applied across the kit, and the questions the p
 - **hotfix**: the engineer writes the failing test; fix and changelog commits; the patch tag is created and pushed by
   the session on the hotfix branch (git-workflow names the exception); CI on the tag before `/deploy`. **deploy**: the
   version defaults to the latest `v*` tag on origin, confirmed; `--env` defined and listed on the delegate contract's
-  verbs. **incident**: actions go to `production/roadmap.md` behind a gate; rollback and hotfix run through the Skill
-  tool. **changelog**: `--unreleased` defined. **release-checklist**: the release file is written on NOT READY too.
+  verbs. **incident**: actions become backlog items (`/backlog add`, `🔗 INC-NNN`); rollback and hotfix run through the
+  Skill tool. **changelog**: `--unreleased` defined; its gate commits on a `hotfix/*` branch so the patch tag contains
+  the entry. **release-checklist**: the release file is written on NOT READY too and carries a `Verdict:` line that
+  `/deploy` reads (NOT READY → BLOCKED); `/hotfix` writes a minimal release file (`READY (hotfix)`) before its tag.
+  **sprint-plan** only reports the default branch's CI; `/dev-story` checks it at branch time (`gh run list`).
 - **impact** touches `.impact-verdict` only on an approving verdict — never after BLOCKED, NEEDS ADR or
   `--classify-only`, which used to silence impact-guard for a rejected change. **refactor**: framework mode on Go is
   BLOCKED, the Application-layer step is explicit, `--apply` stamps the card and waits for CI. **story-done** resolves
   its story and requires Review. **code-review** and dev-story list `SendMessage`.
 - **start** reads the review mode /init wrote and stops on an existing project (`/adopt full`); **init** defines
-  INITIALISED vs ALREADY INITIALISED and keeps one Recommended; **setup-stack** records its decision as a `D-NN` and
+  INITIALISED vs ALREADY INITIALISED and keeps one Recommended; **setup-stack** keeps its record in technical-preferences (a big fork is an ADR) and
   recommends `/feature-spec` when a product spec exists; **stack-update** states its default scope; **skill-test**
   stamps `last_static` / `last_category`; **sprint-status** computes burn; **help**'s context line prints `none` when
   there is nothing; `api/schema.graphqls` is a documents-lane path for the hooks.

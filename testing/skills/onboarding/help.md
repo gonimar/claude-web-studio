@@ -73,9 +73,13 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: session-start printed "branch already merged into origin/master" and a `[One paragraph: …]` placeholder in CLAUDE.md; the project has one story in progress. **Expected**: both signals appear as their own lines in the answer; the next step names only commands that exist in the catalog or in a skill's `argument-hint` — closing a story is `/story-done`, never `/dev-story complete S-NNN`.
 - [ ] session-start warnings repeated · [ ] no invented sub-command · [ ] every named command resolves to a skill
 
-### The context line is the harness's, not the skill's
-**Fixture**: no `docs/adoption-plan-*.md`, no `.claude/docs/stack-reference/index.md`; `Bash` absent from `allowed-tools`. **Expected**: the frontmatter `context:` line yields `adoption-plan: none` and `stack-ref: ?` (an empty pipeline falls back — `tail`'s exit status is never what decides); the body says in one line that the line is evaluated by the harness before the skill starts; the skill runs no command of its own and `Bash` stays out of `allowed-tools`.
-- [ ] `none` printed when no plan exists · [ ] harness note in the body · [ ] no Bash
+### The context line is a convenience, not a dependency
+**Fixture**: no `docs/adoption-plan-*.md`, no `.claude/docs/stack-reference/index.md`; `Bash` absent from `allowed-tools`. **Expected**: the frontmatter `context:` line falls back to `adoption-plan: none` and `stack-ref: ?` (an empty pipeline falls back — `tail`'s exit status is never what decides); the body makes no claim about when or whether the harness evaluates that line — it says the skill does not depend on it, and Phase 1 step 3 reads the stack-reference date, the newest adoption plan, the roadmap's first open line, the stage and the review mode itself with `Read`/`Glob`; the skill runs no command of its own and `Bash` stays out of `allowed-tools`.
+- [ ] `none` as the fallback · [ ] no mechanism claim in the body · [ ] Phase 1 reads the files itself · [ ] no Bash
+
+### Roadmap first open item
+**Fixture**: `production/roadmap.md` in v3.1 whose first open line is `- [ ] [S-012](stories/S-012.md) · Repository layer ~8h`; no adoption plan; stage `build` with every required step met. **Expected**: the report carries `Roadmap: N open — first: S-012 · Repository layer`; NEXT is `/dev-story S-012`, Recommended in the closing question; with an open adoption-plan item or an unmet required step, those come first and the roadmap line is still printed.
+- [ ] roadmap line printed · [ ] first open item is NEXT when nothing else claims it · [ ] plan items and required steps still precede it
 
 ### The answer is not executed here (0.12)
 **Fixture**: plugin mode, `/help` after `/dev-story`, the user picks "/web-studio:code-review (Recommended)". **Expected**: the output names every command as `/web-studio:<name>`; after the answer the skill prints `Run: /web-studio:code-review --diff …` and ends the turn — no `Skill` call in the same turn (the skill would inherit Haiku).

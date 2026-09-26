@@ -13,6 +13,7 @@ agent: api-designer
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 Template `.claude/docs/templates/api-contract.md`; references `graphql.md`, `web-platform.md` (REST conventions), rules `api-contracts.md`.
+In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Scope and style
 1. **Style**: `--style`, else technical-preferences (GraphQL by default).
@@ -50,7 +51,8 @@ Removing without a deprecation period is `BREAKING (N)` and needs the owner's ex
 3. Propose the codegen task (`graphql-codegen`/`gqlgen generate`/`openapi-typescript`) as part of the first story.
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: api contract <F-NNN or area>` (`docs: deprecate <element>` for `--deprecate`), staging exactly the written documents — the schema at `api_contract_path` (`api/schema.graphqls` counts as a document there: the hooks' documents lane lists it), `docs/architecture/api/api-contract.md`, and `.claude/docs/technical-preferences.md` when Phase 1 set `api_contract_path`.
+Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: api contract <F-NNN or area>` (`docs: deprecate <element>` for `--deprecate`), staging exactly the written documents — the schema at `api_contract_path` when the hooks' documents lane lists that path (`api/schema.graphqls`, `graph/schema.graphqls`, `api/openapi.yaml`, anything under `docs/`; `hooks/docs-lane.sh` is the source of truth), `docs/architecture/api/api-contract.md`, and `.claude/docs/technical-preferences.md` when Phase 1 set `api_contract_path`. Before asking, record the gate — `<hooks>session-state.sh set Gate "/api-contract Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+- **A contract path outside the documents lane** — any `api_contract_path` the hook does not list, e.g. a schema `/adopt` read from `gqlgen.yml` at `internal/graph/schema.graphqls` — never goes into a `docs:` commit on the default branch: the commit hook would warn and the lane would carry code-side files. Say so in the gate question and commit that file as `chore(contract): <F-NNN or area>` on a `chore/<slug>` branch with a PR (git-workflow.md § Chore / infra); the `docs:` commit then carries `api-contract.md` (and technical-preferences) only.
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - The CI date rule of `--deprecate` (a workflow or inspector/spectral config), generated types and codegen output are toolchain work, not documents: they do not ride the `docs:` commit. Name them in the result and offer the chore lane for them (git-workflow.md § Chore / infra), or the first story when Phase 4 step 3 put codegen there.

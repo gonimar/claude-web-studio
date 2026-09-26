@@ -12,13 +12,13 @@ model: haiku
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 Template `.claude/docs/templates/backlog.md`; the roadmap format (`.claude/docs/templates/roadmap.md`) reserves
-`production/backlog.md` for ideas before their spec and `production/decisions.md` for owner decisions.
+`production/backlog.md` for ideas before their spec and `production/decisions.md` for owner decisions. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 **Write gate** (every mode below that changes the file): render the new or changed entry in the chat, then
 "May I write `production/backlog.md`?" — one `AskUserQuestion`: write (Recommended) · adjust the wording · not now.
 After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker), then
 write. Then one commit gate: `docs: backlog <what>` staging exactly that file, on the branch git-workflow's
-documents lane prescribes.
+documents lane prescribes. Record the gate before asking — `<hooks>session-state.sh set Gate "/backlog <mode>: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 
 **Not initialised** — no `.claude/docs/` and no `production/` → `BLOCKED (not initialised — run /init)`, nothing
 written. An initialised project without `production/backlog.md` gets it created from the template at the first write.

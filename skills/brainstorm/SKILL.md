@@ -3,7 +3,7 @@ name: brainstorm
 description: "Explores a product or web-game idea before specification — audience, problem, competitors, constraints, differentiation, MVP candidates; for games also MDA and core loop. Produces a concept brief. Use when the idea is vague."
 argument-hint: "[topic or idea]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Bash, WebSearch, AskUserQuestion, Task
+allowed-tools: Read, Glob, Grep, Write, Bash, WebSearch, AskUserQuestion
 model: sonnet
 agent: product-director
 ---
@@ -13,7 +13,7 @@ agent: product-director
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 Reference: `stack-reference/index.md` (what the studio builds and with which versions); the brief feeds the
-`product-spec.md` / `game-concept.md` templates that follow.
+`product-spec.md` / `game-concept.md` templates that follow. This skill delegates nothing: the conversation, the framing and the brief are the director's own work, so `Task` is not among its tools. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Conversation
 Clarify via `AskUserQuestion`, one question at a time; with no argument, the first question is the idea itself.
@@ -33,7 +33,7 @@ Propose success metrics and "what must be true" for the idea to work (hypotheses
 3. Show the draft in the chat, then "May I write `docs/specs/concept-brief.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 4: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: concept brief`, staging exactly the written files — `docs/specs/concept-brief.md`.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: concept brief`, staging exactly the written files — `docs/specs/concept-brief.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/brainstorm Phase 4: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit.

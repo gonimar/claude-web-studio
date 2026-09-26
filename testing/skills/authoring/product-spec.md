@@ -27,8 +27,8 @@ Product spec section by section with review per mode.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
 ### 6. BLOCKING from the review reaches findings.md
-**Fixture**: lean mode; `technical-director` returns CONCERNS with one BLOCKING (a fact in the draft the repository contradicts) and one HIGH. **Expected**: the draft is corrected; for each of the two items one `AskUserQuestion` (record in `production/findings.md` as `ARCH-NNN` Recommended · story stubs · spec only); a declined BLOCKING is named in the verdict line as unrecorded; the row is written only after the answer.
-- [ ] one question per BLOCKING/HIGH · [ ] `findings.md` row follows the template · [ ] unrecorded BLOCKING appears in the verdict line
+**Fixture**: lean mode; `technical-director` returns CONCERNS with one BLOCKING (a fact in the draft the repository contradicts) and one HIGH. **Expected**: the draft is corrected; for each of the two items one `AskUserQuestion` (record in `production/findings.md` as `ARCH-NNN` Recommended · story stubs through `/feature-spec F-NNN` first, `/create-stories` once that spec has criteria · spec only); a declined BLOCKING is named in the verdict line as unrecorded; the row is written only after the answer; when story stubs were chosen for the HIGH, the closing question offers `/feature-spec F-NNN` for that feature as Recommended and says `/create-stories` follows once the spec has criteria — never a bare `/create-stories` that would block.
+- [ ] one question per BLOCKING/HIGH · [ ] `findings.md` row follows the template · [ ] unrecorded BLOCKING appears in the verdict line · [ ] stubs route named in the closing question
 
 ### 7. Retrofit on an operate project
 **Fixture**: stage `operate`, deployed code, no spec. **Expected**: retrofit mode — draft from CLAUDE.md/roadmap/code shown as a whole, questions only where facts are silent; `stage.txt` is not proposed backwards; a claim the repository contradicts is BLOCKING in the review.

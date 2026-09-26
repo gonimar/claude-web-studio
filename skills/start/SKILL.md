@@ -12,7 +12,7 @@ model: sonnet
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 Entry point for a new project. Assumes nothing — asks, then routes. Writes files only after "May I write?" → "yes".
-`Bash` is used only for the Phase 5 commit; every other step reads and asks. A command in a hand-off is `/web-studio:<command>` in plugin mode and `/<command>` in copy mode.
+`Bash` is used for two things: `touch .claude/.write-consent` after the Phase 3 write answer, and the Phase 5 commit with its gate record; every other step reads and asks. A command in a hand-off is `/web-studio:<command>` in plugin mode and `/<command>` in copy mode; `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Silent state detection
 1. Read (without showing): `.claude/docs/technical-preferences.md` (exists? configured?), `docs/specs/product-spec.md`,
@@ -48,6 +48,7 @@ Right after the last write, one commit gate (rule 7, `.claude/docs/git-workflow.
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - A merged `.claude/settings.json` (Phase 4 step 3) is toolchain work, not a document: it does not ride the `docs:` commit. Name it in the result and offer the chore lane for it (git-workflow.md § Chore / infra).
+- Before asking, record the gate — `<hooks>session-state.sh set Gate "/start Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 
 Nothing is committed without the answer; when this run wrote nothing, there is no commit gate.
 

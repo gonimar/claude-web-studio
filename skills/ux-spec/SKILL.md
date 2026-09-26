@@ -12,7 +12,7 @@ agent: design-lead
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `.claude/docs/templates/ux-spec.md`.
+Template `.claude/docs/templates/ux-spec.md`. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Context
 1. **The feature spec** the argument names (`F-NNN`, or the feature the named flow belongs to — ask when unclear). Missing → verdict `BLOCKED (no feature spec — run /feature-spec F-NNN first)`; write nothing.
@@ -30,7 +30,7 @@ Copy table; focus order and aria; behaviour at 320–400 px; reduced motion.
 "May I write `docs/specs/ux/UX-NNN-<slug>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: UX spec UX-NNN`, staging exactly the written files — `docs/specs/ux/UX-NNN-<slug>.md`.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: UX spec UX-NNN`, staging exactly the written files — `docs/specs/ux/UX-NNN-<slug>.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/ux-spec Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit.

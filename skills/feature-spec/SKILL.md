@@ -11,7 +11,7 @@ model: sonnet
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `.claude/docs/templates/feature-spec.md`. Section by section; written after "May I write?".
+Template `.claude/docs/templates/feature-spec.md`. Section by section; written after "May I write?". In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Context
 1. `docs/specs/product-spec.md`. Missing → verdict `BLOCKED (no product spec — run /product-spec first)`; write nothing. The feature must be in its scope; otherwise ask whether to add it.
@@ -39,7 +39,7 @@ Mode from `--review`, else `production/review-mode.txt`, default `lean`. `full`:
 "May I write `docs/specs/features/F-NNN-<slug>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Update the feature index in the product spec (section 5) with consent. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: feature spec F-NNN`, staging exactly the written files — the feature spec and, when it was updated, the product spec's feature index.
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: feature spec F-NNN`, staging exactly the written files — the feature spec and, when it was updated, the product spec's feature index. Record the gate before asking — `<hooks>session-state.sh set Gate "/feature-spec Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Code, configs, workflows and scripts never ride the `docs:` commit.
