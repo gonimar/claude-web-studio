@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: dev-story-blocked-no-test-strategy
+description: "Spec testing/skills/pipeline/dev-story.md case 7: test-strategy.md missing → BLOCKED before any planning, branching or code."
+tags: [dev-story, gate, critical]
+context:
+  scaffold_script: scaffold.sh

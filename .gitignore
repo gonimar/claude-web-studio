@@ -8,3 +8,4 @@ testing/results/*
 *.log
 __pycache__/
 *.pyc
+evals/results/

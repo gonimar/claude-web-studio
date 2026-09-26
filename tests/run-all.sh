@@ -7,5 +7,5 @@ if command -v shellcheck >/dev/null 2>&1; then echo "== shellcheck"; shellcheck 
 echo "== structure"; python3 tests/validate-structure.py || rc=1
 echo "== hooks"; bash tests/hooks.sh || rc=1
 echo "== installer"; bash tests/installer.sh || rc=1
-if command -v claude >/dev/null 2>&1; then echo "== claude plugin validate"; claude plugin validate . || rc=1; else echo "== claude CLI not found, skipping plugin validate"; fi
+if command -v claude >/dev/null 2>&1; then echo "== claude plugin validate"; claude plugin validate . && claude plugin validate .claude-plugin/plugin.json || rc=1; else echo "== claude CLI not found, skipping plugin validate"; fi
 [ $rc = 0 ] && echo "ALL TESTS PASSED" || echo "TESTS FAILED"; exit $rc

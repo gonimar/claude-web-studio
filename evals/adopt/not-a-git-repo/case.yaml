@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: adopt-not-a-git-repo
+description: "Spec adopt case 9: sources without .git → one question (initialize git now Recommended · stop); no git init and no plan written before the answer."
+tags: [adopt,gate,critical]
+context:
+  scaffold_script: scaffold.sh

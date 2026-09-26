@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: story-done-task-line
+description: "Spec story-done 'resolved before anything is read': without an argument the Task: line of production/session-state/active.md names the story in the first line of the report."
+tags: [story-done,critical]
+context:
+  scaffold_script: scaffold.sh
