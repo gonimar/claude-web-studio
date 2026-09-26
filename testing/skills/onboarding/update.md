@@ -58,5 +58,9 @@ Update the studio in the project (plugin update or copy-mode reinstall); local e
 **Fixture**: a plugin-mode project with no `.claude/.web-studio-version`; `/update` seeds with `install.sh --seed-only`. **Expected**: no stamp is created, the installer says so in its output, and the next `/update` still detects plugin mode — a stamp here would name a version whose agents and skills are not in the project and would send the next run down the copy-mode branch.
 - [ ] no stamp after seeding · [ ] the output says so · [ ] mode detection unaffected
 
+### 14. CLAUDE.md studio sections follow the template
+**Fixture**: the project's `CLAUDE.md` was created from the 0.11 template (principles 1–6), the owner added a principle of their own at the end of the list and filled `## Stack`; the kit template now carries principles 1–9. **Expected**: the Phase 2 drift table has a `CLAUDE.md` row naming principles 7–9 as missing and the owner's principle as a local edit; Phase 3 step 8 shows the diff of the two studio-owned sections and asks (replace and append my principles (Recommended) · replace, drop my lines · keep as is); on the first answer `## Studio (Web Studio)` and `## Working principles` match the template with the owner's principle appended as 10, the title, `## Language`, `## Project` and `## Stack` are byte-identical to before, and `.claude/local-overrides/CLAUDE.md` holds the previous file. A `CLAUDE.md` without the `## Studio (Web Studio)` heading is reported, not edited, with `/adopt` named.
+- [ ] drift row for CLAUDE.md · [ ] only the two studio sections change · [ ] owner's principle kept and renumbered · [ ] previous file in local-overrides · [ ] no studio block → /adopt, no edit
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -64,9 +64,11 @@ end at `SubagentStop`. `/code-review` gains a Scope check: hunks that serve no a
 `SCOPE-SPEC`, reformatting of untouched code INFO `SCOPE-STYLE`, and a behaviour the new code exposes stays inside the
 criteria even when the misbehaving lines are old; reviewers now receive the story's criteria. `rules/go-code.md`,
 `rules/php-code.md` and the Go/PHP engineers scope their "clean before the result" to the findings the story's diff
-introduces (`--new-from-rev <base>`); a pre-existing one is reported, never fixed in passing. Existing projects: copy
-principle 9 into your CLAUDE.md by hand if you want it there — `/update` never edits CLAUDE.md; the agents and
-`/code-review` carry the rule either way.
+introduces (`--new-from-rev <base>`); a pre-existing one is reported, never fixed in passing. Existing projects get
+the principle through `/update`: its drift table now has a `CLAUDE.md` row (principles missing or changed, Studio lines
+that differ), and Phase 3 replaces the two studio-owned sections — `## Studio (Web Studio)` and `## Working principles`
+— behind their own gate, appending the project's own principles after the template's list and keeping the previous file
+in `.claude/local-overrides/`; the title, Language, Project, Stack and any other section stay the project's.
 
 ## 0.12.0 — 2026-09-26
 Findings of a week-long manual run on a real project (Web Studio 0.11.1, ten sessions, 250 agent runs) and of an
