@@ -11,24 +11,58 @@ model: sonnet
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Triage, not review: the skill decides **who** must look at a proposal and **what runs next**, in minutes. It produces no document — an ADR, a threat-model surface, a contract, a story is written by its own command with its own "May I write?" gate (rule 9); the only file this skill touches is `production/session-state/active.md` (one dated `Notes:` line, `Next:`), which needs no question. Coordination-rules rule 11; review-workflow.md § Change classes. After the "write" answer: `touch .claude/.write-consent` (rule 7).
+Triage, not review: the skill decides **who** must look at a proposal and **what runs next**, in minutes. Coordination-rules rule 11; review-workflow.md § Change classes.
+
+It produces no document. An ADR, a threat-model surface, a contract or a story is written by its own command with its own "May I write?" gate (rule 9). The files this skill touches:
+- `production/session-state/active.md`, through the writer: one dated `Notes:` line, and `Next:` only when the user picks a command (Phase 4). This needs no question.
+- `production/findings.md` (a row for a finding ID a verdict names) and `production/backlog.md` (the verdict line of a backlog idea), only when the case arises and only after the Phase 4 "May I write?" gate.
+
+In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode; a studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode.
 
 ## Phase 1: Proposal and scope
-The proposal verbatim (the argument, else the user's last message — quote it back). The active story from `session-state/active.md` and its acceptance criteria; the review mode (`production/review-mode.txt`). A proposal fully inside the active story's criteria is `ROUTINE`: say so in one line and hand off to `/dev-story` — no verifier is spawned for work a story already approved. A **trivial** change — a comment, a typo, formatting, a log message or docstring text, with no behavioural change — is `ROUTINE` too, whatever path it touches: one line, no verifier (the `security-sensitive` rule's review-before-merge applies to the PR, not to triage).
+1. **The proposal verbatim**: the argument, else the user's last message. Quote it back.
+2. **Read** the active story from `production/session-state/active.md` and its acceptance criteria, and the review mode (`production/review-mode.txt`).
+3. **Inside the active story.** A proposal fully inside the active story's criteria is `ROUTINE`: say so in one line and hand off to `/dev-story <story>`; the skill ends here. No verifier is spawned for work a story already approved.
+4. **Trivial change.** A comment, a typo, formatting, a log message or docstring text, with no behavioural change, is `ROUTINE` too, whatever path it touches: one line, no classification table, no verifier. The `security-sensitive` rule's review-before-merge applies to the PR, not to triage.
 
 ## Phase 2: Classification from evidence
-Every class is claimed only with the artifact or path it touches, rendered as a table (class · trigger · evidence) before anything else happens (rule 7). Grep, do not guess:
-- **architecture** — an accepted ADR names or contradicts it (`docs/architecture/adr-*.md`, `decisions.md`); a system boundary or module ownership moves; the stack or a pinned version in `technical-preferences.md`; the API contract (`schema.graphql`, `openapi.*`); the data model or a migration; a new runtime dependency (manifest); the deployment topology (Dockerfile, compose, workflows).
-- **security** — a surface in `docs/architecture/threat-model.md`; a path matching the globs of `.claude/rules/security-sensitive.md`; authentication, sessions, authorisation; PII, secrets, tokens; CI permissions; network, proxy, TLS; uploads, webhooks, WebSocket.
-- **product** — user-visible behaviour absent from the feature spec; a changed acceptance criterion; scope the product spec lists as out.
-- **routine** — none of the above: a change inside existing decisions and surfaces.
-`--classify-only`: stop after the table with the verdict `CLASSIFIED (<classes>)` and the hand-off below; useful when the user only wants to know whether a director must look.
+1. **Grep, do not guess.** Every class is claimed only with the artifact or path it touches:
+   - **architecture** — an accepted ADR names or contradicts it (`docs/architecture/adr-*.md`, `production/decisions.md`); a system boundary or module ownership moves; the stack or a pinned version in `technical-preferences.md`; the API contract (`schema.graphql`, `openapi.*`); the data model or a migration; a new runtime dependency (manifest); the deployment topology (Dockerfile, compose, workflows).
+   - **security** — a surface in `docs/architecture/threat-model.md`; a path matching the globs of `.claude/rules/security-sensitive.md`; authentication, sessions, authorisation; PII, secrets, tokens; CI permissions; network, proxy, TLS; uploads, webhooks, WebSocket.
+   - **product** — user-visible behaviour absent from the feature spec; a changed acceptance criterion; scope the product spec lists as out.
+   - **routine** — none of the above: a change inside existing decisions and surfaces.
+2. **Render the table** (class · trigger · evidence) in the chat message before anything else happens (rule 7).
+3. **`--classify-only`**: stop after the table with the verdict `CLASSIFIED (<classes>)` and go to the next step. No `Task` is spawned. Useful when the user only wants to know whether a director must look.
 
 ## Phase 3: Verification by the class owner
-Only the triggered classes, in one parallel `Task` batch: architecture → `technical-director`, security → `security-lead`, product → `product-director`. The brief per verifier: the proposal, that class's evidence rows, the artifacts to read by path, the review mode. Review mode scopes this step (review-workflow.md): `full` — every triggered class; `lean` — architecture and security, product shown as classification only unless asked; `solo` — classification shown, verification only after one `AskUserQuestion` (verify (Recommended) · skip).
-The verifier's contract — quoted verbatim in the brief — is exactly four blocks and nothing else, 15 lines in total: `Verdict:` one of `APPROVED` · `APPROVED WITH CONDITIONS (…)` · `NEEDS ADR` · `BLOCKED (reason)`; `Why:` at most two lines; `Artifacts:` the ones that must change (ADR, threat-model surface, contract, data model, spec, stories); `Commands:` numbered, in pipeline order. No observations, no background, no list of files read. A reply without commands, or longer than 15 lines, goes back once with the four blocks quoted; a second miss is reported as such — the skill never pads or trims a verdict itself. A `BLOCKED` from any verifier is surfaced immediately with the reason.
+1. **Review mode scopes the step** (review-workflow.md):
+   - `full` — every triggered class.
+   - `lean` — architecture and security; product is shown as classification only unless the user asks.
+   - `solo` — the classification is shown; before any spawn, one `AskUserQuestion`: verify (Recommended) · skip.
+2. **Spawn** only the triggered classes in scope, in one parallel `Task` batch: architecture → `technical-director`, security → `security-lead`, product → `product-director`.
+3. **The brief per verifier**: the proposal, that class's evidence rows, the artifacts to read by path, the review mode, and the verifier's contract quoted verbatim.
+4. **The verifier's contract** is exactly four blocks and nothing else, 15 lines in total:
+   - `Verdict:` one of `APPROVED` · `APPROVED WITH CONDITIONS (…)` · `NEEDS ADR` · `BLOCKED (reason)`;
+   - `Why:` at most two lines;
+   - `Artifacts:` the ones that must change (ADR, threat-model surface, contract, data model, spec, stories);
+   - `Commands:` numbered, in pipeline order.
+
+   No observations, no background, no list of files read.
+5. **Check each reply.** A reply without commands, or longer than 15 lines, goes back once with the four blocks quoted. A second miss is reported as incomplete; the skill never pads or trims a verdict itself.
+6. **`BLOCKED`** from any verifier is surfaced immediately, with the reason.
 
 ## Phase 4: Decision and hand-off
-One table: verifier · verdict · artifacts to change · commands. A verdict that rests on a measurement names the file it lives in (`docs/ops/measurements/…`, rule 8) — not a number typed from memory into `Notes:`. **An ID is never minted without the line it names**: a verdict that says `ARCH-004` or `SEC-002` writes that row into `production/findings.md` in the same turn, under the same write gate (any severity, status `planned (S-NNN)` when a story will carry it) — otherwise the next session greps the ID, finds nothing, and the verdict's authority evaporates along with the finding. Session state through the studio's writer: `hooks/session-state.sh note "impact: <proposal> → <verdicts>"` (it dates the line, keeps the last ten and moves older ones to `production/session-state/archive/`) . **This skill never writes `Next:`** — `Next:` is where the session was heading, and a triage is usually a detour from it (rule 7: a detour never overwrites the interrupted intent). The commands the verdicts require go into the note and into the closing `AskUserQuestion`; `Next:` changes only when the user picks one of them there, because that choice is what makes it the task. If the state file is not in the writer's format the writer refuses — then `hooks/session-state.sh migrate` converts it once (the whole previous file is archived) or the line is added by hand; when the proposal came from `production/backlog.md` — an `I-NNN` in the argument, or an entry whose text this proposal repeats — the verdict goes back into that entry as one line (date, verdict, next command) under the same write gate, because an idea that has been through triage and is still listed as untouched will be proposed again; then `touch .claude/.impact-verdict` (the impact-guard hook checks the marker for architecture/security paths; warn-only). Commands in the pipeline's order: `/architecture-decision` → `/threat-model` → `/api-contract` / `/data-model` → `/feature-spec` / `/create-stories` → `/dev-story`. May I write? never arises here: every document above is written by its own command.
+1. **One table**: verifier · verdict · artifacts to change · commands. Commands in the pipeline's order: `/architecture-decision` → `/threat-model` → `/api-contract` / `/data-model` → `/feature-spec` / `/create-stories` → `/dev-story`.
+2. **Measurements.** A verdict that rests on a measurement names the file it lives in (`docs/ops/measurements/…`, rule 12), never a number typed from memory into `Notes:`.
+3. **Records the verdict creates** — only when one of these applies:
+   - **A finding ID is never minted without the line it names.** A verdict that says `ARCH-004` or `SEC-002` gets that row in `production/findings.md` in the same turn (any severity; status `planned (S-NNN)` when a story will carry it). Otherwise the next session greps the ID, finds nothing, and the verdict loses its authority.
+   - **A backlog idea gets its verdict back.** When the proposal came from `production/backlog.md` (an `I-NNN` in the argument, or an entry whose text this proposal repeats), add one line to that entry: date, verdict, next command. An idea that has been through triage and is still listed as untouched will be proposed again.
 
-Verdict: `ROUTINE` | `CLASSIFIED (…)` | `APPROVED` | `APPROVED WITH CONDITIONS` | `NEEDS ADR` | `BLOCKED`. Next step — one `AskUserQuestion`: the first command the verdicts require (Recommended) · show the verifiers' full replies · stop here. On `BLOCKED`: revise the proposal (Recommended) · record the rejection as an ADR (`/architecture-decision`) · stop here.
+   Show the row/line, then one `AskUserQuestion`: "May I write <the row in `production/findings.md` / the line in `production/backlog.md`>?" — write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7), then `Edit`.
+4. **Session note** through the studio's writer: `<hooks>session-state.sh note "impact: <proposal> → <verdicts>; next: <commands>"`. It dates the line, keeps the last ten and moves older ones to `production/session-state/archive/`. If the state file is not in the writer's format, the writer refuses: run `<hooks>session-state.sh migrate` once (it archives the whole previous file), or add the line by hand.
+5. **This skill never writes `Next:` on its own.** `Next:` is where the session was heading, and a triage is usually a detour from it (rule 7: a detour never overwrites the interrupted intent). The required commands go into the note and into the closing `AskUserQuestion`. `Next:` changes only when the user picks one of them there (`<hooks>session-state.sh set Next "<command>"`), because that choice is what makes it the task.
+6. **Marker**: `touch .claude/.impact-verdict` (the impact-guard hook checks it for architecture/security paths; warn-only).
+
+Verdict: `ROUTINE` | `CLASSIFIED (…)` | `APPROVED` | `APPROVED WITH CONDITIONS` | `NEEDS ADR` | `BLOCKED`.
+
+Next step — one `AskUserQuestion`: the first command the verdicts require (Recommended) · show the verifiers' full replies · stop here. On `BLOCKED`: revise the proposal (Recommended) · record the rejection as an ADR (`/architecture-decision`) · stop here.
