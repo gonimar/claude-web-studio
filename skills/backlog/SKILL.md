@@ -11,8 +11,17 @@ model: haiku
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `.claude/docs/templates/backlog.md`; the roadmap format (`templates/roadmap.md`) reserves `production/backlog.md`
-for ideas before their spec and `production/decisions.md` for owner decisions. Writes only after "May I write?".
+Template `.claude/docs/templates/backlog.md`; the roadmap format (`.claude/docs/templates/roadmap.md`) reserves
+`production/backlog.md` for ideas before their spec and `production/decisions.md` for owner decisions.
+
+**Write gate** (every mode below that changes the file): render the new or changed entry in the chat, then
+"May I write `production/backlog.md`?" — one `AskUserQuestion`: write (Recommended) · adjust the wording · not now.
+After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker), then
+write. Then one commit gate: `docs: backlog <what>` staging exactly that file, on the branch git-workflow's
+documents lane prescribes.
+
+**Not initialised** — no `.claude/docs/` and no `production/` → `BLOCKED (not initialised — run /init)`, nothing
+written. An initialised project without `production/backlog.md` gets it created from the template at the first write.
 
 ## Phase 0: What is an idea (rule for every skill and the main conversation)
 A **musing** — "what if we…", "maybe we should…", "it would be nice…", or their equivalents in the conversation language, said while
@@ -24,38 +33,50 @@ session store") is `/impact`'s business, not the backlog's; when unsure, record 
 one command, implementing an undecided idea costs a story.
 
 ## Phase 1: `add "<idea>"`
-Read `production/backlog.md` (create from the template when missing) and take the next `I-NNN`. Draft one
-entry: `### I-NNN · <title in ≤ 8 words> 💡` + one line *recorded YYYY-MM-DD, source: <conversation | user |
-incident INC-NNN | audit>* + the idea in one or two sentences **in the user's words**, plus, when obvious, the
-area (`🏷 backend/frontend/game/infra/docs`) — no analysis, no options, no estimate: that is what promotion is for.
-Render the entry in the chat, then "May I write `production/backlog.md`?" — one `AskUserQuestion`: write
-(Recommended) · adjust the wording · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 —
-the consent-guard hook checks the marker). Then one commit gate: `docs: backlog I-NNN <title>` staging exactly
-that file, on the branch git-workflow's documents lane prescribes. **Stop here** — the recorded idea never
-becomes a task in this turn; if a story or skill was in progress, the hand-off returns to it ("back to
-/dev-story S-NNN (Recommended)").
+1. Read `production/backlog.md` and take the next `I-NNN`.
+2. Draft one entry: `### I-NNN · <title in ≤ 8 words> 💡`, one line *recorded YYYY-MM-DD, source: <conversation |
+   user | incident INC-NNN | audit>*, and the idea in one or two sentences **in the user's words**. Add the area
+   (`🏷 backend/frontend/game/infra/docs`) when it is obvious. No analysis, no options, no estimate: that is what
+   promotion is for.
+3. **A proposal passed to `add`** (a concrete change with a decision behind it) is recorded as asked — the backlog
+   never refuses — with one line saying that a concrete change is `/impact`'s business; the next step then offers
+   `/backlog promote I-NNN` → `/impact`.
+4. Write gate and commit gate (`docs: backlog I-NNN <title>`).
+5. **Stop here.** The recorded idea never becomes a task in this turn. If a story or skill was in progress, the
+   hand-off returns to it ("back to /dev-story S-NNN (Recommended)").
 
 ## Phase 2: `review` (weekly, or when `/help` shows `Backlog: N ideas, oldest N days`)
-Table of open ideas: ID · title · recorded · age · area · marker (`🅿` parked). Older than 60 days without a
-decision → flagged. One `AskUserQuestion` per review, never per idea: promote one (name it) (Recommended when
-something is older than 30 days) · park/close some · nothing now. Ideas are never silently deleted — `close`
-keeps the line with `[x]` and the reason.
+1. Render a table of open ideas: ID · title · recorded · age · area · marker (`🅿` parked). Flag ideas older than 60
+   days without a decision.
+2. **Ideas that left sideways.** An idea can leave the backlog without `promote` — the user ran `/impact` or
+   `/feature-spec` on it directly — and the entry then stays open for weeks while the work is already done. An open
+   entry whose text matches a spec, ADR or impact verdict written later is that case: name it and offer to close it
+   with the link.
+3. One `AskUserQuestion` per review, never per idea: promote one (name it) (Recommended when something is older than
+   30 days) · park/close some · nothing now.
+4. Apply the answer through the matching mode below. With a write answer, also set `last-review` and **Reviewed:**
+   to today (the template header; `/help` reads `last-review`), behind the write gate.
 
-## Phase 3: `promote I-NNN` (the idea goes through the pipeline it skipped)
-Decide the route from the entry, not from its wording, and hand off with one `AskUserQuestion`:
-- vague, no clear user or scope → `/brainstorm "<title>"` (Recommended);
-- a concrete change to code, architecture, security or deployment → `/impact "<idea>"` (its verifiers decide);
-- a user-visible feature the product spec allows → `/feature-spec "<title>"`, it receives `F-NNN`;
-- a technical choice → `/architecture-decision "<title>"`.
-After the hand-off returns, mark the entry `→ promoted YYYY-MM-DD: [F-NNN](../docs/specs/features/…)` (or the
-ADR / impact verdict) and tick it `[x]` — "May I update `production/backlog.md`?" with the same gate and commit.
-The promotion counts only once that line exists: an idea can also leave the backlog sideways — the user runs
-`/impact` or `/feature-spec` on it directly, without `promote` — and the entry then stays open for weeks while
-the work is already done. `review` treats an entry whose text matches a spec, ADR or impact verdict written
-later as exactly that case: it names it and offers to close it with the link.
-`park I-NNN` adds `🅿` and a date; `close I-NNN <reason>` ticks it with the reason. Nothing here ever creates a
-story or writes code.
+Ideas are never silently deleted: `close` keeps the line with `[x]` and the reason.
+
+## Phase 3: `promote I-NNN` · `park I-NNN` · `close I-NNN <reason>`
+**`promote I-NNN`** — the idea goes through the pipeline it skipped.
+1. Decide the route from the entry, not from its wording:
+   - vague, no clear user or scope → `/brainstorm "<title>"`;
+   - a concrete change to code, architecture, security or deployment → `/impact "<idea>"` (its verifiers decide);
+   - a user-visible feature the product spec allows → `/feature-spec "<title>"`, it receives `F-NNN`;
+   - a technical choice → `/architecture-decision "<title>"`.
+2. Hand off with one `AskUserQuestion`: the route chosen in step 1 (Recommended) · the other plausible routes · not now.
+3. After the hand-off returns, mark the entry `→ promoted YYYY-MM-DD: [F-NNN](../docs/specs/features/…)` (or the
+   ADR / impact verdict) and tick it `[x]`, behind the write gate ("May I update `production/backlog.md`?") and the
+   commit gate. The promotion counts only once that line exists.
+
+**`park I-NNN`** adds `🅿` and a date (and the reason, when given). **`close I-NNN <reason>`** ticks it `[x]` with
+the reason. Both go through the write gate and the commit gate.
+
+Nothing here ever creates a story or writes code.
 
 Verdict: `COMPLETE (I-NNN recorded)` | `COMPLETE (review: N open, M promoted)` | `COMPLETE (I-NNN promoted → …)` |
 `BLOCKED (not initialised — run /init)`. Next step — one `AskUserQuestion`: return to the interrupted work
-(Recommended when something was in progress) · `/backlog review` · stop here.
+(Recommended when something was in progress) · `/backlog promote I-NNN` (Recommended when a proposal was just
+recorded and nothing was in progress) · `/backlog review` · stop here.

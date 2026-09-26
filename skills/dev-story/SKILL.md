@@ -11,57 +11,84 @@ model: sonnet
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7); delegated agents follow the same protocol. After the "write" answer: `touch .claude/.write-consent` (rule 7).
+File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7). After the "write" answer: `touch .claude/.write-consent` (rule 7).
 
 ```
 /create-stories → /dev-story (this) → /code-review → /story-done
 ```
 
-## Phase 1: Story
-**Context first (rule 13)**: when the statusline `ctx:` share is above 50 %, or this session has already closed a story, the story does not start here — one `AskUserQuestion`: `/clear`, then `/web-studio:dev-story S-NNN` again (copy mode `/dev-story`) (Recommended) · continue in this session (the answer names why). A story started at 450 k of context costs three fresh ones and every subagent hand-back lands on top of it.
-Argument or `production/session-state/active.md` (`Task:`); none — ask. Status must be Ready/In Progress.
-No `production/sprints/sprint-*.md` covers this story while the backlog holds more than three Ready
-stories → say so before the plan question and include `/sprint-plan` in its options (Recommended for
-the first story of a fresh backlog): the sprint layer must not be reachable only by the owner's memory.
+In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode; a studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode.
 
-## Phase 2: Context (read everything before starting)
-**Architecture prerequisites first** — regardless of how the project entered `build` (brownfield
-projects start there with the architecture phase unwalked): `docs/architecture/threat-model.md` and
-`docs/architecture/test-strategy.md` must exist — the catalog marks both `required`. Either missing →
-`BLOCKED (architecture prerequisites unmet — run /threat-model | /test-setup first)`; name only the
-missing ones, never loop a question about it. Then read: the story; the feature spec (relevant
-sections); the contract (`schema.graphql`/openapi) — if the story changes the contract, run
-`/api-contract` first; ADRs; the data model; applicable `.claude/rules/*.md`; the stack reference for
-the story's languages; the test strategy. A missing ADR/contract for a story that needs one →
-`BLOCKED` naming what to run. A request that leaves the story's acceptance criteria — the user asks
-for something the story does not cover, or the implementation needs an unplanned dependency,
-contract, schema or security surface — is not absorbed into the story: detour to `/impact <the
-request>` (rule 11) and return to the story afterwards (rule 7, hand-off after a detour).
+## Phase 1: Story
+1. **Context gate (rule 13).** When the statusline `ctx:` share is above 50 %, or this session has already closed a story, the story does not start here. Ask one `AskUserQuestion`: `/clear`, then `/web-studio:dev-story S-NNN` again (copy mode `/dev-story`) (Recommended) · continue in this session (the answer names why). Every subagent hand-back lands on top of the context the story starts with, so a story started at 450 k costs as much as three fresh ones.
+2. **Pick the story.** The argument, else `Task:` in `production/session-state/active.md`, else ask. Its status must be Ready or In Progress.
+3. **Sprint layer.** When no `production/sprints/sprint-*.md` covers this story and the backlog holds more than three Ready stories, say so in one line and add `/sprint-plan` to the options of the Phase 3 plan question (Recommended for the first story of a fresh backlog). Otherwise the sprint layer is reachable only by the owner's memory. With a covering sprint file, say nothing.
+
+## Phase 2: Context (read everything before planning)
+1. **Architecture prerequisites.** `docs/architecture/threat-model.md` and `docs/architecture/test-strategy.md` must exist. The catalog marks both `required`, and brownfield projects enter `build` with the architecture phase unwalked, so check them however the project got here. Either missing → verdict `BLOCKED (architecture prerequisites unmet — run /threat-model | /test-setup first)`, naming only the missing ones. Do not plan, branch or write anything, and do not loop a question about it.
+2. **Read**: the story; the relevant sections of the feature spec; the contract (`schema.graphql` / openapi); ADRs; the data model; applicable `.claude/rules/*.md`; the stack reference for the story's languages; the test strategy. Note line ranges as you read, because the Phase 4 briefs need them.
+3. **Missing inputs.** A story that changes the contract → run `/api-contract` first. A story that needs an ADR or a contract that does not exist → `BLOCKED`, naming the command to run.
+4. **Scope creep goes to `/impact`.** When the user asks for something the story's acceptance criteria do not cover, or the implementation needs an unplanned dependency, contract, schema or security surface, do not absorb it into the story. Detour to `/impact <the request>` (rule 11), then return to the story (rule 7, hand-off after a detour).
 
 ## Phase 3: Plan and branch
-The story's scope passed its spec and ADR gates: `touch .claude/.impact-verdict` at story start, so the impact-guard hook stays silent on the story's own architecture/security paths (rule 11).
-Files to create/change, order, tests per criterion — **the table rendered in the chat message** before the plan question. The plan is divided into steps an agent can finish inside its turn budget (≤ 40 turns: reading the brief's files, writing, one test run) — one specialist, one file cluster per step — and the table says how many steps and which agent takes each; a plan of one step called "implement the story" is how a story ends up written by the parent. When the plan needs a spike — a throwaway script that answers a question about a library, a timing, a format — the table says where it lives: `tools/spike-<slug>/` (gitignored) or the session's scratchpad, and that Phase 6 deletes it. A spike has no other home: unnamed, it lands in the repository root and rides into the commit (rule 7: readable rendering, on updates too). Branch per `.claude/docs/git-workflow.md`: `git fetch origin`; if the current branch is the default branch or is already merged into `origin/<default>` (session-start prints "no commits beyond"), `git switch <default> && git pull --ff-only`; then `git switch -c feat/S-NNN-slug` — with consent. Never continue on a merged branch. Update the session state with the studio's writer, never with a hand-built `sed`/`python3 -c` one-liner — `hooks/session-state.sh set Task "S-NNN …" Branch feat/S-NNN-slug Next "/code-review"` (`.claude/hooks/` in copy mode, `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode). It refuses to touch a state file it cannot round-trip — a project whose `active.md` grew into a working document keeps it, and the answer is to move its durable parts to their own documents, never to force the writer through. It keeps every field of the template, fills the untouched ones with `—` and prints the result, so a failed write is visible instead of silent — quoting one-liners inside double quotes is how the file used to be updated, and a broken quote left it unchanged with nobody the wiser and write `Started: YYYY-MM-DDTHH:MM` into the story card's metadata line (the actual time `/story-done` records is measured from it). Show the plan, then one `AskUserQuestion`: continue (Recommended) · change the plan (say what) · stop.
+1. **Mark the story's scope as reviewed.** `touch .claude/.impact-verdict`. The story already passed its spec and ADR gates, and this keeps the impact-guard hook quiet on the story's own architecture/security paths (rule 11).
+2. **Build the plan table**, then render it in the chat message as a table (rule 7, readable rendering, on updates too). Columns: step · agent · files to create/change · criterion and test it serves. Rules for the steps:
+   - A step is something one specialist can finish inside a subagent's turn budget (≤ 40 turns: read the brief's files, write, one test run). One specialist, one file cluster per step. A one-step plan called "implement the story" is how the parent ends up writing the story itself.
+   - Every step names its agent, and the table says how many steps there are.
+   - **Spikes.** When the plan needs a throwaway script to answer a question about a library, a timing or a format, the table gives it a home: `tools/spike-<slug>/` (gitignored) or the session scratchpad, and says Phase 6 deletes it. An unnamed spike lands in the repository root and rides into the commit.
+3. **Ask one `AskUserQuestion`**: continue — branch `feat/S-NNN-slug` and start (Recommended) · change the plan (say what) · stop. Include `/sprint-plan` when Phase 1 step 3 flagged it. The "continue" answer is the consent for the branch, the state update, the story-card edit and the files named in the plan (rule 7, delegated steps): `touch .claude/.write-consent` after it and again before each `Task` batch in Phase 4, so the consent-guard sees the specialists' writes as approved.
+4. **Branch** per `.claude/docs/git-workflow.md`:
+   1. `git fetch origin`.
+   2. If the current branch is the default branch, or is already merged into `origin/<default>` (session-start prints "no commits beyond"; check with `git merge-base --is-ancestor HEAD origin/<default>`): `git switch <default> && git pull --ff-only origin <default>`. Never continue on a merged branch.
+   3. `git switch -c feat/S-NNN-slug`.
+5. **Record the start.**
+   - Session state goes through the studio's writer, never a hand-built `sed` / `python3 -c` one-liner: `<hooks>session-state.sh set Task "S-NNN …" Branch feat/S-NNN-slug Next "/code-review"`. It keeps every template field, fills untouched ones with `—` and prints the result, so a failed write is visible instead of silent. If it refuses because it cannot round-trip the file, the project's `active.md` has grown into a working document. Leave it alone and suggest moving its durable parts into their own documents. Never force the writer.
+   - On the story card's metadata line, write `Started: YYYY-MM-DDTHH:MM` with the actual time. `/story-done` measures the story's actual duration from it.
 
-## Phase 4: Implementation (via Task to the right engineers, by layer)
-**The parent does not write product code.** Every file of the story is written by a specialist through `Task` with an explicit `subagent_type` (`web-studio:go-engineer` in plugin mode, `go-engineer` in copy mode) — not by the session running this skill. This is the rule the pipeline rests on: the specialists carry the stack reference, the layout contract and their own memory, and the audit log records who wrote what. Observed failure: across four stories the implementing agent was spawned **once**, was cut off at its turn limit without writing a line, and the parent wrote 687 lines itself — the story passed, the rule did not.
-One call = one layer or one file cluster, sized to a subagent's turn budget; the result reports decisions, surprises and numbers, never the full diff (the parent reads it with `git diff`).
-**The brief carries what the parent already knows.** Every `Task` prompt has the same six lines, filled from Phase 2/3 — `Story:` path and the criterion this step serves · `Read:` the files **with line ranges** the step touches or depends on (the parent read them in Phase 2; an agent that has to find them spends half its budget on `grep`) · `Write:` the files to create or change · `Check:` the exact commands to run before reporting · `Skip:` what not to read or run (the full suite, the whole reference, unrelated packages) · `Report:` decisions, numbers, `Checkpoint:` line. A brief without `Read:` line ranges is not sent.
-**When an agent is cut off** (`stopped at its N-turn limit`, a result that ends mid-sentence, a `SubagentStart` with no `Stop`): resume *that* agent with the point it stopped at, never spawn a second one on the same task. The resume message is one line — "continue from your `Checkpoint:`; run `git status` and the step's `Check:` yourself and report" — and the parent runs **no** `git status`, build or test of its own before sending it: on a real day the parent answered 50 of 64 cut-offs with its own checks first, each one adding 5–20 k tokens to a context that was already past 400 k. The parent verifies once, after the `SubagentStop`. Cut off twice: split what is left into smaller calls and spawn again. Only after both have failed may the parent write the code itself — and then the story result says so in one line ("written by the parent: <agent> cut off twice on <task>"), because a rule broken silently is a rule that will be broken again next story.
-- Backend: `go-engineer` / `php-engineer` / `node-engineer`; GraphQL — `graphql-engineer`; DB — `database-engineer`. Go under `go_architecture: layered`: the step table names the layer of every step (domain → use case → infrastructure → composition root → transport, in that order for a vertical slice), a domain or use-case step includes its tests, and the story result quotes the `coverage-gate` lines and the `golangci-lint` count; a story that would restructure existing packages is not a story, it is `/refactor` (rule 11 detour). PHP under `php_architecture: layered`: the same step order by layer (domain → application → infrastructure → composition root → transport), domain and application steps include their tests, and the story result quotes the `coverage-gate:` lines and the deptrac violation count; a schema change is a migration file in the story, never DDL in a class.
-- Frontend: `angular-engineer` / `vue-engineer`; styles — `css-engineer`; public pages of a content site (`Type: site`, SSR/SSG) — `seo-specialist` reviews title/meta/canonical, structured data, sitemap and hreflang before the story closes; user-facing copy with i18n keys — `accessibility-specialist` for the states and copy.
+## Phase 4: Implementation (Task to the right engineers, by layer)
+**The parent does not write product code.** Every file of the story is written by a specialist through `Task` with an explicit studio `subagent_type` (for example `web-studio:go-engineer`), not by the session running this skill. The specialists carry the stack reference, the layout contract and their own memory, and the audit log records who wrote what. (Observed: across four stories the implementing agent was spawned once, cut off without writing a line, and the parent wrote 687 lines itself. The stories passed; the rule did not.)
+
+**One call per plan step**, independent steps in parallel, dependent ones in order (contract → backend → frontend). The result reports decisions, surprises and numbers, never the full diff; the parent reads the diff with `git diff`.
+
+**The brief carries what the parent already knows.** Every `Task` prompt has these six lines, filled from Phase 2 and 3:
+```
+Story:  <story path> — criterion <n> (<one-line criterion>)
+Read:   <file>:<start>-<end>, … (the files this step touches or depends on, with line ranges)
+Write:  <files to create or change>
+Check:  <exact commands to run before reporting>
+Skip:   <what not to read or run: the full suite, the whole reference, unrelated packages>
+Report: decisions, surprises, numbers, and a final `Checkpoint:` line (done · next · unverified)
+```
+Do not send a brief without line ranges in `Read:`. An agent that has to find its files spends half its budget on `grep`.
+
+**Consent inside a step.** The Phase 3 answer covers the files the plan names. A specialist that needs to go beyond its brief (another file, a new dependency, a contract or schema change) stops and reports it. The parent then asks the user, or detours to `/impact` when it leaves the story (Phase 2 step 4). Subagents cannot ask the user themselves.
+
+**When an agent is cut off** (`stopped at its N-turn limit`, a result that ends mid-sentence, a `SubagentStart` with no `Stop`):
+1. Resume *that* agent. Do not spawn a second one on the same task. The resume message is one line: "continue from your `Checkpoint:`; run `git status` and the step's `Check:` yourself and report". Before sending it the parent runs **no** `git status`, build or test of its own. Each such check adds 5–20 k tokens to the parent's context (on one real day, 50 of 64 cut-offs were answered that way). The parent verifies once, after the `SubagentStop`.
+2. Cut off twice: split what is left into smaller steps and spawn again.
+3. Only after both have failed may the parent write the code itself. The story result then says so in one line, "written by the parent: <agent> cut off twice on <task>", because a rule broken silently gets broken again next story.
+
+**Routing**
+- Backend: `go-engineer` / `php-engineer` / `node-engineer`; GraphQL `graphql-engineer`; DB `database-engineer`.
+  - Go under `go_architecture: layered`: the plan names the layer of every step, in the order domain → use case → infrastructure → composition root → transport for a vertical slice. A domain or use-case step includes its tests. The story result quotes the `coverage-gate` lines and the `golangci-lint` count. A story that would restructure existing packages is not a story: detour to `/refactor` (rule 11).
+  - PHP under `php_architecture: layered`: the same step order by layer (domain → application → infrastructure → composition root → transport). Domain and application steps include their tests. The story result quotes the `coverage-gate:` lines and the deptrac violation count. A schema change is a migration file in the story, never DDL in a class.
+- Frontend: `angular-engineer` / `vue-engineer`; styles `css-engineer`. On public pages of a content site (`Type: site`, SSR/SSG), `seo-specialist` reviews title/meta/canonical, structured data, sitemap and hreflang before the story closes; internal SPAs get no SEO review. User-facing copy with i18n keys: `accessibility-specialist` reviews the states and copy.
 - Game: `threejs-engineer` / `web-game-engineer` / `multiplayer-engineer`.
-- Tests: the engineers themselves plus `test-engineer` for e2e.
-Each gets the story context and the rule: show code before writing (the user approves), then run tests/lint with output.
-Independent layers in parallel; dependent ones sequentially (contract → backend → frontend).
+- Tests: the engineers write their own; `test-engineer` handles e2e.
 
 ## Phase 5: Criteria check
-Who wrote this story is part of the report: `grep "SubagentStart" production/session-logs/agent-audit.log | tail -n <steps>` — the agents that ran, against the agents the plan named. A step whose agent never started, or started and never stopped, is named in the result; silence there is what let four stories in a row be written by the parent without anyone noticing.
-Table "criterion → test → result (output)". Unmet ones explicitly. Lint/typecheck/dependency audit (if packages were added — health verified).
+1. **Who wrote the story.** Run `grep "SubagentStart" production/session-logs/agent-audit.log | tail -n <steps>` and compare the agents that ran against the agents the plan named. Name any step whose agent never started, or started and never stopped. Silence here is what let four stories in a row be written by the parent without anyone noticing.
+2. **Criteria table**: criterion → test → result, with the command output. Name unmet criteria explicitly.
+3. **Checks**: lint, typecheck, and a dependency audit when packages were added (health verified).
 
-**Waiting for CI** after the push: as in `/story-done` — one background `gh run watch <run-id> --exit-status`, no polling `Monitor`, no `AskUserQuestion` as a pause; end the turn with a one-line status if the queue is slow.
+## Phase 6: Wrap-up, commit and CI
+1. **Status.** Set the story status to `Review` and the session state to `Next: /code-review` (through `<hooks>session-state.sh`).
+2. **Commit gate**, one `AskUserQuestion`: commit and push (Recommended) · commit only · not now (`git-workflow.md`, step "Implement").
+3. **Stage by name.** Read `git status --short` first and deal with every unplanned `??` entry: delete the spike (its `tools/spike-<slug>/` or scratchpad files), add a file deliberately if it belongs to the story, otherwise leave it alone and name it. Then stage the story's files **by name**. Never use `git add -A`; that is how a spike, a scratch log or a stray `.bak` reaches the history.
+4. `git commit -m "feat(S-NNN): <story title>"`, then `git push -u origin feat/S-NNN-slug`. Never commit on the default branch.
+5. **Find out what starts CI** before waiting for anything. Read the triggers (`grep -l "pull_request" .github/workflows/*.yml` and each workflow's `on:`). A workflow with `on: pull_request` and no `push` trigger for this branch starts **nothing** on a bare push. When the PR is what starts the checks, open it as a draft in this step (`gh pr create --draft --fill`) so they run during review; `/story-done` marks it ready and merges it. Without `gh`, or with a push-triggered workflow, say which run to expect and its id.
+6. **Wait for CI** only for a run that exists: one background `gh run watch <run-id> --exit-status`, as in `/story-done`. No polling `Monitor`, and no `AskUserQuestion` used as a pause. If the queue is slow, end the turn with a one-line status.
 
-## Phase 6: Wrap-up and commit
-Update the story status (`Review`), session state (`Next: /code-review`). Then, with consent as one `AskUserQuestion` — commit and push (Recommended) · commit only · not now (`git-workflow.md`, step "Implement"): stage the story's files **by name** — never `git add -A`, which is how a spike, a scratch log and a stray `.bak` reach the history — after reading `git status --short` and naming any unplanned `??` entry (deleted if it is the spike, added deliberately if it belongs to the story, left alone otherwise), `git commit -m "feat(S-NNN): <story title>"`, `git push -u origin feat/S-NNN-slug`. Never commit on the default branch.
-Then check what actually triggers CI before waiting for it: a workflow with `on: pull_request` and no `push` trigger for this branch starts **nothing** on a bare push, and a session that waits for that run waits for something that was never queued. Read the triggers (`grep -l "pull_request" .github/workflows/*.yml`) and, when the PR is what starts them, open it as a draft in the same step — `gh pr create --draft --fill` — so the checks run while the review happens; `/story-done` turns the draft ready and merges it. With no `gh`, or with a push-triggered workflow, say which run to expect and its id.
+**Verdict**: `COMPLETE` | `PARTIAL (open: …)` | `BLOCKED`.
 
-Verdict: `COMPLETE` | `PARTIAL (open: …)` | `BLOCKED`. Next step — one `AskUserQuestion`, never a bare "run /code-review?": `/web-studio:code-review --diff <story-path>` (copy mode `/code-review --diff <story-path>`; the bare name in plugin mode is Claude Code's built-in review — coordination-rules § Subagents) (Recommended on COMPLETE) · commit first (when Phase 6 was declined) · show the diff · stop here. Run the next skill only on that answer.
+**Next step**, one `AskUserQuestion`, never a bare "run /code-review?": `/web-studio:code-review --diff <story-path>` (copy mode `/code-review --diff <story-path>`; in plugin mode the bare name is Claude Code's built-in review, see coordination-rules § Subagents) (Recommended on COMPLETE) · commit first (when step 2 was declined) · show the diff · stop here. Run the next skill only on that answer.

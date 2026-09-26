@@ -78,7 +78,7 @@ for h in set(re.findall(r'\.claude/hooks/([a-z-]+\.sh)', open('templates/setting
 # A hook a skill calls as a command (`hooks/x.sh set …`) must be executable (WS-135: session-state.sh shipped 0644)
 for sk in skills:
     body = open(f'skills/{sk}/SKILL.md', encoding='utf-8').read()
-    for h in set(re.findall(r'hooks/([a-z-]+\.sh) (?:set|clear|--since|convert)', body)):
+    for h in set(re.findall(r'(?:hooks/|<hooks>)([a-z-]+\.sh) (?:set|clear|--since|convert)', body)):
         if os.path.isfile(f'hooks/{h}') and not os.access(f'hooks/{h}', os.X_OK): fail(f'hooks/{h}: called as a command by /{sk} but not executable')
 # Both registrations carry the same hook set — a hook present in plugin mode only never reaches copy-mode projects
 hp = set(re.findall(r'hooks/([a-z-]+\.sh)', open('hooks/hooks.json').read())); hc = set(re.findall(r'\.claude/hooks/([a-z-]+\.sh)', open('templates/settings.json').read()))

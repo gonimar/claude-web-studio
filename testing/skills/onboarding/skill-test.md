@@ -11,7 +11,7 @@ Linter/specs/rubric/audit of skills and agents.
 
 ## Cases
 ### 1. Happy path
-**Fixture**: static all. **Expected**: 8-check table for every skill, summary.
+**Fixture**: static all. **Expected**: 9-check table for every skill, summary.
 - [ ] phase order followed · [ ] output matches the expectation · [ ] writes only after consent
 ### 2. Refusal / BLOCKED
 **Fixture**: no framework. **Expected**: only static available.

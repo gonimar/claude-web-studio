@@ -12,19 +12,40 @@ agent: network-security-engineer
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-`stack-reference/security-standards.md`, `security-baseline.md` (headers, network), rules `rules/ci-docker.md`, `rules/security-sensitive.md`.
+References: `stack-reference/security-standards.md`, `security-baseline.md` (headers, network), rules `rules/ci-docker.md`, `rules/security-sensitive.md`.
+
+**Mode** (argument, default `full`): `full` runs every checklist group of Phase 2; `headers`, `tls`, `proxy`, `docker`, `ci` narrow it to that group; `secrets` runs the rotation checklist instead. `--apply` goes on to Phase 3 without a separate "apply?" question; every file write still has its own "May I write?".
 
 ## Phase 1: Inventory
-Proxy configs — in this repository or in the **Infra repo / Proxy config** from `technical-preferences.md` (Infrastructure) when the proxy lives elsewhere; compose/Dockerfile, workflows, where TLS terminates, current headers (`curl -sI <url>` on dev/staging/prod with consent). No infra repo declared and no proxy config here → say so: the checklist can only be verified live, not fixed, and `/setup-stack`/`/adopt` records the field.
+1. **Where the config lives.** Proxy configs in this repository, or in the **Infra repo / Proxy config** from `technical-preferences.md` (Infrastructure) when the proxy lives elsewhere. Also compose/Dockerfile, workflows, and where TLS terminates.
+2. **No infra repo declared and no proxy config here** → say so: the proxy checklist can only be verified live, not fixed here, and `/setup-stack` / `/adopt` records the field.
+3. **Current headers**: `curl -sI <url>` on dev/staging/prod, with consent. No URL reachable (or consent declined) → continue with static analysis of the configs and say that every item is unverified live.
 
 ## Phase 2: Checklist
-Headers (HSTS, CSP nonce/strict-dynamic — mind Angular `ngCspNonce`/Nuxt, nosniff, Referrer-Policy, Permissions-Policy, COOP/CORP), cookie flags; TLS profile; `server_tokens`/`limit_req`/`client_max_body_size`/timeouts; WebSocket Origin/limits; Docker: networks, non-root, `cap_drop`, `read_only`, pins, health checks; CI `permissions`; secrets (`.env` ignored, gitleaks). Per item — status and a verification command.
-**`secrets` mode (rotation checklist)** — an inventory, never the values: every secret the project uses, from the deploy contract's Prerequisites & secrets, `.env.example`, compose `environment:`/`env_file:`, workflow `secrets.*` references and the platform UI names; per secret: where it lives (platform env, `~/.config/<project>/*.env`, CI secret, registry token), which component reads it, the provider's rotation steps (issue new → deploy → verify → revoke old), the last rotation date if recorded. Then the checks: `gitleaks` / `git log -p -S` for the old value pattern (never the value itself in the command line), no secret in images (`docker history`, build args), CI `permissions` least-privilege, `.env` ignored. Output: the rotation table + the order to rotate in (dependencies first) + the verification per secret; written into `docs/security/hardening-checklist.md` § Secrets. Trigger: a leak (`/incident`), a departure, quarterly.
+Per item: status and a verification command.
+- **Headers**: HSTS, CSP nonce/strict-dynamic (mind Angular `ngCspNonce` / Nuxt), nosniff, Referrer-Policy, Permissions-Policy, COOP/CORP; cookie flags.
+- **TLS**: the TLS profile.
+- **Proxy**: `server_tokens` / `limit_req` / `client_max_body_size` / timeouts; WebSocket Origin checks and limits.
+- **Docker**: networks, non-root, `cap_drop`, `read_only`, pins, health checks.
+- **CI**: workflow `permissions`.
+- **Secrets hygiene**: `.env` ignored, gitleaks.
 
-## Phase 3: Changes (`--apply` or with consent)
-Show config diffs — in the infra repo when declared ("May I write [infra repo path/file]?"), otherwise the exact snippet for the owner of the proxy; validate with `nginx -t`/`caddy validate`/`docker compose config`; repeat `curl -I` — before/after output. The live headers are the evidence in both cases.
+**`secrets` mode (rotation checklist)** — an inventory, never the values. Trigger: a leak (`/incident`), a departure, quarterly.
+1. **Inventory** every secret the project uses, from the deploy contract's Prerequisites & secrets, `.env.example`, compose `environment:`/`env_file:`, workflow `secrets.*` references and the platform UI names.
+2. **Per secret**: where it lives (platform env, `~/.config/<project>/*.env`, CI secret, registry token), which component reads it, the provider's rotation steps (issue new → deploy → verify → revoke old), the last rotation date if recorded.
+3. **Checks**: `gitleaks` / `git log -p -S` for the old value's pattern (never the value itself on the command line); no secret in images (`docker history`, build args); CI `permissions` least-privilege; `.env` ignored.
+4. **Output**: the rotation table, the order to rotate in (dependencies first) and the verification per secret; it goes into `docs/security/hardening-checklist.md` § Secrets (Phase 4).
+
+## Phase 3: Changes (`--apply`, or with consent)
+Without `--apply`, ask one `AskUserQuestion` after Phase 2: apply the fixes (Recommended) · checklist only · stop.
+1. **Show the config diffs** and write each one only after its own "May I write `<path>`?" (`touch .claude/.write-consent` after the answer):
+   - config in this repository (proxy, compose, Dockerfile, workflows) → the diff here;
+   - proxy in the declared infra repo → the diff there ("May I write `<infra repo path/file>`?");
+   - neither → no write: the exact snippet for the owner of the proxy.
+2. **Validate**: `nginx -t` / `caddy validate` / `docker compose config`.
+3. **Re-check live**: repeat `curl -I` and show the before/after output. The live headers are the evidence in every case.
 
 ## Phase 4: Write
-"May I write `docs/security/hardening-checklist.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+Render the checklist (and the § Secrets table in `secrets` mode) in the chat, then "May I write `docs/security/hardening-checklist.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 Verdict: `HARDENED` | `PARTIAL (open: …)`. Next step — one `AskUserQuestion`: `/security-audit quick` (Recommended) · `/pentest` (optional) · stop here.

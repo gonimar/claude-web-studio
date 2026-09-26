@@ -12,29 +12,49 @@ agent: technical-director
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Versions come from `stack-reference/`; when the recommended version there is a major behind the registry's "latest on the date", the ADR states why the older one is chosen (or proposes `/stack-update` first).
-
-Template `.claude/docs/templates/adr.md`; files `docs/architecture/adr-NNNN-<slug>.md`.
+Template `.claude/docs/templates/adr.md`; files `docs/architecture/adr-NNNN-<slug>.md`. Version facts come from `.claude/docs/stack-reference/` (`stack-reference/` below). A studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode. The review mode is `--review`, else `production/review-mode.txt`.
 
 ## Phase 0: Mode
-`retrofit <path>` — read the existing ADR, find missing sections (Status — BLOCKING; Options/Consequences/Verification — HIGH), propose adding them without changing existing text; "May I write?".
+1. **`retrofit <path>`** (no path → ask which ADR): read the existing ADR and find the missing sections — Status is BLOCKING; Options, Consequences and Verification are HIGH.
+2. Propose adding the missing sections without changing the existing text, then go to the Phase 4 gate for `<path>`. The Phase 4 status rule applies: a Status added here is `Proposed` unless the user says `Accepted`.
+3. **A title** (or none — ask for it): a new ADR, Phase 1.
 
 ## Phase 1: Context
-Read technical-preferences, the product spec, related feature specs, existing ADRs (dependencies, contradictions), the relevant `stack-reference/` file (version facts come from there; when in doubt `WebFetch` the official source).
+1. **Read**: technical-preferences, the product spec, related feature specs, existing ADRs.
+2. **Existing ADRs**: note what this decision depends on and what it contradicts. A contradiction with an accepted ADR is flagged to the user and named in the draft.
+3. **Versions**: the relevant `stack-reference/` file; when in doubt, `WebFetch` the official source. When the recommended version there is a major behind the registry's "latest on the date", the ADR states why the older one is chosen (or proposes `/stack-update` first).
 
 ## Phase 2: Options
-≥ 2 options (including "do nothing" where relevant) with pros/cons/cost/risk/maturity. For the studio's typical forks use the known arguments: GraphQL vs REST (see `graphql.md`), Go vs PHP vs Node, Angular vs Vue, three.js vs Pixi vs Phaser, sessions vs JWT, monolith vs services, Caddy vs nginx. Give an explicit recommendation.
+1. **≥ 2 options** (including "do nothing" where relevant) with pros/cons/cost/risk/maturity.
+2. **Known arguments** for the studio's typical forks: GraphQL vs REST (see `stack-reference/graphql.md`), Go vs PHP vs Node, Angular vs Vue, three.js vs Pixi vs Phaser, sessions vs JWT, monolith vs services, Caddy vs nginx.
+3. **An explicit recommendation.**
 
-## Phase 3: Decision and consequences
-Draft Decision/Consequences/Verification (how we will check: metric, spike, test; when we revisit). A number in the draft — a latency, a size, a rate — links to `docs/ops/measurements/YYYY-MM-DD-<topic>.md` holding the command, the environment and the raw output (rule 8); a figure whose only home is the session state is quoted as "measured in session, not recorded" or not quoted at all. Review per mode: `full` — `backend-lead`/`frontend-lead`/`security-lead` for affected areas; `lean` — `security-lead` when auth/data/network are affected; `solo` — none.
-Reviews run **before** the write gate, in parallel, each as `Task` with an explicit `subagent_type` (`web-studio:backend-lead`, `web-studio:frontend-lead`, `web-studio:security-lead`) — never the default general-purpose agent, and never a generic agent with a model override standing in as an arbiter: "one more opinion" on a draft is one of these same reviewers, because an agent outside the roster carries none of the project's rules and leaves no roster name in the log (WS-104).
-**The reviewer has to be able to read the draft.** A long draft does not fit a Task prompt, so the skill writes it to a session file first and passes **the path plus the requirement to quote the ADR title and the two lines of Decision back in the verdict** — that quote is the evidence the text was read. A verdict without it is returned once with the path repeated; a second one without it is reported as "reviewer did not read the draft", never counted as a review. Name the reviewers in the report exactly as `production/session-logs/agent-audit.log` records them. Conditions from the verdicts are applied to the draft first; only then Phase 4.
+## Phase 3: Decision, consequences and review
+1. **Draft** Decision / Consequences / Verification (how we will check: metric, spike, test; when we revisit).
+2. **Numbers.** A number in the draft — a latency, a size, a rate — links to `docs/ops/measurements/YYYY-MM-DD-<topic>.md` holding the command, the environment and the raw output (rule 12). A figure whose only home is the session state is quoted as "measured in session, not recorded", or not quoted at all.
+3. **Reviewers per mode**: `full` — `backend-lead` / `frontend-lead` / `security-lead` for the affected areas; `lean` — `security-lead` when auth/data/network are affected; `solo` — none, go to Phase 4.
+4. **Make the draft readable.** A long draft does not fit a `Task` prompt, so write it to a session file first (the session scratchpad, never `docs/architecture/`: the ADR path waits for the Phase 4 gate).
+5. **Spawn the reviews before the write gate**, in parallel, each as `Task` with an explicit studio `subagent_type` (`web-studio:backend-lead`, `web-studio:frontend-lead`, `web-studio:security-lead`). Never the default general-purpose agent, and never a generic agent with a model override standing in as an arbiter: "one more opinion" on a draft is one of these same reviewers, because an agent outside the roster carries none of the project's rules and leaves no roster name in the log (WS-104).
+6. **The brief** carries the draft's path plus the requirement to quote the ADR title and the two lines of Decision back in the verdict. That quote is the evidence the text was read.
+7. **Check each verdict.** One without the quote is returned once with the path repeated; a second one without it is reported as "reviewer did not read the draft", never counted as a review.
+8. **Name the reviewers** in the report exactly as `production/session-logs/agent-audit.log` records them.
+9. **Apply the conditions** from the verdicts to the draft; only then Phase 4.
 
 ## Phase 4: Write
-"May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Status is `Proposed` until the user says `Accepted` — also for a decision that is already implemented and deployed (write `Proposed · implemented since <date>`); "implemented" is not "accepted". After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+1. **Status** is `Proposed` until the user says `Accepted`. That holds for a decision that is already implemented and deployed too: write `Proposed · implemented since <date>`; "implemented" is not "accepted".
+2. **Gate**, one `AskUserQuestion`: "May I write `docs/architecture/adr-NNNN-<slug>.md` and a line in the technical-preferences decision log?" — write (Recommended) · show the draft/diff first · not now. When the ADR is `Accepted` and the roadmap step below applies, the question names `production/roadmap.md` too.
+3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+4. **Write** the ADR from the template and the line in `technical-preferences.md` → Architecture decision log.
+5. **Roadmap**, when the project has `production/roadmap.md` (`roadmap-format: v3.1` or later) and this ADR reaches `Accepted`:
+   - Add or update its row in the roadmap's `## Docs` → *docs/architecture/* block (✅, inline link, one-line summary) and refresh the block's `<summary>` count.
+   - Open task lines carrying `⛔ [ADR-NNNN](path)` now name an accepted decision, not a pending one. Leave the marker, because it still names *why* the dependency exists; this decision no longer holds those stories back.
 
-When the project has `production/roadmap.md` (`roadmap-format: v3.1` or later) and this ADR reaches `Accepted`: add or update its row in the roadmap's `## Docs` → *docs/architecture/* block (✅, inline link, one-line summary) and refresh the block's `<summary>` count; any open task lines carrying `⛔ [ADR-NNNN](path)` now name an accepted decision, not a pending one — leave the marker (it still names *why* the dependency exists) but this is the moment a blocked story becomes unblockable-by-this-reason.
+## When the answer is "no ADR"
+A decision **not** to take the ADR is an outcome, not a dead end.
+1. **Record it** as a `D-NN` line in `production/decisions.md` (or as an ADR with status `Rejected` when a draft already exists), with the reason and the date — after its own "May I write `<path>`?" gate, as in Phase 4.
+2. **Never end the discussion in code.** If the answer turns out to be a change to the repository — a Dockerfile line, a healthcheck, a flag — this skill does not make it. Editing production files from a document session bypasses the review, the branch and the DoD of whatever story owns them.
+3. **Hand it over** in the closing `AskUserQuestion`: `/impact "<change>"` for anything with an architecture or security surface, `/hotfix` for a one-liner in production, otherwise a story through `/create-stories`.
 
-A decision **not** to take the ADR is an outcome, not a dead end: record it as a `D-NN` line in `production/decisions.md` (or as an ADR with status `Rejected` when a draft already exists), with the reason and the date. What must never happen is the discussion ending in code: if the answer turns out to be a change to the repository — a Dockerfile line, a healthcheck, a flag — this skill does not make it. It hands it over in the closing `AskUserQuestion`: `/impact "<change>"` for anything with an architecture or security surface, `/hotfix` for a one-liner in production, otherwise a story through `/create-stories`. Editing production files from a document session bypasses the review, the branch and the DoD of whatever story owns them.
+Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION` | `REJECTED`.
 
-Verdict: `ACCEPTED` | `PROPOSED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/api-contract` (Recommended) · `/data-model` · `/create-stories`.
+Next step — one `AskUserQuestion`: `/api-contract` (Recommended) · `/data-model` · `/create-stories`. On `REJECTED`: the hand-over command from the section above (Recommended) · stop here.

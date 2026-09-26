@@ -30,5 +30,9 @@ Release gate from evidence.
 **Fixture**: first tag of a project with a database; `data-model.md` §7 has no restore date; no `/healthz`. **Expected**: `NOT READY` with two ❌ gates naming the stories ("Backup & restore drill", "Observability"); on a later release the restore date is shown and a >90-day date is a warning, not a gate.
 - [ ] gates on the first release · [ ] warning only later · [ ] stories named
 
+### The tag contains the release document (0.13)
+**Fixture**: READY, `production/releases/v1.2.0.md` written on a story branch. **Expected**: a `docs: release v1.2.0` commit gate on the default branch comes before the tag question; the tag is created with `-m` on the default branch after that commit and pushed (`git push origin v1.2.0`); a release document left uncommitted → no tag, with the reason.
+- [ ] commit before tag · [ ] tag on the default branch with -m, pushed · [ ] no tag without the committed document
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

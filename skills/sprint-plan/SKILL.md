@@ -12,23 +12,56 @@ agent: product-director
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `sprint-plan.md`.
+Templates (`.claude/docs/templates/`): `sprint-plan.md`, `roadmap.md`. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: State
-Ready stories (`production/stories/**`), the roadmap (priority/blocker markers), the last sprint (unfinished work, retro actions), `production/findings.md` (open BLOCKING findings and their stories), the dependency-update queue (Phase 2), capacity (ask: days, hours per day — here, before any gate; rule 7: one turn, one gate), `production/backlog.md` (one line `Backlog: N open ideas — /backlog review`; an idea enters a sprint only after promotion, never from here).
-**Calibration**: one sample, worded identically in both skills — the **last six closed stories of the roadmap** that carry both `~Nh` and `⏱ Nh`, whichever sprint they belong to → ratio = Σ⏱ / Σ~ (`/retrospective` prints this same rolling ratio next to its own sprint-only one and labels which is which; two skills quoting different numbers under the same name is how a plan stops being trusted); with three or more such stories the ratio is applied to this sprint's estimates (calibrated estimate = `~Nh` × ratio) and shown as one line `Calibration: ratio R over N stories — capacity fits ~X h of estimates`; fewer than three → "insufficient data, estimates taken as written". The ratio is never rounded towards a nicer plan.
+1. **Arguments**: the sprint number `NN` (default: the last sprint in `production/sprints/` + 1); `--days N` is the sprint length in working days.
+2. **Ready stories** (`production/stories/**`). None → stop with `BLOCKED (no Ready stories — run /create-stories)` and write nothing.
+3. **Read**: the roadmap (priority and blocker markers), the last sprint (unfinished work, retro actions), `production/findings.md` (open BLOCKING findings and their stories).
+4. **Backlog**: `production/backlog.md` → one line `Backlog: N open ideas — /backlog review`. An idea enters a sprint only after promotion, never from here.
+5. **Capacity and dates**: ask now — days (unless `--days` gave them), hours per day, start date. Parameters are asked here, before any gate, never in the same message as one (rule 7: one turn, one gate).
+6. **Calibration**, one sample worded identically in both skills: the **last six closed stories of the roadmap** that carry both `~Nh` and `⏱ Nh`, whichever sprint they belong to. `/retrospective` prints this same rolling ratio next to its own sprint-only one and labels which is which; two skills quoting different numbers under the same name is how a plan stops being trusted.
+   - Ratio = Σ⏱ / Σ~, never rounded towards a nicer plan.
+   - Three or more such stories → apply it to this sprint's estimates (calibrated estimate = `~Nh` × ratio) and show one line: `Calibration: ratio R over N stories — capacity fits ~X h of estimates`.
+   - Fewer than three → "insufficient data, estimates taken as written".
 
 ## Phase 2: Dependency queue
-Only when `gh` exists and the repository has `.github/dependabot.yml` or `renovate.json`; otherwise one line ("no update bot configured — `/dependency-audit` sets one up") and on to Phase 3. `gh pr list --state open --author app/dependabot --json number,title,createdAt,mergeable,statusCheckRollup` (Renovate: `--author app/renovate`). Classify every PR from the command output, never from memory or the title alone:
-- **green and safe** — `mergeable: MERGEABLE`, every check `SUCCESS` or `SKIPPED`, and the bump is a patch/minor of a library or any CI-action bump — a merge candidate at sprint start, not a story;
-- **major** — the first version component changes in the title (`from 4.2.2 to 7.0.1`) or the PR body names a breaking change — a story (`chore(deps)`, size S/M, layer from the manifest's directory) or deferred with a written reason in the plan; never merged here;
-- **red or conflicting** — a failing check or `CONFLICTING` — stays open, named under risks, never merged.
-Show the queue as a table (number · package · bump · checks · class · action). Before asking, session-state: `Task: /sprint-plan Phase 2`, `Gate: /sprint-plan Phase 2: merge #…?` — the merge question is its own turn, nothing else is asked in that message; a session that resumes with this `Gate:` open continues here: it merges or not, it never implements a story (rule 7). One `AskUserQuestion`: merge the green safe PRs now (Recommended) · turn them into one story · leave them. On "merge": clear `Gate:`, then `gh pr merge <n> --squash` one PR at a time with the output in the message; after the batch the default branch's CI run is the gate — `gh run list --branch <default> --limit 1` must be green before the first story branch starts. An empty queue is one line. A major bump is either a story in the sprint or deferred with a written reason — never left open unmentioned (`tooling-devops.md` §Renovate/Dependabot).
+1. **Precondition**: `gh` exists and the repository has `.github/dependabot.yml` or `renovate.json`. Otherwise one line — "no update bot configured — `/dependency-audit` sets one up", or "no `gh` — dependency queue not checked" — and on to Phase 3.
+2. **List**: `gh pr list --state open --author app/dependabot --json number,title,createdAt,mergeable,statusCheckRollup` (Renovate: `--author app/renovate`). An empty queue is one line; go on to Phase 3.
+3. **Classify every PR** from the command output, never from memory or the title alone:
+   - **green and safe** — `mergeable: MERGEABLE`, every check `SUCCESS` or `SKIPPED`, and the bump is a patch/minor of a library or any CI-action bump. A merge candidate at sprint start, not a story.
+   - **major** — the first version component changes in the title (`from 4.2.2 to 7.0.1`) or the PR body names a breaking change. A story (`chore(deps)`, size S/M, layer from the manifest's directory) or deferred with a written reason in the plan; never merged here, never left open unmentioned (`stack-reference/tooling-devops.md`, Renovate/Dependabot).
+   - **red or conflicting** — a failing check or `CONFLICTING`. Stays open, named under risks, never merged.
+4. **Show the queue** as a table: number · package · bump · checks · class · action.
+5. **Record the gate** before asking: `<hooks>session-state.sh set Task "/sprint-plan Phase 2" Gate "/sprint-plan Phase 2: merge #…?"`. A session that resumes with this `Gate:` open continues here: it merges or not, and never implements a story (rule 7).
+6. **Ask**, alone in its message, one `AskUserQuestion`: merge the green safe PRs now (Recommended) · turn them into one story · leave them.
+7. **After the answer**: clear the gate (`<hooks>session-state.sh set Gate "—"`). On "merge": `gh pr merge <n> --squash`, one PR at a time, with the output in the message.
+8. **Default-branch CI.** After the batch, the default branch's CI run is the gate: `gh run list --branch <default> --limit 1` must be green before the first story branch starts. Report its state.
 
 ## Phase 3: Selection
-The sprint goal as one verifiable statement. Stories by priority and dependencies within capacity (20 % buffer), using the calibrated estimates when the ratio applies; first the one that removes the biggest risk. Blockers and external dependencies explicit. An open BLOCKING finding is either in the sprint (its story) or deferred with a written reason in the plan — never absent. Stories born from major bumps compete on priority like any other; one that unblocks the toolchain or the runner (a Node 24 action, a new Go toolchain) goes before the stories that need it.
+1. **The sprint goal** as one verifiable statement.
+2. **Stories** by priority and dependencies, within capacity minus a 20 % buffer, using the calibrated estimates when the ratio applies. First the one that removes the biggest risk.
+3. **Blockers and external dependencies** (the roadmap's ⛔ markers) are named explicitly.
+4. **Open BLOCKING findings**: each one is either in the sprint (its story) or deferred with a written reason in the plan — never absent.
+5. **Stories born from major bumps** compete on priority like any other. One that unblocks the toolchain or the runner (a Node 24 action, a new Go toolchain) goes before the stories that need it.
 
 ## Phase 4: Write
-Its own turn — never on the merge answer: show the plan rendered (rule 7); "May I write `production/sprints/sprint-NN.md` and update the roadmap?" (roadmap per `templates/roadmap.md`: **move** the selected stories — they are added under a `## Sprint NN (YYYY-MM-DD → YYYY-MM-DD) — goal` subheading **and removed from the Backlog block in the same edit**, never left in both; recalculate the `<summary>` count of each block and close the write with the numbers (`Backlog: N → M, Sprint: 0 → K, overlap none`) — a story counted twice makes every later count wrong — the sprint is the heading, never a `📅 sprint-NN` marker; `📅` carries ISO dates only; mark the active story ⏳, the first one 🔥; markers inline in the legend's order, IDs as inline links, no prose ordering; refresh the `Updated:` line; when this closes the *previous* sprint — every one of its stories now `[x]` — wrap that sprint's list in `<details><summary>closed · N stories — expand</summary>` (blank line after `<summary>` or GitHub won't render the list inside); add a row to the roadmap's `## Docs` → *production/sprints/* block for the new sprint; the plan's `## Dependency updates` section lists what was merged, which majors became stories, what was deferred and why, what stays open red) — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. Propose `/qa-plan NN`. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+Its own turn — never on the merge answer.
+1. **Show the plan** rendered (rule 7), from `sprint-plan.md`: the header with dates, capacity, review mode and the calibration ratio applied; the stories; risks and blockers; the `## Dependency updates` section (what was merged, which majors became stories, what was deferred and why, what stays open red).
+2. **Gate**, one `AskUserQuestion`: "May I write `production/sprints/sprint-NN.md` and update the roadmap?" — write (Recommended) · show the draft/diff first · not now.
+3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+4. **Write** `production/sprints/sprint-NN.md`.
+5. **Update the roadmap** per `templates/roadmap.md`:
+   - **Move** the selected stories: add them under a `## Sprint NN (YYYY-MM-DD → YYYY-MM-DD) — goal` subheading **and remove them from the Backlog block in the same edit**, never leaving them in both. A story counted twice makes every later count wrong.
+   - Recalculate the `<summary>` count of each block.
+   - The sprint is the heading, never a `📅 sprint-NN` marker; `📅` carries ISO dates only.
+   - Mark the active story ⏳ and the first one 🔥.
+   - Markers inline in the legend's order, IDs as inline links, no prose ordering.
+   - Refresh the `Updated:` line.
+   - When this closes the *previous* sprint (every one of its stories now `[x]`), wrap that sprint's list in `<details><summary>closed · N stories — expand</summary>`, with a blank line after `<summary>` or GitHub won't render the list inside.
+   - Add a row for the new sprint to the roadmap's `## Docs` → *production/sprints/* block.
+6. **Close the write with the numbers**: `Backlog: N → M, Sprint: 0 → K, overlap none`.
 
-Verdict: `READY`. Next step — one `AskUserQuestion`: `/qa-plan` (Recommended) · `/dev-story` directly · revise the sprint.
+Verdict: `READY` | `BLOCKED`.
+
+Next step — one `AskUserQuestion`: `/qa-plan NN` (Recommended) · `/dev-story` directly · revise the sprint. On `BLOCKED`: `/create-stories` (Recommended) · stop here.

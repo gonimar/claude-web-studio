@@ -63,6 +63,22 @@ tokens or references to private projects.
    `DONE`, …); an explicit "May I write …?" gate whenever `Write` or `Edit` is allowed; a closing
    `Next step:` naming the following command; references to the templates, rules or stack-reference
    files it relies on. Read-only skills say so in the first lines.
+   **How the body reads** — a skill is followed step by step by a model (often Sonnet) in the
+   middle of real work, so its order has to be visible at a glance:
+   - Numbered steps inside each phase, in the order they run. A step that depends on an earlier
+     answer comes after it; an action that happens after a push is written after the push.
+   - One instruction per step or bullet. A paragraph longer than about 120 words is a sign that
+     several steps were merged into one; split it.
+   - The reason for a rule stays, in one sentence ("an unnamed spike rides into the commit"). The
+     incident that produced it goes to `CHANGELOG.md`, not into the skill.
+   - Only instructions the executor can carry out. A subagent spawned through `Task` cannot ask
+     the user anything: consent is collected by the parent (for a delegated step, the plan answer
+     covers the files the plan names; anything beyond the brief comes back to the parent, which
+     asks). Name commands that work without assumed state (`git pull --ff-only origin <default>`,
+     not a bare pull that needs an upstream).
+   - Repeated fragments (plugin vs copy mode paths, agent namespaces) are defined once near the
+     top and referred to by name.
+   Restructuring never drops a rule: the skill's spec in `testing/` must still hold line by line.
 3. Register it: `docs/workflow-catalog.yaml` if it belongs to a phase; the one-sentence command
    lists in `README.md` and every `docs/readme/README.*.md`; `docs/PROJECT-README.md` if it is an
    entry point; the `skills:` preload list of an agent if it should be loaded with that agent.

@@ -14,10 +14,11 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Entry point for a new project. Assumes nothing — asks, then routes. Writes files only after "May I write?" → "yes".
 
 ## Phase 1: Silent state detection
-Read (without showing): `.claude/docs/technical-preferences.md` (exists? configured?), `docs/specs/product-spec.md`,
-`docs/specs/game-concept.md`, code presence (`go.mod`, `composer.json`, `package.json`, `angular.json`, `nuxt.config.*`),
-`production/roadmap.md`, `CLAUDE.md` Language section. If `.claude/docs/` is missing → run `/init` first.
-If code/specs already exist → suggest `/adopt` instead of `/start`.
+1. Read (without showing): `.claude/docs/technical-preferences.md` (exists? configured?), `docs/specs/product-spec.md`,
+   `docs/specs/game-concept.md`, code presence (`go.mod`, `composer.json`, `package.json`, `angular.json`, `nuxt.config.*`),
+   `production/roadmap.md`, `CLAUDE.md` Language section.
+2. `.claude/docs/` missing → the studio is not initialised: run `/web-studio:init` first (copy mode `/init`; in plugin mode the bare `/init` is Claude Code's built-in, which does not scaffold the studio).
+3. Code or specs already exist → suggest `/adopt` instead of `/start`.
 
 ## Phase 2: Where are you
 `AskUserQuestion`: "Where are we starting from?"
@@ -32,8 +33,8 @@ Second question: type (site | spa | api | fullstack | game | game+backend) and r
 Write `production/review-mode.txt` and `production/stage.txt` = `discovery` after "May I write?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
 ## Phase 4: Route
-Show the next 3 steps from `.claude/docs/workflow-catalog.yaml` with commands.
-If `production/roadmap.md` is missing, offer to create it (checkbox list) or, if an external advisor skill is installed, suggest its init command.
-If `.claude/settings.web-studio.json` exists (settings.json pre-dated the install) — offer to merge hooks/permissions (show the diff, ask).
+1. Show the next 3 steps from `.claude/docs/workflow-catalog.yaml` with commands.
+2. `production/roadmap.md` missing → offer to create it (checkbox list) or, if an external advisor skill is installed, suggest its init command.
+3. `.claude/settings.web-studio.json` exists (settings.json pre-dated the install) → offer to merge hooks/permissions (show the diff, ask).
 
-Verdict: `READY` — stack and mode chosen, next step named. Next step — one `AskUserQuestion`: `/setup-stack` (Recommended) · `/brainstorm` first (idea still vague) · stop here.
+Verdict: `READY` — project type and review mode chosen, next step named. Next step — one `AskUserQuestion`, the route from Phase 2 first (Recommended): `/setup-stack` (B, C) · `/brainstorm` (A, or the idea is still vague) · `/adopt` (D) · stop here.

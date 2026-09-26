@@ -48,5 +48,9 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: DONE and merged, statusline `ctx: 48%`. **Expected**: the closing question offers `/clear`, then `/web-studio:dev-story S-NNN` (Recommended) and names the context share; "continue the next story here" is not an option.
 - [ ] `/clear` first · [ ] namespaced command · [ ] no same-session option
 
+### PR number before the close edits; no-PR path (0.13)
+**Fixture**: `gh` present, a push-triggered workflow, so `/dev-story` opened no draft PR; DONE. **Expected**: after the close answer "close and open the PR", `gh pr create --fill` runs before the roadmap, `## Docs` and commit edits, which then carry `PR #N`; with "close without the PR" nothing carries a PR number, the commit is `docs: close S-NNN — Done` and Phase 5 is skipped with the re-run line. Red CI on the close commit → `NOT DONE (CI red)`, nothing merged, the close stays and the report says "closed, not merged".
+- [ ] PR created before the edits that cite it · [ ] no-PR path skips Phase 5 · [ ] red CI leaves the close and names it
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
