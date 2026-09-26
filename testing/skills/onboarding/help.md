@@ -45,7 +45,7 @@ Where we are in the pipeline and one next step; read-only.
 - [ ] Attention lines · [ ] no investigation · [ ] question about the pipeline only
 
 ### 11. Plugin version drift
-**Fixture**: `.claude/.web-studio-version` = 0.5.1; session-start context prints `Plugin root: …/web-studio/0.5.5`. **Expected**: one line naming both versions and recommending `/update`; `/update` appears among the closing question's options; no drift line when the versions match or in copy mode (no plugin root).
+**Fixture**: plugin mode, session-start context prints `Plugin root: …/web-studio/0.5.5`; `.claude/docs/coordination-rules.md` differs from `<plugin root>/docs/coordination-rules.md`; no `.claude/.web-studio-version`. **Expected**: one line `Seeded docs differ from plugin v0.5.5 (1 file) — /update re-seeds changed docs/rules` and `/update` among the closing options; with `claude plugin list --json` reporting 0.5.6 installed, a second line `session runs v0.5.5, v0.5.6 is installed — restart the session`; a stray stamp in plugin mode is ignored as a copy-mode leftover. Copy mode: the stamp compared with the kit's `plugin.json` when the kit path is known, otherwise the check is skipped.
 - [ ] both versions named · [ ] /update offered · [ ] silent when equal
 
 ### 12. Adoption plan in table format

@@ -61,7 +61,7 @@ language chosen in Phase 2 binds instead. Code, identifiers, paths and commit me
 ## Phase 4: Write and verify
 1. Apply the plan; print the tree of created files.
 2. Smoke-check the statusline: `echo '{"cwd":"'"$PWD"'"}' | bash .claude/statusline.sh`.
-3. Record the version in `.claude/.web-studio-version` (from `<root>/.claude-plugin/plugin.json`).
+3. **Copy mode only**: record the version in `.claude/.web-studio-version` (from `<root>/.claude-plugin/plugin.json`). In plugin mode no stamp is written — the installed version is what `claude plugin list --json` reports, and a stamp would claim files the project does not hold (`/update` deletes such a stamp as a copy-mode leftover).
 
 ## Phase 5: Commit (documents lane)
 Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: initialise web studio`, staging exactly the documents this run wrote — `CLAUDE.md`, `.claude/docs/`, `.claude/rules/`, `docs/web-studio/README.md`, `production/stage.txt`, `production/review-mode.txt`, `.claude/.web-studio-version`. The seeded `docs/*` and `production/*` folders hold no file yet and git stages no empty folder: they are not in the list and appear in history once a document lands. Before asking, record the gate — `<hooks>session-state.sh set Gate "/init Phase 5: commit?"` (`<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
@@ -80,7 +80,7 @@ Next step — one `AskUserQuestion`, never a plain text line:
   `technical-preferences.md` is filled from the facts) · `/start` (Recommended for an empty project) ·
   `/help` · stop here.
 - After `ALREADY INITIALISED` the Recommended option is decided by facts, not by a default, and **exactly one option is marked Recommended**. The facts are checked in this order and the first that holds decides; the others are still offered as alternatives:
-  1. `.claude/.web-studio-version` older than the plugin (last segment of the "Plugin root:" line) → `/update` (Recommended — the seeded docs and rules are behind the plugin, and `/adopt` would audit stale references);
+  1. the seeded documents are behind the studio — plugin mode: `diff -rq <plugin root>/docs .claude/docs` and `diff -rq <plugin root>/rules .claude/rules` (ignoring `technical-preferences.md` and `local-overrides/`) list files that differ; copy mode: `.claude/.web-studio-version` older than the kit's `plugin.json` — → `/update` (Recommended — the seeded docs and rules are behind the studio, and `/adopt` would audit stale references);
   2. otherwise `technical-preferences.md` still a placeholder, or no `docs/adoption-plan-*.md` on a project with code → `/adopt full` (Recommended);
   3. otherwise `/help` (Recommended).
   When both 1 and 2 hold, `/update` is Recommended and `/adopt full` is the second option with the note "after /update".
