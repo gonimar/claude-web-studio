@@ -29,6 +29,9 @@ lint → typecheck → unit → build → integration (services: postgres, redis
 - Zero-downtime when needed: two replicas behind the proxy or Caddy graceful reload.
 - Kubernetes (`Deploy target: kubernetes`): the deploy shape, versions and rollout/rollback commands are in `kubernetes.md`.
 
+## Supply chain
+SBOM per release image (syft, CycloneDX JSON), keyless cosign signature by digest, provenance attestation (`actions/attest`), Renovate policy (`minimumReleaseAge` 7 days, grouped minors, patch-only automerge), Actions pinned by SHA, frozen lockfile installs: all in [supply-chain.md](supply-chain.md) with the review checklist `SC-01…SC-12`; templates in `docs/templates/supply-chain/`.
+
 ## Observability
 Versions, the studio default set, idioms per language, security notes and the review checklist: **`observability.md`**. The summary:
 - Logs: JSON to stdout, collected by Loki/Vector (or a simple log viewer on small servers); `request_id` end to end.

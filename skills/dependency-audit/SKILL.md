@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash, Write, WebFetch, Task, AskUserQuestion
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Reference `stack-reference/index.md`, `tooling-devops.md`; template `findings.md`. The report is `docs/ops/dependency-audit-<date>.md` (Phase 4); its high findings reach planning the way the sibling audits' do — as `production/findings.md` rows (`DEP-NNN`, Phase 4 step 2), because `/help`, `/create-stories` and `/sprint-plan` read that file and nobody reads the report for open actions (git-workflow § Chore / infra: a found problem is recorded there). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
+Reference `stack-reference/index.md`, `tooling-devops.md`, `supply-chain.md` (SBOM scanning, update-bot policy); template `findings.md`. The report is `docs/ops/dependency-audit-<date>.md` (Phase 4); its high findings reach planning the way the sibling audits' do — as `production/findings.md` rows (`DEP-NNN`, Phase 4 step 2), because `/help`, `/create-stories` and `/sprint-plan` read that file and nobody reads the report for open actions (git-workflow § Chore / infra: a found problem is recorded there). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes". After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). A subagent spawned through `Task` cannot ask the user: the parent's "yes" covers the packages and files it names, and a delegated agent that needs to go beyond that stops and reports back so the parent asks.
 
@@ -25,6 +25,7 @@ Manifests and lockfiles (`go.mod/go.sum`, `composer.lock`, `pnpm-lock.yaml`/`pac
 - Licences: `license-checker`/`composer licenses`/`go-licenses` when available.
 - `renovate.json`/`dependabot.yml`: present, minors grouped per `tooling-devops.md`. The open update PRs themselves are `/sprint-plan`'s queue, not this report's.
 - Images: `trivy image` when available.
+- **SBOM-based scan** (option next to the ecosystem audits, `supply-chain.md` § SBOM): when a release SBOM exists (`gh release view <tag> --json assets`, or `syft <image>@<digest> -o cyclonedx-json=sbom.cdx.json` now), `grype sbom:sbom.cdx.json --fail-on high --only-fixed` or `trivy sbom sbom.cdx.json` — one scan covers OS packages of the base image and the app dependencies together; its findings join the same table with the source column `sbom`.
 
 ## Phase 3: Report
 Table "package → version → problem (CVE/abandoned/outdated/licence) → action (upgrade/replace/accept risk) → effort", shown in the chat.

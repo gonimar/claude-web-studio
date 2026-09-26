@@ -9,7 +9,7 @@ Mozilla Web Security Guidelines. Stack details: `.claude/docs/stack-reference/se
 |---|---|---|
 | A01 | Broken Access Control (incl. SSRF) | Server-side authorisation on every request; deny by default; object ownership checks (IDOR); allow-list for outbound URLs |
 | A02 | Security Misconfiguration | Production config without debug or default passwords; security headers; least-privilege containers; closed ports |
-| A03 | Software Supply Chain Failures | Lockfile in git; `npm audit` / `composer audit` / `govulncheck` in CI; pinned versions; abandoned-package check; Dependabot/Renovate |
+| A03 | Software Supply Chain Failures | Lockfile in git and frozen installs in CI; `npm audit` / `composer audit` / `govulncheck` in CI; pinned versions, Actions pinned by SHA; abandoned-package check; Renovate (Dependabot fallback) with a release age; SBOM per release image, keyless signature verified by digest before deploy, provenance attestation — `stack-reference/supply-chain.md` |
 | A04 | Cryptographic Failures | TLS 1.3 everywhere; argon2id/bcrypt for passwords; secrets in the environment; no home-grown crypto |
 | A05 | Injection | Parameterised queries always; boundary validation; context-aware escaping (HTML/JS/URL/SQL); CSP |
 | A06 | Insecure Design | Threat model (`/threat-model`) before auth/payments/uploads; limits and quotas as part of the design |

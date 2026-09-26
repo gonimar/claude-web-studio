@@ -1,0 +1,77 @@
+# Release job snippet: build -> push -> SBOM (syft) -> scan (grype) -> cosign sign by digest
+# -> provenance + SBOM attestation -> SBOM as a release asset.
+# Reference: .claude/docs/stack-reference/supply-chain.md (SC-03 .. SC-10).
+# Pin every `uses:` to a full commit SHA before use (`# vX.Y.Z` comment keeps the version readable);
+# the placeholders below name the majors documented on the reference date.
+# Trigger it from the release workflow on `push: tags: ['v*']`.
+
+permissions:
+  contents: read
+
+jobs:
+  release-image:
+    runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    permissions:
+      contents: write        # release asset upload
+      packages: write        # push to ghcr.io
+      id-token: write        # keyless signing and attestations with the GitHub OIDC token
+      attestations: write    # actions/attest
+      artifact-metadata: write
+    env:
+      IMAGE: ghcr.io/<owner>/<image>
+    steps:
+      - uses: actions/checkout@<sha> # v7
+
+      - uses: docker/login-action@<sha> # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: push
+        uses: docker/build-push-action@<sha> # v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}:${{ github.ref_name }}
+
+      # SBOM from the pushed digest, not from the build context (base image layers included).
+      - uses: anchore/sbom-action/download-syft@<sha> # v0
+      - name: SBOM
+        run: syft "registry:${IMAGE}@${{ steps.push.outputs.digest }}" -o cyclonedx-json=sbom.cdx.json -o spdx-json=sbom.spdx.json
+
+      # Gate on the SBOM: fixable high/critical findings fail the release (SC-07).
+      - uses: anchore/scan-action@<sha> # v7
+        with:
+          sbom: sbom.cdx.json
+          fail-build: true
+          severity-cutoff: high
+          only-fixed: true
+
+      # Keyless signature by digest (SC-08).
+      - uses: sigstore/cosign-installer@<sha> # v4
+      - name: Sign
+        run: cosign sign --yes "${IMAGE}@${{ steps.push.outputs.digest }}"
+
+      # Provenance attestation (SLSA Build L2 by itself) and SBOM attestation (SC-10).
+      - uses: actions/attest@<sha> # v4
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+      - uses: actions/attest@<sha> # v4
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          sbom-path: sbom.cdx.json
+          push-to-registry: true
+
+      # SBOM as a release asset (SC-06).
+      - name: Attach SBOM to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.ref_name }}" sbom.cdx.json sbom.spdx.json --clobber
+
+      - name: Record the digest for /deploy
+        run: echo "${IMAGE}@${{ steps.push.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"

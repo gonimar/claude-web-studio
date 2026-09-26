@@ -61,6 +61,7 @@
   - **metrics**: [prometheus — Go `client_golang` | PHP `promphp/prometheus_client_php` (APCu | Redis adapter) | Node `@prometheus-io/client`; `/metrics` on the internal listener | none]
   - **tracing**: [opentelemetry — OTLP/HTTP to a Collector; sampler `parentbased_always_on` (dev/staging), `parentbased_traceidratio` `<ratio>` (prod) | none]
   - **health_endpoints**: [/healthz (liveness, process only) + /readyz (readiness: db, cache, migrations)]
+- **Supply chain** (`stack-reference/supply-chain.md`): **sbom_tool**: [syft (CycloneDX JSON, studio default) | trivy | none]  **signing**: [cosign keyless (GitHub OIDC, verified by digest before deploy) | cosign key | none]  **provenance**: [actions/attest | none — <reason, e.g. private repo without Enterprise Cloud>]  **update_bot**: [renovate (studio policy, docs/templates/supply-chain/renovate.json) | dependabot | none]  **release_age**: [7 days | 3 days | none]
 
 ## Layout
 - **backend_root**: [./backend | ./ | …]
