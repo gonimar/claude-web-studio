@@ -11,5 +11,5 @@ paths: ["**/*.php"]
 - Errors: domain exceptions (incl. a domain `NotFoundException`) mapped to RFC 9457 in the error-handler middleware.
 - Parameterised SQL; escaped output; CSRF on mutations; argon2id passwords.
 - Tests per `rules/tests.md` and `php.md` "Tests by layer"; `phpunit --filter` on the classes touched after each change, `composer ci` once before the result (`ci-full` with `composer audit` once per story).
-- The recorded analyser (`php_static_analysis`) clean at its level; formatting is the post-edit hook's job.
+- The recorded analyser (`php_static_analysis`) clean at its level on the lines the story's diff touches — a finding the story introduces is fixed in the same story; one that predates the branch (the same line red on `<base>`) is reported under *Outside the brief* (CLAUDE.md principle 9), never fixed in passing. Formatting is the post-edit hook's job.
 - Reference: `.claude/docs/stack-reference/php.md`, then the framework file.

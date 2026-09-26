@@ -71,3 +71,10 @@ instead of relying on memory.
    `/clear`: the session's own context, not the engineers' work, is where the cost goes (coordination-rules, rule 13).
    In plugin mode commands carry the namespace — `/web-studio:code-review`; a bare `/code-review` is Claude
    Code's built-in review, not the studio's.
+9. **The smallest change that meets the criteria.** No feature, abstraction, option or error path the story
+   does not ask for; when the same result works with fewer moving parts — one option, one abstraction, one error path
+   less — that is the version written. Code next to the
+   change stays as it is — its style, its comments, its dead code — even when it could be better: what you notice
+   there goes to `/backlog add` or `production/findings.md`, not into this diff. Clean up only what this change
+   made unused. The test: every changed line traces to an acceptance criterion or to a check the story must pass;
+   `/code-review` flags the ones that do not.

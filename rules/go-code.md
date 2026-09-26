@@ -12,5 +12,5 @@ paths: ["**/*.go"]
 - Parameterised SQL only (pgx/sqlc); `html/template` for HTML; `log/slog` without secrets.
 - GraphQL (gqlgen): the SDL at `api_contract_path`; no schema type named `Query`/`Mutation`/`Subscription` unless it is the root.
 - Tests per `rules/tests.md` and `go.md` "Tests by layer"; `go test -race` on the packages touched after each change, the full suite and `make coverage-gate` once before the result.
-- `golangci-lint fmt` after every write; `golangci-lint run` and `make arch-check` clean before the result — a finding is fixed in the same story; `govulncheck` in `make ci-full`.
+- `golangci-lint fmt` after every write; before the result `golangci-lint run --new-from-rev <base>` (the commit the story branch left the default branch at) and `make arch-check` clean — a finding the story's own diff introduces is fixed in the same story; a pre-existing finding of the whole-module `golangci-lint run` is reported under *Outside the brief* (CLAUDE.md principle 9), never fixed in passing; `govulncheck` in `make ci-full`.
 - Reference: `.claude/docs/stack-reference/go.md`.

@@ -57,7 +57,7 @@ Read:   <file>:<start>-<end>, … (the files this step touches or depends on, wi
 Write:  <files to create or change>
 Check:  <exact commands to run before reporting>
 Skip:   <what not to read or run: the full suite, the whole reference, unrelated packages>
-Report: decisions, surprises, numbers, and a final `Checkpoint:` line (done · next · unverified)
+Report: decisions, surprises, numbers, what you noticed "Outside the brief" (reported, not fixed), and a final `Checkpoint:` line (done · next · unverified)
 ```
 Do not send a brief without line ranges in `Read:`. An agent that has to find its files spends half its budget on `grep`.
 
@@ -80,6 +80,7 @@ Do not send a brief without line ranges in `Read:`. An agent that has to find it
 1. **Who wrote the story.** Run `grep "SubagentStart" production/session-logs/agent-audit.log | tail -n <steps>` and compare the agents that ran against the agents the plan named. Name any step whose agent never started, or started and never stopped. Silence here is what let four stories in a row be written by the parent without anyone noticing.
 2. **Criteria table**: criterion → test → result, with the command output. Name unmet criteria explicitly.
 3. **Checks**: lint, typecheck, and a dependency audit when packages were added (health verified).
+4. **Outside the brief.** Gather the items the specialists reported under that heading. They are listed in the story result under *Outside the brief*, and each is recorded before the story leaves the session — `/backlog add "<item>"` per item (a security-relevant one → a `production/findings.md` row instead), run after the Phase 6 commit gate, each with its own gate. Nothing is fixed here. An item that is neither listed nor recorded is gone at `SubagentStop`.
 
 ## Phase 6: Wrap-up, commit and CI
 1. **Status.** Set the story status to `Review` and the session state to `Next: /code-review` (through `<hooks>session-state.sh`).

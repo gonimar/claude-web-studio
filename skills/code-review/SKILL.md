@@ -26,7 +26,7 @@ In the steps below, `<default>` is the default branch (`master` or `main`); `<ba
 2. **Security.** Sensitive paths (`auth`, `security`, `payments`, `upload`, `webhook`, proxy configs) or `--security` → `appsec-engineer` is mandatory.
 3. **Write the diff once**: `git diff <base> > "$TMPDIR/review-<id>.diff"`, plus `git diff -M --name-status <base>` for the file list. A reviewer that reads the diff through `sed -n` in pieces runs out of turns on a third of the diffs and returns a verdict about the part it reached.
 4. **Print the routing table** before the reviewers run: extension or path in the diff → the reviewer this list requires → spawned yes/no. A required reviewer may be skipped, but only as a line saying so and why; chosen "by eye", routing quietly shrinks to one reviewer on a diff that touches three layers.
-5. **Spawn the reviewers** in one parallel batch. Each gets the diff path, the file list, the ADRs and the rules, and returns findings as `severity | file:line | what | risk | fix`.
+5. **Spawn the reviewers** in one parallel batch. Each gets the diff path, the file list, the ADRs, the story's acceptance criteria (when there is a story) and the rules, and returns findings as `severity | file:line | what | risk | fix`.
 6. **The first line of every verdict is `Read: N/M files`** — the diff files the reviewer actually opened. `N < M` makes that verdict `PARTIAL`, printed as such in the routing table, and a `PARTIAL` reviewer never contributes to `APPROVED`.
 
 ## Phase 3: Automated checks (Bash, when tools exist)
@@ -64,6 +64,14 @@ Every check's output goes into the report.
 **Go layout** (`go.md` "Project layout"), whenever the diff touches `cmd/` or the project has one. The numbers go into the report even when clean; a code comment calling the code "wiring" changes nothing.
 - `wc -l cmd/*/*.go` and `grep -ln 'flag\.\|Fprint' cmd/*/*.go`: a second non-test file in `cmd/<app>`, a `main.go` over 50 lines or a `flag.`/`Fprint` hit there is a WARNING `LAYOUT | cmd/<app>/<file>:1 | application code in cmd/ | grows with every story, untestable without package main | move to internal/app/<app>`.
 - The same dependency-graph struct literal in two files is BLOCKING when a field is already missing in one of them (that difference is the bug), WARNING otherwise (fix: one constructor).
+
+**Scope** (CLAUDE.md principle 9), with a story. Every changed line should trace to one of the story's acceptance criteria or to a check the story must pass. The numbers go into the report even when clean.
+- The parent prints `git diff --stat <base>` next to the story's files (its Tasks, the criteria table's Test column): a file in the diff that the story does not name is listed, not yet judged.
+- The reviewers judge the hunks. A hunk that serves no criterion — a refactor of neighbouring code, a fixed pre-existing lint issue, a renamed identifier the story does not touch → WARNING `SCOPE | file:line | change outside the story's criteria | review cost, an unowned behaviour change, merge conflicts with other stories | revert it here; record it with /backlog add or in production/findings.md`.
+- An option, abstraction or error path no criterion asks for → WARNING `SCOPE-SPEC | file:line | speculative code | code with no test that pins it | remove it, or add the criterion through /impact`.
+- A behaviour the story's new code exposes — a new route, a new input reaching old code — is inside the criteria even when the lines that misbehave are old: SCOPE covers changes, not consequences. Such a finding keeps the severity its reviewer gave it and is never downgraded to INFO as "pre-existing".
+- Reformatting, reflowed comments or reordered imports in code the story does not otherwise change → INFO `SCOPE-STYLE`.
+- Not findings: removing what this change itself made unused, the tests for the criteria, files a tool regenerated (lockfiles, generated code), and the changes a `/code-review` fix round was asked for.
 
 ## Phase 4: ADR conformance
 Deviation from an accepted ADR: ARCHITECTURAL VIOLATION (BLOCKING) / DRIFT (WARNING) / MINOR (INFO).
