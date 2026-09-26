@@ -4,7 +4,6 @@ description: "Fast path for an urgent production fix — reproduce with a failin
 argument-hint: "[issue description or bug id] | --chore <what>"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, Skill, AskUserQuestion
-model: sonnet
 ---
 
 # Hotfix

@@ -4,8 +4,6 @@ description: "Authors a UX specification for a flow or screen — user goal, flo
 argument-hint: "[flow or feature F-NNN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
-agent: design-lead
 ---
 
 # UX Spec

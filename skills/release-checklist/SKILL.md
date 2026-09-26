@@ -4,8 +4,6 @@ description: "Runs the release gate — verifies stories done, audits (security/
 argument-hint: "[version]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
-model: sonnet
-agent: qa-lead
 ---
 
 # Release Checklist

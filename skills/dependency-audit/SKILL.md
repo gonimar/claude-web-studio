@@ -4,8 +4,6 @@ description: "Supply-chain audit (OWASP A03) — lockfiles present, npm/pnpm/com
 argument-hint: "[--fix-safe]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, WebFetch, Task, AskUserQuestion
-model: sonnet
-agent: appsec-engineer
 ---
 
 # Dependency Audit

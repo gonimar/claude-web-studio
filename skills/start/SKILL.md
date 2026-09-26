@@ -4,7 +4,6 @@ description: "First-time onboarding for a new web project — asks where you are
 argument-hint: "[no arguments]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Bash, AskUserQuestion
-model: sonnet
 ---
 
 # Start

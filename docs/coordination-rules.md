@@ -29,6 +29,9 @@
 | Opus | `opus` | Multi-document synthesis, phase gates, `/architecture-review`, `/threat-model`, `/team-*` |
 
 New skill: Haiku if it only reads and formats; Opus if it synthesises 5+ documents with high stakes; otherwise Sonnet.
+A skill's `model:` frontmatter switches the model for the whole turn, the closing hand-off included, so only the
+exceptions above pin one (`/help` haiku; `/architecture-review`, `/threat-model`, `/team-*` opus); every other skill
+runs on the session model. An agent's `model:` is its own and applies inside `Task`.
 
 ## Subagents
 
@@ -47,3 +50,16 @@ the *model of the studio agent*, never the agent itself.
 **A reviewer reads what it reviews**: a draft goes to the subagent as a path it can read plus a requirement to
 quote back a named part of it; pasting an abbreviated draft, or a placeholder, produces a verdict about
 nothing. A verdict that quotes nothing is returned once and then reported as unread, never counted.
+
+## Skill conventions
+
+Every studio skill follows these; a skill body names them by section instead of restating them.
+
+- **Language** — rule 10: reply in the project's conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+- **Paths and names** — `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode; a studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode; a command is `/web-studio:<name>` in plugin mode and `/<name>` in copy mode (§ Subagents). `<default>` is the default branch (`master` or `main`).
+- **Gates** — rule 7: show the draft → "May I write `<path>`?" as one `AskUserQuestion` (Recommended first) → `Write`/`Edit` only after the answer, then `touch .claude/.write-consent`. Before each gate `<hooks>session-state.sh set Gate "/<skill> Phase N: <question>"`; after the answer `<hooks>session-state.sh set Gate "—"`. A subagent has no `AskUserQuestion`: consent is collected by the session that runs the skill.
+- **Documents-lane commit gate** — rule 7 (4) and git-workflow § Rules: after a write, one `AskUserQuestion` offers a `docs:` commit staging exactly the written files. On the default branch when no story work is in progress. When HEAD is a story branch, name it and offer: switch to `<default>` and commit there (Recommended: `git switch <default> && git pull --ff-only origin <default>`, commit, `git switch <branch>` back) · commit here (the document rides the story's PR) · leave uncommitted. Product code never rides a `docs:` commit.
+- **Another skill** — § Subagents: a skill listed in `allowed-tools: Skill` runs another studio skill through the `Skill` tool with all of its phases and gates, one after another, never inside a `Task` batch; every other skill hands off with a closing `AskUserQuestion` naming the namespaced command, and the turn ends.
+- **Subagents** — § Subagents: `subagent_type` is always a studio agent; a cut-off agent is resumed with its `Checkpoint:`, a second cut-off splits the step, only then may the parent write (and says so); a reviewer quotes what it read (`Read: N/M files`).
+- **CI wait** — read the workflow triggers before waiting (`push` starts a run on the branch; `pull_request` only starts one for a PR — open a draft PR then); wait with one background `gh run watch --exit-status`, never with polling, `Monitor`, `ScheduleWakeup` or an `AskUserQuestion` used as a pause; a slow queue ends the turn with one status line.
+- **Verdict and next step** — the verdict is one word from the skill's vocabulary on its own line; the next step is one `AskUserQuestion` naming the namespaced command (Recommended) and the real alternatives; in plugin mode a bare `/code-review` is Claude Code's built-in review, never the studio's.

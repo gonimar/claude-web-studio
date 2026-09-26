@@ -4,8 +4,6 @@ description: "Inventories technical debt — outdated dependencies vs the stack 
 argument-hint: "[area or 'full']"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, AskUserQuestion
-model: sonnet
-agent: technical-director
 ---
 
 # Tech Debt

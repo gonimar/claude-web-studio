@@ -4,8 +4,6 @@ description: "Generates or updates CHANGELOG.md from Conventional Commits since 
 argument-hint: "[version | --unreleased]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion
-model: haiku
-agent: tech-writer
 ---
 
 # Changelog

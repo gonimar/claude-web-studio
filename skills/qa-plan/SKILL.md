@@ -4,8 +4,6 @@ description: "Creates the QA plan for a sprint or feature — maps each story's 
 argument-hint: "[sprint NN | F-NNN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Bash, AskUserQuestion, Task
-model: sonnet
-agent: qa-lead
 ---
 
 # QA Plan

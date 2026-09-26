@@ -4,7 +4,6 @@ description: "Validates Web Studio skills and agents: static (structural linter)
 argument-hint: "static [name|all] | spec [name] | category [name|all] | agent [name|all] | audit"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: sonnet
 ---
 
 # Skill Test

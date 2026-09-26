@@ -4,8 +4,6 @@ description: "Designs the API contract before implementation — GraphQL SDL by 
 argument-hint: "[feature F-NNN or area] [--style graphql|rest|events|ws] | --deprecate <operation or field> [--remove-after YYYY-MM-DD]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
-agent: api-designer
 ---
 
 # API Contract

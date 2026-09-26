@@ -4,8 +4,6 @@ description: "Incident response and blameless postmortem — severity, containme
 argument-hint: "[title] [--sev 1-4]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, Skill, AskUserQuestion
-model: sonnet
-agent: devops-lead
 ---
 
 # Incident

@@ -4,8 +4,6 @@ description: "Sets up the test strategy and infrastructure for the chosen stack 
 argument-hint: "[--apply]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
-agent: qa-lead
 ---
 
 # Test Setup

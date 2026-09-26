@@ -5,7 +5,6 @@ argument-hint: "[full | <surface>]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
 model: opus
-agent: security-lead
 ---
 
 # Threat Model

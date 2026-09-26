@@ -4,8 +4,6 @@ description: "Authors a web-game concept — pitch, core loop, MDA, mechanics, p
 argument-hint: "[game title] | gate"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
-agent: game-lead
 ---
 
 # Game Concept

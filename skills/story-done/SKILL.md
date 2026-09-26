@@ -4,8 +4,6 @@ description: "Verifies a story is truly done: every acceptance criterion has a p
 argument-hint: "[story-path or S-NNN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write, Task, AskUserQuestion
-model: sonnet
-agent: qa-lead
 ---
 
 # Story Done

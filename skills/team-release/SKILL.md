@@ -5,7 +5,6 @@ argument-hint: "[version]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, Skill, AskUserQuestion
 model: opus
-agent: qa-lead
 ---
 
 # Team: Release

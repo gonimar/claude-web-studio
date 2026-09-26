@@ -4,7 +4,6 @@ description: "Sprint retrospective from artefacts — planned vs shipped, estima
 argument-hint: "[sprint NN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion
-model: sonnet
 ---
 
 # Retrospective

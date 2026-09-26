@@ -4,7 +4,6 @@ description: "Updates the Web Studio itself in this project — plugin mode: cla
 argument-hint: "[--kit <path-to-repo>] [--dry-run]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Edit, AskUserQuestion
-model: haiku
 ---
 
 # Update the studio

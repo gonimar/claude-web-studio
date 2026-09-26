@@ -4,8 +4,6 @@ description: "Audits the application against OWASP Top 10:2025 / ASVS for the pr
 argument-hint: "[full | quick | api | auth | infra | <path>]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
-model: sonnet
-agent: security-lead
 ---
 
 # Security Audit

@@ -4,7 +4,6 @@ description: "Documentation for people, through tech-writer — README from tech
 argument-hint: "[readme | api | guide | runbook | all] [--check]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion
-model: sonnet
 ---
 
 # Docs — documentation for people

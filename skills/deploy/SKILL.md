@@ -4,8 +4,6 @@ description: "Plans and executes a deployment — verifies release readiness, bu
 argument-hint: "[version | rollback [tag]] [--env <name>] [--plan-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
-model: sonnet
-agent: devops-lead
 ---
 
 # Deploy

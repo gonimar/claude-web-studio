@@ -4,8 +4,6 @@ description: "Measures and improves performance against budgets — Lighthouse (
 argument-hint: "[web | api | db | game | full] [url]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
-model: sonnet
-agent: performance-engineer
 ---
 
 # Perf Audit

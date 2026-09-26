@@ -4,8 +4,6 @@ description: "Breaks a feature spec into implementable stories (vertical slices:
 argument-hint: "[F-NNN or feature-spec path]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: sonnet
-agent: product-director
 ---
 
 # Create Stories
