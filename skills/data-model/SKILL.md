@@ -1,6 +1,6 @@
 ---
 name: data-model
-description: "Designs or extends the data model — entities/relations, PostgreSQL DDL with constraints and indexes justified by queries, migration strategy (expand/contract), PII classification, backup/restore. Produces docs/architecture/data-model.md and migration drafts."
+description: "Designs or extends the data model — entities and relations, PostgreSQL DDL with constraints and indexes justified by queries, expand/contract migration strategy, PII classification, backup/restore — into docs/architecture/data-model.md and migration drafts. Run after /api-contract and before build, or for 'design the schema', 'add a table', 'write the migration'."
 argument-hint: "[feature F-NNN or 'full']"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion

@@ -129,7 +129,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/create-stories` — slices a feature spec into vertical-slice stories with a criteria-to-test matrix.
 - `/dev-story` — implements one story end to end through the right engineers, with tests and a criteria check.
 - `/code-review` — reviews files or the current diff for correctness, standards, ADR conformance, security and performance.
-- `/story-done` — verifies a story is truly done (tests run, checks green, review approved) and closes it.
+- `/story-done` — verifies a story is truly done (tests run, checks green, review approved), closes it, opens the PR if none exists and merges it on green CI.
 - `/sprint-plan` — plans a sprint from ready stories, capacity and dependencies, and triages the Dependabot/Renovate queue (green patch/minor merged at sprint start, majors become stories).
 - `/sprint-status` — reports sprint progress from artefacts, blockers, the dependency-update queue and risk to the goal.
 - `/backlog` — records an idea from the conversation as one line in `production/backlog.md` without acting on it; weekly review; promotes an idea to `/brainstorm`, `/impact` or `/feature-spec`.
@@ -151,7 +151,7 @@ Plugin mode prefixes each with `web-studio:`.
 - `/changelog` — generates the changelog from Conventional Commits and proposes the version bump.
 - `/release-checklist` — runs the release gate from evidence and writes the release file with rollback steps.
 - `/deploy` — plans and executes a deployment with confirmations, smoke checks and rollback, handing the stack mutation to the declared deploy delegate by the deploy target contract (`docs/deploy-target-contract.md`) or producing runbook steps when none is declared.
-- `/hotfix` — fast-tracks an urgent production fix from a failing test to deploy and backport.
+- `/hotfix` — fast-tracks an urgent production fix from a failing test to deploy and backport; `--chore` repairs a broken toolchain on the chore lane.
 - `/incident` — coordinates incident response and writes a blameless postmortem.
 
 **Teams (orchestration)**

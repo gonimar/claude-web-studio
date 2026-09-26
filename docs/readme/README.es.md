@@ -120,7 +120,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/create-stories` — divide una especificación en historias de corte vertical con una matriz criterio → prueba.
 - `/dev-story` — implementa una historia de principio a fin con los ingenieros adecuados, con pruebas y verificación de criterios.
 - `/code-review` — revisa archivos o el diff actual: corrección, estándares, conformidad con ADR, seguridad y rendimiento.
-- `/story-done` — comprueba que una historia está realmente terminada (pruebas ejecutadas, checks verdes, revisión aprobada) y la cierra.
+- `/story-done` — comprueba que una historia está realmente terminada (pruebas ejecutadas, checks verdes, revisión aprobada), la cierra, abre el PR si no existe y lo fusiona con la CI en verde.
 - `/sprint-plan` — planifica un sprint a partir de historias listas, capacidad y dependencias, y clasifica la cola de Dependabot/Renovate (los PR patch/minor en verde se fusionan al inicio del sprint, los majors se convierten en historias).
 - `/sprint-status` — informa del progreso del sprint según artefactos, bloqueos, la cola de actualizaciones de dependencias y riesgo para el objetivo.
 - `/backlog` — registra una idea de la conversación como una línea en `production/backlog.md` sin actuar sobre ella; revisión semanal; promueve una idea a `/brainstorm`, `/impact` o `/feature-spec`.
@@ -142,7 +142,7 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 - `/changelog` — genera el changelog a partir de Conventional Commits y propone el salto de versión.
 - `/release-checklist` — pasa la puerta de release con evidencias y escribe el archivo de release con pasos de reversión.
 - `/deploy` — planifica y ejecuta un despliegue con confirmaciones, smoke checks y reversión; entrega la mutación del stack al delegado de despliegue declarado según el contrato (`docs/deploy-target-contract.md`) o produce los pasos del runbook si no hay delegado.
-- `/hotfix` — acelera una corrección urgente en producción desde la prueba que falla hasta el despliegue y el backport.
+- `/hotfix` — acelera una corrección urgente en producción desde la prueba que falla hasta el despliegue y el backport; `--chore` repara una toolchain rota en el carril de chores.
 - `/incident` — coordina la respuesta a incidentes y escribe un postmortem sin culpables.
 
 **Equipos (orquestación)**

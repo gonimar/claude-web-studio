@@ -120,7 +120,7 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 - `/create-stories` — zerlegt eine Feature-Spezifikation in vertikale Stories mit einer Kriterium-zu-Test-Matrix.
 - `/dev-story` — setzt eine Story Ende-zu-Ende über die passenden Engineers um, mit Tests und Kriterienprüfung.
 - `/code-review` — prüft Dateien oder das aktuelle Diff auf Korrektheit, Standards, ADR-Konformität, Sicherheit und Performance.
-- `/story-done` — verifiziert, dass eine Story wirklich fertig ist (Tests gelaufen, Checks grün, Review genehmigt), und schließt sie.
+- `/story-done` — verifiziert, dass eine Story wirklich fertig ist (Tests gelaufen, Checks grün, Review genehmigt), schließt sie, öffnet den PR, falls keiner existiert, und merged ihn bei grüner CI.
 - `/sprint-plan` — plant einen Sprint aus bereiten Stories, Kapazität und Abhängigkeiten und sortiert die Dependabot/Renovate-Warteschlange (grüne Patch/Minor-PRs werden zum Sprintstart gemergt, Majors werden Stories).
 - `/sprint-status` — berichtet den Sprint-Fortschritt anhand von Artefakten, Blockern, der Warteschlange der Abhängigkeits-Updates und Risiko für das Ziel.
 - `/backlog` — hält eine Idee aus dem Gespräch als eine Zeile in `production/backlog.md` fest, ohne sie umzusetzen; wöchentliche Durchsicht; befördert eine Idee zu `/brainstorm`, `/impact` oder `/feature-spec`.
@@ -142,7 +142,7 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 - `/changelog` — erzeugt das Changelog aus Conventional Commits und schlägt die Versionsanhebung vor.
 - `/release-checklist` — durchläuft das Release-Gate anhand von Nachweisen und schreibt die Release-Datei mit Rollback-Schritten.
 - `/deploy` — plant und führt ein Deployment mit Bestätigungen, Smoke-Checks und Rollback aus; die Stack-Änderung geht per Vertrag (`docs/deploy-target-contract.md`) an den deklarierten Deploy-Delegaten oder wird als Runbook-Schritte ausgegeben, wenn keiner deklariert ist.
-- `/hotfix` — beschleunigt eine dringende Produktionskorrektur vom fehlschlagenden Test bis zu Deployment und Backport.
+- `/hotfix` — beschleunigt eine dringende Produktionskorrektur vom fehlschlagenden Test bis zu Deployment und Backport; `--chore` repariert eine kaputte Toolchain auf der Chore-Lane.
 - `/incident` — koordiniert die Reaktion auf einen Vorfall und schreibt ein schuldfreies Postmortem.
 
 **Teams (Orchestrierung)**

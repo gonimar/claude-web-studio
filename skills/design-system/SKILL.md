@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: "Defines the project design system — principles, --ds-* tokens (colour roles, spacing, type, radius, motion) for light/dark, component inventory with states and aria patterns, mapping to Angular Material / Taiga UI / Vue kits, game HUD rules. Produces docs/specs/design-system.md and a tokens CSS draft."
+description: "Defines the project design system — principles, --ds-* tokens (colour roles, spacing, type, radius, motion) for light/dark, component inventory with states and aria patterns, mapping onto the chosen UI kit, game HUD rules — into docs/specs/design-system.md and a tokens CSS draft. Run before UI implementation, or for 'design tokens', 'dark theme', 'component library'."
 argument-hint: "[--base material|taiga|primevue|vuetify|custom]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task

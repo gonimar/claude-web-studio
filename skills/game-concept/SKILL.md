@@ -1,6 +1,6 @@
 ---
 name: game-concept
-description: "Authors a web-game concept — pitch, core loop, MDA, mechanics, progression/economy, content scope, visual/audio direction, technical feasibility (engine, frame/memory/load budgets on mobile web, networking), accessibility, metrics, prototype plan. Produces docs/specs/game-concept.md."
+description: "Authors a web-game concept — pitch, core loop, MDA, mechanics, progression and economy, content scope, visual/audio direction, feasibility (engine, frame/memory/load budgets on mobile web, networking), accessibility, metrics, prototype plan — into docs/specs/game-concept.md; `gate` records the prototype go/no-go. Use when starting a game, for 'game idea', 'core loop', 'is the prototype fun'."
 argument-hint: "[game title] | gate"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task

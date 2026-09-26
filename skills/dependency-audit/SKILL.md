@@ -1,6 +1,6 @@
 ---
 name: dependency-audit
-description: "Supply-chain audit (OWASP A03) — lockfiles present, npm/pnpm/composer audit, govulncheck, abandoned/unmaintained packages, versions vs the stack reference, licence check, Renovate/Dependabot config, SRI for external scripts, image pinning. Report with upgrade/replace actions."
+description: "Audits the supply chain (OWASP A03) — lockfiles, vulnerability scans, abandoned packages, versions vs the stack reference, licences, Renovate/Dependabot config, SRI, image pinning — and reports upgrade/replace actions; `--fix-safe` applies patch/minor updates on a chore branch. Required before release; use for 'check the dependencies', 'any vulnerable packages', 'outdated deps'."
 argument-hint: "[--fix-safe]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, WebFetch, Task, AskUserQuestion

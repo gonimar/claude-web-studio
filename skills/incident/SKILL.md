@@ -1,6 +1,6 @@
 ---
 name: incident
-description: "Incident response and blameless postmortem — severity, containment steps, diagnosis (logs/metrics/containers via a deployment skill when present), fix/rollback, timeline, root cause, actions; writes docs/ops/incidents/INC-NNN.md."
+description: "Runs incident response and the blameless postmortem — severity, containment, diagnosis (logs/metrics/containers via a deployment skill when present), fix or rollback, timeline, root cause, actions — into docs/ops/incidents/INC-NNN.md. Use when production is down or degraded, after /hotfix, for 'we have an outage', 'postmortem', 'incident report'."
 argument-hint: "[title] [--sev 1-4]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, Skill, AskUserQuestion

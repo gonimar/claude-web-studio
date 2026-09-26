@@ -1,6 +1,6 @@
 ---
 name: migrate
-description: "Migrates a project's documents to the studio's current templates without losing content — a roadmap of any format to v3.1 with stable IDs and inline links, story cards, ADRs, product and feature specs, sprint files; detects each document's format, shows the mapping and a rendered dry run before any write, keeps history and IDs. Use after /adopt on a project whose documents predate or differ from the templates, and when /update reports template drift."
+description: "Migrates a project's documents (roadmap, stories, ADRs, specs, sprints) to the studio's current templates, keeping content, IDs and history; detects each format and shows the mapping and a rendered dry run before any write. Use after /adopt when documents predate the templates, when /update reports template drift, or for 'convert the roadmap', 'old story format', 'bring the ADRs up to date'."
 argument-hint: "[roadmap | stories | adrs | specs | sprints | all] [--dry-run]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion

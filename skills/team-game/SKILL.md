@@ -1,6 +1,6 @@
 ---
 name: team-game
-description: "Delivers a playable web-game slice: game-concept check → engine ADR → branch → simulation + rendering (three.js/Pixi) + UI overlay (Angular/Vue) + optional multiplayer (Go server) in parallel → frame-budget measurement → accessibility settings → commit and PR → review. Use to build the prototype or a game feature."
+description: "Delivers a playable web-game slice: game-concept check → engine ADR → branch → simulation, rendering and UI overlay in parallel, optional multiplayer server → frame-budget measurement → accessibility settings → commit and PR → review. Use for 'build the prototype', 'make it playable', 'game feature F-NNN'."
 argument-hint: "[prototype | feature F-NNN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, Skill, AskUserQuestion

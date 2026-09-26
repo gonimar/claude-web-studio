@@ -1,6 +1,6 @@
 ---
 name: retrospective
-description: "Sprint retrospective from artefacts — planned vs shipped, estimate vs actual per story (the calibration ratio /sprint-plan applies to the next sprint), blockers and their causes, incidents and findings of the period, process actions with owners; writes the Retrospective section of the sprint file, carries the actions into the roadmap and closes the sprint (unfinished stories back to the Backlog, the block folded, Status: closed). The only command that closes a sprint. Use at sprint end, before /sprint-plan for the next sprint."
+description: "Runs the sprint retrospective from artefacts — planned vs shipped, estimate vs actual (the calibration ratio the next /sprint-plan applies), blockers, incidents, actions with owners — and closes the sprint (the only command that does; unfinished stories go back to the Backlog). Use at sprint end, before the next /sprint-plan, for 'close the sprint', 'how did the sprint go', 'retro'."
 argument-hint: "[sprint NN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion

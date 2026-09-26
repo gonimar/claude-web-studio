@@ -1,6 +1,6 @@
 ---
 name: team-feature
-description: "Orchestrates a full vertical slice for one feature: feature-spec check → branch → API contract (GraphQL/REST) → data model → backend → frontend/game → tests → security review → commit and PR → code review, spawning the right leads and engineers in parallel where independent. Use to deliver a feature end-to-end."
+description: "Delivers one feature end-to-end as a vertical slice: feature-spec check → branch → API contract → data model → backend → frontend/game → tests → security review → commit and PR → code review, spawning the right leads and engineers in parallel where independent. Use for 'build feature F-NNN', 'implement the whole feature', 'deliver this end-to-end'."
 argument-hint: "[F-NNN or feature name] [--review full|lean|solo]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, Skill, AskUserQuestion

@@ -1,6 +1,6 @@
 ---
 name: harden
-description: "Hardens the runtime and perimeter — security headers/CSP, TLS/HSTS, proxy (Caddy/nginx) config, rate/body limits, WebSocket protections, Docker network/container hardening, CI permissions, supply chain (update bot, SHA-pinned Actions, lockfile policy, SBOM and signing jobs), secrets hygiene; verifies with live curl/scanner output; writes docs/security/hardening-checklist.md."
+description: "Hardens the runtime and perimeter — security headers/CSP, TLS/HSTS, reverse-proxy config, rate/body limits, WebSocket protections, container and network hardening, CI permissions, supply chain (update bot, SHA-pinned Actions, lockfile policy, SBOM and signing jobs), secrets hygiene — verified with live curl/scanner output; `--apply` writes the changes; docs/security/hardening-checklist.md. Use before release or after /security-audit, for 'CSP headers', 'harden the server'."
 argument-hint: "[full | headers | tls | proxy | docker | ci | supply-chain | secrets] [--apply]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, AskUserQuestion

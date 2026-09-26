@@ -1,6 +1,6 @@
 ---
 name: release-checklist
-description: "Runs the release gate — verifies stories done, audits (security/deps/harden/perf/a11y) without blocking findings, migration compatibility, changelog, secrets/env, backup; writes production/releases/vX.Y.Z.md with deploy and rollback steps."
+description: "Runs the release gate from evidence — stories done, audits (security/deps/harden/perf/a11y) without blocking findings, migration compatibility, changelog, secrets/env, backup — and writes production/releases/vX.Y.Z.md with deploy and rollback steps. Run after /changelog and before /deploy, or for 'are we ready to release', 'release checklist', 'ship vX.Y.Z'."
 argument-hint: "[version]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion

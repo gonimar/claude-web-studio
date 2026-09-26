@@ -1,6 +1,6 @@
 ---
 name: create-stories
-description: "Breaks a feature spec into implementable stories (vertical slices: contract → backend → frontend/game → tests) with acceptance criteria mapped to tests, size, layer, ADR links. Produces production/stories/F-NNN/S-NNN-*.md."
+description: "Slices a feature spec into implementable vertical-slice stories (contract → backend → frontend/game → tests) with acceptance criteria mapped to tests, size, layer and ADR links, in production/stories/F-NNN/. Run after /feature-spec and before /sprint-plan, or for 'break this feature into stories', 'create stories for F-NNN', 'what are the tasks'."
 argument-hint: "[F-NNN or feature-spec path]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion

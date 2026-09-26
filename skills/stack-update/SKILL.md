@@ -1,6 +1,6 @@
 ---
 name: stack-update
-description: "Refreshes the stack knowledge base — checks the latest versions of every technology in stack-reference (official llms.txt, release pages, endoflife.date, npm/packagist/pkg.go.dev), rewrites the reference files with dated facts and sources, compares with the project's lockfiles, and proposes an upgrade plan. Run when references are older than 60 days or before planning upgrades."
+description: "Refreshes the stack knowledge base — checks every technology in the stack reference against official sources, rewrites the reference files with dated facts and sources, compares with the project's lockfiles and proposes an upgrade plan; `--check-only` reports without writing. Run when the reference is older than 60 days or before planning upgrades, for 'is our stack current', 'latest versions'."
 argument-hint: "[project | all | <tech: go|php|yii3|symfony|laravel|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling|kubernetes|observability|llm>] [--check-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, WebSearch, AskUserQuestion, Task

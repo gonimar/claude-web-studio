@@ -1,6 +1,6 @@
 ---
 name: skill-test
-description: "Validates Web Studio skills and agents: static (structural linter), spec (behavioural spec evaluation), category (rubric metrics), agent (agent spec evaluation), audit (coverage report). Uses the testing framework (catalog.yaml, quality-rubric.md, specs) from the kit repository or a project copy."
+description: "Validates Web Studio skills and agents: `static` (structural linter), `spec` (behavioural spec evaluation), `category` (rubric metrics), `agent` (agent spec evaluation), `audit` (coverage report), using the testing framework (catalog.yaml, rubric, specs) from the kit or a project copy. Run after editing a skill or agent, for 'lint the skills', 'test skill X', 'coverage of the kit'."
 argument-hint: "static [name|all] | spec [name] | category [name|all] | agent [name|all] | audit"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
