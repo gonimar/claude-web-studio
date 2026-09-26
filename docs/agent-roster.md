@@ -1,7 +1,10 @@
 # Agent Roster
 
-Each agent is a file in `agents/` (plugin) or `.claude/agents/` (copy mode). Work that spans
-domains goes through a coordinating agent (director or lead) who delegates to specialists.
+Each agent is a file in `agents/` (plugin) or `.claude/agents/` (copy mode). The coordinator is the
+session that runs the skill: it plans, briefs and dispatches specialists (Tier 3) and collects their
+results. Directors (Tier 1) give verdicts at gates; leads (Tier 2) review, design and name the
+specialist a step belongs to — they do not spawn agents themselves (measured on real projects: leads
+ran only as reviewers, every dispatch came from the session).
 The stack-reference file an agent reads first is listed in its description
 (`.claude/docs/stack-reference/…`). All agents reply in the project's conversation language
 (CLAUDE.md → Language) and keep code, identifiers and commits in English.
@@ -18,7 +21,7 @@ The stack-reference file an agent reads first is listed in its description
 | `technical-director` | Technical vision | Stack choice, ADRs, system boundaries, performance and security strategy, arbitration of technical conflicts |
 | `product-director` | Product and production | Scope, priorities, product spec, epics/stories, sprints, risks, phase gates |
 
-## Tier 2 — leads (Sonnet)
+## Tier 2 — leads (Sonnet) — review, design, verdicts; a lead names the specialist, the session dispatches it
 | Agent | Domain | When |
 |---|---|---|
 | `backend-lead` | Server architecture | Domains/modules, API contracts, DB, queues, backend code review, Go vs PHP vs Node per service |
