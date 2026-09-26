@@ -13,7 +13,7 @@ agent: tech-writer
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
 ## Phase 1: Commits
-`git describe --tags --abbrev=0` → `git log <tag>..HEAD --pretty=format:'%h %s'`; group by type (feat → Added, fix → Fixed, perf → Changed, `!`/BREAKING → Breaking, security fixes → Security). Non-standard messages go to "Other" with a note.
+`git describe --tags --abbrev=0` → `git log <tag>..HEAD --pretty=format:'%h %s'`. No tag yet (`git describe` fails) → `git log HEAD --pretty=format:'%h %s'`, the whole history, and say so. Then group by type (feat → Added, fix → Fixed, perf → Changed, `!`/BREAKING → Breaking, security fixes → Security). Non-standard messages go to "Other" with a note.
 
 ## Phase 2: Version
 Propose the bump (breaking → major, feat → minor, else patch); the argument's version wins.

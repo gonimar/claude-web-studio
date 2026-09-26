@@ -11,7 +11,11 @@ model: opus
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Orchestration. File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes"; delegated agents follow the same protocol. A partial report on BLOCKED at any stage is mandatory. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+Orchestration. File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" — each one `AskUserQuestion` (proceed (Recommended) · show the draft/diff first · not now) → "yes". After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). A partial report on BLOCKED at any stage is mandatory.
+
+**Consent for delegated work is collected by this skill.** A subagent spawned through `Task` cannot ask the user. Before each `Task` batch, the "Proceed?" question names the agents and the files each will create or change; that answer covers those files. A specialist that needs to go beyond its brief (another file, a new dependency, a contract or schema change) stops and reports it, and the parent asks.
+
+Agents below are spawned with a studio `subagent_type`: `web-studio:<name>` in plugin mode, `<name>` in copy mode. Commands are `/web-studio:<name>` in plugin mode and `/<name>` in copy mode; a bare `/code-review` in plugin mode runs Claude Code's built-in review, not the studio's (coordination-rules § Subagents).
 
 ## Phase 1: Readiness
 A feature spec with criteria (missing → run `/feature-spec`); technical-preferences; review mode.
@@ -23,7 +27,7 @@ A feature spec with criteria (missing → run `/feature-spec`); technical-prefer
 Backend (`go-engineer`/`php-engineer`/`node-engineer` + `graphql-engineer`) → once the contract is ready, in parallel frontend (`angular-engineer`/`vue-engineer`, `css-engineer`) and game (`threejs-engineer`/`web-game-engineer`) — the frontend may start on mocks from the contract. Engineers write the tests; e2e — `test-engineer`.
 
 ## Phase 4: Verification
-`appsec-engineer` (mandatory for sensitive work, else per mode) ‖ `accessibility-specialist` (UI) ‖ `performance-engineer` (budget risk) — in parallel; then `/code-review --diff`.
+`appsec-engineer` (mandatory for sensitive work, else per mode) ‖ `accessibility-specialist` (UI) ‖ `performance-engineer` (budget risk) — in parallel; then `/web-studio:code-review --diff` (copy mode `/code-review --diff`).
 
 ## Phase 5: Summary
 Table criteria ↔ tests ↔ results; open findings; propose `/story-done` per story and the PR.
