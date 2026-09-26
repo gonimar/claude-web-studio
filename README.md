@@ -226,15 +226,15 @@ A fourth, everyday case — returning after a break: open the project, read the 
   plugin users receive an update only when the version changes.
 
 ## 8. Testing the studio itself
-`testing/` holds a catalog, a quality rubric and 74 behavioural specs. Run `/skill-test static all`,
+`testing/` holds a catalog, a quality rubric and 80 behavioural specs. Run `/skill-test static all`,
 `/skill-test spec <skill>`, `/skill-test agent <agent>`, `/skill-test audit`, or `/skill-improve <name>`
 in this repository or in a project installed with `--with-testing`. Details: [testing/README.md](testing/README.md).
 
 ## 9. Repository layout
 ```
 .claude-plugin/   plugin.json + marketplace.json (this repository is both the marketplace and the plugin)
-agents/           30 agents        skills/     50 commands + 1 preload skill     hooks/      hooks.json + 10 scripts
-rules/            13 path-scoped rules          docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, roster, workflow catalog, security baseline
+agents/           30 agents        skills/     50 commands + 1 preload skill        hooks/      hooks.json + 19 scripts
+rules/            16 path-scoped rules          docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, roster, workflow catalog, security baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          agent and skill testing framework      install.sh  copy-mode / new-project installer
 ```

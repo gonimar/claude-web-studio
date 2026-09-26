@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+- **`templates/CLAUDE.md.template` cut to what its imports do not already say** (audit of 2026-09-26: 80 lines, about 45 of
+  them restating the `@`-imported coordination-rules). Principles keep their numbers and names and point to the rule or
+  section that owns them; `directory-structure.md` and `security-baseline.md` are referenced by path, not imported; new
+  `## Commands` stub, merge-policy line under principle 5, `/help commands` / `/help guide` pointer, "managed by `/update`"
+  on the two studio sections. Principle 3's package-health checks move to `rules/dependencies.md` (manifests and lockfiles);
+  principle 9's "neighbouring code stays as it is" reaches the TypeScript, Vue and Angular rules as it already did Go and PHP.
+  Principle 7 loses its incident: catalog artifacts authored in the chat, and product code written right after `/init`
+  because the goal "looked trivial", skipped the steps' gates and templates — that is why the first code goes through `/start`.
+- Kit `CLAUDE.md` names the commit gate (`tests/run-all.sh`), the kit ↔ project path mapping, `tests/` vs `testing/` vs
+  `evals/`, the hook contract and the rule that the template's principle numbers are never renumbered.
+
 ## 0.13.0 — 2026-09-26
 Two sources: the lab's traces of two real projects (the sprint cycle, comments, agent memory — WS-131, WS-136…139), and
 the skill pass with its follow-ups (#62, #64–#67).

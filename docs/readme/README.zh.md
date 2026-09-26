@@ -198,15 +198,15 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - 套件发布：提升 `.claude-plugin/plugin.json` 中的 `version` 并在 `CHANGELOG.md` 添加条目——插件用户只在版本变化时收到更新。
 
 ## 8. 测试工作室本身
-`testing/` 包含目录、质量评分表和 74 份行为规格。在本仓库或以 `--with-testing` 安装的项目中运行
+`testing/` 包含目录、质量评分表和 80 份行为规格。在本仓库或以 `--with-testing` 安装的项目中运行
 `/skill-test static all`、`/skill-test spec <skill>`、`/skill-test agent <agent>`、`/skill-test audit` 或
 `/skill-improve <name>`。详情：[testing/README.md](../../testing/README.md)。
 
 ## 9. 仓库结构
 ```
 .claude-plugin/   plugin.json + marketplace.json（本仓库同时是 marketplace 和插件）
-agents/           30 个代理        skills/     50 个命令 + 1 个预加载技能     hooks/      hooks.json + 10 个脚本
-rules/            13 条路径规则                   docs/       stack-reference/、templates/（findings、adoption-plan、deploy-runbook、deploy/）、deploy-target-contract、、名册、流水线目录、安全基线
+agents/           30 个代理        skills/     50 个命令 + 1 个预加载技能        hooks/      hooks.json + 19 个脚本
+rules/            16 条路径规则                   docs/       stack-reference/、templates/（findings、adoption-plan、deploy-runbook、deploy/）、deploy-target-contract、、名册、流水线目录、安全基线
 templates/        CLAUDE.md、settings.json、settings.plugin-mode.json、statusline.sh
 testing/          代理与技能测试框架                install.sh  副本 / 新项目安装脚本
 ```

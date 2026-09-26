@@ -217,7 +217,7 @@ lesen, `/help`, `/sprint-status`, dann `/dev-story` für die genannte Story.
   `CHANGELOG.md` ergänzen — Plugin-Nutzer erhalten ein Update nur bei geänderter Version.
 
 ## 8. Das Studio selbst testen
-`testing/` enthält einen Katalog, eine Qualitätsrubrik und 74 Verhaltensspezifikationen. Führen Sie
+`testing/` enthält einen Katalog, eine Qualitätsrubrik und 80 Verhaltensspezifikationen. Führen Sie
 `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent <agent>`, `/skill-test audit`
 oder `/skill-improve <name>` in diesem Repository oder in einem mit `--with-testing` installierten
 Projekt aus. Details: [testing/README.md](../../testing/README.md).
@@ -225,8 +225,8 @@ Projekt aus. Details: [testing/README.md](../../testing/README.md).
 ## 9. Aufbau des Repositorys
 ```
 .claude-plugin/   plugin.json + marketplace.json (dieses Repository ist Marketplace und Plugin zugleich)
-agents/           30 Agenten       skills/     50 Befehle + 1 vorgeladener Skill     hooks/      hooks.json + 10 Skripte
-rules/            13 pfadbezogene Regeln        docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, Agentenliste, Workflow-Katalog, Sicherheits-Baseline
+agents/           30 Agenten       skills/     50 Befehle + 1 vorgeladener Skill        hooks/      hooks.json + 19 Skripte
+rules/            16 pfadbezogene Regeln        docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, Agentenliste, Workflow-Katalog, Sicherheits-Baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          Testframework für Agenten und Skills      install.sh  Installer für Kopie / neues Projekt
 ```

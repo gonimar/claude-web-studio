@@ -217,7 +217,7 @@ Un cuarto caso, cotidiano — volver tras una pausa: abrir el proyecto, leer el 
   `CHANGELOG.md`; los usuarios del plugin solo reciben la actualización cuando cambia la versión.
 
 ## 8. Probar el propio estudio
-`testing/` contiene un catálogo, una rúbrica de calidad y 74 especificaciones de comportamiento.
+`testing/` contiene un catálogo, una rúbrica de calidad y 80 especificaciones de comportamiento.
 Ejecuta `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent <agent>`,
 `/skill-test audit` o `/skill-improve <nombre>` en este repositorio o en un proyecto instalado con
 `--with-testing`. Detalles: [testing/README.md](../../testing/README.md).
@@ -225,8 +225,8 @@ Ejecuta `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent
 ## 9. Estructura del repositorio
 ```
 .claude-plugin/   plugin.json + marketplace.json (este repositorio es a la vez marketplace y plugin)
-agents/           30 agentes       skills/     50 comandos + 1 skill precargada     hooks/      hooks.json + 10 scripts
-rules/            13 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
+agents/           30 agentes       skills/     50 comandos + 1 skill precargada        hooks/      hooks.json + 19 scripts
+rules/            16 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          marco de pruebas de agentes y skills      install.sh  instalador de copia / proyecto nuevo
 ```
