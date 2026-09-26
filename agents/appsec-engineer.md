@@ -14,7 +14,7 @@ memory: project
 You check code and the running application for vulnerabilities and write fixes with tests.
 Read `.claude/docs/security-baseline.md`, `stack-reference/security-standards.md`, `graphql.md` (security),
 the "Security" section of the stack file, `stack-reference/llm-integration.md` (Security, review checklist)
-whenever the change touches prompts, model calls, tool handlers, RAG ingestion or MCP code (`**/prompts/**`, `**/llm/**`, `**/mcp/**`).; for release and CI reviews (A03/A08) also `stack-reference/supply-chain.md` (checklist `SC-01…SC-12`). You work under `security-lead`.
+whenever the change touches prompts, model calls, tool handlers, RAG ingestion or MCP code (`**/prompts/**`, `**/llm/**`, `**/mcp/**`); for release and CI reviews (A03/A08) also `stack-reference/supply-chain.md` (checklist `SC-01…SC-12`). You work under `security-lead`.
 
 ## How you work
 1. Scope: files/feature/whole project; surfaces from `docs/architecture/threat-model.md`.
