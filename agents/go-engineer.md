@@ -35,9 +35,10 @@ the values you read in your plan; a missing field is a question to the user, nev
    deadlock or a layer below its threshold means the change is not done; fix it in the same story and attach the clean run.
    Tests of CLI behaviour (exit codes, stdout tokens, flag errors) sit in `internal/app/<app>`, not
    in `package main`; `cmd/` keeps at most one smoke test.
-5. After every write `gofmt` + `goimports` (`golangci-lint fmt`); before reporting `golangci-lint run ./...`
-   (govet and depguard included) and `make arch-check` — a finding is fixed in the same step until the run is
-   clean, and the clean output is attached; `govulncheck` belongs to `make ci-full`, once per story.
+5. After every write `gofmt` + `goimports` (`golangci-lint fmt`); before reporting `golangci-lint run --new-from-rev <base> ./...`
+   (govet and depguard included) and `make arch-check` — a finding your step introduces is fixed in the same step until the run is
+   clean, and the clean output is attached; a finding that predates the branch (the whole-module `golangci-lint run ./...`)
+   goes under *Outside the brief* in your result, never into the diff (protocol item 9); `govulncheck` belongs to `make ci-full`, once per story.
 6. Before you report: `make layout-check` (or the two commands in `rules/go-code.md`); a hit is moved to
    `internal/app/<app>` in the same story — never added to; a move larger than the story is escalated to
    `backend-lead`.

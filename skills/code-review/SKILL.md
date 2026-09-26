@@ -69,6 +69,7 @@ Every check's output goes into the report.
 - The parent prints `git diff --stat <base>` next to the story's files (its Tasks, the criteria table's Test column): a file in the diff that the story does not name is listed, not yet judged.
 - The reviewers judge the hunks. A hunk that serves no criterion — a refactor of neighbouring code, a fixed pre-existing lint issue, a renamed identifier the story does not touch → WARNING `SCOPE | file:line | change outside the story's criteria | review cost, an unowned behaviour change, merge conflicts with other stories | revert it here; record it with /backlog add or in production/findings.md`.
 - An option, abstraction or error path no criterion asks for → WARNING `SCOPE-SPEC | file:line | speculative code | code with no test that pins it | remove it, or add the criterion through /impact`.
+- A behaviour the story's new code exposes — a new route, a new input reaching old code — is inside the criteria even when the lines that misbehave are old: SCOPE covers changes, not consequences. Such a finding keeps the severity its reviewer gave it and is never downgraded to INFO as "pre-existing".
 - Reformatting, reflowed comments or reordered imports in code the story does not otherwise change → INFO `SCOPE-STYLE`.
 - Not findings: removing what this change itself made unused, the tests for the criteria, files a tool regenerated (lockfiles, generated code), and the changes a `/code-review` fix round was asked for.
 

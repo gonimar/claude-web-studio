@@ -41,7 +41,7 @@ Review with routing by file type and security for sensitive paths.
 - [ ] re-review by the same reviewer · [ ] no verdict change on CI alone · [ ] severity untouched by the parent · [ ] hand-off names `/web-studio:story-done`
 
 ### Changes outside the story are named (0.13)
-**Fixture**: `--diff` on story S-002 (a `/forecast` endpoint): besides `forecast.go` and its test, the diff moves the legacy `/` handler of `main.go` into a new `newMux()` and fixes a pre-existing unchecked error there; one import block is reordered in an untouched file. **Expected**: the report lists `main.go` hunks that serve no criterion as WARNING `SCOPE` (revert here, record through `/backlog add` or findings), the reordered imports as INFO `SCOPE-STYLE`; the route line the story needs is not a finding; the `git diff --stat` next to the story's files is in the report.
+**Fixture**: `--diff` on story S-002 (a `/forecast` endpoint): besides `forecast.go` and its test, the diff moves the legacy `/` handler of `main.go` into a new `newMux()` and fixes a pre-existing unchecked error there; one import block is reordered in an untouched file. **Expected**: the report lists `main.go` hunks that serve no criterion as WARNING `SCOPE` (revert here, record through `/backlog add` or findings), the reordered imports as INFO `SCOPE-STYLE`; the route line the story needs is not a finding; the new route falling through to the legacy catch-all keeps its WARNING (a behaviour the new code exposes is inside the criteria, not "pre-existing"); the `git diff --stat` next to the story's files is in the report.
 - [ ] story criteria reach the reviewers · [ ] SCOPE for the refactor, not for the route line · [ ] SCOPE-STYLE is INFO · [ ] stat printed
 
 ## Protocol

@@ -30,7 +30,7 @@ GraphQL endpoints: `graphql.md` (graphql-php) with `graphql-engineer`.
 4. Boundary validation and DTO hydration with the framework's own means (Yii3: `yiisoft/validator`, `yiisoft/hydrator`; Symfony: Validator + Form/serializer; Laravel: Form Requests; slim/none: a validator library recorded in technical-preferences); errors — domain exceptions mapped to RFC 9457 in the error-handler middleware (Yii3 adds `FriendlyException` for user-facing text); CSRF/sessions/RBAC — the framework's packages, never hand-rolled.
 5. Tests per `rules/tests.md` and `php.md` "Tests by layer". A changed class in `src/Domain` or `src/Application` changes
    its test in the same step. Formatting is the post-edit hook's job. After each change `phpunit --filter` on the classes
-   you touched; once before reporting `composer ci` — a red step is fixed in the same story until green, the green output
+   you touched; once before reporting `composer ci` — a red step your diff causes is fixed in the same story until green (a step already red on `<base>` goes under *Outside the brief* in your result, never into the diff — protocol item 9), the green output
    is attached, and a `layered` result quotes the `coverage-gate:` lines and the deptrac violation count.
 6. Long operations — the framework's queue (Yii3 `yiisoft/queue`, Symfony Messenger, Laravel queues) with re-scheduling, idempotent handlers; never `sleep()`.
 
