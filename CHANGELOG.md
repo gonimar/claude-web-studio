@@ -1,5 +1,52 @@
 # Changelog
 
+## Unreleased
+Findings of a week-long manual run on a real project (Web Studio 0.11.1, ten sessions, 250 agent runs) and of an
+external PHP project. Nothing new to learn: the same commands, the same agents — cheaper, and harder to bypass.
+- **One story per session** (coordination-rules rule 13). 80 % of the week's spend was the parent's context, not the
+  agents' work: sessions ran to 966 k tokens with two compactions in ten sessions, and 85 % of requests re-read more than
+  200 k. `/story-done` now hands off to `/clear` before the next story (continuing in the same conversation is no longer
+  an offered option), `/dev-story` refuses to start a story past 50 % context without offering `/clear` first, and
+  `/code-review` sends a re-review after fixes to a fresh session past that mark. Playbook § 10.25 says the same in two languages.
+- **Commands carry their namespace.** A bare `/code-review` in a hand-off ran Claude Code's *built-in* review skill of the
+  same name — nine general-purpose agents, no routing table, no appsec — and its findings travelled under the studio's name;
+  once a security-sensitive story was closed on its word. Every hand-off in `dev-story`, `refactor`, `code-review`,
+  `story-done` and every line `/help` prints now names `/web-studio:<command>` in plugin mode; coordination-rules § Subagents
+  says why, next to the same rule for `subagent_type`.
+- **`/help` no longer starts the next command.** It runs on Haiku, and a skill started from its closing question inherited
+  that model: a `/code-review` and a `/story-done` ran on Haiku and closed a story with invented numbers. After the answer
+  `/help` prints `Run: /web-studio:<command>` and ends the turn.
+- **The studio's review has to be in the log.** `/story-done` DoD: a reviewer's `SubagentStop` after the branch's first
+  commit, `appsec-engineer` among them for a security-sensitive story — otherwise `NOT DONE (no studio review)`.
+- **A verdict is the reviewer's.** After fixes `/code-review` sends the fix diff to the reviewer that raised each finding
+  and moves NEEDS CHANGES to APPROVED only on its answer — never on a green CI (five of five verdicts had been flipped by
+  the parent). A BLOCKING is downgraded only by the reviewer that raised it or by `technical-director` through `/impact`.
+  Reviewers get the diff as one file and open every verdict with `Read: N/M files`; `N < M` is `PARTIAL` and never
+  counts towards APPROVED (35 % of lead reviews had been cut off mid-diff).
+- **Engineers write the code, in every mode.** The rule lived in `dev-story` and `refactor`; on an external PHP project
+  the session drifted into "faster to fix it myself" from the third review round. It is now in coordination-rules
+  § Subagents, principle 8 of the CLAUDE.md template, `code-review` Phase 5 and `hotfix` — and it has an observer:
+  `hooks/parent-write.sh` (PreToolUse Write|Edit, warn-only) names the engineer the roster has for a code file the
+  session writes itself and leaves a `ParentWrite` line in `agent-audit.log`; `agent-stats.sh` and `/sprint-status` print the count.
+- **Turn budgets and briefs.** `maxTurns` 30 → 60 for the implementing Tier-3 engineers, 25 → 40 for the leads and
+  `appsec-engineer` (go-engineer hit its limit on 55 % of runs, test-engineer on 50 %, backend-lead as a reviewer on 35 %).
+  The `dev-story` brief has six fixed lines (`Story · Read` with line ranges · `Write · Check · Skip · Report`) because
+  half of an engineer's turns went into `grep`/`sed` navigation of files the parent had already read; every agent's
+  protocol gains point 8 — `Read`/`Grep` on the brief's paths, shell search only when the path is unknown, and a
+  `Checkpoint:` line kept in the result so a cut-off hands the caller the point to resume from. After a cut-off the parent
+  sends one resume line and runs no checks of its own until the `SubagentStop` (50 of 64 cut-offs had been answered with
+  the parent's own `git status` and builds).
+- **The roster says what the tiers do.** Leads review, design and name the specialist; the session dispatches. The `Task`
+  tool and "routes work to …" leave the seven leads — measured on real projects, no lead ever spawned an agent.
+- Hooks, four false positives closed and one gap: `validate-commit` blocks provider-shaped credentials everywhere but only
+  *warns* on `password = "…"` shapes in test code and agent memory (three test files had been rewritten to please it);
+  `validate-push` reads the commit from a `git commit … && git push` call instead of an empty `rev-list` (docs commits
+  on the default branch cried wolf three times a day); `written-paths` resolves `p='…'; open(p,'w')` and
+  `Path(p).write_text(…)` (27 document writes in one session had passed every guard); `consent-guard` stays silent on a
+  one-line `Status:`/`Started:`/`Actual:` edit, on a command that sets the marker before writing, and on
+  `docs/ops/measurements/` (rule 12 asks for those). `hooks/session-state.sh` is executable — skills call it as a
+  command and one call failed with `Permission denied`; the structure linter checks the bit for every hook a skill calls.
+
 ## 0.11.1 — 2026-09-18
 - Review follow-ups of 0.11.0. `/refactor` without an argument is a full interview: every architecture and tooling choice is asked with the current value first, a kept value produces no step and a changed one becomes an ADR-first plan step — this is how the owner changes the approach of a running project; with an argument only that mode's questions are asked. The `go_layers`/`php_layers` fields are gone: the use-case shape is the tree the layout ADR shows, and `/architecture-review code` already compares the tree with the ADR. `/code-review` lints a layered Go diff with `--new-from-rev=<default-branch>` only; the whole-module run belongs to `make ci`. `stack-reference/index.md` has a `Verified` column carrying each file's own `updated:` date, so a partial refresh no longer has to lie with one header date; `/stack-update` fills the row. `rules/*.md` follow CONTRIBUTING §5 again — short imperative bullets with a link — and the Go, PHP and test rules stop restating the stack-reference tables (the `cmd/` contract and the numbers a story reports now live in `rules/go-code.md`, which every `*.go` edit loads; go-engineer and php-engineer keep the role, the mechanics only they add, the Never list and the Reference line). `post-edit-check` has one `smell` helper for Go, PHP and Vitest (`setTimeout` waits, `toThrow("string")`) so the patterns cannot drift apart. `coverage-gate.php` streams the clover report with `XMLReader`, so a large project's report fits the default `memory_limit`. The `refactor` row sits with the pipeline rows in `testing/catalog.yaml`.
 

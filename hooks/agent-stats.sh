@@ -48,8 +48,9 @@ awk -F'|' -v since="$SINCE" -v label="$LABEL" '
     if (name == "general-purpose" || name == "Explore" || name == "claude") foreign++
   }
   ev == "SubagentStop" { if (aid != "" && aid != "-") delete openids[aid] }
+  ev == "ParentWrite" { pw++; if (since != "" && date >= since) pww++ }
   END {
-    if (starts == 0) { print "Agents: the log has no runs yet"; exit }
+    if (starts == 0) { print "Agents: the log has no runs yet"; if (pw > 0) printf "  ! %d code file(s) written by the session itself (parent-write) — no engineer ran at all\n", pw; exit }
     printf "Agents: %d runs all-time", starts
     if (since != "") printf " · %d in the %s", window + 0, label
     if (agents > 0) printf " · %d agents", agents
@@ -67,4 +68,5 @@ awk -F'|' -v since="$SINCE" -v label="$LABEL" '
     if (noid > 0)
       printf "  %d run(s) predate the agent ids in the log — they cannot be paired, so \"never closed\" is measured only over the %d that can\n", noid, agents
     if (foreign > 0) printf "  ! %d run(s) of non-studio agents — routing went around the roster\n", foreign
+    if (pw > 0) printf "  ! %d code file(s) written by the session itself (parent-write), %d in the %s — the roster engineers were bypassed\n", pw, pww + 0, label
   }' "$LOG"

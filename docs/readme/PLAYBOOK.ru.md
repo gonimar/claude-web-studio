@@ -694,7 +694,8 @@ git stash pop
 - `/team-*` и `/architecture-review`, `/threat-model` идут на Opus — самые дорогие; по шагам
   (`/feature-spec` → `/api-contract` → …) дешевле и контролируемее.
 - `/help`, `/sprint-status`, `/changelog`, `/a11y-audit` — Haiku, дёшево, можно часто.
-- Длинная сессия → компакция; лучше завершать историю и начинать новую сессию с `/dev-story`.
+- Одна история — одна сессия: после `/story-done` выполните `/clear` перед следующим `/dev-story` — деньги уходят на контекст самой сессии, а не на работу агентов (coordination-rules, правило 13); `/dev-story` сам скажет об этом, когда `ctx:` в строке статуса выше 50 %, а `/story-done` предлагает `/clear` первым вариантом.
+- В plugin-режиме вызывайте команды с пространством имён — `/web-studio:code-review`, `/web-studio:story-done`: голое `/code-review` — это встроенное ревью Claude Code (один general-purpose агент, без маршрутизации и appsec), а не студийное.
 - Квота кончилась посреди истории: код на ветке уже закоммичен по фазам? Если нет — `git commit`
   руками (`feat(S-NNN): wip`), `active.md` заполнить руками по шаблону
   `.claude/docs/templates/session-state.md`; следующая сессия продолжит с `Task:`.

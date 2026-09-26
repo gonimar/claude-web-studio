@@ -20,12 +20,21 @@ warn() {
 }
 protected() {
   case "$1" in
+    */docs/ops/measurements/*|docs/ops/measurements/*) return 1;;   # rule 12 asks for these as work proceeds
     */docs/adoption-plan-*.md|docs/adoption-plan-*.md|*/docs/ops/*|docs/ops/*|*/docs/security/*|docs/security/*|*/production/roadmap.md|production/roadmap.md|*/production/releases/*|production/releases/*|*/production/backlog.md|production/backlog.md|*/production/decisions.md|production/decisions.md|*/production/findings.md|production/findings.md|*/CHANGELOG.md|CHANGELOG.md) return 0;;
     */docs/architecture/*|docs/architecture/*|*/docs/specs/*|docs/specs/*|*/technical-preferences.md|technical-preferences.md|*/production/sprints/*|production/sprints/*|*/production/stories/*|production/stories/*) return 0;;
   esac
   return 1
 }
-PATHS=$(affected_paths "$(jget .tool_input.file_path)" "$(jget .tool_input.command)")
+CMD=$(jget .tool_input.command)
+# A command that sets the marker before it writes is the gate's own choreography, not write-then-ask;
+# checking the marker's age before the command runs saw the old marker and warned (WS-133).
+printf '%s\n' "$CMD" | grep -qE 'touch[[:space:]]+[^;&|]*\.claude/\.write-consent' && exit 0
+# One metadata line of a story card — `Status:`, `Started:`, `Actual:` — is the skill's own bookkeeping
+# inside an agreed step (dev-story Phase 3/6, refactor Phase 7), not a document write (WS-133).
+OLD=$(jget .tool_input.old_string)
+if [ -n "$OLD" ] && [ "$(printf '%s' "$OLD" | grep -c '')" -le 1 ] && printf '%s' "$OLD" | grep -qE '^(> *)?(\*\*)?(Status|Started|Actual)(\*\*)?:'; then exit 0; fi
+PATHS=$(affected_paths "$(jget .tool_input.file_path)" "$CMD")
 [ -z "$PATHS" ] && exit 0
 HIT=""
 for p in $PATHS; do protected "$p" && HIT="$HIT $p"; done

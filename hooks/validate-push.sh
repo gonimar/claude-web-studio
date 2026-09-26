@@ -50,6 +50,26 @@ if git show-ref -q --verify "refs/remotes/origin/$BR" 2>/dev/null; then
     for c in $COMMITS; do docs_lane_commit "$c" || { DOCS_LANE=0; break; }; done
   fi
 fi
+# The commit and the push often share one Bash call (`git add … && git commit -F - <<EOF … EOF && git push`):
+# at PreToolUse the commit does not exist yet, `rev-list` is empty and the documents lane looked empty too —
+# three false "pushing directly to master" on docs commits in one day (WS-103, second form). Read the commit
+# from the command the way validate-commit does: its subject from -m / -F -, its paths from the index and
+# the `git add` segments.
+if [ "$DOCS_LANE" = 0 ] && printf '%s\n' "$STRIPPED" | grep -qE '(^|[;&|][[:space:]]*)git[[:space:]]+commit'; then
+  if printf '%s\n' "$CMD" | grep -qE -- "-F[[:space:]]+-[[:space:]]*<<"; then
+    MSG=$(printf '%s\n' "$CMD" | awk 'hd!=""{ if ($0 ~ /^[[:space:]]*$/) next; print; exit } /-F[[:space:]]+-[[:space:]]*<<-?[[:space:]]*["'"'"']?[A-Za-z_]+/ { hd=1 }')
+  elif printf '%s\n' "$CMD" | grep -qE -- "-m[[:space:]]+[\"']?\\$\(cat[[:space:]]*<<"; then
+    MSG=$(printf '%s\n' "$CMD" | awk 'hd!=""{ if ($0 ~ /^[[:space:]]*$/) next; print; exit } /-m[[:space:]]+["'"'"']?\$\(cat[[:space:]]*<<-?[[:space:]]*["'"'"']?[A-Za-z_]+/ { hd=1 }')
+  else
+    MSG=$(printf '%s\n' "$STRIPPED" | grep -oE -- "-m[[:space:]]+[\"'][^\"']*" | head -1 | sed -E "s/^-m[[:space:]]+[\"']//")
+  fi
+  PATHS=$(git diff --cached --name-only 2>/dev/null)
+  ADD_ARGS=$(printf '%s\n' "$STRIPPED" | tr ';&|' '\n' | sed -nE 's/^[[:space:]]*git[[:space:]]+add[[:space:]]+//p' | tr '\n' ' ')
+  # shellcheck disable=SC2086  # the segment is re-split into arguments on purpose
+  [ -n "$ADD_ARGS" ] && PATHS="$PATHS
+$(git add --dry-run --ignore-missing $ADD_ARGS 2>/dev/null | sed -E "s/^add '(.*)'$/\\1/")"
+  if [ -n "$MSG" ] && [ -n "$(printf '%s' "$PATHS" | tr -d '[:space:]')" ] && echo "$MSG" | grep -qE "$DOC_SUBJECT_RE" && printf '%s\n' "$PATHS" | docs_lane_paths; then DOCS_LANE=1; fi
+fi
 case "$BR" in main|master|production|release)
   [ "$DOCS_LANE" = 1 ] || warn PreToolUse "WARNING: pushing directly to '$BR'. Studio rule: open a PR from a feature branch (.claude/docs/git-workflow.md).";;
 esac

@@ -29,6 +29,19 @@ written_paths() { # <command text> -> one path per line
     printf '%s\n' "$cmd" | grep -oE "open\(['\"][^'\"]+['\"][[:space:]]*,[[:space:]]*['\"][wax]" \
       | sed -E "s/^.*open\(['\"]//; s/['\"].*$//"
     printf '%s\n' "$cmd" | grep -oE "writeFileSync\(['\"][^'\"]+" | sed -E "s/^.*\(['\"]//"
+    # The idiom the model actually uses: `p='production/x.md'` … `open(p,'w')` — the path sits in a
+    # variable one line above the write (27 such writes in one session, none seen — WS-085, second form).
+    # Resolve a simple literal assignment when the same name is opened for writing or `.write_text`-ed.
+    printf '%s\n' "$cmd" | awk '
+      match($0, /^[[:space:]]*[A-Za-z_][A-Za-z0-9_]*[[:space:]]*=[[:space:]]*["'"'"'][^"'"'"']+["'"'"']/) {
+        s = substr($0, RSTART, RLENGTH); v = s; sub(/[[:space:]]*=.*/, "", v); sub(/^[[:space:]]*/, "", v)
+        p = s; sub(/^[^"'"'"']*["'"'"']/, "", p); sub(/["'"'"']$/, "", p); val[v] = p }
+      match($0, /open\([[:space:]]*[A-Za-z_][A-Za-z0-9_]*[[:space:]]*,[[:space:]]*["'"'"'][wax]/) {
+        s = substr($0, RSTART, RLENGTH); sub(/^open\([[:space:]]*/, "", s); sub(/[[:space:]]*,.*/, "", s); if (s in val) print val[s] }
+      match($0, /Path\([[:space:]]*[A-Za-z_][A-Za-z0-9_]*[[:space:]]*\)\.write_(text|bytes)\(/) {
+        s = substr($0, RSTART, RLENGTH); sub(/^Path\([[:space:]]*/, "", s); sub(/[[:space:]]*\).*/, "", s); if (s in val) print val[s] }
+      match($0, /Path\(["'"'"'][^"'"'"']+["'"'"']\)\.write_(text|bytes)\(/) {
+        s = substr($0, RSTART, RLENGTH); sub(/^Path\(["'"'"']/, "", s); sub(/["'"'"'].*/, "", s); print s }'
   } 2>/dev/null \
     | sed -e 's#^\./##' -e 's/["'"'"']$//' \
     | grep -vE '^(/dev/[a-z]+|&[0-9]|-|)$' \

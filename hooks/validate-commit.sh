@@ -48,9 +48,34 @@ if [ "$PRESTAGE" = 1 ]; then
 else
   DIFF=$(git diff --cached -U0 2>/dev/null | grep '^+' | grep -v '^+++')
 fi
-if echo "$DIFF" | grep -qE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|(password|passwd|secret|api[_-]?key|token)[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"']{12,}["'"'"']'; then
+# Two classes of secret-like content (WS-123). Provider-shaped credentials (AWS/GitHub/OpenAI/Slack keys, a
+# private key) block on every path. The generic `password = "…"` shape blocks only outside test code: in
+# `*_test.go`, `*Test.php`, `*.spec.ts`, `testdata/`, `fixtures/`, `e2e/` and the agents' memory notes it
+# is a fixture (`correct horse battery staple`, `token: "family123.secretXYZ"`), and blocking there made
+# sessions rename test fields and rewrite notes to please the hook — three times in one week.
+PROVIDER_RE='AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----'
+GENERIC_RE='(password|passwd|secret|api[_-]?key|token)[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"']{12,}["'"'"']'
+TEST_PATH_RE='(^|/)(testdata|fixtures|__tests__|e2e|tests?)/|_test\.go$|Tests?\.php$|\.(test|spec)\.[cm]?[jt]sx?$|^\.claude/agent-memory/'
+diff_added() { # <paths…> -> the added lines of those paths, index or working tree per PRESTAGE
+  [ $# -gt 0 ] || return 0
+  if [ "$PRESTAGE" = 1 ]; then
+    { git diff -U0 -- "$@" 2>/dev/null
+      for f in "$@"; do git ls-files --error-unmatch -- "$f" >/dev/null 2>&1 || sed -e 's/^/+/' -- "$f" 2>/dev/null | head -500; done
+    } | grep '^+' | grep -v '^+++'
+  else
+    git diff --cached -U0 -- "$@" 2>/dev/null | grep '^+' | grep -v '^+++'
+  fi
+}
+# shellcheck disable=SC2046,SC2086  # $STAGED is a newline-separated path list, split on purpose
+DIFF_TEST=$(diff_added $(echo "$STAGED" | grep -E "$TEST_PATH_RE"))
+# shellcheck disable=SC2046,SC2086
+DIFF_CODE=$(diff_added $(echo "$STAGED" | grep -vE "$TEST_PATH_RE"))
+if echo "$DIFF" | grep -qE "$PROVIDER_RE" || echo "$DIFF_CODE" | grep -qE "$GENERIC_RE"; then
   { echo "BLOCKED: staged changes contain a secret-like string. Move it to the environment (.env is not committed)."
-    echo "$DIFF" | grep -nE 'AKIA|ghp_|github_pat_|sk-|xox[baprs]-|PRIVATE KEY|(password|passwd|secret|api[_-]?key|token)[[:space:]]*[:=]' | head -5 | cut -c1-160; } >&2; exit 2
+    { echo "$DIFF" | grep -nE "$PROVIDER_RE"; echo "$DIFF_CODE" | grep -nE '(password|passwd|secret|api[_-]?key|token)[[:space:]]*[:=]'; } | head -5 | cut -c1-160; } >&2; exit 2
+fi
+if echo "$DIFF_TEST" | grep -qE "$GENERIC_RE"; then
+  WARN="$WARN\nSECRET?: a secret-shaped string in test code or agent memory — fine for a fixture, not for a real credential: $(echo "$DIFF_TEST" | grep -E "$GENERIC_RE" | head -2 | cut -c1-100 | tr '\n' ' ')"
 fi
 for pair in "package.json:pnpm-lock.yaml package-lock.json yarn.lock bun.lock" "composer.json:composer.lock" "go.mod:go.sum"; do
   m=${pair%%:*}; locks=${pair#*:}

@@ -19,7 +19,7 @@ File writes and any mutation (git, deploy) happen only after an explicit "May I 
 Branch `hotfix/<slug>` from the production tag; a failing test reproducing the bug (mandatory); impact assessment (data? security? → `security-lead` via Task).
 
 ## Phase 2: Minimal fix
-Through the relevant engineer; only what is needed; test green; lint/typecheck; for sensitive paths — `appsec-engineer` review.
+Through the relevant engineer (`Task` with the studio `subagent_type`; the parent writes no code, a cut-off engineer is resumed from its `Checkpoint:` — coordination-rules § Subagents); only what is needed; test green; lint/typecheck; for sensitive paths — `appsec-engineer` review.
 
 ## Phase 3: Expedited gate
 Package tests + e2e smoke; `/changelog` patch version; `/deploy` with confirmation (delegate verbs `deploy`/`rollback` by `docs/deploy-target-contract.md`); backport to the default branch (`master`/`main`, PR).

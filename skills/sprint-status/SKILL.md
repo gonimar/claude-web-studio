@@ -14,7 +14,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Read-only. Source: artefacts (story files, git log, CI), not claims.
 
 ## Phase 1: Data
-Who did the work: `hooks/agent-stats.sh --since <sprint start>` (`.claude/hooks/` in copy mode, `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) over `production/session-logs/agent-audit.log` — the numbers come from the log the `log-agent` hook keeps, never from memory of what ran.
+Who did the work — including the `parent-write` count, code the session wrote instead of an engineer (coordination-rules § Subagents): `hooks/agent-stats.sh --since <sprint start>` (`.claude/hooks/` in copy mode, `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) over `production/session-logs/agent-audit.log` — the numbers come from the log the `log-agent` hook keeps, never from memory of what ran.
 The current sprint (latest in `production/sprints/`), stories and statuses, `git log --since` on `feat/S-*` branches, `gh run list` and `gh pr list --state open --author app/dependabot --json number,title,createdAt,statusCheckRollup` (if `gh` exists; Renovate: `--author app/renovate`), `session-state/active.md`.
 
 ## Phase 2: Report

@@ -142,5 +142,5 @@ Push with consent (`git push -u origin refactor/S-NNN-<slug>`), draft PR when a 
 `pull_request` (as `/dev-story` Phase 6). Story status → `Review`. Verdict: `PLANNED (…)` | `COMPLETE` |
 `PARTIAL (open: …)` | `BLOCKED (…)`. Next step — one `AskUserQuestion`: after a dry-run
 `/architecture-decision` when Phase 3 changed the style or the mode was `framework` (Recommended then), else
-`/create-stories <plan-path>` (Recommended) · show the plan · stop here; after an apply `/code-review --diff` (Recommended) · show the before/after table ·
+`/create-stories <plan-path>` (Recommended) · show the plan · stop here; after an apply `/web-studio:code-review --diff` (copy mode `/code-review --diff`; the bare name in plugin mode is Claude Code's built-in review, which reviewed a refactor story with nine general-purpose agents and no lead) (Recommended) · show the before/after table ·
 stop here.

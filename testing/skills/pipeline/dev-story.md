@@ -53,5 +53,12 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: a story touching a Go package and its tests; the first `go-engineer` call comes back cut off at its turn limit having written nothing. **Expected**: the skill resumes that agent with its stopping point rather than spawning a new one; on a second truncation it splits the remaining work into smaller calls; the parent writes product code only after both attempts failed, and then the story result says so in one line. Phase 5 compares the agents that started (`agent-audit.log`) against the agents the plan named.
 - [ ] every file written through Task with an explicit studio `subagent_type` · [ ] truncation resumed, not re-spawned · [ ] a parent-written fallback is recorded, never silent · [ ] agents that ran are checked against the plan
 
+### Context gate and the six-line brief (0.12)
+**Fixture**: statusline `ctx: 62%`, a story S-012 of three files the parent read in Phase 2. **Expected**: Phase 1 offers `/clear`, then `/web-studio:dev-story S-012` (Recommended) before any plan; when the user continues, every `Task` brief carries `Story · Read` (paths **with line ranges**) `· Write · Check · Skip · Report`; a brief without `Read:` ranges is not sent.
+- [ ] context gate before the plan · [ ] six-line brief · [ ] line ranges in `Read:`
+### Resume without the parent's own checks (0.12)
+**Fixture**: `go-engineer` cut off at its limit with `Checkpoint: done: domain · next: usecase tests · unverified: build`. **Expected**: one `SendMessage` — "continue from your Checkpoint; run git status and the step's Check yourself" — and no `git status`, build or test by the parent before it; the parent verifies once after the `SubagentStop`.
+- [ ] resume first · [ ] no parent checks before resume · [ ] hand-off names `/web-studio:code-review`
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

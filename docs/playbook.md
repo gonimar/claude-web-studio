@@ -700,7 +700,8 @@ stay — they are your documents. `.claude/docs`, `.claude/rules`, the studio bl
 - `/team-*`, `/architecture-review`, `/threat-model` run on Opus — the most expensive; step by step
   (`/feature-spec` → `/api-contract` → …) is cheaper and more controllable.
 - `/help`, `/sprint-status`, `/changelog`, `/a11y-audit` — Haiku, cheap, run them often.
-- A long session → compaction; better to finish the story and start a new session with `/dev-story`.
+- One story per session: after `/story-done` run `/clear` before the next `/dev-story` — the session's own context, not the agents' work, is where the cost goes (coordination-rules, rule 13); `/dev-story` says so itself when the statusline `ctx:` is past 50 %, and `/story-done` offers `/clear` as its recommended hand-off.
+- In plugin mode call commands with the namespace — `/web-studio:code-review`, `/web-studio:story-done`: a bare `/code-review` is Claude Code's built-in review (one general-purpose agent, no routing, no appsec), not the studio's.
 - Quota ran out mid-story: is the code committed on the branch by phase? If not — `git commit` by hand
   (`feat(S-NNN): wip`), fill `active.md` by hand from `.claude/docs/templates/session-state.md`; the
   next session continues from `Task:`.
