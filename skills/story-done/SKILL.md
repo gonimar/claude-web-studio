@@ -36,7 +36,7 @@ Each item is ✅ or an open item named in the report.
 4. **Findings recorded**: every `ARCH-NNN`/`SEC-NNN` named in the story card exists as a row in `production/findings.md` (`grep -c '<ID>' production/findings.md`). An ID with no row is an open DoD item, not a formality.
 5. **Docs** (README/API/runbook) updated; contract and codegen in sync.
 5a. **TODOs carry an id** (`rules/comments.md`): every `TODO`/`FIXME`/`HACK` the branch adds (`git diff <default>...HEAD | grep -nE '^\+.*(TODO|FIXME|HACK)'`) names an id that exists — `grep -c '<ID>' production/roadmap.md production/backlog.md` ≥ 1. A bare TODO or an unknown id is an open DoD item; the fix is `/backlog add` and the id, never deleting the TODO.
-6. **Branch**: the story branch is pushed, with no uncommitted changes.
+6. **Branch**: the story branch is pushed, with no uncommitted changes — `git status --short` empty, **including `.claude/agent-memory/**`** (the agents' notes ride the story's commits, git-workflow § Agent memory), and `git stash list` empty: a stash is an open DoD item named in the report, never a place to park memory files (16 of them from ten stories sat in a stash for 28 hours on one project). Uncommitted memory files → one more `feat(S-NNN)`/`fix(S-NNN)` commit on the branch with consent, never `git stash`, never a discard.
 7. **CI green on the branch**: `gh run list --branch <branch>` when `gh` exists. A run in progress → wait (see above). No run at all because the workflows trigger on `pull_request` and no PR exists yet → name it; the PR opened in Phase 4 starts it, and Phase 5 waits for it before the merge question.
 
 ## Phase 4: Close

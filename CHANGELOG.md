@@ -1,6 +1,15 @@
 # Changelog
 
 ## 0.13.0 — 2026-09-26
+Two sources: the lab's traces of two real projects (the sprint cycle, comments, agent memory — WS-131, WS-136…139), and
+the skill pass with its follow-ups (#62, #64–#67).
+- **Agent memory is committed with the work that produced it.** Thirty agents write `.claude/agent-memory/<agent>/**`
+  on every run and no lane owned those files: a Haiku `/story-done` hid 16 of them from ten stories in `git stash push -u`,
+  where they sat for 28 hours until the owner asked what was hanging (WS-136). git-workflow gains the *Agent memory*
+  lane; `/dev-story`, `/refactor --apply` and `/code-review` stage `.claude/agent-memory/` with their commits;
+  `/story-done` requires `git status --short` and `git stash list` empty and offers one more commit, never a stash;
+  the hooks treat `.claude/agent-memory/` as the documents lane (a memory-only `docs:` commit of an audit on the
+  default branch passes); coordination-rules § Subagents says it in one sentence.
 - **The retrospective closes the sprint** — and nothing else does. A sprint had no act of closing: `/retrospective` wrote
   its section, `/sprint-plan` folded the previous block only as a side effect and only when every story was `[x]`, so a
   sprint with one carried-over story never closed, sprints closed with no retrospective at all, and one block was folded by
@@ -27,6 +36,8 @@
   comment history per package. Templates: `revive` (`exported`, `package-comments`) + `godot` in `golangci.yml`, Slevomat
   comment sniffs in `ecs.php` (`slevomat/coding-standard` added by `/test-setup`), an ESLint snippet in `typescript.md`.
   New code only — existing files are a `chore` story per package, never a drive-by.
+
+### Skill pass and follow-ups (#62, #64–#67)
 A pass over all 50 skills: bodies rewritten as numbered steps in the order they run, and the defects that hid in
 the long paragraphs fixed. No rule was dropped; every spec case was re-checked against the new text. The style the
 pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").

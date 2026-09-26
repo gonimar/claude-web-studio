@@ -83,5 +83,9 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: branch created at 20:30 local (+0500) for S-060 in sprint 05. **Expected**: the card's metadata line gets `Started: 2026-…T20:30+0500` (from `date +%FT%H:%M%z`, not typed from memory); the S-060 row in `sprint-05.md` reads `In Progress` after one Edit.
 - [ ] offset present · [ ] sprint row updated
 
+### Agent memory rides the story commit (0.13)
+**Fixture**: after Phase 4 the engineers changed `.claude/agent-memory/web-studio-go-engineer/MEMORY.md` and added a note file; a spike sits in `tools/spike-json/`. **Expected**: Phase 6 step 3 deletes the spike, stages the story's files by name and `.claude/agent-memory/` as one entry; the `feat(S-NNN)` commit contains the memory files; `git add -A` is never used.
+- [ ] memory staged deliberately · [ ] spike gone · [ ] no `git add -A`
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

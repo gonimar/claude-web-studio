@@ -167,7 +167,7 @@ Dry-run verdict: `PLANNED (N steps)`.
 5. **Run the plan step by step.** For each step:
    1. `Task` to `<engineer>` with the step's row and the rule "move, do not improve — the diff of a refactoring step contains no new behaviour". The engineer cannot ask the user: a step that needs a file outside its row, or would change behaviour, stops and reports; the parent then asks, or — once that `Task` has returned — detours to `/impact <the change>` through the `Skill` tool (`/web-studio:impact` in plugin mode), quotes its verdict and returns to the step (rule 7, hand-off after a detour; `Next:` stays `/code-review`).
    2. After the step, the parent runs the check: Go `go build ./... && go test -race -count=1 ./...` (and the gate/`arch-check` once installed); PHP `composer ci` (the local chain, no network).
-   3. Green → `git commit -m "refactor(S-NNN): <step>"`, staging the step's files by name.
+   3. Green → `git commit -m "refactor(S-NNN): <step>"`, staging the step's files by name plus `.claude/agent-memory/` (the engineer's notes ride the step that produced them, git-workflow § Agent memory).
    4. Red → the same agent fixes it in the same step, or the step is reverted (`git restore` of its changed files, the files it created removed) and the plan is amended. Never a red commit, and never a second agent on the same step; a cut-off agent is resumed (`/dev-story` Phase 4).
 6. **Who wrote it.** The parent writes no code; the story result says who wrote each step, from `production/session-logs/agent-audit.log`.
 
