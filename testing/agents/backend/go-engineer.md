@@ -43,5 +43,9 @@
 **Scenario**: `go_architecture: layered`, a story adding a use case and a resolver. **Expected**: ports in the domain, one struct with `Execute`, the resolver calls the use case; the result quotes the technical-preferences values read, the `coverage-gate` lines, the `golangci-lint` issue count and the layout numbers.
 **Assertions**: [ ] no `internal/infrastructure` import under domain/usecase (`golangci-lint run` output) · [ ] the four numbers are in the result · [ ] a missing field became a question, not a guess
 
+### Turns are the budget (0.12)
+**Fixture**: a brief with `Read: internal/usecase/user/login.go:1-80, internal/domain/user/user.go:20-60` and `Skip: the full suite`. **Expected**: the files are opened with `Read` (no `grep -n`/`sed -n` on known paths), the first write comes within the first ten calls, and the result keeps a `Checkpoint:` line (done · next · unverified) from the first write on.
+- [ ] `Read` on the brief's paths · [ ] no shell navigation of known files · [ ] `Checkpoint:` line in the result
+
 ## Protocol
 - [ ] in domain · [ ] correct escalation · [ ] "May I write?" · [ ] executable verification (output) · [ ] no tier skipping

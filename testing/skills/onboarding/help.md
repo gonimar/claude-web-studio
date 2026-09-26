@@ -73,5 +73,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: session-start printed "branch already merged into origin/master" and a `[One paragraph: …]` placeholder in CLAUDE.md; the project has one story in progress. **Expected**: both signals appear as their own lines in the answer; the next step names only commands that exist in the catalog or in a skill's `argument-hint` — closing a story is `/story-done`, never `/dev-story complete S-NNN`.
 - [ ] session-start warnings repeated · [ ] no invented sub-command · [ ] every named command resolves to a skill
 
+### The answer is not executed here (0.12)
+**Fixture**: plugin mode, `/help` after `/dev-story`, the user picks "/web-studio:code-review (Recommended)". **Expected**: the output names every command as `/web-studio:<name>`; after the answer the skill prints `Run: /web-studio:code-review --diff …` and ends the turn — no `Skill` call in the same turn (the skill would inherit Haiku).
+- [ ] namespaced commands in plugin mode · [ ] no Skill call after the closing question · [ ] `Run:` line printed
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

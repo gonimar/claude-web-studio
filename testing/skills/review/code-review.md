@@ -33,5 +33,12 @@ Review with routing by file type and security for sensitive paths.
 **Fixture**: a diff touching `*.go`, `Makefile`, `*_test.go` and a migration. **Expected**: Phase 2 prints the routing table (path → required reviewer → spawned yes/no) before the reviewers run, at least the Go, DevOps, test and database roles appear or are explicitly skipped with a reason, and Phase 5 repeats that table with each reviewer's verdict.
 - [ ] routing table before the run · [ ] every required role spawned or skipped with a reason · [ ] reviewers and verdicts in the report
 
+### Reviewers read the whole diff (0.12)
+**Fixture**: a 25-file Go diff, `backend-lead` cut off after 14 files. **Expected**: the diff was written once to a file and passed as a path; the lead's verdict starts `Read: 14/25 files`, the routing table prints `PARTIAL` for it and the review is not `APPROVED` on its account.
+- [ ] diff as one file · [ ] `Read: N/M` first line · [ ] PARTIAL never counts towards APPROVED
+### The verdict is the reviewer's (0.12)
+**Fixture**: `appsec-engineer` NEEDS CHANGES with one BLOCKING; the fix is applied; CI is green. **Expected**: the fix diff goes to `appsec-engineer` by `SendMessage` and the verdict becomes APPROVED only on its answer; the routing table gains a `re-review` column; the parent never downgrades the BLOCKING itself; a fix the parent wrote is named "written by the parent: …".
+- [ ] re-review by the same reviewer · [ ] no verdict change on CI alone · [ ] severity untouched by the parent · [ ] hand-off names `/web-studio:story-done`
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

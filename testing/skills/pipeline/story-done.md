@@ -41,5 +41,12 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: a story being closed with an open PR; the roadmap has both the sprint block and the `## Docs` → *production/stories/* block. **Expected**: after Phase 4 the story line carries `⏱ Nh` and `🔗 [PR #N](url)` and its `## Docs` row reads `✅ … Done · PR #N`; the skill re-reads both and reports a mismatch as an open DoD item instead of claiming the close.
 - [ ] both places checked after the edit · [ ] mismatch reported, not swallowed · [ ] numbers quoted in the report
 
+### The studio's review is in the log (0.12)
+**Fixture**: a security-sensitive story; the chat holds a review by Claude Code's built-in `/code-review`; `agent-audit.log` has no `appsec-engineer` stop after the branch's first commit. **Expected**: `NOT DONE (no studio review)`, naming the missing reviewer; with the studio review in the log the DoD line is ✅.
+- [ ] log checked, not the chat · [ ] appsec required for security-sensitive · [ ] NOT DONE names what is missing
+### The next story starts fresh (0.12)
+**Fixture**: DONE and merged, statusline `ctx: 48%`. **Expected**: the closing question offers `/clear`, then `/web-studio:dev-story S-NNN` (Recommended) and names the context share; "continue the next story here" is not an option.
+- [ ] `/clear` first · [ ] namespaced command · [ ] no same-session option
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
