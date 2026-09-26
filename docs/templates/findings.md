@@ -1,6 +1,6 @@
 # Findings — open decisions from audits
 
-<!-- production/findings.md. Written by /security-audit, /perf-audit, /a11y-audit, /product-spec (review
+<!-- production/findings.md. Written by /security-audit, /pentest, /perf-audit, /a11y-audit, /architecture-review, /product-spec (review
      verdict, ARCH-), /adopt (artefact audit, ADOPT-) — always after "May I write?";
      read by /create-stories, /sprint-plan, /sprint-status, /help. One row per finding; the row stays
      after closing (status changes), ids are never reused. -->

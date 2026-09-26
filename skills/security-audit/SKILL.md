@@ -31,4 +31,12 @@ Deduplicate, severity (CVSS 4.0), BLOCKING/WARNING/INFO, fix and regression test
 3. A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line.
 4. Propose a threat-model update.
 
+## Phase 5: Commit (documents lane)
+Right after the write (and the findings rows, when any were recorded), one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: security audit <date>`, staging exactly the written files — `docs/security/security-audit-<date>.md` and `production/findings.md` when rows were added.
+- On the default branch when no story work is in progress: one `AskUserQuestion` — commit (Recommended) · leave uncommitted.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- The audit itself changes no code; fixes are the next step and belong to a story or the chore lane (git-workflow.md § Chore / infra), never to the `docs:` commit.
+
+Nothing is committed without the answer.
+
 Verdict: `PASS` | `CONCERNS (N warnings)` | `FAIL (N blocking)`. Next step — one `AskUserQuestion`: fixes, then a repeated `/security-audit quick` (Recommended) · `/harden` · report only.

@@ -3,7 +3,7 @@ name: threat-model
 description: "Builds or updates the STRIDE threat model — assets, trust boundaries, attack surfaces (auth, GraphQL/REST, WebSocket, uploads, webhooks, admin, CI/CD, dependencies, infra), threats with likelihood/impact/mitigation, verification. Produces docs/architecture/threat-model.md. Required before build and when a new surface appears."
 argument-hint: "[full | <surface>]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Task
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
 model: opus
 agent: security-lead
 ---
@@ -32,5 +32,13 @@ Top 5 unmitigated threats → proposed stories (`/create-stories`) or ADRs (`/ar
 
 ## Phase 4: Write
 The gate follows coordination-rules rule 7's exact order: the draft (or a tight summary of it) in the chat message first, then "May I write `docs/architecture/threat-model.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now — and `Write` only after that answer, never write-then-ask. Add a "Security" section to affected feature specs with consent. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: threat model` (or `docs: threat model — <surface>` for a single-surface update), staging exactly the written files — `docs/architecture/threat-model.md` and the feature specs whose "Security" section was added with consent.
+- On the default branch when no story work is in progress: one `AskUserQuestion` — commit (Recommended) · leave uncommitted.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- This skill writes no code; should a mitigation snippet have been written on request, it is not a document and never rides the `docs:` commit — name it and offer the chore lane (git-workflow.md § Chore / infra) or the story it belongs to.
+
+Nothing is committed without the answer.
 
 Verdict: `COMPLETE` | `HIGH RISK (N unmitigated)`. Next step — one `AskUserQuestion`: `/create-stories` for the mitigations (Recommended) · `/security-audit` after implementation · revise the model.

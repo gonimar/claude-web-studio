@@ -48,4 +48,12 @@ Without `--apply`, ask one `AskUserQuestion` after Phase 2: apply the fixes (Rec
 ## Phase 4: Write
 Render the checklist (and the § Secrets table in `secrets` mode) in the chat, then "May I write `docs/security/hardening-checklist.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: hardening checklist` (`docs: hardening checklist — secrets` in `secrets` mode), staging exactly `docs/security/hardening-checklist.md`.
+- On the default branch when no story work is in progress: one `AskUserQuestion` — commit (Recommended) · leave uncommitted.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- The Phase 3 config diffs (proxy, compose, Dockerfile, workflows) are infra, not documents: they never ride the `docs:` commit — name them in the result and offer the chore lane (git-workflow.md § Chore / infra: branch `chore/harden-<group>`, `ci(…)`/`chore(…)` commits, a PR, `/code-review --diff` before the merge, workflow files to `devops-engineer`). A diff written in the declared infra repo is committed there under that repository's rules, named in the result.
+
+Nothing is committed without the answer.
+
 Verdict: `HARDENED` | `PARTIAL (open: …)`. Next step — one `AskUserQuestion`: `/security-audit quick` (Recommended) · `/pentest` (optional) · stop here.

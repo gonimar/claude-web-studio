@@ -34,5 +34,9 @@ STRIDE per surface, DFD, mitigations, priorities.
 **Fixture**: data model §6 classifies personal data. **Expected**: the surfaces table has a "data export / deletion" row: requester, identity check, what is exported and what is not, propagation to replicas, backups and logs, evidence kept; STRIDE threats for it (spoofed requester, tampering with the export, information disclosure).
 - [ ] surface present when PII exists · [ ] STRIDE rows · [ ] absent when no PII
 
+### 9. Commit gate on the documents lane
+**Fixture**: the model written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write gate one commit gate offers `docs: threat model` staging exactly the written files (`docs/architecture/threat-model.md` and any feature spec that gained a "Security" section), names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
