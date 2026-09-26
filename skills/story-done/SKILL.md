@@ -3,21 +3,26 @@ name: story-done
 description: "Verifies a story is truly done: every acceptance criterion has a passing test (with output), lint/typecheck/security checks pass, review is APPROVED, docs updated; then closes it and updates roadmap/session state. Run after /code-review."
 argument-hint: "[story-path or S-NNN]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Edit, Write, Task, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Bash, Edit, AskUserQuestion
 ---
 
 # Story Done
 
-Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
+Language, `<hooks>`, agent and command namespaces, gate mechanics (record `Gate` → ask → clear; consent marker after the "write" answer) and the CI wait: `docs/coordination-rules.md` § Skill conventions. Every mutation (files, git, merge) has its own gate, asked by this session, never by a subagent.
 
-File writes and any mutation (git, deploy) happen only after an explicit "May I write?" / "Proceed?" → "yes", asked as an `AskUserQuestion` with the recommended action first and the real alternatives (coordination-rules, rule 7). Consent is collected by this session, never by a subagent. After the "write" answer: `touch .claude/.write-consent` (rule 7).
-
-In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode. **An open gate survives the next turn** (rule 7): before each of its gates (the memory commit of Phase 3, the close gate, the merge gate) the skill records them — `<hooks>session-state.sh set Gate "/story-done Phase N: <question>"` — and clears the gate after the answer (`<hooks>session-state.sh set Gate "—"`), so a resumed session continues at that question instead of reading a new task from `Next:`.
-
-**Waiting for CI** (Phases 3–5): one background command with a single completion notification — `gh run watch <run-id> --exit-status` (or `gh pr checks <n> --watch`) via Bash `run_in_background`. Never a polling `Monitor`, never `ScheduleWakeup`, and never an `AskUserQuestion` as a pause (rule 7: a question is a decision for the user, not a wait). If the runner queue exceeds ~10 minutes, say so in one line and end the turn; the notification resumes the skill. Wait only for a run that exists.
+Glossary:
+- `<default>` — the default branch (`master` or `main`); `<branch>` — the story branch (`Branch:` in the session state, else `git branch --show-current`).
+- `<card>` — `production/stories/S-NNN-*.md`; `<sprint>` — `production/sprints/sprint-NN.md` when a sprint's roadmap heading holds the story.
+- **Three places** — the roadmap line, the roadmap's `## Docs` → *production/stories/* row, the `<sprint>` `## Stories` row (two without a sprint).
+- **Re-run rule** — `/story-done S-NNN` on a story already `Done` with an open PR skips to Phase 5 and its merge question.
 
 ## Phase 1: Story and evidence
-1. **Pick the story** (as `/dev-story` Phase 1): the argument (a story path or `S-NNN`), else `Task:` in `production/session-state/active.md`, else ask — one `AskUserQuestion` listing the stories in `Review` (the most recently started first, Recommended) · another story (say which) · stop. A story resolved from the session state is named in the first line of the report, so a stale `Task:` closes no wrong story. Its status must be `Review`, or `Done` with an open PR (the merge re-run of Phase 5); a `Ready` or `In Progress` story → `NOT DONE (story not in Review — run /dev-story S-NNN, then /code-review)`. One exception in the wording only: a `Ready`/`In Progress` story whose branch already carries a `feat(S-NNN)` commit (`git log origin/<default>..<branch> --oneline | grep 'S-NNN'`) and a PR (`gh pr list --head <branch>`) was implemented and never stamped — it is named as such, `NOT DONE (implemented but never set to Review — set it and re-run)`, and the status is not changed here.
+1. **Pick the story** (as `/dev-story` Phase 1):
+   1. The argument (a story path or `S-NNN`), else `Task:` in `production/session-state/active.md`, else ask — one `AskUserQuestion`: the stories in `Review` (most recently started first, Recommended) · another story (say which) · stop. A story taken from the session state is named in the report's first line, so a stale `Task:` closes no wrong story.
+   2. Status `Review` → continue.
+   3. Status `Done` with an open PR (`gh pr list --head <branch>`) → the re-run rule: skip Phases 2–4, go to Phase 5.
+   4. `Ready` or `In Progress` → `NOT DONE (story not in Review — run /dev-story S-NNN, then /code-review)`; nothing is written.
+   5. Wording exception: a `Ready`/`In Progress` story whose branch carries a `feat(S-NNN)` commit (`git log origin/<default>..<branch> --oneline | grep 'S-NNN'`) and a PR (`gh pr list --head <branch>`) was implemented and never stamped → `NOT DONE (implemented but never set to Review — set it and re-run)`, naming the commit and the PR; the status is not changed here.
 2. **Read** the story, the feature-spec criteria, and the latest `/code-review` report (chat history, or `production/reviews/` if kept).
 
 ## Phase 2: Run
@@ -27,50 +32,44 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
 4. Put the output in the report. Anything red → `NOT DONE`.
 
 ## Phase 3: DoD checklist
-Each item is ✅ or an open item named in the report.
+Each item is ✅ or an open item named in the report; recipe (exact commands): `references/dod-checks.md`, read here.
 1. **Criteria ↔ tests**: the criterion → test → result table **rendered in the chat message** (rule 7), not just written to the story file.
-2. **The studio's review ran.** `grep -E 'SubagentStop \| (web-studio:)?([a-z-]+-(lead|engineer))' production/session-logs/agent-audit.log` shows a reviewer's Stop later than the branch's first commit. For a `security-sensitive` story (security rules for sensitive paths), `appsec-engineer` is among them. A review that exists only in the chat (Claude Code's built-in `/code-review`, a parent's own reading) is `NOT DONE (no studio review)`, naming the missing reviewer: the chat can claim an appsec review the log never recorded.
+2. **The studio's review ran**: a studio reviewer's `SubagentStop` in `production/session-logs/agent-audit.log` after the branch's first commit — the log, not the chat; `security-sensitive` → `appsec-engineer` among them. Missing → `NOT DONE (no studio review)`, naming the reviewer.
 3. **Review APPROVED**: the reviewers' own verdict after the last fix (`/code-review` Phase 5), not the parent's summary of it.
-4. **Findings recorded**: every `ARCH-NNN`/`SEC-NNN` named in the story card exists as a row in `production/findings.md` (`grep -c '<ID>' production/findings.md`). An ID with no row is an open DoD item, not a formality.
+4. **Findings recorded**: every `ARCH-NNN`/`SEC-NNN` in the card has a row in `production/findings.md`; an ID without a row is an open item, not a formality.
 5. **Docs** (README/API/runbook) updated; contract and codegen in sync.
-5a. **TODOs carry an id** (`rules/comments.md`): every `TODO`/`FIXME`/`HACK` the branch adds (`git diff <default>...HEAD | grep -nE '^\+.*(TODO|FIXME|HACK)'`) names an id that exists — `grep -c '<ID>' production/roadmap.md production/backlog.md` ≥ 1. A bare TODO or an unknown id is an open DoD item; the fix is `/backlog add` and the id, never deleting the TODO.
-6. **Branch**: the story branch is pushed, with no uncommitted changes — `git status --short` empty, **including `.claude/agent-memory/**`** (the agents' notes ride the story's commits, git-workflow § Agent memory), and `git stash list` empty: a stash is an open DoD item named in the report, never a place to park memory files. Uncommitted memory files → one more `feat(S-NNN)`/`fix(S-NNN)` commit on the branch, one `AskUserQuestion` recorded first as `Gate "/story-done Phase 3: commit agent memory?"` and cleared after the answer — never `git stash`, never a discard.
-7. **CI green on the branch**: `gh run list --branch <branch>` when `gh` exists. A run in progress → wait (see above). No run at all because the workflows trigger on `pull_request` and no PR exists yet → name it; the PR opened in Phase 4 starts it, and Phase 5 waits for it before the merge question.
+6. **TODOs carry an id** (`rules/comments.md`): every added `TODO`/`FIXME`/`HACK` names an id present in the roadmap or the backlog; a bare TODO or an unknown id is an open item, fixed by `/backlog add` and the id, never by deleting the TODO.
+7. **Branch pushed, tree clean**: `git status --short` empty, `.claude/agent-memory/**` included (memory rides the story's commits, git-workflow § Agent memory).
+8. **No stash**: `git stash list` empty; an entry is an open item until the user applies or drops it, never a place to park memory files.
+9. **Memory commit** for uncommitted memory files: one more `feat(S-NNN)`/`fix(S-NNN)` commit of `.claude/agent-memory/` on the branch, behind `<hooks>session-state.sh set Gate "/story-done Phase 3: commit agent memory?"` → one `AskUserQuestion` → `<hooks>session-state.sh set Gate "—"`; never `git stash`, never a discard.
+10. **CI green on the branch**: `gh run list --branch <branch>` when `gh` exists; in progress → the CI wait. No run because the workflows trigger on `pull_request` and no PR exists yet → `pending (the PR opened in Phase 4 starts it)`, not open: DONE proceeds, Phase 5 step 1 waits for it.
+
+**Verdict point**: every item ✅ (item 10 may read `pending`) → `DONE`, continue; otherwise `NOT DONE (items)` and stop — nothing written, nothing merged.
 
 ## Phase 4: Close
 Only on `DONE`.
-1. **Close gate**, one `AskUserQuestion`, recorded first as `Gate "/story-done Phase 4: close S-NNN?"` and cleared after the answer: "May I set the story status → Done, record the actual time, tick the roadmap, update the `## Docs` row, commit `docs: close S-NNN — Done, PR #N`, push it and open the PR if it does not exist yet (`gh pr create`)?" — close and open the PR (Recommended) · close without the PR · not now. This answer covers the close only, never the merge. The edits it covers:
-   - **Actual time**: `⏱ Nh` on the roadmap line and `Actual:` in the card — wall-clock from the card's `Started:` line (written by `/dev-story` or `/refactor --apply` at branch time) to now, rounded to 0.5 h. **Both ends in the same clock**: `Started:` carries its offset since 0.13 (`YYYY-MM-DDTHH:MM±HHMM`; an older card without one is local time) and "now" is `date +%FT%H:%M%z` on the same machine — never the UTC stamp of a CI run, a GitHub timestamp or a log line (a stamp in another zone is off by hours). No `Started:` → `⏱ ?` and one line naming the omission, never a number reconstructed from `git reflog` or commit dates.
-   - **Roadmap line**: tick `[x]`, add `🔗 [PR #N](url)` inline (same rule as the ID: a file-relative link, not a `## Links` reference-definition), and refresh the `Updated:` line.
-   - **`## Docs` → *production/stories/* block**: the story's row becomes `✅ … Done · PR #N`.
-   - **Sprint file**, when a sprint's roadmap heading holds the story: its row in that sprint file's `## Stories` table (`production/sprints/sprint-NN.md`) becomes `Done · ⏱ Nh · PR #N`, with an Edit of that row, never a rewrite of the file; a story taken from the Backlog has no sprint row: `/sprint-status` and `/retrospective` read this table, and on every project it stopped being true after the first story.
-2. Before editing, count `grep -c "⏱" production/roadmap.md` and `grep -c "🔗 \[PR #" production/roadmap.md`.
-3. After the "yes": `touch .claude/.write-consent`. Then **get the PR number before editing**, because the roadmap link, the `## Docs` row and the commit message all carry it:
-   - a PR exists (the draft `/dev-story` opened, or one opened by hand) → `gh pr view --json number,url`;
-   - no PR and the answer was "close and open the PR" → `gh pr create --fill` now (it needs only the pushed branch), then read its number and URL;
-   - "close without the PR" → no PR number anywhere: the roadmap line gets no `🔗`, the `## Docs` row reads `✅ … Done`, the commit is `docs: close S-NNN — Done`.
-   Then make the edits.
-4. **Prove the edit instead of assuming it**: run the two counts again, re-read the story's row in the `## Docs` block and `grep -E "^\| S-NNN .*Done" production/sprints/sprint-NN.md` for the sprint row when the story has one. A story closed with a PR but without its `⏱` and `🔗 PR` in **all three** places (two for a story without a sprint) is an unfinished DoD item, printed as such in the report with the numbers quoted: an answer can carry numbers that never reached the file.
-5. `git commit -m "docs: close S-NNN — Done, PR #N"` (without the PR: `docs: close S-NNN — Done`), then `git push`, so the PR carries the close commit.
+1. **Close gate**: show the draft as the resulting rows (`Actual: Nh`/`⏱ Nh`, roadmap line, `## Docs` row, `<sprint>` row); `<hooks>session-state.sh set Gate "/story-done Phase 4: close S-NNN?"`; one `AskUserQuestion`: "May I write `<card>`, `production/roadmap.md` and `<sprint>` as shown, commit `docs: close S-NNN — Done, PR #N`, push, and open the PR if none exists?" — close and open the PR (Recommended) · close without the PR · not now. Then `<hooks>session-state.sh set Gate "—"`. The answer covers the close only, never the merge; "not now" ends with the verdict.
+2. **Count before editing**: `grep -c "⏱" production/roadmap.md` and `grep -c "🔗 \[PR #" production/roadmap.md`.
+3. After the "yes": `touch .claude/.write-consent`, then **the PR number before any edit** (the roadmap link, `## Docs` row and commit carry it): a PR exists → `gh pr view --json number,url`; none and "close and open the PR" → `gh pr create --fill` now, then read its number and URL; "close without the PR" → no PR number anywhere (`references/close-edits.md` § Without a PR).
+4. **The edits**: read `references/close-edits.md` and apply its four edits — actual time (`Actual:`, `⏱ Nh`, both ends in one clock), roadmap line (`[x]`, `🔗 PR`, `Updated:`), `## Docs` row, `<sprint>` row — one `Edit` per row, never a heredoc or a file rewrite.
+5. **Prove the edit, never assume it**: run the two counts again, re-read the `## Docs` row, and `grep -E "^\| S-NNN .*Done" <sprint>` when there is a sprint row. `⏱` or `🔗 PR` missing from any of the three places → an unfinished DoD item in the report, numbers quoted: an answer can carry numbers that never reached the file.
+6. **Commit and push**: stage exactly `<card>`, `production/roadmap.md` (its story line and `## Docs` block) and `<sprint>` when its row changed; `git commit -m "docs: close S-NNN — Done, PR #N"` (no PR: `docs: close S-NNN — Done`); `git push`, so the PR carries the close commit.
 
 ## Phase 5: Merge (`.claude/docs/git-workflow.md`, step "Merge")
-Only on `DONE` and only after Phase 4 is finished.
-No PR ("close without the PR", or no `gh` and none opened by hand) → Phase 5 is skipped: say how to finish later — open the PR, then re-run `/story-done S-NNN`, which goes straight to the merge question for a story already Done.
-1. **Wait for CI** on the PR's latest commit (see above). Red → `NOT DONE (CI red)`; nothing is merged. The Phase 4 close stays as it is — the story met its DoD on green CI in Phase 3, and a red run on the close commit is a new failure of the branch, not a reopened story. The report says so in one line ("closed, not merged: CI red on <commit>"); after the fix, re-running `/story-done S-NNN` goes straight to this phase.
-2. **Merge gate**, a separate `AskUserQuestion`, recorded first as `Gate "/story-done Phase 5: merge PR #N?"` and cleared after the answer: "PR #N is open and CI is green. Merge it into `<default>` and delete the branch now?" — merge now (Recommended when CI is green) · leave the PR open.
+Only on `DONE`, after Phase 4 or through the re-run rule. No PR ("close without the PR", or no `gh` and none opened by hand) → skipped; say how to finish: open the PR, then re-run `/story-done S-NNN` (re-run rule).
+1. **Wait for CI** on the PR's latest commit: one background `gh run watch <run-id> --exit-status` (or `gh pr checks <n> --watch`), § CI wait. Red → `NOT DONE (CI red)`, nothing merged, the Phase 4 close stays (the DoD held on green CI in Phase 3; a red close commit is a new branch failure, not a reopened story); one report line "closed, not merged: CI red on <commit>"; after the fix, re-run `/story-done S-NNN` (re-run rule).
+2. **Merge gate**: `<hooks>session-state.sh set Gate "/story-done Phase 5: merge PR #N?"`; a separate `AskUserQuestion`: "PR #N is open and CI is green. Merge it into `<default>` and delete the branch now?" — merge now (Recommended when CI is green) · leave the PR open. Then `<hooks>session-state.sh set Gate "—"`.
 3. "yes":
    1. A draft PR (opened by `/dev-story` Phase 6) → `gh pr ready <n>` first.
    2. `gh pr merge --merge --delete-branch` (`--squash` only when the project's CLAUDE.md says so).
    3. `git switch <default> && git pull --ff-only origin <default>`; delete the local story branch.
-   4. Clear the session state with `<hooks>session-state.sh clear` (the same writer `/dev-story` used, so the file keeps its shape).
-4. "no" (or no answer) → leave the PR open, keep `Branch:` in the session state, and say how to merge later: re-run `/story-done S-NNN` (a story already Done with an open PR goes straight to this question), or merge on GitHub and run `git switch <default> && git pull --ff-only origin <default>`.
+   4. `<hooks>session-state.sh clear` (the same writer `/dev-story` used, so the file keeps its shape).
+4. "no" (or no answer) → the PR stays open, `Branch:` stays in the session state; how to merge later: re-run `/story-done S-NNN` (re-run rule), or merge on GitHub and `git switch <default> && git pull --ff-only origin <default>`.
 5. Without `gh`: the same, by hand. `NOT DONE` → nothing is merged.
 
 Verdict: `DONE` | `NOT DONE (reasons)`.
 
-Next step — one `AskUserQuestion`. **When the sprint is over** — no `- [ ]` line is left under its roadmap heading after this close, or its end date (the heading's second ISO date) has passed — the Recommended option is **`/web-studio:retrospective NN`** (copy mode `/retrospective NN`): nothing else closes a sprint, and the next story would start in a sprint that no longer exists; the alternatives are `/web-studio:sprint-status` · stop here. Otherwise:
-- **`/clear`, then `/web-studio:dev-story S-NNN`** (copy mode `/dev-story S-NNN`) — the next story starts in a fresh session on the fresh default branch (Recommended). Name the statusline `ctx:` share when it is visible (rule 13: the parent's context is the studio's largest cost).
-- `/web-studio:sprint-status`.
-- stop here.
-
-Continuing the next story in this session is an "Other" the user types, never an option offered.
+Next step — one `AskUserQuestion`:
+- **Sprint over** (no `- [ ]` line left under its roadmap heading after this close, or the heading's end date — its second ISO date — has passed) → `/web-studio:retrospective NN` (copy mode `/retrospective NN`) (Recommended): nothing else closes a sprint, and the next story would start in one that no longer exists · `/web-studio:sprint-status` · stop. No `/clear` + `dev-story` option.
+- **Otherwise** → `/clear`, then `/web-studio:dev-story S-NNN` (copy mode `/dev-story S-NNN`) (Recommended): a fresh session on the fresh default branch (rule 13); quote the statusline `ctx:` share when known · `/web-studio:sprint-status` · stop.
+- Continuing the next story here is an "Other" the user types, never an option offered.

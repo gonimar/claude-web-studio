@@ -78,7 +78,7 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 - [ ] ids grepped, not assumed · [ ] fix named, TODO kept
 
 ### Agent memory is committed, not stashed (0.13)
-**Fixture**: branch pushed; `git status --short` shows ` M .claude/agent-memory/web-studio-appsec-engineer/MEMORY.md` and one `??` memory file; `git stash list` has one entry from a previous story. **Expected**: DoD item 6 is ❌ with both facts quoted; the offer is one more `feat(S-NNN)` commit of `.claude/agent-memory/` on the branch (consent), never `git stash push -u`, never a discard; the stash entry is named as an open item until it is applied or dropped by the user.
+**Fixture**: branch pushed; `git status --short` shows ` M .claude/agent-memory/web-studio-appsec-engineer/MEMORY.md` and one `??` memory file; `git stash list` has one entry from a previous story. **Expected**: DoD items 7 and 8 are ❌ with both facts quoted; the offer is one more `feat(S-NNN)` commit of `.claude/agent-memory/` on the branch (consent), never `git stash push -u`, never a discard; the stash entry is named as an open item until it is applied or dropped by the user.
 - [ ] memory files count as uncommitted changes · [ ] stash list checked · [ ] no stash as the fix
 
 ## Protocol
