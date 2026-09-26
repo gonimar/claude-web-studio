@@ -19,7 +19,9 @@ References `stack-reference/index.md` (and `php.md` / `go.md` for the code-shape
 2. **No code** to scan → say so and report an empty inventory; nothing is written.
 3. **Collect**:
    - dependencies: `go list -m -u all` / `composer outdated` / `pnpm outdated` vs `stack-reference/index.md`;
-   - `TODO|FIXME|HACK`; skipped tests `skip|xit|@group skip|t.Skip`; lint suppressions `eslint-disable|@psalm-suppress|nolint`;
+   - TODOs by `rules/comments.md` — `git grep -nE 'TODO|FIXME|HACK'` split into: with an id whose card is Done or missing (`grep -c '<ID>' production/roadmap.md production/backlog.md`, the line's `[x]`) → a row each; with an open id → listed by story; without an id → one row with the count (each is a `/backlog add`);
+   - comment history — `git grep -cE '^\s*(//|#|\*) .*(\b(S|OPS|ARCH|SEC)-[0-9]+\b|pre-S-|used to|previously)' -- ':!*_test.go' ':!*Test.php' ':!*.spec.ts' ':!*.test.ts'` summed per package, and for Go `go doc -all ./... 2>/dev/null | grep -cE '\b(S|ARCH|OPS)-[0-9]+\b|used to'` (what the rendered API documentation carries) — a row per package over 20 lines, proposed story `chore(<package>): comments per rules/comments.md` (never a drive-by in a feature story);
+   - skipped tests `skip|xit|@group skip|t.Skip`; lint suppressions `eslint-disable|@psalm-suppress|nolint`;
    - ADRs in Proposed older than 30 days; feature specs without stories; Done stories without tests; missing runbooks;
    - open findings from the last audits (security/perf/a11y).
 4. **Code shape is measured, not felt** — each item a row with its number:

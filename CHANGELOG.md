@@ -1,6 +1,32 @@
 # Changelog
 
 ## 0.13.0 — 2026-09-26
+- **The retrospective closes the sprint** — and nothing else does. A sprint had no act of closing: `/retrospective` wrote
+  its section, `/sprint-plan` folded the previous block only as a side effect and only when every story was `[x]`, so a
+  sprint with one carried-over story never closed, sprints closed with no retrospective at all, and one block was folded by
+  hand. Now `/retrospective` Phase 4 moves unfinished stories back to the Backlog with their markers, folds the block
+  (`closed · N stories · K carried over`), writes `Status: closed YYYY-MM-DD` into the sprint file and reconciles its
+  `## Stories` table from the roadmap; `/sprint-plan` is `BLOCKED (sprint NN open — run /retrospective NN first)`;
+  `/story-done` recommends the retrospective after the last story; `/sprint-status` prints the sprint's status and
+  `OVER (not closed)`; `/help` prints an `Attention:` line. Template `sprint-plan.md` gains the `Status:` header;
+  `/migrate sprints` adds it to older files.
+- **The sprint file's Stories table is kept in step.** `/sprint-status` read story states from a table that only
+  `/sprint-plan` ever wrote (six closed stories still read Ready on one project, the owner synced it by hand). `/dev-story`
+  and `/refactor --apply` set the row to In Progress, `/story-done` to `Done · ⏱ Nh · PR #N` (third place in its proof
+  step), `/sprint-status` reads states from the roadmap and counts a differing row as `sprint file ≠ roadmap`.
+- **Actual time in one clock.** `Started:` carries its offset (`date +%FT%H:%M%z`), `/refactor --apply` writes it too
+  (four refactor stories had their times read off `git reflog`), and `/story-done` never takes "now" from a CI or GitHub
+  UTC stamp — 10.5 h became 8 h and 2 h became 8 h that way, and the calibration ratio ran on those numbers.
+- **Comments are the contract and the reason, not the story's history** (`rules/comments.md`). Agents knew the godoc
+  form (228 of 229 doc comments start with the name) and nobody had said what goes inside: on two projects the rendered
+  `go doc -all` carried 426 and 315 lines of story ids, "pre-S-050", "used to" and review rounds, one file was 35 % comments,
+  and the projects had 0 and 1 TODOs — the gaps lived in prose ("left as a follow-up if a future story wants"). The rule
+  names two kinds (doc comment = contract, body = reason), what never goes in code, the tests-only exception for ids, and
+  `TODO(S-NNN):`/`TODO(I-NNN):` as the only TODO. `/code-review` checks the added lines (`TODO-NOID`, `COMMENT-HISTORY`,
+  `COMMENT-LONG`), `/story-done` checks every new TODO's id exists, `/tech-debt` lists TODOs with closed or unknown ids and
+  comment history per package. Templates: `revive` (`exported`, `package-comments`) + `godot` in `golangci.yml`, Slevomat
+  comment sniffs in `ecs.php` (`slevomat/coding-standard` added by `/test-setup`), an ESLint snippet in `typescript.md`.
+  New code only — existing files are a `chore` story per package, never a drive-by.
 A pass over all 50 skills: bodies rewritten as numbered steps in the order they run, and the defects that hid in
 the long paragraphs fixed. No rule was dropped; every spec case was re-checked against the new text. The style the
 pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
@@ -60,23 +86,8 @@ pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
   `no-strategy`, `merged-spike`) for comparing two versions of a pipeline skill; dev-story spec gains two cases;
   `validate-structure` checks hooks called as `<hooks>session-state.sh …` too.
 
-Separate from the pass — **the smallest change that meets the criteria**: CLAUDE.md template principle 9, adapted from
-two of the four principles of andrej-karpathy-skills (MIT; attribution in NOTICE). No feature, abstraction, option or
-error path the story does not ask for, and the version with fewer moving parts wins; neighbouring code keeps its style,
-comments and dead code, and what an engineer notices there is reported under *Outside the brief*, not fixed in the
-story's diff. All 30 agents' collaboration protocol gains the rule, and its "Ask" / "Show a draft" items now say what a
-`Task` subagent does instead — the questions go into its result for the caller, and the brief's files carry the "yes".
-`/dev-story` Phase 5 records the *Outside the brief* items (`/backlog add` each, findings for security) so they do not
-end at `SubagentStop`. `/code-review` gains a Scope check: hunks that serve no acceptance criterion are WARNING `SCOPE` /
-`SCOPE-SPEC`, reformatting of untouched code INFO `SCOPE-STYLE`, and a behaviour the new code exposes stays inside the
-criteria even when the misbehaving lines are old; reviewers now receive the story's criteria. `rules/go-code.md`,
-`rules/php-code.md` and the Go/PHP engineers scope their "clean before the result" to the findings the story's diff
-introduces (`--new-from-rev <base>`); a pre-existing one is reported, never fixed in passing. Existing projects get
-the principle through `/update`: its drift table now has a `CLAUDE.md` row (principles missing or changed, Studio lines
-that differ), and Phase 3 replaces the two studio-owned sections — `## Studio (Web Studio)` and `## Working principles`
-— behind their own gate, appending the project's own principles after the template's list and keeping the previous file
-in `.claude/local-overrides/`; the title, Language, Project, Stack and any other section stay the project's.
 
+### Open questions closed (PR #66)
 Two decisions of the maintainer, applied across the kit, and the questions the pass had left open.
 - **Every document write ends with a commit gate** (rule 7 (4), git-workflow § Documents). The gate existed in four skills;
   it is now in every skill that writes a pipeline document — the authoring skills (feature-spec, data-model,

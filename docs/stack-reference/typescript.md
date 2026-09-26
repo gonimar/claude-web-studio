@@ -39,4 +39,18 @@ Layers: controller (DTO validation) → service → repository (Drizzle ORM / Ky
 `apps/web`, `apps/api`; a shared `tsconfig.base.json`; Turborepo/Nx as needed (Nx fits Angular naturally).
 
 ## TS review checklist
-1. `strict`, no `any`/`as unknown as`; 2. boundary validation (zod), types from schemas; 3. async errors handled, no floating promises (`@typescript-eslint/no-floating-promises`); 4. ESM only, no cycles (`madge`); 5. Vitest tests next to code; 6. bundle analysis when it grows.
+1. `strict`, no `any`/`as unknown as`; 2. boundary validation (zod), types from schemas; 3. async errors handled, no floating promises (`@typescript-eslint/no-floating-promises`); 4. ESM only, no cycles (`madge`); 5. Vitest tests next to code; 6. bundle analysis when it grows; 7. comments per `rules/comments.md` — TSDoc summary + `@remarks`, no story history, `TODO(S-NNN)` only.
+
+**Comment lint** (add to `eslint.config.js` when it exists; a studio template for the whole config is not shipped yet):
+```js
+import jsdoc from 'eslint-plugin-jsdoc';
+import unicorn from 'eslint-plugin-unicorn';
+export default [
+  jsdoc.configs['flat/recommended-typescript-error'],
+  { plugins: { unicorn }, rules: {
+      'jsdoc/require-jsdoc': ['warn', { publicOnly: true }],   // exported symbols carry a TSDoc summary
+      'jsdoc/no-types': 'error',                               // the signature has the types
+      'unicorn/expiring-todo-comments': ['error', { allowWarningComments: false, ignore: [/\((S|I)-\d+\)/] }],
+  } },
+];
+```

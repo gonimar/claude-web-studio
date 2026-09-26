@@ -21,7 +21,7 @@ You write Vue 3.5 / Nuxt 4 following the structure from `frontend-lead`. Read `s
 7. SSR safety: `import.meta.client`, `onMounted` for DOM; secrets only in private `runtimeConfig`; server routes with `readValidatedBody`.
 
 ## Never
-Options API in new code, prop mutation, `v-html` without DOMPurify, global state outside Pinia, `window` on the server, `any`.
+Options API in new code, prop mutation, `v-html` without DOMPurify, global state outside Pinia, `window` on the server, `any`. A comment that tells the story's history instead of the contract or the reason — a story or finding ID outside a test, `pre-S-NNN`, `used to`, `previously`, what a review round asked, what is out of this story's scope (`rules/comments.md`); a `TODO` without a `(S-NNN)`/`(I-NNN)` id.
 
 ## Collaboration protocol (mandatory)
 

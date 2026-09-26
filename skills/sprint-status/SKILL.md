@@ -16,8 +16,8 @@ Read-only: no file is written and no status changes. Source: artefacts (story fi
 In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Data
-1. **The sprint.** `production/sprints/sprint-NN.md` for the sprint number in the argument, else the latest file in `production/sprints/`. Its header gives the start and end dates. No sprint file → report `No sprint in production/sprints/ — run /sprint-plan`, give no verdict, and go straight to the next step with `/sprint-plan` as the Recommended option.
-2. **Stories**: the sprint's stories and their statuses, from the story files.
+1. **The sprint.** `production/sprints/sprint-NN.md` for the sprint number in the argument, else the latest file in `production/sprints/`. Its header gives `Status:`, the start and end dates, the goal and the capacity. No sprint file → report `No sprint in production/sprints/ — run /sprint-plan`, give no verdict, and go straight to the next step with `/sprint-plan` as the Recommended option.
+2. **Stories**: the sprint's stories and their states **from the roadmap's sprint block** (the single source `/story-done` writes); the sprint file's `## Stories` table compared with it row by row — a differing row is drift, counted, never the source.
 3. **Commits**: `git log --since <sprint start>` on the `feat/S-*` branches.
 4. **CI and the dependency queue** (only when `gh` exists): `gh run list`, and `gh pr list --state open --author app/dependabot --json number,title,createdAt,statusCheckRollup` (Renovate: `--author app/renovate`).
 5. **Session state**: `production/session-state/active.md`.
@@ -28,8 +28,8 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
 ## Phase 2: Report
 1. Print the report:
    ```
-   Sprint NN — goal: …   days left: N
-   Done N / In Progress N / Ready N / Blocked N
+   Sprint NN — goal: …   status: active | closed YYYY-MM-DD | overdue (end date passed, not closed)   days left: N
+   Done N / In Progress N / Ready N / Blocked N   sprint file ≠ roadmap: N rows
    Burn: X h of Y h closed (N of M stories) · day D of T · on a straight line Z h would be closed by now
      day 1: 0 · day 2: 8 h · day 3: 8 h · day 4: 18 h · …   (cumulative, one entry per day since the sprint start)
    Blockers: …
@@ -51,9 +51,10 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
    - The **parent-write count** (`P code file(s) written by the session itself`) is a fact from the `parent-write` hook: product code or tests the parent wrote instead of a Tier-3 engineer, each file logged as `ParentWrite` in the audit log — a rule with no observer was broken on a real project, so the count is printed even when the stories are green.
    - Never report starts minus stops. `SubagentStart` fires on every resume of the same agent, so that difference counts resumes, not lost work.
    - Each of these three lines goes under *Risk to the goal* when it is not zero; for parent-write the line reads `parent-write: P file(s) — engineer rule bypassed (coordination-rules § Subagents)`.
-5. **Discrepancies** on a separate line: "Done without a test/PR" for every story marked Done with no test or PR behind it.
+5. **Discrepancies** on a separate line: "Done without a test/PR" for every story marked Done with no test or PR behind it. `sprint file ≠ roadmap: N rows` names the rows; the fix is `/retrospective` at close (it reconciles them), never an edit from here.
+5a. **Sprint over and not closed**: a sprint that is `overdue`, or whose every roadmap line is `[x]` while its file is not `Status: closed`, is a line under *Risk to the goal*: `sprint NN is over and not closed — /retrospective NN`. A sprint file without a `Status:` line predates 0.13 and counts as closed only when its roadmap block is folded.
 6. **Findings**: `Open BLOCKING findings: N (production/findings.md)`, naming the story per finding, or "no story".
 
-Verdict: `ON TRACK` | `AT RISK` | `OFF TRACK`.
+Verdict: `ON TRACK` | `AT RISK` | `OFF TRACK` | `OVER (not closed)`.
 
-Next step — one `AskUserQuestion`: `/dev-story <next story>` (Recommended) · `/help` · nothing now.
+Next step — one `AskUserQuestion`: `/dev-story <next story>` (Recommended) · `/help` · nothing now; when the sprint is over and not closed, `/retrospective NN` is the Recommended option instead.

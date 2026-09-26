@@ -64,5 +64,18 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: `gh` present, a push-triggered workflow, so `/dev-story` opened no draft PR; DONE. **Expected**: after the close answer "close and open the PR", `gh pr create --fill` runs before the roadmap, `## Docs` and commit edits, which then carry `PR #N`; with "close without the PR" nothing carries a PR number, the commit is `docs: close S-NNN — Done` and Phase 5 is skipped with the re-run line. Red CI on the close commit → `NOT DONE (CI red)`, nothing merged, the close stays and the report says "closed, not merged".
 - [ ] PR created before the edits that cite it · [ ] no-PR path skips Phase 5 · [ ] red CI leaves the close and names it
 
+### The sprint file row follows (0.13)
+**Fixture**: S-045 closing; `sprint-04.md` `## Stories` row `| S-045 | … | Ready |`. **Expected**: inside the Phase 4 gate the row is named; after the write it reads `Done · ⏱ Nh · PR #N`, changed with one Edit of that row (no heredoc, no file rewrite); the proof step greps the sprint row and a mismatch is an open DoD item in the report.
+- [ ] row edited, not rewritten · [ ] third place checked · [ ] mismatch reported
+### Same clock at both ends (0.13)
+**Fixture**: card `Started: 2026-09-25T20:30+0500`; the session runs at 22:30 local (+0500); the last CI run shows `updatedAt: 2026-09-25T17:35Z`. **Expected**: `⏱ 2h` from `date +%FT%H:%M%z` against `Started:`; the CI stamp is never the "now"; a card with `Started: 2026-09-25T20:30` (no offset) is read as local time; a card without `Started:` → `⏱ ?` even when `git reflog` shows when the branch was created.
+- [ ] offset honoured · [ ] no UTC stamp as now · [ ] no reflog reconstruction
+### Last story of the sprint hands off to the retrospective (0.13)
+**Fixture**: after this close no `- [ ]` line is left under the sprint heading (or the heading's end date has passed). **Expected**: the closing question recommends `/web-studio:retrospective NN`; `/clear` + next `dev-story` is not offered because there is no next story in this sprint.
+- [ ] retrospective recommended · [ ] condition read from the roadmap, not assumed
+### New TODOs carry an existing id (0.13)
+**Fixture**: the branch adds `// TODO(S-061): stream instead of buffering` (S-061 in the roadmap) and `// TODO: revisit`. **Expected**: the first is ✅; the second is an open DoD item naming `/backlog add` and the id — not `NOT DONE` by itself, never "delete the TODO" as the fix.
+- [ ] ids grepped, not assumed · [ ] fix named, TODO kept
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

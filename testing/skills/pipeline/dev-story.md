@@ -79,5 +79,9 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: the session starts on a merged story branch; the local default branch has no upstream configured. **Expected**: `git pull --ff-only origin <default>` fast-forwards it before `git switch -c feat/S-NNN-slug`; the story branch never starts from a stale default branch.
 - [ ] explicit remote on the pull · [ ] story branch contains origin/<default>
 
+### Started with an offset, sprint row In Progress (0.13)
+**Fixture**: branch created at 20:30 local (+0500) for S-060 in sprint 05. **Expected**: the card's metadata line gets `Started: 2026-…T20:30+0500` (from `date +%FT%H:%M%z`, not typed from memory); the S-060 row in `sprint-05.md` reads `In Progress` after one Edit.
+- [ ] offset present · [ ] sprint row updated
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

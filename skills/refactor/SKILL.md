@@ -161,8 +161,9 @@ Dry-run verdict: `PLANNED (N steps)`.
    3. `git switch -c refactor/S-NNN-<slug>`.
 4. **Record the start** (as `/dev-story` Phase 3 step 5):
    1. Session state through the studio's writer: `<hooks>session-state.sh set Task "S-NNN …" Branch refactor/S-NNN-<slug> Next "/code-review"`.
-   2. On the story card's metadata line, set `Status: In Progress` and write `Started: YYYY-MM-DDTHH:MM` with the actual time; `/story-done` measures the actual duration from it.
-   3. Commit the card at once, on the refactor branch: `git commit -m "docs: refactor S-NNN — In Progress"` staging exactly the story card. Step commits stage their files by name, so the card never rides a `refactor(S-NNN)` commit and never lingers uncommitted through a `git restore` of a red step.
+   2. On the story card's metadata line, set `Status: In Progress` and write `Started: <date +%FT%H:%M%z>` (the offset included — `/story-done` measures the actual duration from it in the same clock; four refactor stories were closed with times read off `git reflog` when this step was missing).
+   3. The story's row in the current sprint file's `## Stories` table (`production/sprints/sprint-NN.md`) → `In Progress`, one Edit of the row.
+   4. Commit the card and the sprint file at once, on the refactor branch: `git commit -m "docs: refactor S-NNN — In Progress"` staging exactly those two files. Step commits stage their files by name, so the card never rides a `refactor(S-NNN)` commit and never lingers uncommitted through a `git restore` of a red step.
 5. **Run the plan step by step.** For each step:
    1. `Task` to `<engineer>` with the step's row and the rule "move, do not improve — the diff of a refactoring step contains no new behaviour". The engineer cannot ask the user: a step that needs a file outside its row, or would change behaviour, stops and reports; the parent then asks, or — once that `Task` has returned — detours to `/impact <the change>` through the `Skill` tool (`/web-studio:impact` in plugin mode), quotes its verdict and returns to the step (rule 7, hand-off after a detour; `Next:` stays `/code-review`).
    2. After the step, the parent runs the check: Go `go build ./... && go test -race -count=1 ./...` (and the gate/`arch-check` once installed); PHP `composer ci` (the local chain, no network).

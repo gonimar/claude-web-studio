@@ -12,11 +12,20 @@ linters:
     - depguard
     - errorlint
     - gocritic
+    - godot
     - gosec
     - misspell
+    - revive
     - unconvert
     - unparam
   settings:
+    # Comment form (rules/comments.md): a doc comment on every exported name, `// Name …`, full sentences.
+    # revive runs only the two comment rules here — the rest of the standard set is covered by the other linters.
+    revive:
+      rules:
+        - name: exported
+          arguments: ["checkPrivateReceivers", "disableStutteringCheck"]
+        - name: package-comments
     depguard:
       rules:
         domain:

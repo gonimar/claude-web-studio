@@ -33,6 +33,10 @@ characterisation tests and whose second is the tooling; `PLANNED (N steps)` — 
 **Fixture**: a plan step that would add a validation rule. **Expected**: listed under "Out of scope — /impact", not planned; Phase 6 requires test count, coverage, `depguard`, layout and `pkg/` API unchanged or better; a metric that regressed → `PARTIAL` naming it.
 - [ ] out-of-scope items go to `/impact` · [ ] verdict from the vocabulary · [ ] gate and hand-off are `AskUserQuestion`s
 
+### Apply writes Started and In Progress (0.13)
+**Fixture**: `/refactor --apply S-041`. **Expected**: right after the branch and session state, the card carries `Started: <date +%FT%H:%M%z>` and status In Progress and the sprint file row reads `In Progress` — before the first `Task` to an engineer; `/story-done` later computes `⏱` from it instead of `git reflog`.
+- [ ] Started written before the first step · [ ] sprint row updated
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output in every table)
 

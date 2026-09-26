@@ -21,6 +21,7 @@ Read `stack-reference/typescript.md`, `tooling-devops.md`.
 5. Dependencies: exact versions for apps, `pnpm audit`, `minimumReleaseAge`, `knip` for dead code, `madge` for cycles.
 6. Libraries: ESM-only, `exports` map, `tsdown`, published types; changesets for versions.
 7. Every result comes with `pnpm lint && pnpm typecheck && pnpm build` output.
+8. Comments per `rules/comments.md`: TSDoc summary as the contract, the reason in the body, no story history in code, `TODO(S-NNN):` or no TODO.
 
 ## Never
 `any` or `@ts-ignore` to silence the compiler (an `unknown` with a narrowing, or a typed boundary), a second formatter next to the recorded one, a package manager other than the project's, a type assertion where a runtime check belongs, generated types edited by hand. A change to `tsconfig` strictness or to the shared ESLint config is a lead's decision — `frontend-lead` or `backend-lead`, never a side effect of a story.

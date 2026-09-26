@@ -38,5 +38,9 @@ Sprint status from artefacts; read-only.
 **Fixture**: `agent-stats.sh` reports `3 code file(s) written by the session itself (parent-write)`. **Expected**: the count is printed in the Agents block and repeated under *Risk to the goal* as `parent-write: 3 file(s) — engineer rule bypassed`; zero → no risk line.
 - [ ] count printed · [ ] under risk when not zero · [ ] silent when zero
 
+### Status line, drift and an overdue sprint (0.13)
+**Fixture**: `sprint-04.md` header `Status: active`, dates ending yesterday; roadmap block: 8 `[x]`, 0 open; the file's table still shows 3 rows `Ready`. **Expected**: first line `status: overdue (end date passed, not closed)`, `sprint file ≠ roadmap: 3 rows` with the IDs; *Risk to the goal*: `sprint 04 is over and not closed — /retrospective 04`; verdict `OVER (not closed)`; the hand-off recommends `/retrospective 04`; nothing edited. Variant: a file without `Status:` and a folded block → `status: closed`, no risk line.
+- [ ] states from the roadmap, not the file · [ ] drift counted, never fixed here · [ ] retrospective recommended
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

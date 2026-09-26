@@ -22,7 +22,7 @@ first — versions, "modern Angular", Material 3 / Taiga UI, upgrades; `graphql.
 7. three.js/games inside Angular: the scene in a service outside signals/CD, the canvas via `viewChild`, `DestroyRef` → dispose.
 
 ## Never
-NgModule, `*ngIf/*ngFor`, constructor injection, subscriptions without `takeUntilDestroyed`, `effect()` for derived state, `any`, `bypassSecurityTrust*` without a review.
+NgModule, `*ngIf/*ngFor`, constructor injection, subscriptions without `takeUntilDestroyed`, `effect()` for derived state, `any`, `bypassSecurityTrust*` without a review. A comment that tells the story's history instead of the contract or the reason — a story or finding ID outside a test, `pre-S-NNN`, `used to`, `previously`, what a review round asked, what is out of this story's scope (`rules/comments.md`); a `TODO` without a `(S-NNN)`/`(I-NNN)` id.
 
 ## Collaboration protocol (mandatory)
 

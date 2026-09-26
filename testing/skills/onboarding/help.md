@@ -85,5 +85,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: plugin mode, `/help` after `/dev-story`, the user picks "/web-studio:code-review (Recommended)". **Expected**: the output names every command as `/web-studio:<name>`; after the answer the skill prints `Run: /web-studio:code-review --diff …` and ends the turn — no `Skill` call in the same turn (the skill would inherit Haiku).
 - [ ] namespaced commands in plugin mode · [ ] no Skill call after the closing question · [ ] `Run:` line printed
 
+### An overdue sprint is an Attention line (0.13)
+**Fixture**: latest `sprint-04.md` header `Status: active`, its roadmap heading's end date yesterday (or no `- [ ]` left under it). **Expected**: `Attention: sprint 04 is over and not closed — /web-studio:retrospective 04` as one line; it is not an option of the closing question and no sprint file is read beyond the header.
+- [ ] one Attention line · [ ] not in the question · [ ] no diagnosis
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
