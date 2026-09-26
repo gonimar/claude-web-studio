@@ -18,14 +18,18 @@ Writes only after "May I write?". Documentation is derived from the pipeline's d
 a fact missing from a spec or the contract is a spec gap (`/feature-spec`, `/api-contract`), not something to invent here.
 
 ## Phase 1: Inventory (`--check` stops after it)
-Per target: what exists (`README.md`, `docs/api/*`, `docs/guide/*`, `docs/ops/*.md`), its last change vs the
-last change of its sources (`git log -1 --format=%cs -- <path>`), and the gaps: README without a quick start, an
-env table that misses variables present in `.env.example` or compose, an API reference behind the contract
-(`graphql-inspector diff` / `openapi-diff` when installed, otherwise operation lists compared), a user guide
-that does not cover a Done feature, a runbook without rollback or without the last incident's action. Table
-"target → exists → stale vs → gaps". `--check` → verdict `COMPLETE (check only: N targets stale)` and stop.
+1. **Per target, what exists**: `README.md`, `docs/api/*`, `docs/guide/*`, `docs/ops/*.md`.
+2. **Staleness**: its last change vs the last change of its sources (`git log -1 --format=%cs -- <path>`).
+3. **Gaps**:
+   - a README without a quick start, or an env table that misses variables present in `.env.example` or compose;
+   - an API reference behind the contract (`graphql-inspector diff` / `openapi-diff` when installed, otherwise operation lists compared);
+   - a user guide that does not cover a Done feature;
+   - a runbook without rollback or without the last incident's action.
+4. **Missing sources**: a target whose source does not exist (`api` with no contract; `readme` with no product spec) → `BLOCKED (no product spec / no contract — run /product-spec | /api-contract first)`, naming only the missing one. No hand-written substitute is drafted.
+5. **Table** "target → exists → stale vs → gaps". `--check` → verdict `COMPLETE (check only: N targets stale)` and stop.
 
 ## Phase 2: Draft (tech-writer via Task, one target at a time)
+The brief asks `tech-writer` for the draft and the output of every command it ran, not for a write: the write gate is this session's (Phase 3). Questions the agent has come back in its result, and this session asks them.
 - **readme** — what it is (product spec §1) → quick start (commands from technical-preferences and the test
   strategy, **run here with output**) → configuration (env table from `.env.example`/compose, secrets named, never
   valued) → development (tests, lint, `/help`) → deploy (link to the runbook) → licence. Never duplicates CLAUDE.md.
@@ -39,13 +43,15 @@ that does not cover a Done feature, a runbook without rollback or without the la
 - **runbook** — `docs/ops/deploy.md` completed from the deploy contract, the release files and the incidents:
   symptom → diagnosis (commands) → action → verification → rollback, per known failure; secrets by name and
   location only.
-Each draft is rendered in the chat (rule 7); a command that fails when run is a finding, not prose.
 
-## Phase 3: Write
-Per target: "May I write `<path>`?" — one `AskUserQuestion`: write (Recommended) · adjust · skip. After the "write"
-answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). Then one commit gate:
-`docs: <target> from <sources>` staging exactly the written files, on the branch git-workflow's documents lane
-prescribes (a story branch when the docs belong to the story in progress).
+Each draft is rendered in the chat (rule 7). A command that fails when run is a finding, not prose.
+
+## Phase 3: Write (per target)
+1. "May I write `<path>`?" — one `AskUserQuestion`: write (Recommended) · adjust · skip.
+2. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). Then write.
+3. **Commit gate**, one `AskUserQuestion`: `docs: <target> from <sources>`, staging exactly the written files, on the
+   branch the documents lane of `git-workflow.md` prescribes (a story branch when the docs belong to the story in
+   progress; name the branch in the question).
 
 Verdict: `COMPLETE (N targets written)` | `COMPLETE (check only: …)` | `BLOCKED (no product spec / no contract —
 run /product-spec | /api-contract first)`. Next step — one `AskUserQuestion`: `/story-done S-NNN` when the docs
