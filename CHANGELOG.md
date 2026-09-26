@@ -77,6 +77,44 @@ that differ), and Phase 3 replaces the two studio-owned sections — `## Studio 
 — behind their own gate, appending the project's own principles after the template's list and keeping the previous file
 in `.claude/local-overrides/`; the title, Language, Project, Stack and any other section stay the project's.
 
+Two decisions of the maintainer, applied across the kit, and the questions the pass had left open.
+- **Every document write ends with a commit gate** (rule 7 (4), git-workflow § Documents). The gate existed in four skills;
+  it is now in every skill that writes a pipeline document — the authoring skills (feature-spec, data-model,
+  create-stories, sprint-plan, architecture-decision, product-spec, brainstorm, game-concept, ux-spec), the audits
+  (threat-model, security-audit, pentest, a11y-audit, perf-audit, harden, dependency-audit, architecture-review,
+  qa-plan, design-system, tech-debt), impact, incident, changelog, init, start, adopt, setup-stack, api-contract, and
+  the findings rows of dev-story and hotfix — modelled on test-setup: `docs: <what>` staging exactly the written files,
+  the default branch when no story is in progress, the three options on a story branch, nothing committed without the
+  answer. Code, configs, lockfiles, scripts and the axe spec never ride a `docs:` commit; they are offered the chore
+  lane. `Bash` joins the `allowed-tools` where the gate needs git. Each spec gains a commit-gate case.
+- **A skill runs another studio skill through the `Skill` tool** (coordination-rules § Subagents): only dev-story,
+  refactor, hotfix, incident and the four team-* skills list it, the called skill keeps every phase and gate, and skills
+  run one after another — `‖` means a Task batch of agents, never two skills at once. team-release and team-security
+  run their audits in sequence and stop at the first failing verdict; a skill without `Skill` hands off. dev-story treats
+  a contract change as a BLOCKED stop, not a mid-story `/api-contract` run.
+- **team-feature and team-game branch, commit, push and open a draft PR** like dev-story (one story = one branch = one
+  PR); `/code-review --diff` is their closing hand-off. team-security stops with BLOCKED when there is no code;
+  team-game's PARTIAL carries the measured numbers.
+- **hotfix**: the engineer writes the failing test; fix and changelog commits; the patch tag is created and pushed by
+  the session on the hotfix branch (git-workflow names the exception); CI on the tag before `/deploy`. **deploy**: the
+  version defaults to the latest `v*` tag on origin, confirmed; `--env` defined and listed on the delegate contract's
+  verbs. **incident**: actions go to `production/roadmap.md` behind a gate; rollback and hotfix run through the Skill
+  tool. **changelog**: `--unreleased` defined. **release-checklist**: the release file is written on NOT READY too.
+- **impact** touches `.impact-verdict` only on an approving verdict — never after BLOCKED, NEEDS ADR or
+  `--classify-only`, which used to silence impact-guard for a rejected change. **refactor**: framework mode on Go is
+  BLOCKED, the Application-layer step is explicit, `--apply` stamps the card and waits for CI. **story-done** resolves
+  its story and requires Review. **code-review** and dev-story list `SendMessage`.
+- **start** reads the review mode /init wrote and stops on an existing project (`/adopt full`); **init** defines
+  INITIALISED vs ALREADY INITIALISED and keeps one Recommended; **setup-stack** records its decision as a `D-NN` and
+  recommends `/feature-spec` when a product spec exists; **stack-update** states its default scope; **skill-test**
+  stamps `last_static` / `last_category`; **sprint-status** computes burn; **help**'s context line prints `none` when
+  there is nothing; `api/schema.graphqls` is a documents-lane path for the hooks.
+- Audits: pentest records findings like security-audit; a11y-audit names its one axe spec file and the canvas-menu
+  rule; perf-audit falls back to the CWV defaults of web-platform.md; dependency-audit gains WebFetch, a report path and
+  a `chore/deps-<date>` branch for `--fix-safe`; architecture-review flags a Proposed ADR older than 30 days and drops
+  HIGH; qa-plan keeps untestable criteria as `manual`; design-system's body and spec agree on dark theme and Material
+  tokens. Stale spec cases (refactor, architecture-review, design-system, skill-test, ux-spec, …) now match the skills.
+
 ## 0.12.0 — 2026-09-26
 Findings of a week-long manual run on a real project (Web Studio 0.11.1, ten sessions, 250 agent runs) and of an
 external PHP project. Nothing new to learn: the same commands, the same agents — cheaper, and harder to bypass.
