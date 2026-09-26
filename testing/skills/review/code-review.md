@@ -38,7 +38,7 @@ Review with routing by file type and security for sensitive paths.
 - [ ] diff as one file · [ ] `Read: N/M` first line · [ ] PARTIAL never counts towards APPROVED
 ### The verdict is the reviewer's (0.12)
 **Fixture**: `appsec-engineer` NEEDS CHANGES with one BLOCKING; the fix is applied; CI is green. **Expected**: the fix diff goes to `appsec-engineer` by `SendMessage` and the verdict becomes APPROVED only on its answer; the routing table gains a `re-review` column; the parent never downgrades the BLOCKING itself; a fix the parent wrote is named "written by the parent: …".
-- [ ] re-review by the same reviewer · [ ] no verdict change on CI alone · [ ] severity untouched by the parent · [ ] hand-off names `/web-studio:story-done`
+- [ ] re-review by the same reviewer · [ ] `SendMessage` listed in `allowed-tools`, `Task` to the same reviewer as the fallback · [ ] no verdict change on CI alone · [ ] severity untouched by the parent · [ ] hand-off names `/web-studio:story-done`
 
 ### Changes outside the story are named (0.13)
 **Fixture**: `--diff` on story S-002 (a `/forecast` endpoint): besides `forecast.go` and its test, the diff moves the legacy `/` handler of `main.go` into a new `newMux()` and fixes a pre-existing unchecked error there; one import block is reordered in an untouched file. **Expected**: the report lists `main.go` hunks that serve no criterion as WARNING `SCOPE` (revert here, record through `/backlog add` or findings), the reordered imports as INFO `SCOPE-STYLE`; the route line the story needs is not a finding; the new route falling through to the legacy catch-all keeps its WARNING (a behaviour the new code exposes is inside the criteria, not "pre-existing"); the `git diff --stat` next to the story's files is in the report.

@@ -19,7 +19,8 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
 **Waiting for CI** (Phases 3–5): one background command with a single completion notification — `gh run watch <run-id> --exit-status` (or `gh pr checks <n> --watch`) via Bash `run_in_background`. Never a polling `Monitor`, never `ScheduleWakeup`, and never an `AskUserQuestion` as a pause (rule 7: a question is a decision for the user, not a wait). If the runner queue exceeds ~10 minutes, say so in one line and end the turn; the notification resumes the skill. Wait only for a run that exists.
 
 ## Phase 1: Story and evidence
-Read the story, the feature-spec criteria, and the latest `/code-review` report (chat history, or `production/reviews/` if kept).
+1. **Pick the story** (as `/dev-story` Phase 1): the argument (a story path or `S-NNN`), else `Task:` in `production/session-state/active.md`, else ask — one `AskUserQuestion` listing the stories in `Review` (the most recently started first, Recommended) · another story (say which) · stop. A story resolved from the session state is named in the first line of the report, so a stale `Task:` closes no wrong story. Its status must be `Review`, or `Done` with an open PR (the merge re-run of Phase 5); a `Ready` or `In Progress` story → `NOT DONE (story not in Review — run /dev-story S-NNN, then /code-review)`.
+2. **Read** the story, the feature-spec criteria, and the latest `/code-review` report (chat history, or `production/reviews/` if kept).
 
 ## Phase 2: Run
 1. Run the tests from the criteria matrix and the whole affected package.

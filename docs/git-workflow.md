@@ -24,7 +24,7 @@ force-pushes.
 - No work on a branch that is already merged: the commit hook warns "already merged into origin/<default>", the session-start hook prints ahead/behind.
 - Solo projects still open the PR: CI runs on it and the merge records the review; `story-done` merges it on request.
 - Hotfixes follow `/hotfix` (branch from the release tag, backport to the default branch).
-- Releases are tags on the default branch (`/release-checklist`, `/deploy`); never deploy from a story branch.
+- Releases are tags on the default branch (`/release-checklist`, `/deploy`); never deploy from a story branch. The one exception is a `/hotfix` patch tag: it is created on the hotfix branch (branched from the release tag) so the image can be built and deployed before the backport lands, and the backport PR brings the commit to the default branch.
 
 ## Session state
 `production/session-state/active.md` → `Branch:` is the story branch from Phase 3 until Phase 5;

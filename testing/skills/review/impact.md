@@ -3,7 +3,7 @@
 > **Category**: review · **Priority**: high · **Spec written**: 2026-09-09
 
 ## Summary
-Triage of a change proposal that arrives in the conversation rather than through an approved story: classification (architecture · security · product · routine) from the artifacts and paths it touches, a short verdict from the owner of each triggered class (`technical-director`, `security-lead`, `product-director`), a hand-off to the commands the verdict requires. Writes only session-state.
+Triage of a change proposal that arrives in the conversation rather than through an approved story: classification (architecture · security · product · routine) from the artifacts and paths it touches, a short verdict from the owner of each triggered class (`technical-director`, `security-lead`, `product-director`), a hand-off to the commands the verdict requires. Writes session-state, and a findings row or backlog line only under its write and commit gates.
 
 ## Static checks
 - [ ] Frontmatter: `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools`
@@ -14,11 +14,11 @@ Triage of a change proposal that arrives in the conversation rather than through
 **Fixture**: ADR-0002 pins REST; the user proposes "let's expose the catalogue over GraphQL too". **Expected**: classification table with the evidence row "architecture · contradicts ADR-0002 · docs/architecture/adr-0002-api-style.md"; one `Task` to `technical-director`; a verdict within 15 lines that names the commands (`/architecture-decision`, then `/api-contract`); the hand-off `AskUserQuestion` offers `/architecture-decision` first.
 - [ ] evidence cites the ADR path · [ ] only technical-director spawned · [ ] verdict carries commands · [ ] hand-off is the first command
 ### 2. Refusal / BLOCKED — security veto
-**Fixture**: the proposal stores the OAuth refresh token in `localStorage`; `threat-model.md` lists browser storage of credentials as a rejected surface. **Expected**: security class from the threat-model row; `security-lead` returns `BLOCKED (reason)`; surfaced immediately; the hand-off offers revise (Recommended) · record the rejection as an ADR · stop; nothing written except session-state.
-- [ ] BLOCKED surfaced with reason · [ ] no document written · [ ] hand-off options as specified
+**Fixture**: the proposal stores the OAuth refresh token in `localStorage`; `threat-model.md` lists browser storage of credentials as a rejected surface. **Expected**: security class from the threat-model row; `security-lead` returns `BLOCKED (reason)`; surfaced immediately; the hand-off offers revise (Recommended) · record the rejection as an ADR · stop; nothing written except the session note, and `.claude/.impact-verdict` is **not** touched — the impact-guard keeps warning on the rejected surface.
+- [ ] BLOCKED surfaced with reason · [ ] no document written · [ ] no marker after BLOCKED · [ ] hand-off options as specified
 ### 3. Mode/argument variant — `--classify-only` and `solo`
-**Fixture**: `--classify-only` with a two-class proposal; separately review mode `solo`. **Expected**: with the flag — the table, verdict `CLASSIFIED (architecture, security)`, no `Task`; in `solo` — the table, then one `AskUserQuestion` (verify (Recommended) · skip) before any spawn.
-- [ ] flag stops before Phase 3 · [ ] solo asks before spawning
+**Fixture**: `--classify-only` with a two-class proposal; separately review mode `solo`. **Expected**: with the flag — the table, verdict `CLASSIFIED (architecture, security)`, no `Task`, and no write at all: no session note, no `.claude/.impact-verdict`, no row; in `solo` — the table, then one `AskUserQuestion` (verify (Recommended) · skip) before any spawn.
+- [ ] flag stops before Phase 3 · [ ] flag writes nothing (no note, no marker) · [ ] solo asks before spawning
 ### 4. Edge case — routine inside the active story
 **Fixture**: session-state names S-007; the proposal is a rename of a field the story's criteria already cover. **Expected**: `ROUTINE` in one line, no verifier, hand-off to `/dev-story S-007`.
 - [ ] no spawn · [ ] names the story · [ ] hand-off to /dev-story
@@ -29,8 +29,8 @@ Triage of a change proposal that arrives in the conversation rather than through
 **Fixture**: the proposal adds a file-upload endpoint (new dependency for image processing + an upload surface). **Expected**: architecture and security rows; `technical-director` and `security-lead` in one parallel batch; the combined table; commands ordered `/architecture-decision` → `/threat-model` → `/api-contract` → `/create-stories`.
 - [ ] one batch of two Tasks · [ ] combined table · [ ] pipeline order kept
 ### 7. Marker and session state
-**Fixture**: any verified proposal. **Expected**: `Notes:` gets a dated `impact:` line, `Next:` the first command, `.claude/.impact-verdict` touched; no other file changes.
-- [ ] session-state updated · [ ] marker touched · [ ] no other writes
+**Fixture**: a proposal every verifier in scope answers `APPROVED` or `APPROVED WITH CONDITIONS`; separately one where `technical-director` answers `NEEDS ADR`. **Expected**: `Notes:` gets a dated `impact:` line in both; `Next:` changes only when the user picks a command in the closing question, never by the skill itself; `.claude/.impact-verdict` is touched only in the approved case — after `NEEDS ADR` (as after `BLOCKED`, case 2) it is not, and an existing marker is never removed; no other file changes.
+- [ ] session-state updated · [ ] marker only on APPROVED / APPROVED WITH CONDITIONS · [ ] `Next:` only on the user's pick · [ ] no other writes
 
 ### 8. Trivial change on a sensitive path
 **Fixture**: "fix the typo in the comment of internal/auth/login.go" — a `security-sensitive` path, no behavioural change. **Expected**: `ROUTINE` in one line, no verifier spawned, no classification table; the review-before-merge rule may be named for the PR.
@@ -40,12 +40,12 @@ Triage of a change proposal that arrives in the conversation rather than through
 - [ ] one retry with the format quoted · [ ] no silent acceptance · [ ] no padding/trimming
 
 ### A backlog idea triaged directly still gets closed
-**Fixture**: `production/backlog.md` holds `I-003`; the user runs `/impact` on that idea's text without `/backlog promote`. **Expected**: the verdict is written back into the `I-003` entry as one line (date, verdict, next command) under the write gate, so the idea is not proposed again at the next review.
-- [ ] the backlog entry is updated · [ ] same write gate, not a silent edit · [ ] the line names the verdict and the next command
+**Fixture**: `production/backlog.md` holds `I-003`; the user runs `/impact` on that idea's text without `/backlog promote`. **Expected**: the verdict is written back into the `I-003` entry as one line (date, verdict, next command) under the write gate, so the idea is not proposed again at the next review; right after the write one commit gate offers `docs: backlog I-003 — impact verdict` staging exactly that file, on the branch the documents lane prescribes.
+- [ ] the backlog entry is updated · [ ] same write gate, not a silent edit · [ ] commit gate after the write · [ ] the line names the verdict and the next command
 
 ### A verdict that names a finding ID records it
-**Fixture**: `technical-director` returns `APPROVED WITH CONDITIONS` and cites `ARCH-004` for a deviation the change introduces. **Expected**: the row for `ARCH-004` is written into `production/findings.md` in the same turn under the write gate, with the severity and the story that will carry it; `/story-done` later checks that every ID named in the card exists there.
-- [ ] ID and row created together · [ ] same write gate · [ ] the DoD check catches an ID with no row
+**Fixture**: `technical-director` returns `APPROVED WITH CONDITIONS` and cites `ARCH-004` for a deviation the change introduces; HEAD is `feat/S-012-…` because the triage interrupted `/dev-story`. **Expected**: the row for `ARCH-004` is written into `production/findings.md` in the same turn under the write gate, with the severity and the story that will carry it; then one commit gate `docs: impact ARCH-004 — APPROVED WITH CONDITIONS` staging exactly `production/findings.md`, naming the story branch and offering switch-to-default (Recommended) · commit here · leave uncommitted; nothing is committed without the answer; `/story-done` later checks that every ID named in the card exists there.
+- [ ] ID and row created together · [ ] same write gate · [ ] commit gate names the story branch and stages only the row's file · [ ] the DoD check catches an ID with no row
 
 ## Protocol
 - [ ] draft (the table) before any spawn · [ ] next step as `AskUserQuestion` · [ ] never advances the stage itself · [ ] artefacts over claims (evidence rows cite files)

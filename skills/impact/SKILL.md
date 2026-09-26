@@ -14,8 +14,11 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Triage, not review: the skill decides **who** must look at a proposal and **what runs next**, in minutes. Coordination-rules rule 11; review-workflow.md § Change classes.
 
 It produces no document. An ADR, a threat-model surface, a contract or a story is written by its own command with its own "May I write?" gate (rule 9). The files this skill touches:
-- `production/session-state/active.md`, through the writer: one dated `Notes:` line, and `Next:` only when the user picks a command (Phase 4). This needs no question.
-- `production/findings.md` (a row for a finding ID a verdict names) and `production/backlog.md` (the verdict line of a backlog idea), only when the case arises and only after the Phase 4 "May I write?" gate.
+- `production/session-state/active.md`, through the writer: one dated `Notes:` line after a verification (Phase 4 step 4), and `Next:` only when the user picks a command (Phase 4 step 5). This needs no question.
+- `production/findings.md` (a row for a finding ID a verdict names) and `production/backlog.md` (the verdict line of a backlog idea), only when the case arises and only after the Phase 4 "May I write?" gate, each followed by its commit gate (Phase 4 step 3).
+- `.claude/.impact-verdict`, the marker, only on an approving verdict (Phase 4 step 6).
+
+`--classify-only` and a `ROUTINE` answer touch none of them: no note, no marker, no row.
 
 In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode; a studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode.
 
@@ -32,7 +35,7 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
    - **product** — user-visible behaviour absent from the feature spec; a changed acceptance criterion; scope the product spec lists as out.
    - **routine** — none of the above: a change inside existing decisions and surfaces.
 2. **Render the table** (class · trigger · evidence) in the chat message before anything else happens (rule 7).
-3. **`--classify-only`**: stop after the table with the verdict `CLASSIFIED (<classes>)` and go to the closing Next-step question; Phase 3 does not run and no `Task` is spawned. Useful when the user only wants to know whether a director must look.
+3. **`--classify-only`**: stop after the table with the verdict `CLASSIFIED (<classes>)` and go to the closing Next-step question; Phase 3 does not run and no `Task` is spawned. Nothing is written either: no session note, no `.claude/.impact-verdict` marker, no findings or backlog row — a classification is not a verdict, and the impact-guard hook must keep warning until a verifier has approved. Useful when the user only wants to know whether a director must look.
 
 ## Phase 3: Verification by the class owner
 1. **Review mode scopes the step** (review-workflow.md):
@@ -59,9 +62,11 @@ In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_
    - **A backlog idea gets its verdict back.** When the proposal came from `production/backlog.md` (an `I-NNN` in the argument, or an entry whose text this proposal repeats), add one line to that entry: date, verdict, next command. An idea that has been through triage and is still listed as untouched will be proposed again.
 
    Show the row/line, then one `AskUserQuestion`: "May I write <the row in `production/findings.md` / the line in `production/backlog.md`>?" — write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7), then `Edit`.
+
+   **Commit gate** right after the write (rule 7 (4), `.claude/docs/git-workflow.md` § Documents), one `AskUserQuestion`: `docs: impact <ID> — <verdict>` (a backlog line: `docs: backlog I-NNN — impact verdict`) staging exactly the written file(s). On the default branch when no story work is in progress. When HEAD is a story branch — the usual case for a triage that interrupted `/dev-story` — name it and offer: switch to the default branch and commit there (Recommended — a findings row or a backlog line is a pipeline-wide document) · commit here (the row belongs to this story) · leave uncommitted. Nothing is committed without the answer; code or configs never ride the `docs:` commit.
 4. **Session note** through the studio's writer: `<hooks>session-state.sh note "impact: <proposal> → <verdicts>; next: <commands>"`. It dates the line, keeps the last ten and moves older ones to `production/session-state/archive/`. If the state file is not in the writer's format, the writer refuses: run `<hooks>session-state.sh migrate` once (it archives the whole previous file), or add the line by hand.
 5. **This skill never writes `Next:` on its own.** `Next:` is where the session was heading, and a triage is usually a detour from it (rule 7: a detour never overwrites the interrupted intent). The required commands go into the note and into the closing `AskUserQuestion`. `Next:` changes only when the user picks one of them there (`<hooks>session-state.sh set Next "<command>"`), because that choice is what makes it the task.
-6. **Marker**: `touch .claude/.impact-verdict` (the impact-guard hook checks it for architecture/security paths; warn-only).
+6. **Marker**, only on an approving verdict: `touch .claude/.impact-verdict` when every verifier in scope answered `APPROVED` or `APPROVED WITH CONDITIONS` (the impact-guard hook checks it for architecture/security paths; warn-only). Never after `BLOCKED` — a marker there would silence the guard for exactly the change that was rejected — and not after `NEEDS ADR` either: the ADR, and the story that follows it, earn the marker (`/dev-story` touches it at story start). `CLASSIFIED` and `ROUTINE` end before this step. A marker that already exists (a running story's, or an earlier approval's — the hook treats it as fresh for four hours) is not removed: the guard is a nudge to classify, and the rejection lives in the session note and the closing question.
 
 Verdict: `ROUTINE` | `CLASSIFIED (…)` | `APPROVED` | `APPROVED WITH CONDITIONS` | `NEEDS ADR` | `BLOCKED`.
 

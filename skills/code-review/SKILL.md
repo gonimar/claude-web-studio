@@ -3,7 +3,7 @@ name: code-review
 description: "Reviews code (files, directory, or current diff) for correctness, standards compliance, ADR adherence, security (OWASP), performance, testability; routes to the right lead and specialist by file type (Go/PHP/TS/Angular/Vue/GraphQL/three.js) and to appsec-engineer for sensitive paths. Read-only findings with BLOCKING/WARNING/INFO."
 argument-hint: "[paths | --diff] [story-path] [--security]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Task, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Bash, Task, SendMessage, AskUserQuestion
 model: sonnet
 ---
 
@@ -82,7 +82,7 @@ Deviation from an accepted ADR: ARCHITECTURAL VIOLATION (BLOCKING) / DRIFT (WARN
 3. **Fixes go through specialists**: the relevant engineer via `Task` for code and tests, `tech-writer` for documents. The answer covers the findings it names; a specialist that needs to go beyond them reports back and the parent asks. The parent writes no code in review rounds either (coordination-rules § Subagents), because "faster to fix it myself" is how review rounds drift. A fix the parent wrote anyway is named in the report ("written by the parent: <finding>").
 4. **Re-run the Phase 3 checks.**
 5. **Commit gate**, one `AskUserQuestion` (`.claude/docs/git-workflow.md`, step "Review"): on "yes", `git commit -m "fix(S-NNN): apply /code-review findings"` and `git push` on the story branch. No fixes → no commit. The review itself never commits or changes the branch.
-6. **Re-review by the reviewer who raised each finding**: `SendMessage` to that agent with the fix diff (`git diff <fix-commit>^!`, or `git diff HEAD` when the commit was declined) and the question "closed / not closed". Where `SendMessage` is not available, spawn the same reviewer through `Task` with its finding and the fix diff. The routing table gets a `re-review` column (yes · no · PARTIAL).
+6. **Re-review by the reviewer who raised each finding**: `SendMessage` (listed in `allowed-tools`) to that agent — its id from the Phase 2 `Task` result — with the fix diff (`git diff <fix-commit>^!`, or `git diff HEAD` when the commit was declined) and the question "closed / not closed". Where `SendMessage` is not available, or the reviewer's session is gone, spawn the same reviewer through `Task` with its finding and the fix diff. The routing table gets a `re-review` column (yes · no · PARTIAL).
 7. **The verdict moves from `NEEDS CHANGES` to `APPROVED` only on the reviewers' answers**, never on a green CI or the parent's own reading.
 8. **Severity belongs to the reviewer**: a BLOCKING is downgraded only by the reviewer that raised it or by `technical-director` through `/impact`. The parent records its disagreement as a line under the finding; it does not edit the severity.
 

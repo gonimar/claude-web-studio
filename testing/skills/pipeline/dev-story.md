@@ -14,8 +14,8 @@ Implement a story through engineers with tests and criteria checks.
 **Fixture**: S-003 backend GraphQL. **Expected**: context loaded; plan; graphql-engineer; criteria table with output.
 - [ ] phase order followed · [ ] output matches the expectation · [ ] writes only after consent
 ### 2. Refusal / BLOCKED
-**Fixture**: no ADR/contract for the story. **Expected**: BLOCKED with the command.
-- [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] writes no files
+**Fixture**: no ADR/contract for the story; separately a story whose criteria change `schema.graphql`. **Expected**: BLOCKED with the command (`/architecture-decision` · `/api-contract`); the contract change is `BLOCKED (contract change — run /api-contract first)` — `/api-contract` is not run from inside the story, nothing is planned or branched.
+- [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] writes no files · [ ] no mid-story `/api-contract` run
 ### 3. Mode/argument variant
 **Fixture**: frontend-only story → angular-engineer. **Expected**: behaviour differs from case 1 according to the argument.
 - [ ] argument parsed · [ ] the difference matches the skill description
@@ -38,8 +38,12 @@ Implement a story through engineers with tests and criteria checks.
 - [ ] sprint absence named · [ ] /sprint-plan among options · [ ] silent when a sprint covers the story
 
 ### 9. Started stamp and SEO routing
-**Fixture**: Phase 3 branches for S-030 on a `Type: site` project with a public article page. **Expected**: the story card gets `Started: <ISO minute>` when the branch is created; in Phase 4 `seo-specialist` reviews title/meta/canonical, structured data, sitemap and hreflang before the story closes; on an internal SPA no SEO review is spawned.
-- [ ] Started written · [ ] seo-specialist only for public pages
+**Fixture**: Phase 3 branches for S-030 on a `Type: site` project with a public article page. **Expected**: the story card gets `Status: In Progress` and `Started: <ISO minute>` when the branch is created, and the card rides the `feat(S-030)` commit; in Phase 4 `seo-specialist` reviews title/meta/canonical, structured data, sitemap and hreflang before the story closes; on an internal SPA no SEO review is spawned.
+- [ ] Started written · [ ] status In Progress · [ ] seo-specialist only for public pages
+
+### Another skill runs through the `Skill` tool
+**Fixture**: mid-story the user asks for a rate limit the criteria do not cover; at the end two specialists reported "Outside the brief" items, one of them security-relevant. **Expected**: `/impact <the request>` runs through the `Skill` tool (`/web-studio:impact` in plugin mode) after the running `Task` batch has returned, with its own table, verifier and gates, its verdict quoted, and the story resumes with its `Next:` untouched; after the Phase 6 commit gate each plain item is `/backlog add` through the `Skill` tool, one after another, each behind `/backlog`'s own gates; the security-relevant one becomes a `production/findings.md` row behind "May I write?" and then one commit gate `docs: findings <ID>` that names the story branch and offers switch-to-default (Recommended) · commit here · leave uncommitted. `/refactor` is never run this way: a story that would restructure packages stops with a closing `AskUserQuestion` naming it.
+- [ ] `Skill` in `allowed-tools` · [ ] the called skill keeps its gates · [ ] skills one after another, never in a `Task` batch · [ ] findings row gets the commit gate · [ ] `/refactor` is a hand-off
 
 ### CI that only pull_request starts
 **Fixture**: `.github/workflows/ci.yml` has `on: pull_request` and no `push` trigger; the story branch is pushed at the end of Phase 6. **Expected**: the skill reads the triggers, opens a draft PR (`gh pr create --draft --fill`) so the checks start, and names the run it expects; it never waits for a run that was never queued.

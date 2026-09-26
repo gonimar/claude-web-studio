@@ -3,7 +3,7 @@ name: refactor
 description: "Refactors the code the studio maintains without changing behaviour: a dry-run plan by numbers (build, tests, coverage, dependency graph, layout, test smells) with the step list an engineer can execute, stories through /create-stories, and — only from a story — the execution in refactor/S-NNN with characterisation tests first, one green step per commit and a before/after table. Modes: <package|namespace|file>, layout (migration to the layered architecture, choices asked as in /setup-stack), tests (bring tests to the rules), framework (PHP: inventory and plan for moving to another framework); no argument runs every applicable mode after asking. Go and PHP in this version."
 argument-hint: "[<package|namespace|file> | layout | tests | framework] [--dry-run (default) | --apply S-NNN]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, Skill, AskUserQuestion
 model: sonnet
 ---
 
@@ -19,12 +19,17 @@ contour as `/dev-story`:
 - "May I write?" is an `AskUserQuestion` before the first write, and `touch .claude/.write-consent` follows the "write" answer (rule 7).
 
 **Behaviour does not change in a refactoring.** A step that needs a new rule, a contract change or a
-schema change is not a refactoring step: it is a `/impact` detour (rule 11).
+schema change is not a refactoring step: it is a `/impact` detour (rule 11) — in a dry-run it is listed
+under "Out of scope — /impact" (Phase 4 step 3); during an apply it runs through the `Skill` tool
+(Phase 5 step 5), the only other skill this one runs mid-flow.
 
 Names used below: `<engineer>` is `go-engineer` for Go and `php-engineer` for PHP; a studio agent is
 `web-studio:<name>` in plugin mode and `<name>` in copy mode; `<hooks>` is `.claude/hooks/` in copy mode and
 `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode; a command in a hand-off is `/web-studio:<command>` in plugin
-mode and `/<command>` in copy mode (coordination-rules § Subagents).
+mode and `/<command>` in copy mode (coordination-rules § Subagents). Another studio skill runs only through
+the `Skill` tool (same naming), keeps all of its phases and gates, and runs after the current `Task` has
+returned — never alongside one; `/create-stories`, `/architecture-decision` and `/code-review` are hand-offs
+in the closing `AskUserQuestion`, never run from here.
 
 References: `stack-reference/go.md` ("Architecture style", "Layered architecture", "Tests by layer",
 "Project layout"), `stack-reference/php.md` ("Layered architecture", "Tests by layer"), `rules/go-code.md`,
@@ -36,7 +41,7 @@ targets), `docs/git-workflow.md`.
    - `<package|namespace|file>` → local mode.
    - `layout` → architecture migration.
    - `tests` → test hygiene.
-   - `framework` → PHP only: what would move if the framework changed. It is never part of the full pass; it runs only when asked for.
+   - `framework` → PHP only: what would move if the framework changed. It is never part of the full pass; it runs only when asked for. On a Go project → `BLOCKED (framework mode is PHP-only — Go has no framework layer to move; use /refactor layout or /refactor <package>)`, one line, no baseline, no plan.
    - No mode argument and no `--apply` → **full pass**: every mode that applies, in the order layout → packages → tests, each announced before it runs.
    - `--apply S-NNN` → mode and scope come from the story's plan document; check the story first (Phase 5 step 1). Phases 1 and 2 run (a refactoring starts from green, and Phase 2 is the "before" column of Phase 6); Phases 3 and 4 are skipped; Phase 5 follows.
 2. **Stack** from technical-preferences: Go and PHP in this version. Anything else → `BLOCKED (refactor supports Go and PHP in this version — inventory with /tech-debt, changes through /dev-story)`, one line, no plan.
@@ -132,8 +137,9 @@ hand-off; `/refactor` never writes an ADR itself.
      7. Transport calling use cases.
    - PHP `framework`: requires `php_architecture: layered`, else `PLANNED (layout first — run /refactor layout)`.
      1. Step 1 is always "ADR: `/architecture-decision` records the move to <target>". `--apply` refuses while that ADR is not `Accepted`.
-     2. Then one step per Infrastructure sub-namespace (`Transport\Http`, `Transport\GraphQL`, `Persistence`, `Mail`, …), plus the composition root and `public/index.php`, each replacing one framework's adapters with the target's.
-     3. The last step switches the deptrac `Framework` layer and `php_framework` to the target, so the old framework fails the build the moment it is no longer allowed.
+     2. Step 2, the first non-ADR step, whenever the Phase 2 framework table shows a non-zero Domain or Application column: move every framework import out of `App\Domain` and `App\Application` (a port in the domain, an adapter in `App\Infrastructure`), one step per layer touched, until both columns read zero. The row names the classes from the table. Under `layered` these are also `deptrac` violations, so the step closes their `ARCH-NNN` rows. With both columns at zero the step is absent.
+     3. Then one step per Infrastructure sub-namespace (`Transport\Http`, `Transport\GraphQL`, `Persistence`, `Mail`, …), plus the composition root and `public/index.php`, each replacing one framework's adapters with the target's.
+     4. The last step switches the deptrac `Framework` layer and `php_framework` to the target, so the old framework fails the build the moment it is no longer allowed.
      The plan document is written like every other mode's (step 4 below); the ADR is its first step, not a precondition of writing it.
    - `tests`: one step per smell class: sleep → polling/synctest or a fake clock; string compare → `errors.Is` / `expectException(Class::class)`; ad-hoc → table-driven / data providers; doubles by layer; thresholds.
    - `<package|namespace|file>`: the split/move of that package, namespace or file only.
@@ -146,14 +152,17 @@ Dry-run verdict: `PLANNED (N steps)`.
 
 ## Phase 5: Apply (`--apply S-NNN` only)
 1. **Story check.** The story must be Ready and reference a plan document; otherwise `BLOCKED (no plan — run /refactor --dry-run first)`. For a `framework` plan, the step-1 ADR must be `Accepted`; otherwise `BLOCKED (ADR not Accepted — /architecture-decision)`.
-2. **Consent.** One `AskUserQuestion`: start — branch `refactor/S-NNN-<slug>`, update the session state, then run the plan's steps with one commit per green step (Recommended) · show the plan first · stop. The "start" answer is the "May I write?" consent for the branch, the session state, the step commits and the files the plan names; `touch .claude/.write-consent` after it and again before each step's `Task` call.
+2. **Consent.** One `AskUserQuestion`: start — branch `refactor/S-NNN-<slug>`, update the session state, stamp the story card, then run the plan's steps with one commit per green step (Recommended) · show the plan first · stop. The "start" answer is the "May I write?" consent for the branch, the session state, the story card's two status stamps and their `docs:` commits (steps 4 and Phase 7 step 1), the step commits and the files the plan names; `touch .claude/.write-consent` after it and again before each step's `Task` call.
 3. **Branch** per `git-workflow.md` ("Refactor" lane), from an up-to-date default branch:
    1. `git fetch origin`.
    2. `git switch <default> && git pull --ff-only origin <default>`.
    3. `git switch -c refactor/S-NNN-<slug>`.
-4. **Session state** through the studio's writer: `<hooks>session-state.sh set Task "S-NNN …" Branch refactor/S-NNN-<slug> Next "/code-review"`.
+4. **Record the start** (as `/dev-story` Phase 3 step 5):
+   1. Session state through the studio's writer: `<hooks>session-state.sh set Task "S-NNN …" Branch refactor/S-NNN-<slug> Next "/code-review"`.
+   2. On the story card's metadata line, set `Status: In Progress` and write `Started: YYYY-MM-DDTHH:MM` with the actual time; `/story-done` measures the actual duration from it.
+   3. Commit the card at once, on the refactor branch: `git commit -m "docs: refactor S-NNN — In Progress"` staging exactly the story card. Step commits stage their files by name, so the card never rides a `refactor(S-NNN)` commit and never lingers uncommitted through a `git restore` of a red step.
 5. **Run the plan step by step.** For each step:
-   1. `Task` to `<engineer>` with the step's row and the rule "move, do not improve — the diff of a refactoring step contains no new behaviour". The engineer cannot ask the user: a step that needs a file outside its row, or would change behaviour, stops and reports; the parent then asks, or detours to `/impact`.
+   1. `Task` to `<engineer>` with the step's row and the rule "move, do not improve — the diff of a refactoring step contains no new behaviour". The engineer cannot ask the user: a step that needs a file outside its row, or would change behaviour, stops and reports; the parent then asks, or — once that `Task` has returned — detours to `/impact <the change>` through the `Skill` tool (`/web-studio:impact` in plugin mode), quotes its verdict and returns to the step (rule 7, hand-off after a detour; `Next:` stays `/code-review`).
    2. After the step, the parent runs the check: Go `go build ./... && go test -race -count=1 ./...` (and the gate/`arch-check` once installed); PHP `composer ci` (the local chain, no network).
    3. Green → `git commit -m "refactor(S-NNN): <step>"`, staging the step's files by name.
    4. Red → the same agent fixes it in the same step, or the step is reverted (`git restore` of its changed files, the files it created removed) and the plan is amended. Never a red commit, and never a second agent on the same step; a cut-off agent is resumed (`/dev-story` Phase 4).
@@ -172,10 +181,11 @@ The Phase 2 table again, side by side: before · after · rule. Required for `CO
 A metric that moved the wrong way is a `PARTIAL (…)` with the metric named.
 
 ## Phase 7: Report and hand-off
-1. **After an apply**:
-   1. Push with consent, one `AskUserQuestion`: push (Recommended) · not now. Then `git push -u origin refactor/S-NNN-<slug>`.
-   2. Open a draft PR when a workflow starts on `pull_request` (as `/dev-story` Phase 6).
-   3. Story status → `Review`.
+1. **After an apply**, in this order:
+   1. **Story status → `Review`**, session state `Next: /code-review` (through `<hooks>session-state.sh`), and one more `docs:` commit on the refactor branch: `git commit -m "docs: refactor S-NNN — Review"` staging exactly the story card. This is the commit that carries the status change — never the last step commit, whose diff stays a pure move — and it comes before the push so the PR carries it. The Phase 5 "start" answer covers it.
+   2. **Push** with consent, one `AskUserQuestion`: push (Recommended) · not now. Then `git push -u origin refactor/S-NNN-<slug>`. "Not now" → the report says the branch is local and the status commit is on it.
+   3. **Find out what starts CI** before waiting for anything (as `/dev-story` Phase 6 step 5): `grep -l "pull_request" .github/workflows/*.yml` and each workflow's `on:`. When the PR is what starts the checks, open it as a draft now (`gh pr create --draft --fill`); `/story-done` marks it ready and merges it. Without `gh`, or with a push-triggered workflow, say which run to expect and its id.
+   4. **Wait for CI** only for a run that exists: one background `gh run watch <run-id> --exit-status` (as `/dev-story` Phase 6 step 6 and `/story-done`). No polling `Monitor`, and no `AskUserQuestion` used as a pause. If the queue is slow, end the turn with a one-line status; a red run is named in the report and the verdict is `PARTIAL (open: CI red on <commit>)`.
 2. **Verdict**: `PLANNED (…)` | `COMPLETE` | `PARTIAL (open: …)` | `BLOCKED (…)`.
 3. **Next step**, one `AskUserQuestion`:
    - after a dry-run: `/architecture-decision` when Phase 3 changed the style or the mode was `framework` (Recommended then), else `/create-stories <plan-path>` (Recommended) · show the plan · stop here;

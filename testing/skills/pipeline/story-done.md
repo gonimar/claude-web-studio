@@ -29,9 +29,13 @@ Acceptance: criteria ↔ tests with a run, DoD, closure.
 **Fixture**: DONE, PR #7 open, `gh` available. **Expected**: `docs: close S-NNN — Done, PR #7` commit after the Phase 4 question; then a *separate* merge question; only after its own "yes" — `gh pr merge --merge --delete-branch`, switch to the default branch and pull, session state cleared. "yes" to Phase 4 alone → no merge, PR left open, `Branch:` kept, how to merge later printed. On NOT DONE nothing is merged.
 - [ ] merge only on DONE · [ ] merge has its own question (Phase 4's "yes" never merges) · [ ] declined merge: PR open, `Branch:` kept, how-to printed · [ ] default branch synced after merge · [ ] session state cleared
 
-### 6. Waiting for CI
+### 6b. Waiting for CI
 **Fixture**: PR open, self-hosted runner queue slow. **Expected**: one background `gh run watch --exit-status` with a single notification; no polling `Monitor`, no `ScheduleWakeup`, no `AskUserQuestion` used as a pause; a slow queue ends the turn with one status line.
 - [ ] single background wait · [ ] no placeholder question
+
+### The story is resolved before anything is read
+**Fixture**: `/story-done` without an argument; `production/session-state/active.md` has `Task: S-014 …`; separately no `Task:` line and two stories in `Review`; separately an argument naming a story still `In Progress`. **Expected**: with the `Task:` line the skill names S-014 in the first line of the report and proceeds; without it, one `AskUserQuestion` lists the `Review` stories (most recently started first, Recommended) before any test runs; the `In Progress` story ends with `NOT DONE (story not in Review — run /dev-story S-NNN, then /code-review)` and nothing is written.
+- [ ] argument · `Task:` · ask, in that order · [ ] resolved story named in the report · [ ] wrong status → NOT DONE, no writes
 
 ### 7. Actual time recorded
 **Fixture**: story card `Started: 2026-09-10T09:00`, closing at 11:40. **Expected**: `⏱ 2.5h` on the roadmap line and `Actual: 2.5h` in the card inside the Phase 4 gate; a card without `Started:` gets `⏱ ?` and one line naming the omission — never a guessed number.
