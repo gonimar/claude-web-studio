@@ -14,8 +14,8 @@ Release gate from evidence.
 **Fixture**: audits clean. **Expected**: READY; release file with rollback.
 - [ ] phase order followed · [ ] output matches the expectation · [ ] writes only after consent
 ### 2. Refusal / BLOCKED
-**Fixture**: security-audit FAIL. **Expected**: NOT READY.
-- [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] writes no files
+**Fixture**: security-audit FAIL. **Expected**: `NOT READY (security-audit FAIL)`; the checklist with its ❌ gate is still offered for writing to `production/releases/vX.Y.Z.md` and for the `docs: release vX.Y.Z` commit, each after consent; the tag step is skipped and the reason named; the next step recommends fixing the items and re-running the checklist, not `/deploy`.
+- [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] the release file only after consent, no tag
 ### 3. Mode/argument variant
 **Fixture**: migrations present → database-engineer. **Expected**: behaviour differs from case 1 according to the argument.
 - [ ] argument parsed · [ ] the difference matches the skill description

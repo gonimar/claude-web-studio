@@ -31,9 +31,11 @@ installed kit's docs). The roster's Tier 0 row lists the delegate.
 |---|---|---|---|
 | `status` | — | no | `RUNNING (n services)` · `DEGRADED (…)` · `NOT CONFIGURED` |
 | `create` | — | yes | `CREATED` · `EXISTS` · `FAILED (reason)` |
-| `deploy` | `<tag>` | yes | `DEPLOYED <tag>` · `FAILED (reason, state)` |
-| `rollback` | `[tag]` (default: previous release) | yes | `ROLLED BACK <tag>` · `FAILED (reason)` |
-| `logs` | `[service] [--since <duration>]` | no | `LOGS (n lines)` |
+| `deploy` | `<tag> [--env <name>]` | yes | `DEPLOYED <tag>` · `FAILED (reason, state)` |
+| `rollback` | `[tag] [--env <name>]` (default: previous release) | yes | `ROLLED BACK <tag>` · `FAILED (reason)` |
+| `logs` | `[service] [--since <duration>] [--env <name>]` | no | `LOGS (n lines)` |
+
+`--env <name>` names the environment when the target has several (`/deploy --env`); a delegate that serves one environment ignores it (the reference `compose-ssh.sh` does), one that serves several must honour it and fail on an unknown name.
 | `env` (optional) | `list` · `set KEY` (value from stdin) | set: yes | `ENV (…)`; absent → `NOT SUPPORTED` |
 | `backup` (optional) | — | no | `BACKUP <id>` ; absent → `NOT SUPPORTED` |
 Every verb returns evidence, not only the verdict: container/service list, image tags, the smoke
