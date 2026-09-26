@@ -9,7 +9,7 @@
 ## Sprint 01 (YYYY-MM-DD → YYYY-MM-DD) — goal in one clause
 
 <details>
-<summary>closed · 2 stories — expand</summary>
+<summary>closed · 2 stories · ~18h → ⏱ 15h — expand</summary>
 
 - [x] [S-001](stories/F-001/S-001-project-skeleton.md) · Project skeleton and stack modernization 🏷 backend ~8h ⏱ 6h 🔗 [PR #1](https://github.com/<owner>/<repo>/pull/1)
 - [x] [S-002](stories/F-001/S-002-graphql-contract.md) · GraphQL contract: gqlgen + codegen ⛔ [S-001](stories/F-001/S-001-project-skeleton.md) 🏷 backend/frontend ~10h ⏱ 9h 🔗 [PR #2](https://github.com/<owner>/<repo>/pull/2)
@@ -67,7 +67,8 @@
 
 | | Sprint | Goal | Result |
 |---|---|---|---|
-| ✅ | [sprint-01](sprints/sprint-01.md) | Goal in one clause | S-001+S-002 Done · [qa-plan-01](sprints/qa-plan-01.md) |
+| ✅ | [sprint-01](sprints/sprint-01.md) | Goal in one clause | 2 Done · [qa-plan-01](sprints/qa-plan-01.md) |
+| ⏳ | [sprint-02](sprints/sprint-02.md) | Goal in one clause | active |
 </details>
 
 <details>
@@ -120,7 +121,9 @@ evidence (⏱ and/or 🔗) · dates are intentions · the roadmap references dec
 restates them · details live in the story card (`production/stories/`), the decision register (`production/decisions.md`)
 or the idea backlog (`production/backlog.md`) — the line carries only the title and markers · one heading level, no prose
 between the heading and its list · a closed sprint, the Backlog and this Legend fold into `<details>` once there is
-enough history to fold — an active sprint never does · a blank line always follows `<summary>`, or GitHub will not
+enough history to fold — an active sprint never does · a closed sprint's `<summary>` reads `closed · N stories ·
+K carried over · ~Σh → ⏱ Σh` (N as planned, K moved back to the Backlog by `/retrospective` and omitted when zero, the
+sums over the done lines) and its `## Docs` row `N Done · K carried over`; an active sprint's row reads `⏳ … active` · a blank line always follows `<summary>`, or GitHub will not
 render the markdown inside the block.
 
 </details>

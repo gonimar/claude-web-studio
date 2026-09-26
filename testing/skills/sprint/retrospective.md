@@ -11,13 +11,13 @@ Sprint retrospective from artefacts: planned vs shipped, estimate vs actual with
 
 ## Cases
 ### 1. Happy path — sprint with data
-**Fixture**: sprint 02 with five stories: four Done with `~Nh` and `⏱ Nh` on the roadmap, one carried over with `Blocked: spec gap`. **Expected**: the planned-vs-shipped table, Σ estimate, Σ actual and the ratio exactly as computed; goal verdict with evidence; the carried-over story's cause named; actions ≤ 5 each with owner, place and date; "May I write the `## Retrospective` section … and the actions to the roadmap?"; `docs: retrospective sprint 02` commit gate.
+**Fixture**: sprint 02 with five stories: four Done with `~Nh` and `⏱ Nh` on the roadmap, one carried over with `Blocked: spec gap`. **Expected**: the planned-vs-shipped table, Σ estimate, Σ actual and the ratio exactly as computed; goal verdict with evidence; the carried-over story's cause named; actions ≤ 5 each with owner, place and date; "May I write the `## Retrospective` section … and the actions to the roadmap?"; `docs: retrospective sprint 02 — closed` commit gate.
 - [ ] ratio computed, not rounded to a story · [ ] causes from the artefacts · [ ] actions with owner and place · [ ] write gate
 ### 2. Refusal / BLOCKED — no sprint file
 **Fixture**: `production/sprints/` empty. **Expected**: `BLOCKED (no sprint file — run /sprint-plan NN first)`, nothing written.
 - [ ] writes no files · [ ] names `/sprint-plan`
 ### 3. Mode/argument variant — insufficient data
-**Fixture**: two Done stories, only one with `⏱`. **Expected**: the table still shown; ratio line reads "insufficient data, ratio not applied"; the missing `⏱` is named as a `/story-done` omission; verdict `COMPLETE (insufficient data for the ratio)`.
+**Fixture**: two Done stories, only one with `⏱`. **Expected**: the table still shown; ratio line reads "insufficient data, ratio not applied"; the missing `⏱` is named as a `/story-done` omission; verdict `COMPLETE (sprint NN closed · insufficient data for the ratio)`.
 - [ ] no ratio applied · [ ] omission named
 ### 4. Edge case — blameless
 **Fixture**: a story slipped because an engineer agent rewrote a module twice. **Expected**: the cause is written as a system/process cause (spec ambiguity, missing ADR, review too late), never as an agent or person; a studio issue is suggested only with evidence a `/skill-test spec` could check.

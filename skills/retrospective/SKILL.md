@@ -16,15 +16,17 @@ Template `.claude/docs/templates/sprint-plan.md` (`## Retrospective` section); r
 and the process, never in a person or an agent by name. Writes only after "May I write?". In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 **This command closes the sprint.** Nothing else does: `/sprint-plan` refuses to plan the next sprint while this one is
-open, `/story-done` hands off here after the last story, `/help` prints an `Attention:` for an overdue sprint. A sprint
-with a retrospective section and no `Status: closed` stayed open for weeks on two projects, and the folding of its block
-happened by hand or as a side effect of the next plan. A story still `⏳` is carried over like any other unfinished one —
-the retrospective is the end of the sprint by definition; when the user means a mid-sprint check, say so in one line and
-name `/sprint-status` instead of running Phase 2.
+open, `/story-done` hands off here after the last story, `/help` prints an `Attention:` for an overdue sprint. A story
+still `⏳` is carried over like any other unfinished one — the retrospective is the end of the sprint by definition; when
+the user means a mid-sprint check (the sprint's end date is ahead and stories are still open), stop before Phase 2 with
+`BLOCKED (sprint NN is not over — a mid-sprint check is /sprint-status NN)` and one `AskUserQuestion`: `/sprint-status NN`
+(Recommended) · close the sprint now anyway (the open stories are carried over) · stop here.
 
 ## Phase 1: Data
 1. **Pick the sprint**: `sprint NN` from the argument, else the latest `production/sprints/sprint-*.md`. No sprint file
-   → `BLOCKED (no sprint file — run /sprint-plan NN first)`, nothing written.
+   → `BLOCKED (no sprint file — run /sprint-plan NN first)`, nothing written. A file with `Status: closed` — or, without
+   a `Status:` line, one whose roadmap block is already folded in `<details>` — → `ALREADY CLOSED (sprint NN closed
+   <date> — nothing to do)`, nothing written: a second close would move and fold again.
 2. **Read**:
    - the sprint file (`production/sprints/sprint-NN.md`): goal, selected stories, capacity, dependency updates,
      actions from the last retrospective;
@@ -78,7 +80,9 @@ without an owner and a place is not an action. Show the list, then one `AskUserQ
      in the same edit; a cancelled story stays in the block as `[x] … ❌` (done lines are never deleted); no new marker is
      invented for "carried over" — the format is v3.1 and stays v3.1;
    - the sprint block is wrapped in `<details><summary>closed · N stories · K carried over · ~Σh → ⏱ Σh — expand</summary>`
-     (blank line after `<summary>` or GitHub won't render the list; `K carried over` omitted when zero);
+     (blank line after `<summary>` or GitHub won't render the list): N is the sprint as planned — the lines before the
+     move, done, cancelled and carried over — K the lines moved (`K carried over` omitted when zero), the sums over the
+     done lines; the Backlog block's `<summary>` count gains the K lines;
    - the sprint file: header `Status: closed YYYY-MM-DD`; every `## Stories` row set from the roadmap — `Done · ⏱ Nh · PR #N`,
      `carried over → Backlog`, `cancelled`;
    - the roadmap's `## Docs` → *production/sprints/* row of the sprint reads `✅ … N Done · K carried over · [qa-plan-NN]`
@@ -91,5 +95,6 @@ without an owner and a place is not an action. Show the list, then one `AskUserQ
    (`<hooks>session-state.sh set Gate "—"`).
 
 Verdict: `COMPLETE (sprint NN closed · ratio R over N stories · M actions · K carried over)` | `COMPLETE (sprint NN
-closed · insufficient data for the ratio)` | `BLOCKED (no sprint file — run /sprint-plan NN first)`. Next step — one `AskUserQuestion`: `/sprint-plan NN+1` (Recommended) ·
+closed · insufficient data for the ratio)` | `ALREADY CLOSED (sprint NN closed <date> — nothing to do)` | `BLOCKED (no
+sprint file — run /sprint-plan NN first)` | `BLOCKED (sprint NN is not over — a mid-sprint check is /sprint-status NN)`. Next step — one `AskUserQuestion`: `/sprint-plan NN+1` (Recommended) ·
 `/sprint-status` · stop here.

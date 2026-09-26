@@ -273,7 +273,7 @@ security review → code review; независимые части паралл�
 /sprint-plan 02 --days 10     capacity спрашивается ДО гейта; очередь зависимостей; выбор историй; production/sprints/sprint-02.md
 /qa-plan sprint 02            уровни тестов, данные, регрессия, риски → production/sprints/qa-plan-02.md
 … истории …
-/sprint-status 02             ON TRACK | AT RISK | OFF TRACK; «Done без теста/PR» отдельной строкой
+/sprint-status 02             ON TRACK | AT RISK | OFF TRACK | OVER (not closed); «Done без теста/PR» и «sprint file ≠ roadmap» отдельными строками
 /retrospective 02             план и факт, коэффициент, действия — и закрытие: незавершённое обратно в Backlog, блок свёрнут, Status: closed
 /sprint-plan 03               отказывается, пока спринт 02 открыт; перенесённые истории конкурируют из Backlog, retro-actions читаются
 ```

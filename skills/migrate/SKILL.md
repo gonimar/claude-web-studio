@@ -46,7 +46,7 @@ markers and links change. `/adopt` classifies the gap, this skill closes it.
    - **Sprints**: the `## Retrospective` and `## Dependency updates` sections added empty where missing; the header gets
      `Status:` — `closed <date>` (the date of the retrospective commit, else of the last `⏱`/`🔗` story) when the sprint's
      roadmap block is folded or every one of its lines is `[x]`, `active` otherwise; `## Stories` rows take their status
-     from the roadmap lines (the file's own column drifted on every project before 0.13).
+     from the roadmap lines (the file's own column drifts as soon as a story closes without `/story-done` writing it).
 2. **Questions before the render.** Anything that cannot be mapped mechanically is listed and asked as one `AskUserQuestion` with the real alternatives. Never guess it.
 
 ## Phase 3: Dry run

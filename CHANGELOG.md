@@ -6,7 +6,7 @@ the skill pass with its follow-ups (#62, #64–#67).
 - **Agent memory is committed with the work that produced it.** Thirty agents write `.claude/agent-memory/<agent>/**`
   on every run and no lane owned those files: a Haiku `/story-done` hid 16 of them from ten stories in `git stash push -u`,
   where they sat for 28 hours until the owner asked what was hanging (WS-136). git-workflow gains the *Agent memory*
-  lane; `/dev-story`, `/refactor --apply` and `/code-review` stage `.claude/agent-memory/` with their commits;
+  lane; `/dev-story`, `/refactor --apply`, `/code-review`, the audits and `/team-*` stage `.claude/agent-memory/` with their commits;
   `/story-done` requires `git status --short` and `git stash list` empty and offers one more commit, never a stash;
   the hooks treat `.claude/agent-memory/` as the documents lane (a memory-only `docs:` commit of an audit on the
   default branch passes); coordination-rules § Subagents says it in one sentence.

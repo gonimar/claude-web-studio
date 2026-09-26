@@ -177,7 +177,7 @@ git rm -q --cached api/handler.go; rm -rf api
 # Agent memory (.claude/agent-memory/**) is committed with the work that produced it; an audit on the default branch
 # whose docs: commit carries only memory files is the documents lane (git-workflow § Agent memory).
 mkdir -p .claude/agent-memory/web-studio-appsec-engineer; printf '# notes\n' > .claude/agent-memory/web-studio-appsec-engineer/MEMORY.md; git add .claude/agent-memory
-out=$(echo '{"tool_input":{"command":"git commit -m \\"docs: security audit 2026-09-27\\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: agent memory not recognised as the documents lane"; } || pass=$((pass+1))
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: security audit 2026-09-27\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: agent memory not recognised as the documents lane"; } || pass=$((pass+1))
 git commit -q -m "docs: security audit 2026-09-27"
 out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'WARNING: pushing directly' && { failn=$((failn+1)); echo "FAIL push: docs-lane push of agent memory to master warned"; } || pass=$((pass+1))
 # api_contract_path outside docs/ in its other real shapes: gqlgen's default graph/schema.graphqls and a REST contract at

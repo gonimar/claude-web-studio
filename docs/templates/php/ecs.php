@@ -24,7 +24,7 @@ return ECSConfig::configure()
     ])
     ->withConfiguredRule(ForbiddenCommentsSniff::class, [
         'forbiddenCommentPatterns' => [
-            '~\b(S|I|OPS|ARCH|SEC)-\d+\b~',            // story/finding ids belong in the PR, not the code (tests excluded below)
+            '~(?<!TODO\(|FIXME\(|HACK\()\b(S|I|OPS|ARCH|SEC)-\d+\b~', // story/finding ids belong in the PR, not the code (tests excluded below); TODO(S-NNN) is the one allowed form
             '~\bpre-S-\d+~', '~\bused to\b~', '~\bpreviously\b~',
             '~\bTODO(?!\((S|I)-\d+\))~',                 // a TODO carries a story or idea id or does not exist
         ],
