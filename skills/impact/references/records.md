@@ -1,0 +1,11 @@
+# /impact — records the verdict creates
+
+Read by Phase 4 step 3 of `SKILL.md`, which numbers the gates as sub-steps; this file holds the two conditions, the row and line formats and the full gate text.
+
+**Records the verdict creates** — only when one of these applies:
+- **A finding ID is never minted without the line it names.** A verdict that says `ARCH-004` or `SEC-002` gets that row in `production/findings.md` in the same turn (any severity; status `planned (S-NNN)` when a story will carry it). Otherwise the next session greps the ID, finds nothing, and the verdict loses its authority.
+- **A backlog idea gets its verdict back.** When the proposal came from `production/backlog.md` (an `I-NNN` in the argument, or an entry whose text this proposal repeats), add one line to that entry: date, verdict, next command. An idea that has been through triage and is still listed as untouched will be proposed again.
+
+Show the row/line, then one `AskUserQuestion`: "May I write <the row in `production/findings.md` / the line in `production/backlog.md`>?" — write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7), then `Edit`.
+
+**Commit gate** right after the write (rule 7 (4), `.claude/docs/git-workflow.md` § Documents), recorded first as `Gate "/impact Phase 4: commit <ID>?"` through `<hooks>session-state.sh set` and cleared after the answer (`set Gate "—"`; an open gate survives the next turn), one `AskUserQuestion`: `docs: impact <ID> — <verdict>` (a backlog line: `docs: backlog I-NNN — impact verdict`) staging exactly the written file(s). On the default branch when no story work is in progress. When HEAD is a story branch — the usual case for a triage that interrupted `/dev-story` — name it and offer: switch to the default branch and commit there (Recommended — a findings row or a backlog line is a pipeline-wide document) · commit here (the row belongs to this story) · leave uncommitted. On "switch": `git switch <default> && git pull --ff-only origin <default>`, the commit, then `git switch <story branch>` back, so the interrupted story continues on its own branch. Nothing is committed without the answer; code or configs never ride the `docs:` commit.
