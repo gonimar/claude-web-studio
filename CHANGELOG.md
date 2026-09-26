@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.13.0 — 2026-09-26
 A pass over all 50 skills: bodies rewritten as numbered steps in the order they run, and the defects that hid in
 the long paragraphs fixed. No rule was dropped; every spec case was re-checked against the new text. The style the
 pass followed is now written down in CONTRIBUTING § 3 ("How the body reads").
