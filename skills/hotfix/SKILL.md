@@ -15,7 +15,7 @@ Language, `<hooks>`, `<default>`, agent and command namespaces, gate mechanics (
 **Through the `Skill` tool** (namespaced): `/code-review --diff` (step 2.5, `--chore`), `/changelog` and `/deploy` (Phase 3) — each with all its own phases and gates, one after another once the running `Task` has returned, its verdict quoted. `/incident` is a hand-off in the closing question, never run here.
 
 Glossary:
-- `<tag>` — the release currently deployed; `vX.Y.Z` — its patch number + 1.
+- `<tag>` — the release currently deployed (the newest `production/releases/vX.Y.Z.md` with a `DEPLOYED` line, else the newest `v*` tag after `git fetch origin --tags`; none → `BLOCKED (no release tag — nothing is deployed)`); `vX.Y.Z` — its patch number + 1.
 - `<slug>` — the bug in a few words (`hotfix/<slug>`); `<scope>` — the scope of the fix commit `fix(<scope>): <bug>`, which `/code-review` uses where a story would give `S-NNN`.
 - **Gate recording** — before every commit, tag or push question (each step below names its `Gate "…"` string): `<hooks>session-state.sh set Task "/hotfix <slug>" Gate "/hotfix Phase N: <question>"`; after the answer `<hooks>session-state.sh set Gate "—"`. An open gate survives the turn: a resumed session continues at that question, never at `Next:` (rule 7).
 
