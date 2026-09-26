@@ -41,7 +41,7 @@ Say "Scanning the project…", then:
 5. **Contract**: `api_contract_path` from the `schema:` entry of `gqlgen.yml`, or the OpenAPI file's real location; never from the studio default.
 6. **Fill `technical-preferences.md` in this run**: read `references/fill-technical-preferences.md` (field list, deploy target/delegate detection by `deploy-target-contract.md`, shared-host questions) and draft every field the files answer from the facts. `[TO BE CONFIGURED]` may remain only for fields no file answers.
 7. **Unknown fields**: ask them (project type, API style, layout — whatever is still unknown) in one `AskUserQuestion` before the write gate, never in the same message.
-8. **Write gate**, in rule 7's exact order (§ Skill conventions → Gates): show the draft as a table field · value · source fact — `technical-preferences.md` is still the untouched init placeholder at this point — then "May I write `.claude/docs/technical-preferences.md`?" as one `AskUserQuestion`: write (Recommended) · adjust first · not now. `Write`/`Edit` only after the "write" answer, never before.
+8. **Write gate**, in rule 7's exact order (§ Skill conventions → Gates): show the draft as a table field · value · source fact — `technical-preferences.md` is still the untouched init placeholder at this point — then "May I write `.claude/docs/technical-preferences.md`?" as one `AskUserQuestion`: write (Recommended) · adjust first · not now. `Write`/`Edit` only after the "write" answer, never before. After the "write" answer: `touch .claude/.write-consent`.
 9. **Do not defer to `/setup-stack`**: after `/adopt` the stack counts as chosen — the template says "while [TO BE CONFIGURED] remains, skills treat the stack as not chosen".
 
 ## Phase 2: Artefact audit (`docs` / `full`)
@@ -67,12 +67,12 @@ Say "Scanning the project…", then:
 2. `CLAUDE.md` without the studio block → propose inserting the Language/Studio/Stack/Principles sections from the kit's `templates/CLAUDE.md.template` (generated from `technical-preferences.md` when the template is unavailable); insert, never overwrite the existing file.
 3. `.gitignore` must list `production/session-state/`, `production/session-logs/`, `.claude/settings.local.json` and `.claude/agent-memory-local/` (the same four lines `/init` and `install.sh` add); propose the missing lines.
 4. Companion skills detected (advisor, deploy) → propose noting them in the Tier 0 row of `.claude/docs/agent-roster.md`.
-5. Show the proposals, then one `AskUserQuestion`: "May I write the changes above?" — write (Recommended) · show the draft/diff first · not now.
+5. Show the proposals, then one `AskUserQuestion`: "May I write the changes above?" — write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent`.
 
 ## Phase 4: Adoption plan
 1. **Draft** `docs/adoption-plan-<date>.md` from `.claude/docs/templates/adoption-plan.md`: verdict, the facts table, the artefact audit and a numbered plan where every item is a checkbox `- [ ] N. <priority> — <command> → <artefact>`. `/help` offers the first open item; items are ticked `[x]` when done.
 2. **Stage**: `/init` writes `production/stage.txt` in its own write gate, so after a completed `/init` it exists; propose it from the facts (`build` / `operate`) only when it is missing, and only with the plan's consent, never automatically.
-3. **Write gate**: show the plan in the chat, then "May I write `docs/adoption-plan-<date>.md` (and `production/stage.txt`)?" as one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now.
+3. **Write gate**: show the plan in the chat, then "May I write `docs/adoption-plan-<date>.md` (and `production/stage.txt`)?" as one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent`.
 
 ## Phase 5: Commit (documents lane)
 Right after the last write of the run, one commit gate (§ Skill conventions → Documents-lane commit gate; `.claude/docs/git-workflow.md` § Documents): `docs: adopt web studio (<mode>)`, staging exactly the documents this run wrote — `.claude/docs/technical-preferences.md`, `production/findings.md`, `CLAUDE.md`, `.claude/docs/agent-roster.md`, `docs/adoption-plan-<date>.md`, `production/stage.txt` — whichever of them the earlier gates covered.
