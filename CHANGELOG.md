@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.12.0 — 2026-09-26
 Findings of a week-long manual run on a real project (Web Studio 0.11.1, ten sessions, 250 agent runs) and of an
 external PHP project. Nothing new to learn: the same commands, the same agents — cheaper, and harder to bypass.
 - **One story per session** (coordination-rules rule 13). 80 % of the week's spend was the parent's context, not the
