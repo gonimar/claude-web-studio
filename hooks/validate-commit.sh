@@ -1,6 +1,6 @@
 #!/bin/bash
 # PreToolUse(Bash): git commit checks — secret files, secret-like strings, lockfiles, TODO owners,
-# Conventional Commits, branch hygiene (default branch, already-merged branch — docs/git-workflow.md)
+# Conventional Commits, branch hygiene (default branch, already-merged branch; hotfix/* exempt — docs/git-workflow.md)
 INPUT=$(cat)
 # --- json helper: jq -> python3 -> grep ---
 jget() {
@@ -117,7 +117,10 @@ DEF=$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#
 if [ -z "$DEF" ]; then for b in master main; do git show-ref -q --verify "refs/remotes/origin/$b" && { DEF=$b; break; }; done; fi
 # "Already merged" needs two facts: the tip is an ancestor of origin/<default> AND the branch has commits of its
 # own (its reflog shows a commit) — a branch just created from the default has neither and is not merged (WS-070).
-if [ -n "$DEF" ] && [ -n "$BR" ] && [ "$BR" != "$DEF" ] && git merge-base --is-ancestor "$BR" "origin/$DEF" 2>/dev/null && { [ "$(git rev-parse "$BR" 2>/dev/null)" != "$(git rev-parse "origin/$DEF" 2>/dev/null)" ] || git reflog show --format=%gs "$BR" 2>/dev/null | grep -q "^commit"; }; then
+# A hotfix/* branch is exempt: by design it is branched from a release tag that sits inside the default branch's
+# history (docs/git-workflow.md § Rules, /hotfix Phase 1), so its first commit always looks "merged" — it is not.
+case "$BR" in hotfix/*) HOTFIX=1;; *) HOTFIX=0;; esac
+if [ "$HOTFIX" = 0 ] && [ -n "$DEF" ] && [ -n "$BR" ] && [ "$BR" != "$DEF" ] && git merge-base --is-ancestor "$BR" "origin/$DEF" 2>/dev/null && { [ "$(git rev-parse "$BR" 2>/dev/null)" != "$(git rev-parse "origin/$DEF" 2>/dev/null)" ] || git reflog show --format=%gs "$BR" 2>/dev/null | grep -q "^commit"; }; then
   WARN="$WARN\nBRANCH: '$BR' is already merged into origin/$DEF — this commit will strand; start a new branch from $DEF (git switch $DEF && git pull --ff-only && git switch -c feat/S-NNN-slug)."
 fi
 [ -n "$WARN" ] && warn PreToolUse "$(printf '%b' "=== Commit warnings ===$WARN")"

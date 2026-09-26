@@ -63,16 +63,27 @@ language chosen in Phase 2 binds instead. Code, identifiers, paths and commit me
 2. Smoke-check the statusline: `echo '{"cwd":"'"$PWD"'"}' | bash .claude/statusline.sh`.
 3. Record the version in `.claude/.web-studio-version` (from `<root>/.claude-plugin/plugin.json`).
 
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: initialise web studio`, staging exactly the documents this run wrote — `CLAUDE.md`, `.claude/docs/`, `.claude/rules/`, `docs/web-studio/README.md`, `production/stage.txt`, `production/review-mode.txt`, `.claude/.web-studio-version`. The seeded `docs/*` and `production/*` folders hold no file yet and git stages no empty folder: they are not in the list and appear in history once a document lands. Before asking, record the gate — `<hooks>session-state.sh set Gate "/init Phase 5: commit?"` (`<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- `.claude/settings.json`, `.claude/statusline.sh` and the `.gitignore` lines are toolchain work, not documents: they do not ride the `docs:` commit. Name them in the result and offer the chore lane for them (git-workflow.md § Chore / infra).
+
+Nothing is committed without the answer. When nothing was written (`ALREADY INITIALISED` with 0 files differing, or "not now" at the write gate), there is no commit gate.
+
 Verdict: `INITIALISED` | `ALREADY INITIALISED (N files differ)`.
+- `INITIALISED` — the studio was not in this project before this run: no `## Studio (Web Studio)` block in `CLAUDE.md` and no seeded `.claude/docs/` (Phase 1 step 1.4 did not apply).
+- `ALREADY INITIALISED (N files differ)` — the studio block was already in `CLAUDE.md` or `.claude/docs/` was already seeded when the run started; N counts the seeded files whose content differs from the seed root (Phase 3 lists them), and the run only added what was missing.
 
 Next step — one `AskUserQuestion`, never a plain text line:
 - After `INITIALISED`: `/adopt full` (Recommended for brownfield — the stack, artefacts and settings are audited and
   `technical-preferences.md` is filled from the facts) · `/start` (Recommended for an empty project) ·
   `/help` · stop here.
-- After `ALREADY INITIALISED` the Recommended option is decided by facts, not by a default:
-  - `.claude/.web-studio-version` older than the plugin (last segment of the "Plugin root:" line) → `/update`;
-  - `technical-preferences.md` still a placeholder, or no `docs/adoption-plan-*.md` on a project with code → `/adopt full`;
-  - otherwise `/help`.
+- After `ALREADY INITIALISED` the Recommended option is decided by facts, not by a default, and **exactly one option is marked Recommended**. The facts are checked in this order and the first that holds decides; the others are still offered as alternatives:
+  1. `.claude/.web-studio-version` older than the plugin (last segment of the "Plugin root:" line) → `/update` (Recommended — the seeded docs and rules are behind the plugin, and `/adopt` would audit stale references);
+  2. otherwise `technical-preferences.md` still a placeholder, or no `docs/adoption-plan-*.md` on a project with code → `/adopt full` (Recommended);
+  3. otherwise `/help` (Recommended).
+  When both 1 and 2 hold, `/update` is Recommended and `/adopt full` is the second option with the note "after /update".
   "Do nothing" is never the recommended option on a project that has code.
 
 **`/init` scaffolds the studio and stops there.** It never writes product code (`index.html`, a

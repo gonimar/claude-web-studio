@@ -55,8 +55,12 @@ markers and links change. `/adopt` classifies the gap, this skill closes it.
 ## Phase 4: Write (one type per gate)
 1. **Write gate**, one `AskUserQuestion` per type: "May I write `<the files of this type>` (N files; git history is the backup)?" — write (Recommended) · show the full diff first · skip this type. One answer never covers a second type.
 2. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). Then write the files.
-3. **Commit gate** for the batch, one `AskUserQuestion`: `docs: migrate <type> to template <version>`, staging exactly the written files, on the branch the documents lane of `.claude/docs/git-workflow.md` prescribes.
-4. **After the roadmap**: `/help` must be able to read it. Run its checks (open items count, first open item) and show the result.
+3. **Commit gate** for the batch (rule 7, `.claude/docs/git-workflow.md` § Documents), right after the write, one `AskUserQuestion`: `docs: migrate <type> to template <version>`, staging exactly the written files of this type.
+   - On the default branch when no story work is in progress.
+   - When HEAD is a story branch, name it and ask: switch to the default branch and commit there (Recommended — migrated documents are pipeline-wide) · commit here (the documents belong to this story) · leave uncommitted.
+   - Before asking, record the gate — `<hooks>session-state.sh set Gate "/migrate Phase 4: commit <type>?"` (`<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+   - Nothing is committed without the answer; one commit per type, never one answer covering two types.
+4. **After the roadmap**: `/help` must be able to read it. Run the read `/help` Phase 1 step 3 performs on the roadmap (the first open `- [ ]` line, plus the count of open lines) in this skill and show the result — `/help` itself is the hand-off below, not a call from here (this skill does not list `Skill`).
 
 Verdict: `COMPLETE (N documents migrated, M up to date)` | `DRY RUN (…)` | `BLOCKED (not initialised — run /init |
 no documents of this type)`. Next step — one `AskUserQuestion`: `/help` (Recommended) · migrate the next type ·

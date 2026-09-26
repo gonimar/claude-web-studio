@@ -23,8 +23,8 @@ Documentation for people through `tech-writer`: README, API reference generated 
 **Fixture**: the guide needs the behaviour of an edge case the feature spec does not cover. **Expected**: the gap is named as a spec finding with the command (`/feature-spec F-NNN`), never invented in the docs.
 - [ ] gap named · [ ] no invented behaviour
 ### 5. Gate / protocol — runbook on a story branch
-**Fixture**: `/docs runbook` while `feat/S-020-deploy-artefacts` is checked out. **Expected**: the runbook is drafted from `docs/ops/deploy.md`, the deploy contract's Prerequisites & secrets (names and locations only) and the incidents; the commit gate names the story branch as the target because the docs belong to that story.
-- [ ] secrets by name only · [ ] rollback per failure · [ ] commit gate names the branch
+**Fixture**: `/docs runbook` while `feat/S-020-deploy-artefacts` is checked out. **Expected**: the runbook is drafted from `docs/ops/deploy.md`, the deploy contract's Prerequisites & secrets (names and locations only) and the incidents; the commit gate names the story branch and offers the three options (commit here Recommended because the docs belong to that story · switch to the default branch · leave uncommitted), with exactly one Recommended; a `/docs readme` on the same branch would recommend the default branch instead; `Gate: /docs Phase 3: commit runbook?` is recorded in session-state before the commit question and cleared after the answer.
+- [ ] secrets by name only · [ ] rollback per failure · [ ] commit gate names the branch · [ ] three options, one Recommended by provenance · [ ] gate recorded and cleared
 
 ## Protocol
 - [ ] "May I write?" before writes · [ ] draft before approval · [ ] next step · [ ] never advances the stage itself

@@ -3,7 +3,7 @@ name: create-stories
 description: "Breaks a feature spec into implementable stories (vertical slices: contract → backend → frontend/game → tests) with acceptance criteria mapped to tests, size, layer, ADR links. Produces production/stories/F-NNN/S-NNN-*.md."
 argument-hint: "[F-NNN or feature-spec path]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Task
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 model: sonnet
 agent: product-director
 ---
@@ -12,7 +12,9 @@ agent: product-director
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Templates (`.claude/docs/templates/`): `story.md`, `roadmap.md`, `deploy-runbook.md`, `findings.md`. Files are written only after "May I write?" (Phase 4).
+Templates (`.claude/docs/templates/`): `story.md`, `roadmap.md`, `deploy-runbook.md`, `findings.md`. Files are written only after "May I write?" (Phase 4). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
+
+This skill spawns no subagent: the criteria it slices were reviewed with the feature spec (`/feature-spec` Phase 3) and the test level per criterion is checked again by `/qa-plan`; slicing is the parent's own work, so `Task` is not among its tools.
 
 ## Phase 1: Context
 1. **The feature spec**: the argument (`F-NNN` → `docs/specs/features/F-NNN-*.md`, or a path); none → ask. Acceptance criteria are mandatory. A spec without them → stop with `BLOCKED (no acceptance criteria — complete the spec with /feature-spec F-NNN)` and write nothing.
@@ -46,6 +48,14 @@ Templates (`.claude/docs/templates/`): `story.md`, `roadmap.md`, `deploy-runbook
    - Refresh the `Updated:` line.
    - In the roadmap's `## Docs` → *production/stories/* block, add a row per new story (⬜, the story link, a one-line summary, `Ready`) and refresh the block's `<summary>` count.
 5. **Findings**: set `story: S-NNN` on each finding the stories cover.
+
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: stories S-NNN..S-MMM`, staging exactly the written files — the story files, the roadmap lines and the `story:` fields set in `production/findings.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/create-stories Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- Code, configs, workflows and scripts never ride the `docs:` commit.
+
+Nothing is committed without the answer.
 
 Verdict: `READY (N stories)`.
 

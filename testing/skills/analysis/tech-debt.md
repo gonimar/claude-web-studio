@@ -26,5 +26,9 @@ Debt inventory across code, dependencies, ADRs, audits.
 **Fixture**: written with consent. **Expected**: the user decides; stage/statuses never change automatically; the write gate and the hand-off are `AskUserQuestion`s with a Recommended option and alternatives.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] gate and hand-off are `AskUserQuestion`s, not text
 
+### 6. Commit gate on the documents lane
+**Fixture**: report written and the top 5 added to the roadmap while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write gate one commit gate offers `docs: tech debt <date>` staging exactly `docs/ops/tech-debt-<date>.md` and `production/roadmap.md`, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] only the written documents staged
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

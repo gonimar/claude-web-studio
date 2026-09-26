@@ -14,7 +14,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 
 Template `templates/test-strategy.md`; reference `stack-reference/testing.md`; rules `rules/tests.md`.
 
-In the steps below, `<templates>` is `.claude/docs/templates/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/docs/templates/` in plugin mode; a studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode.
+In the steps below, `<templates>` is `.claude/docs/templates/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/docs/templates/` in plugin mode; a studio agent is `web-studio:<name>` in plugin mode and `<name>` in copy mode; `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Stack and current state
 1. **Read** `.claude/docs/technical-preferences.md`. When it is missing or its `**Type**:` is still `[TO BE CONFIGURED]`, stop with `BLOCKED (stack not configured — run /setup-stack first)` and write nothing.
@@ -63,7 +63,7 @@ In the steps below, `<templates>` is `.claude/docs/templates/` in copy mode and 
 **Self-check** before finishing: `docker compose --profile test config` when docker is available, and every service named in `test-strategy.md` exists in compose.
 
 ## Phase 5: Commit (documents lane)
-Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: test strategy`, staging exactly the written pipeline documents.
+Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: test strategy`, staging exactly the written pipeline documents. Record the gate before asking — `<hooks>session-state.sh set Gate "/test-setup Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 - On the default branch when no story work is in progress.
 - When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
 - Configs, CI workflows and scripts are toolchain work, not documents: they do not ride the `docs:` commit. Name them in the result and offer the chore lane for them (git-workflow.md § Chore / infra).

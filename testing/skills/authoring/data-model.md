@@ -30,5 +30,13 @@ ER, DDL with justified indexes, expand/contract migrations, PII, backups.
 **Fixture**: feature stores e-mail, IP address and payment reference. **Expected**: §6 table lists each field with class, retention (what ends it), deletion method for table, backups and logs; the missing deletion path becomes the "Data deletion" story proposal; export on request described.
 - [ ] every PII field in the table · [ ] retention and method · [ ] deletion story proposed
 
+### 7. No argument
+**Fixture**: `/data-model` with no argument; `production/session-state/active.md` has `Task: S-014 …` and S-014 belongs to F-003, whose spec exists. **Expected**: nothing is assumed — one `AskUserQuestion` proposes F-003 (Recommended), lists the other feature specs and `full`; with no `Task:` the question is the same without a Recommended feature; with no feature specs at all only `full` remains (or `BLOCKED`).
+- [ ] no silent default · [ ] session-state feature proposed · [ ] `full` always offered
+
+### Commit gate on the documents lane
+**Fixture**: the data model for F-003 is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: data model F-003` staging exactly the written files (`docs/architecture/data-model.md`; the migration drafts are code and stay out, named in the result, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

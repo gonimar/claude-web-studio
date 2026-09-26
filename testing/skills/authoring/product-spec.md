@@ -27,8 +27,8 @@ Product spec section by section with review per mode.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary
 
 ### 6. BLOCKING from the review reaches findings.md
-**Fixture**: lean mode; `technical-director` returns CONCERNS with one BLOCKING (a fact in the draft the repository contradicts) and one HIGH. **Expected**: the draft is corrected; for each of the two items one `AskUserQuestion` (record in `production/findings.md` as `ARCH-NNN` Recommended · story stubs · spec only); a declined BLOCKING is named in the verdict line as unrecorded; the row is written only after the answer.
-- [ ] one question per BLOCKING/HIGH · [ ] `findings.md` row follows the template · [ ] unrecorded BLOCKING appears in the verdict line
+**Fixture**: lean mode; `technical-director` returns CONCERNS with one BLOCKING (a fact in the draft the repository contradicts) and one HIGH. **Expected**: the draft is corrected; for each of the two items one `AskUserQuestion` (record in `production/findings.md` as `ARCH-NNN` Recommended · story stubs through `/feature-spec F-NNN` first, `/create-stories` once that spec has criteria · spec only); a declined BLOCKING is named in the verdict line as unrecorded; the row is written only after the answer; when story stubs were chosen for the HIGH, the closing question offers `/feature-spec F-NNN` for that feature as Recommended and says `/create-stories` follows once the spec has criteria — never a bare `/create-stories` that would block.
+- [ ] one question per BLOCKING/HIGH · [ ] `findings.md` row follows the template · [ ] unrecorded BLOCKING appears in the verdict line · [ ] stubs route named in the closing question
 
 ### 7. Retrofit on an operate project
 **Fixture**: stage `operate`, deployed code, no spec. **Expected**: retrofit mode — draft from CLAUDE.md/roadmap/code shown as a whole, questions only where facts are silent; `stage.txt` is not proposed backwards; a claim the repository contradicts is BLOCKING in the review.
@@ -41,6 +41,14 @@ Product spec section by section with review per mode.
 ### A FAIL that was edited is reviewed again
 **Fixture**: the reviewer returns `FAIL` with four blocking factual errors; the skill applies all four. **Expected**: the same verifier gets the corrected text for a short second pass and the document's verdict is that second verdict; if the user declines the re-review, the spec is recorded as `FAIL (edits unverified)` rather than as passed.
 - [ ] second pass by the same verifier · [ ] verdict comes from the last review · [ ] no silent promotion to PASS
+
+### Review verdict to skill verdict
+**Fixture**: three runs — the reviewer returns PASS; CONCERNS with one concern on §4 only; CONCERNS with a concern on §3 (scope). **Expected**: `APPROVED`; `APPROVED` with the concern listed in the verdict line; `NEEDS REVISION`. A FAIL or `FAIL (edits unverified)` is `NEEDS REVISION` with the qualifier carried over; a `solo` run is `APPROVED` and says "no review".
+- [ ] PASS → APPROVED · [ ] CONCERNS on §1–3 → NEEDS REVISION · [ ] FAIL qualifier carried over · [ ] solo says no review
+
+### Commit gate on the documents lane
+**Fixture**: the product spec (with two findings rows and a stage change) is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: product spec` staging exactly the written files (`docs/specs/product-spec.md`, the `production/findings.md` rows, `production/stage.txt`, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

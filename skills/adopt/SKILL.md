@@ -16,6 +16,17 @@ Answers not "what exists?" but "will what exists work with the studio's skills?"
 Writes only after "May I write?", asked as an `AskUserQuestion`. After the "write" answer: `touch .claude/.write-consent` (rule 7).
 A command in a hand-off is `/web-studio:<command>` in plugin mode and `/<command>` in copy mode (coordination-rules § Subagents).
 
+**Mode → phases** (argument; no argument = `full`). "Before Phase 1" runs in every mode.
+
+| Mode | Phase 1 stack | Phase 2 artefacts | Phase 3 settings | Phase 4 plan | Phase 5 commit |
+|---|---|---|---|---|---|
+| `full` | yes | yes | yes | yes | yes |
+| `stack` | yes | — | — | yes (stack findings only; the artefact audit is marked "not run — `/adopt docs`") | yes |
+| `docs` | — | yes | — | yes (artefact findings only; the facts table reads from the current `technical-preferences.md`) | yes |
+| `settings` | — | — | yes | — (only the settings diff; no plan file) | yes (for `CLAUDE.md`/roster only) |
+
+A phase a mode skips is named as skipped in the result, never silently absent.
+
 ## Before Phase 1
 1. `.claude/docs/` missing → run `/init` first, and stop.
 2. Not a git repository (`git rev-parse --show-toplevel` fails) → one `AskUserQuestion`: initialize git now (Recommended) · stop.
@@ -81,13 +92,13 @@ Do not defer to `/setup-stack`: after `/adopt` the stack counts as chosen, which
 
 1. **Classify**: BLOCKING (a skill would fail or lie), HIGH (traceability lost), MEDIUM, INFO. A roadmap kept by a companion advisor skill in its own format is INFO ("not migrated"), never a migration item.
 2. **Format gaps.** A HIGH that is a **format** gap (a roadmap in a foreign format, story cards without a criteria table, ADRs without options) gets the plan item `/migrate <type> --dry-run`, never "rewrite by hand".
-3. **Every BLOCKING and HIGH gets a sink**, not only a row in the plan: one `AskUserQuestion` per item — record it in `production/findings.md` (template `findings.md`; id `ADOPT-NNN`, severity, area, the decision needed) (Recommended) · story stubs now via `/create-stories` · plan only. The row is written only after the "record" answer. `/help`, `/create-stories` and `/sprint-plan` read `production/findings.md`; the adoption plan is read only by `/help`, and only for its first open item.
+3. **Every BLOCKING and HIGH gets a sink**, not only a row in the plan: one `AskUserQuestion` per item — record it in `production/findings.md` (template `findings.md`; id `ADOPT-NNN`, severity, area, the decision needed) (Recommended) · story stubs now via `/create-stories` · plan only. The row is written only after the "record" answer. "Story stubs" is a hand-off, not a call: this skill does not list `Skill`, so the item becomes the plan's first open item with `/create-stories` as its command and the closing question offers it first (coordination-rules § Subagents). `/help`, `/create-stories` and `/sprint-plan` read `production/findings.md`; the adoption plan is read only by `/help`, and only for its first open item.
 4. A BLOCKING or HIGH item that is neither recorded nor turned into a story is named as unrecorded in the verdict line.
 
 ## Phase 3: Settings (`settings` / `full`)
 1. `.claude/settings.web-studio.json` present → show a diff with `settings.json` for `hooks`, `permissions`, `statusLine` and propose a merge: never drop foreign hooks; merge arrays.
 2. `CLAUDE.md` without the studio block → propose inserting the Language/Studio/Stack/Principles sections from the kit's `templates/CLAUDE.md.template` (generated from `technical-preferences.md` if the template is unavailable). Insert; never overwrite the existing file.
-3. `.gitignore` must list `production/session-state/`, `production/session-logs/` and `.claude/settings.local.json`; propose the missing lines.
+3. `.gitignore` must list `production/session-state/`, `production/session-logs/`, `.claude/settings.local.json` and `.claude/agent-memory-local/` (the same four lines `/init` and `install.sh` add); propose the missing lines.
 4. Companion skills detected (advisor, deploy) → propose noting them in the Tier 0 row of `.claude/docs/agent-roster.md`.
 5. Show the proposals, then one `AskUserQuestion`: "May I write the changes above?" — write (Recommended) · show the draft/diff first · not now.
 
@@ -95,6 +106,15 @@ Do not defer to `/setup-stack`: after `/adopt` the stack counts as chosen, which
 1. **Draft** `docs/adoption-plan-<date>.md` from `.claude/docs/templates/adoption-plan.md`: verdict, the facts table, the artefact audit and a numbered plan where every item is a checkbox `- [ ] N. <priority> — <command> → <artefact>`. `/help` reads the open items and offers the first one; items are ticked `[x]` when done.
 2. **Stage**: propose `production/stage.txt` from the facts (`build` / `operate`) if `/init` has not already set it. It is written only with the plan's consent, never automatically.
 3. **Write gate**: show the plan in the chat, then "May I write `docs/adoption-plan-<date>.md` (and `production/stage.txt`)?" as one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now.
+
+## Phase 5: Commit (documents lane)
+Right after the last write of the run, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: adopt web studio (<mode>)`, staging exactly the documents this run wrote — `.claude/docs/technical-preferences.md`, `production/findings.md`, `CLAUDE.md`, `.claude/docs/agent-roster.md`, `docs/adoption-plan-<date>.md`, `production/stage.txt` — whichever of them the earlier gates covered.
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- `.claude/settings.json` and `.gitignore` (Phase 3) are toolchain work, not documents: they do not ride the `docs:` commit. Name them in the result and offer the chore lane for them (git-workflow.md § Chore / infra).
+- Before asking, record the gate — `<hooks>session-state.sh set Gate "/adopt Phase 5: commit?"` (`<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+
+Nothing is committed without the answer; a run that wrote no document has no commit gate.
 
 Verdict: `COMPLIANT` | `NEEDS MIGRATION (N blocking)`, followed by the unrecorded BLOCKING/HIGH items when there are any.
 

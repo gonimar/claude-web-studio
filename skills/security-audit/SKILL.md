@@ -12,7 +12,7 @@ agent: security-lead
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Templates `templates/security-audit-report.md`, `findings.md`; `stack-reference/security-standards.md`, `security-baseline.md`, `graphql.md` (security).
+Templates `templates/security-audit-report.md`, `findings.md`; `stack-reference/security-standards.md`, `security-baseline.md`, `graphql.md` (security). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Scope
 Mode from the argument (`full` by default): `quick` = HIGH/BLOCKING classes only (auth, authorisation/IDOR, injection, secrets, dependency CVEs) without the network and GraphQL deep passes; `api`/`auth`/`infra`/`<path>` narrow the scope. Surfaces from the threat model; no `docs/architecture/threat-model.md` → continue from technical-preferences and the code, say so in the report and propose `/threat-model` as a follow-up — never a silent full pass. Stack from technical-preferences.
@@ -27,8 +27,16 @@ Deduplicate, severity (CVSS 4.0), BLOCKING/WARNING/INFO, fix and regression test
 
 ## Phase 4: Write
 1. Show the report in the chat, then "May I write `docs/security/security-audit-<date>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7).
-2. For every BLOCKING (and every WARNING that needs a decision), one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `SEC-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, so a finding left only in the report never reaches planning.
+2. For every BLOCKING (and every WARNING that needs a decision), one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `SEC-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · report only. `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, so a finding left only in the report never reaches planning. Record the gate before asking — `<hooks>session-state.sh set Gate "/security-audit Phase 4: record SEC-NNN?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
 3. A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line.
 4. Propose a threat-model update.
+
+## Phase 5: Commit (documents lane)
+Right after the write (and the findings rows, when any were recorded), one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): `docs: security audit <date>`, staging exactly the written files — `docs/security/security-audit-<date>.md` and `production/findings.md` when rows were added. Record the gate before asking — `<hooks>session-state.sh set Gate "/security-audit Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+- On the default branch when no story work is in progress: one `AskUserQuestion` — commit (Recommended) · leave uncommitted.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- The audit itself changes no code; fixes are the next step and belong to a story or the chore lane (git-workflow.md § Chore / infra), never to the `docs:` commit.
+
+Nothing is committed without the answer.
 
 Verdict: `PASS` | `CONCERNS (N warnings)` | `FAIL (N blocking)`. Next step — one `AskUserQuestion`: fixes, then a repeated `/security-audit quick` (Recommended) · `/harden` · report only.

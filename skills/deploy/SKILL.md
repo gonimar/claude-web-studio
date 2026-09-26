@@ -1,7 +1,7 @@
 ---
 name: deploy
 description: "Plans and executes a deployment — verifies release readiness, build/tag, migration order, delegates the stack mutation to an installed deployment skill (container platform / Kubernetes / cloud) or produces manual runbook steps, runs post-deploy smoke checks, documents rollback. Every production mutation needs confirmation."
-argument-hint: "[version | rollback [tag]] [--env staging|prod] [--plan-only]"
+argument-hint: "[version | rollback [tag]] [--env <name>] [--plan-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
 model: sonnet
@@ -22,17 +22,21 @@ Prerequisites & secrets per `.claude/docs/deploy-target-contract.md`: verify reg
 - `none` / `manual` → the runbook steps for the user / `devops-engineer`.
 `--confirmed` goes only on a mutating verb (`deploy`, `rollback`), and only after the user's "Proceed?" → "yes" in this skill; `logs` is called without it.
 
-**Arguments**: `vX.Y.Z` — the version to deploy; `rollback [tag]` — roll back to `tag`, default the previous release in `production/releases/`; `--env staging|prod` — the runbook environment; `--plan-only` — stop after the plan.
+**Arguments**:
+- `vX.Y.Z` — the version to deploy. **No version given** → the latest release tag on origin: `git fetch --tags origin`, then `git tag --list 'v*' --sort=-v:refname | head -1` (cross-checked against `git ls-remote --tags --refs origin 'refs/tags/v*'` — `--refs` drops the `^{}` peeled lines of annotated tags; a tag that exists only locally is not released). Show it and confirm in one `AskUserQuestion`: deploy `vX.Y.Z` (Recommended) · another version (say which) · stop. No `v*` tag at all → `BLOCKED (no release tag — run /release-checklist vX.Y.Z)`, nothing written. Never deploy an unconfirmed guess.
+- `rollback [tag]` — roll back to `tag`, default the previous release in `production/releases/`.
+- `--env <name>` — the environment to deploy to. **The names come from the project, never from a fixed list**: the runbook `docs/ops/deploy.md` → Environments (the template lists `dev | staging | prod` as examples) and the target file `docs/deploy/<target>.md`; a name neither lists → `BLOCKED (--env <name> unknown — the runbook lists: <names>)`. **Default**: the one environment `docs/deploy/<target>.md` describes (one endpoint, one stack) — named in the plan as "environment: <name> (the target's only one)". When the target file or the runbook lists several environments and `--env` is missing → `BLOCKED (--env required: <the names the runbook lists, e.g. staging|prod>)`, never a guess. The environment selects the runbook section, the smoke URLs and the target facts; it is named in the "Proceed?" question and passed to the delegate after the verb's arguments (`deploy <tag> --env <name> --confirmed`; a delegate whose `docs/deploy/<target>.md` documents one environment only is called without it).
+- `--plan-only` — stop after the plan.
 
 ## Phase 1: Readiness
-1. **Release file**: `production/releases/vX.Y.Z.md`. Missing → stop: `BLOCKED (no release file — run /release-checklist vX.Y.Z)`, nothing written.
+1. **Release file and its verdict**: `production/releases/vX.Y.Z.md` (written by `/release-checklist` on `READY` and `NOT READY` alike, so its presence proves nothing by itself). Missing → stop: `BLOCKED (no release file — run /release-checklist vX.Y.Z)`, nothing written. Read its `Verdict:` line: `READY` or `READY (hotfix)` → continue; `NOT READY (…)` → stop: `BLOCKED (release NOT READY: <the reason from the file> — fix it, then re-run /release-checklist vX.Y.Z)`; no `Verdict:` line → stop: `BLOCKED (release file without a Verdict line — re-run /release-checklist vX.Y.Z)`. Nothing is deployed on a guessed readiness.
 2. **Artefacts**: the tag exists; CI is green on the tag (`gh run`); the image is built and available.
 3. **Runbook**: `docs/ops/deploy.md`.
-4. **Delegate**: the deploy target and delegate from `technical-preferences.md` (Infrastructure) and `docs/deploy/<target>.md` — contract: `.claude/docs/deploy-target-contract.md`. A delegate declared but not found (no agent file, no script) → `BLOCKED (delegate <name> not found — fix technical-preferences or run /setup-stack)`, never a guess. A companion slash command alone (`/<kit> deploy`) is not a delegate: skills cannot call skills.
+4. **Delegate**: the deploy target and delegate from `technical-preferences.md` (Infrastructure) and `docs/deploy/<target>.md` — contract: `.claude/docs/deploy-target-contract.md`. A delegate declared but not found (no agent file, no script) → `BLOCKED (delegate <name> not found — fix technical-preferences or run /setup-stack)`, never a guess. A companion slash command alone (`/<kit> deploy`) is not a delegate: the contract's delegate is an agent or a script (§ 4), and `/deploy` does not list `Skill` in its `allowed-tools`, so it cannot run another skill (coordination-rules § Subagents).
 With `rollback`, steps 1–2 apply to the target tag, which is already released.
 
 ## Phase 2: Plan
-1. **Steps**: DB backup → migrations (migrate service/command) → stack redeploy → smoke (healthz, key journey, GraphQL `{ __typename }` / REST ping) → 30 min monitoring. With `rollback`: the delegate's `rollback [tag]` → smoke → monitoring; it rolls back the image, not the data, so the plan states whether the migrations since that tag are reversible (the runbook's Rollback § Data).
+1. **Steps** (headed by the version and the environment: `vX.Y.Z → <env>`): DB backup → migrations (migrate service/command) → stack redeploy → smoke (healthz, key journey, GraphQL `{ __typename }` / REST ping) → 30 min monitoring. With `rollback`: the delegate's `rollback [tag]` → smoke → monitoring; it rolls back the image, not the data, so the plan states whether the migrations since that tag are reversible (the runbook's Rollback § Data).
 2. **Rollback plan**: previous tag + migration reversibility.
 3. **Prerequisites**: name each item of the contract's Prerequisites & secrets.
 4. `--plan-only` → verdict `PLAN`, stop.

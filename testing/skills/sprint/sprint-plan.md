@@ -57,5 +57,13 @@ Sprint plan by capacity and dependencies.
 **Fixture**: a roadmap in v3.1 format with a Backlog block of nine stories; four are taken into the new sprint. **Expected**: after the write the four are under the sprint heading and gone from the Backlog block, both `<summary>` counts are recalculated, and the closing report states the numbers (`Backlog: 9 → 5, Sprint: 0 → 4, overlap none`).
 - [ ] no story in two blocks · [ ] both counts recalculated · [ ] the numbers stated in the report
 
+### Red default-branch CI is reported, not enforced
+**Fixture**: after the Phase 2 merges `gh run list --branch <default> --limit 1` shows a failing run. **Expected**: the state is reported in the message and under the plan's risks with the failing job, `/hotfix --chore` named for the fix; the plan is still written after its own gate; the message says the enforcement lives in `/dev-story` Phase 3 (branch step), and nothing here claims to block the first story branch itself.
+- [ ] state reported · [ ] risk named in the plan · [ ] no enforcement claimed here · [ ] `/dev-story` Phase 3 named as the enforcing step
+
+### Commit gate on the documents lane
+**Fixture**: sprint 03 is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: sprint 03` staging exactly the written files (`production/sprints/sprint-03.md` and `production/roadmap.md`, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -3,6 +3,8 @@
 # Seeded into .claude/docs/templates/deploy/ by /init or install.sh; /setup-stack copies it to scripts/deploy/compose-ssh.sh. Configuration: docs/deploy/compose-ssh.md
 # (parsed below: Host, Path, Compose file, Healthz) — no secrets; ssh uses the user's keys.
 #   compose-ssh.sh status | create | deploy <tag> [--confirmed] | rollback [tag] [--confirmed] | logs [service] [--since 1h]
+# Every verb also accepts `--env <name>` (contract § 3): this delegate serves one environment, so the name is
+# recorded in ENV_NAME, echoed as evidence and otherwise ignored — it never becomes a tag or a service name.
 # The verdict line is the LAST line of stdout; exit 0 on success, 1 on FAILED.
 set -euo pipefail
 ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
@@ -12,8 +14,16 @@ cfg() { sed -n "s/^| *$1 *| *\([^|]*\) *|.*/\1/p" "$CFG" | head -1 | sed 's/[` ]
 HOST=$(cfg Host); DIR=$(cfg Path); FILE=$(cfg "Compose file"); HEALTHZ=$(cfg Healthz)
 FILE=${FILE:-compose.prod.yaml}
 VERB="${1:-}"; shift || true
-CONFIRMED=0; ARGS=()
-for a in "$@"; do case "$a" in --confirmed) CONFIRMED=1;; *) ARGS+=("$a");; esac; done
+CONFIRMED=0; ENV_NAME=""; ARGS=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --confirmed) CONFIRMED=1;;
+    --env) ENV_NAME="${2:-}"; if [ $# -gt 1 ]; then shift; fi;;   # two tokens: the flag and its name
+    *) ARGS+=("$1");;
+  esac
+  shift
+done
+[ -z "$ENV_NAME" ] || echo "env: $ENV_NAME (ignored — this delegate serves one environment)"
 run() { ssh -o BatchMode=yes "$HOST" "cd '$DIR' && $*"; }
 need_confirm() { [ "$CONFIRMED" = 1 ] || { echo "FAILED (not confirmed) — the calling skill must ask 'Proceed?' and pass --confirmed"; exit 1; }; }
 case "$VERB" in

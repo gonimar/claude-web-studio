@@ -34,5 +34,9 @@ Headers/TLS/proxy/Docker/CI with live verification.
 **Fixture**: `/harden secrets` after `/incident` on a leaked registry token; deploy contract lists four secrets; one workflow uses `secrets.GHCR_TOKEN`. **Expected**: an inventory table (secret → where it lives → who reads it → rotation steps → last rotation), the rotation order, verification per secret (gitleaks / history search by pattern, `docker history`, CI permissions); no secret value ever appears in a command or the chat; written into `hardening-checklist.md` § Secrets behind the write gate.
 - [ ] inventory without values · [ ] order and verification · [ ] write gate
 
+### 8. Commit gate on the documents lane
+**Fixture**: `/harden --apply headers` wrote a Caddyfile diff and `docs/security/hardening-checklist.md` while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: hardening checklist` staging exactly the checklist, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); the Caddyfile diff is named and offered the chore lane (`chore/harden-headers`, PR, `/code-review --diff`), never staged with the document; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] config diffs never ride the `docs:` commit
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

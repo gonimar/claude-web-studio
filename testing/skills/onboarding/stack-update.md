@@ -30,12 +30,15 @@ Refresh references from official sources with dates; diff; upgrade plan.
 **Fixture**: reference says Phaser 3.90; `npm view phaser dist-tags` → latest 4.2.1. **Expected**: the table shows latest 4.2.1 and the recommended version with a reason (or an upgrade proposal); `index.md` gets the "latest on the date" value.
 - [ ] registry queried · [ ] reason recorded when behind a major · [ ] index column filled
 
-### 6. Project scope by default
+### 7. Project scope by default
 **Fixture**: run inside a project with a filled `technical-preferences.md` (PHP stack). **Expected**: scope = the project's technologies, the file list printed before collecting; `all` only on request with the divergence warning.
 - [ ] project scope chosen · [ ] file list shown · [ ] warning on `all`
-### 7. Commit gate after write
-**Fixture**: files written. **Expected**: one commit-gate question `docs: refresh stack-reference (<scope>)`; the hand-off never leaves the files uncommitted silently.
-- [ ] commit gate offered · [ ] exact files staged
+### 8. Commit gate after write
+**Fixture**: files written while HEAD is `feat/S-030-…`. **Expected**: right after the write one commit-gate question `docs: refresh stack-reference (<scope>)` staging exactly the written files (the reference files and `index.md`), naming the branch with the three options (switch to the default branch Recommended · commit here · leave uncommitted); `Gate: /stack-update Phase 4: commit?` is recorded in session-state before the question and cleared after the answer; the hand-off never leaves the files uncommitted silently — a "leave uncommitted" answer is repeated in the result.
+- [ ] commit gate offered · [ ] exact files staged · [ ] branch named, three options · [ ] gate recorded and cleared
+### 9. Default scope outside a project
+**Fixture**: bare `/stack-update` in the plugin repository (`docs/stack-reference/index.md`, no `.claude/docs/technical-preferences.md`); then the same in a project whose preferences are still `[TO BE CONFIGURED]`. **Expected**: in the plugin repository the scope is `all` and is printed in one line before collecting; in the unconfigured project no scope is guessed — one `AskUserQuestion` (`all` Recommended · one technology · stop); with no reference directory at all → `BLOCKED (no stack-reference found — run /init)`.
+- [ ] `all` in the plugin repository · [ ] asked, not guessed, when the stack is unknown · [ ] BLOCKED without a reference
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

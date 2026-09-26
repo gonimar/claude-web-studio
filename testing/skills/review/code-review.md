@@ -27,7 +27,11 @@ Review with routing by file type and security for sensitive paths.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] fix offer and hand-off are `AskUserQuestion`s with a Recommended option and alternatives
 ### 6. Fix commit
 **Fixture**: BLOCKING fixed after "yes" on `feat/S-004-…`. **Expected**: checks re-run, then a `fix(S-004): apply /code-review findings` commit and push after consent; the review never commits by itself.
-- [ ] checks re-run before the commit · [ ] commit scope is the story ID · [ ] no commit without fixes
+- [ ] checks re-run before the commit · [ ] commit scope is the story ID · [ ] no commit without fixes · [ ] `Gate: /code-review Phase 5: commit the fixes?` recorded through `<hooks>session-state.sh set` before the question and cleared after it
+
+### Fix commit on a hotfix branch
+**Fixture**: `--diff --security` on `hotfix/login-500`, whose only commit beyond the tag is `fix(auth): login 500 on expired refresh token`, pushed with an upstream; separately the same branch never pushed. **Expected**: the fix commit after "yes" is `fix(auth): apply /code-review findings` — the scope of the branch's own fix commit, no `S-NNN` invented; with an upstream it is pushed; without one (`git rev-parse --abbrev-ref @{u}` fails) the commit stays local and the report says so instead of a failed push.
+- [ ] scope taken from the branch's fix commit · [ ] push only with an upstream · [ ] local commit named, no failed push
 
 ### The diff decides the reviewers, and the report shows them
 **Fixture**: a diff touching `*.go`, `Makefile`, `*_test.go` and a migration. **Expected**: Phase 2 prints the routing table (path → required reviewer → spawned yes/no) before the reviewers run, at least the Go, DevOps, test and database roles appear or are explicitly skipped with a reason, and Phase 5 repeats that table with each reviewer's verdict.
@@ -38,7 +42,7 @@ Review with routing by file type and security for sensitive paths.
 - [ ] diff as one file · [ ] `Read: N/M` first line · [ ] PARTIAL never counts towards APPROVED
 ### The verdict is the reviewer's (0.12)
 **Fixture**: `appsec-engineer` NEEDS CHANGES with one BLOCKING; the fix is applied; CI is green. **Expected**: the fix diff goes to `appsec-engineer` by `SendMessage` and the verdict becomes APPROVED only on its answer; the routing table gains a `re-review` column; the parent never downgrades the BLOCKING itself; a fix the parent wrote is named "written by the parent: …".
-- [ ] re-review by the same reviewer · [ ] no verdict change on CI alone · [ ] severity untouched by the parent · [ ] hand-off names `/web-studio:story-done`
+- [ ] re-review by the same reviewer · [ ] `SendMessage` listed in `allowed-tools`, `Task` to the same reviewer as the fallback · [ ] no verdict change on CI alone · [ ] severity untouched by the parent · [ ] hand-off names `/web-studio:story-done`
 
 ### Changes outside the story are named (0.13)
 **Fixture**: `--diff` on story S-002 (a `/forecast` endpoint): besides `forecast.go` and its test, the diff moves the legacy `/` handler of `main.go` into a new `newMux()` and fixes a pre-existing unchecked error there; one import block is reordered in an untouched file. **Expected**: the report lists `main.go` hunks that serve no criterion as WARNING `SCOPE` (revert here, record through `/backlog add` or findings), the reordered imports as INFO `SCOPE-STYLE`; the route line the story needs is not a finding; the new route falling through to the legacy catch-all keeps its WARNING (a behaviour the new code exposes is inside the criteria, not "pre-existing"); the `git diff --stat` next to the story's files is in the report.

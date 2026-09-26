@@ -23,8 +23,12 @@ WCAG 2.2 AA: axe + manual checklist.
 **Fixture**: canvas menu without a DOM overlay → critical. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: axe regression test with consent. **Expected**: the user decides; stage/statuses never change automatically.
-- [ ] no self-advancing · [ ] verdict from the skill's vocabulary
+**Fixture**: axe regression test with consent. **Expected**: the user decides; stage/statuses never change automatically; the regression test is the Phase 2 spec `<e2e dir>/a11y/axe.spec.ts` in its final form, one file, its path named in the Phase 4 question; `<e2e dir>` is the `testDir` of `playwright.config.{ts,js,mjs}` when the config exists, then the directory `test-strategy.md` names, else `e2e/` with a note that the path was assumed.
+- [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] one axe file, path named · [ ] `<e2e dir>` from `playwright.config.*` first
+
+### 6. Commit gate on the documents lane
+**Fixture**: report written and one `A11Y-NNN` row recorded while HEAD is `feat/S-001-…` (a story branch); the axe spec was written too. **Expected**: right after the write one commit gate offers `docs: a11y audit <date>` staging exactly `docs/ops/a11y-audit-<date>.md` and `production/findings.md`, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); the axe spec is named and offered the chore lane or the fix story, never staged; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] the axe spec never rides the `docs:` commit
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

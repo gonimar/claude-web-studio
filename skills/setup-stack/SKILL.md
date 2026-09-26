@@ -11,8 +11,8 @@ model: sonnet
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Result: `.claude/docs/technical-preferences.md` without `[TO BE CONFIGURED]` plus a decision-log line.
-Big forks are recorded as ADRs via `/architecture-decision`.
+Result: `.claude/docs/technical-preferences.md` without `[TO BE CONFIGURED]` — that file is the record of the stack choice. The stack is a technical decision, so it never becomes a `D-NN` entry: `production/decisions.md` holds owner decisions only (its header: "Technical decisions are ADRs, not entries here").
+Big forks are recorded as ADRs via `/architecture-decision` (Phase 5). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Context
 1. **Read** `technical-preferences.md`, `docs/specs/product-spec.md` (if any) and `stack-reference/index.md` (current versions).
@@ -61,10 +61,21 @@ One `AskUserQuestion` at a time, recommendation first. `--quick` accepts all rec
 1. **Draft** the full `technical-preferences.md`: exact versions from the reference, naming conventions for the chosen languages (the Angular file style from Phase 2), performance budgets, and the `Deploy target` / `Deploy delegate` (plus `Infra repo` / `Proxy config`) fields. Show it whole.
 2. **Ask** "May I write `.claude/docs/technical-preferences.md`?" as one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. The question also names the `compose-ssh` files from Phase 2 step 7 when that target was chosen, and `production/stage.txt` → `specification` when the product spec exists.
 3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
-4. **Write** the files the answer covered: `technical-preferences.md`; for `compose-ssh`, copy the script with `cp` and create `docs/deploy/compose-ssh.md`; update `production/stage.txt`. Add the decision-log line.
+4. **Write** the files the answer covered: `technical-preferences.md`; for `compose-ssh`, copy the script with `cp` and create `docs/deploy/compose-ssh.md`; update `production/stage.txt`. Nothing is written to `production/decisions.md`.
 
-## Phase 4: Consequences
+## Phase 4: Commit (documents lane)
+Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: stack decision`, staging exactly the written documents — `.claude/docs/technical-preferences.md`, `production/stage.txt` when changed, `docs/deploy/compose-ssh.md` when created. Record the gate before asking — `<hooks>session-state.sh set Gate "/setup-stack Phase 4: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- `scripts/deploy/compose-ssh.sh` is toolchain work, not a document: it does not ride the `docs:` commit. Name it in the result and offer the chore lane for it (git-workflow.md § Chore / infra).
+
+Nothing is committed without the answer.
+
+## Phase 5: Consequences
 - Propose ADRs for non-trivial forks (GraphQL vs REST, Angular vs Vue, game engine) — `/architecture-decision`. The user decides; no ADR is written here.
 - Propose `/test-setup` and `/threat-model` as the next mandatory architecture steps.
 
-Verdict: `COMPLETE` | `BLOCKED (missing tools: …)`. Next step — one `AskUserQuestion`: `/product-spec` (Recommended) · `/game-concept` · revise the stack.
+Verdict: `COMPLETE` | `BLOCKED (missing tools: …)`. Next step — one `AskUserQuestion`, the Recommended option decided by what Phase 1 found, never by a default:
+- no `docs/specs/product-spec.md` → `/product-spec` (Recommended) · `/game-concept` (type game / game+backend) · revise the stack;
+- the product spec exists → `/feature-spec` (Recommended; `/create-stories` Recommended instead when `docs/specs/features/*.md` already exist) · `/test-setup` · `/product-spec` (revise it) · revise the stack.
+`/product-spec` is never Recommended over a spec that already exists.

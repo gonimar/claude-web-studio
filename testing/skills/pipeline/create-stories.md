@@ -37,5 +37,13 @@ Slice a feature into vertical stories with a criteria matrix.
 **Fixture**: Deploy target set; no `/healthz` route, no alert rule; data model with tables and no tested-restore date in §7; §6 classifies e-mail and IP as PII, no deletion code. **Expected**: the first feature gets "Observability" (devops-engineer), "Backup & restore drill" (restore on staging with the date recorded) and "Data deletion" (every §6 field, backups, logs) with the criteria the skill names; none when the evidence already exists.
 - [ ] three stories with criteria · [ ] none when evidence exists · [ ] restore date named as a criterion
 
+### No subagent
+**Fixture**: any run. **Expected**: the parent slices the feature itself — no `Task` call, no reviewer; the body says why (criteria reviewed with `/feature-spec`, test levels checked by `/qa-plan`) and `Task` is not in `allowed-tools`.
+- [ ] no Task in allowed-tools · [ ] reason stated
+
+### Commit gate on the documents lane
+**Fixture**: the stories S-010..S-014 with their roadmap lines and findings links is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: stories S-010..S-014` staging exactly the written files (the story files, `production/roadmap.md`, `production/findings.md`, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

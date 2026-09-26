@@ -15,7 +15,7 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Templates (`.claude/docs/templates/`): `sprint-plan.md`, `roadmap.md`. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: State
-1. **Arguments**: the sprint number `NN` (default: the last sprint in `production/sprints/` + 1); `--days N` is the sprint length in working days.
+1. **Arguments**: the sprint number `NN` (default: the last sprint in `production/sprints/` + 1); `--days N` is read as the sprint length in working days — the same value step 5 would otherwise ask for, so with it only hours per day and the start date are asked. It is never a deadline or a number of stories.
 2. **Ready stories** (`production/stories/**`). None → stop with `BLOCKED (no Ready stories — run /create-stories)` and write nothing.
 3. **Read**: the roadmap (priority and blocker markers), the last sprint (unfinished work, retro actions), `production/findings.md` (open BLOCKING findings and their stories).
 4. **Backlog**: `production/backlog.md` → one line `Backlog: N open ideas — /backlog review`. An idea enters a sprint only after promotion, never from here.
@@ -36,7 +36,7 @@ Templates (`.claude/docs/templates/`): `sprint-plan.md`, `roadmap.md`. In the co
 5. **Record the gate** before asking: `<hooks>session-state.sh set Task "/sprint-plan Phase 2" Gate "/sprint-plan Phase 2: merge #…?"`. A session that resumes with this `Gate:` open continues here: it merges or not, and never implements a story (rule 7).
 6. **Ask**, alone in its message, one `AskUserQuestion`: merge the green safe PRs now (Recommended) · turn them into one story · leave them.
 7. **After the answer**: clear the gate (`<hooks>session-state.sh set Gate "—"`). On "merge": `gh pr merge <n> --squash`, one PR at a time, with the output in the message.
-8. **Default-branch CI.** After the batch, the default branch's CI run is the gate: `gh run list --branch <default> --limit 1` must be green before the first story branch starts. Report its state.
+8. **Default-branch CI.** After the batch, `gh run list --branch <default> --limit 1`: the default branch's CI should be green before the first story branch starts. This skill **reports** that state — green, red or not run — in the message and, when red, under the plan's risks with the failing job; it does not enforce it: nothing here blocks the plan. The check that holds a story branch back on a red run lives in `/dev-story` Phase 3 (the branch step runs the same `gh run list --branch <default> --limit 1` before creating the branch); fixing it is toolchain work (`/hotfix --chore`), named in the plan.
 
 ## Phase 3: Selection
 1. **The sprint goal** as one verifiable statement.
@@ -61,6 +61,14 @@ Its own turn — never on the merge answer.
    - When this closes the *previous* sprint (every one of its stories now `[x]`), wrap that sprint's list in `<details><summary>closed · N stories — expand</summary>`, with a blank line after `<summary>` or GitHub won't render the list inside.
    - Add a row for the new sprint to the roadmap's `## Docs` → *production/sprints/* block.
 6. **Close the write with the numbers**: `Backlog: N → M, Sprint: 0 → K, overlap none`.
+
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: sprint NN`, staging exactly the written files — `production/sprints/sprint-NN.md` and `production/roadmap.md`. Record the gate before asking — `<hooks>session-state.sh set Gate "/sprint-plan Phase 5: commit?"` — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- Code, configs, workflows and scripts never ride the `docs:` commit; the Phase 2 merges are their own commits on the default branch already.
+
+Nothing is committed without the answer.
 
 Verdict: `READY` | `BLOCKED`.
 

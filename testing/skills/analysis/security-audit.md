@@ -30,5 +30,9 @@ OWASP 2025 audit per stack with tools; report.
 **Fixture**: FAIL with one BLOCKING (IDOR on a resolver). **Expected**: after the report, one `AskUserQuestion` offers recording it in `production/findings.md` (Recommended) · story stubs · report only; a BLOCKING left unrecorded is named in the verdict line.
 - [ ] `production/findings.md` offered · [ ] template `findings.md` · [ ] unrecorded BLOCKING named in the verdict
 
+### 7. Commit gate on the documents lane
+**Fixture**: report written and one `SEC-NNN` row recorded while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: security audit <date>` staging exactly `docs/security/security-audit-<date>.md` and `production/findings.md`, names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); no fix is staged; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] only the written documents staged
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -1,5 +1,9 @@
 # Release vX.Y.Z — YYYY-MM-DD
 
+Verdict: READY | NOT READY (the ❌ gates, in one line) | READY (hotfix)
+
+<!-- Written by /release-checklist (READY | NOT READY) or /hotfix (READY (hotfix)); /deploy reads this line — a file present without `Verdict: READY…` blocks the deploy. -->
+
 ## Gates
 - [ ] All release stories Done with tests (link to the CI run)
 - [ ] `/security-audit` without BLOCKING (report: ) · `/dependency-audit` clean · `/harden` checklist closed

@@ -11,11 +11,11 @@ Release gate from evidence.
 
 ## Cases
 ### 1. Happy path
-**Fixture**: audits clean. **Expected**: READY; release file with rollback.
+**Fixture**: audits clean. **Expected**: READY; release file with rollback and the line `Verdict: READY` (the template's line, which `/deploy` reads).
 - [ ] phase order followed · [ ] output matches the expectation · [ ] writes only after consent
 ### 2. Refusal / BLOCKED
-**Fixture**: security-audit FAIL. **Expected**: NOT READY.
-- [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] writes no files
+**Fixture**: security-audit FAIL. **Expected**: `NOT READY (security-audit FAIL)`; the checklist with its ❌ gate is still offered for writing to `production/releases/vX.Y.Z.md` — with the line `Verdict: NOT READY (security-audit FAIL)`, so `/deploy` blocks on the file — and for the `docs: release vX.Y.Z` commit, each after consent; the tag step is skipped and the reason named; the next step recommends fixing the items and re-running the checklist, not `/deploy`.
+- [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] the release file only after consent, no tag · [ ] `Verdict: NOT READY (…)` in the file
 ### 3. Mode/argument variant
 **Fixture**: migrations present → database-engineer. **Expected**: behaviour differs from case 1 according to the argument.
 - [ ] argument parsed · [ ] the difference matches the skill description
@@ -32,7 +32,10 @@ Release gate from evidence.
 
 ### The tag contains the release document (0.13)
 **Fixture**: READY, `production/releases/v1.2.0.md` written on a story branch. **Expected**: a `docs: release v1.2.0` commit gate on the default branch comes before the tag question; the tag is created with `-m` on the default branch after that commit and pushed (`git push origin v1.2.0`); a release document left uncommitted → no tag, with the reason.
-- [ ] commit before tag · [ ] tag on the default branch with -m, pushed · [ ] no tag without the committed document
+- [ ] commit before tag · [ ] tag on the default branch with -m, pushed · [ ] no tag without the committed document · [ ] `Gate "/release-checklist Phase 3: commit?"` (and `… tag?`) recorded through `session-state.sh` before each question and cleared to `—` after the answer
 
+### Re-run after `NOT READY`
+**Fixture**: `production/releases/v1.2.0.md` exists from an earlier run with `Verdict: NOT READY (security-audit FAIL)` committed as `docs: release v1.2.0`; the audit is now clean. **Expected**: the file is updated in place, `Verdict: READY`; the commit gate offers the subject `docs: release v1.2.0 (re-check)` (the plain subject is already in the history); the tag follows that commit on `<default>`.
+- [ ] file updated in place with the new verdict · [ ] `(re-check)` subject · [ ] tag after the re-check commit
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

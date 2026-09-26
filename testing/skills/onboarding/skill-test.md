@@ -30,5 +30,13 @@ Linter/specs/rubric/audit of skills and agents.
 **Fixture**: a skill without "Reply in the project conversation language". **Expected**: static check 9 WARN naming the skill.
 - [ ] check 9 present · [ ] WARN, not FAIL
 
+### 7. Static and category results reach the catalog
+**Fixture**: `static all` in the kit repository (framework present), then `category onboarding`. **Expected**: after each table one `AskUserQuestion` ("May I update `catalog.yaml` (`last_static`/`last_static_result` …)?" — update Recommended · do not write); on "update" the consent marker is touched and only those two fields of the tested rows change (`last_category`/`last_category_result` for the category run); each question is preceded by `Gate: /skill-test Phase 2A: update catalog?` (2C for the category run, 2B for the spec results) in session-state and the field is cleared after the answer; `audit` then shows the dates; `static` without a framework offers no catalog write.
+- [ ] gate before the catalog edit · [ ] gate recorded and cleared · [ ] only the two fields per row · [ ] no write without a framework
+
+### 8. Check 4 sees the consent touch
+**Fixture**: a skill with `Write` in `allowed-tools`, a "May I write" `AskUserQuestion`, and no `touch .claude/.write-consent` after it. **Expected**: check 4 WARN naming the missing consent touch (the gate itself passes); a skill with the touch after its gate is silent on this point.
+- [ ] consent touch checked · [ ] WARN, not FAIL
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

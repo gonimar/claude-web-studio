@@ -49,9 +49,11 @@ Each draft is rendered in the chat (rule 7). A command that fails when run is a 
 ## Phase 3: Write (per target)
 1. "May I write `<path>`?" — one `AskUserQuestion`: write (Recommended) · adjust · skip.
 2. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). Then write.
-3. **Commit gate**, one `AskUserQuestion`: `docs: <target> from <sources>`, staging exactly the written files, on the
-   branch the documents lane of `git-workflow.md` prescribes (a story branch when the docs belong to the story in
-   progress; name the branch in the question).
+3. **Commit gate** (rule 7, `.claude/docs/git-workflow.md` § Documents), right after the write, one `AskUserQuestion`: `docs: <target> from <sources>`, staging exactly the written files.
+   - On the default branch when no story work is in progress.
+   - When HEAD is a story branch, name it and ask: commit here (Recommended when the docs belong to the story in progress — a runbook or guide for the feature that branch implements) · switch to the default branch and commit there (Recommended when the target is pipeline-wide, e.g. a README refresh) · leave uncommitted. Exactly one option is marked Recommended, by the target's provenance.
+   - Before asking, record the gate — `<hooks>session-state.sh set Gate "/docs Phase 3: commit <target>?"` (`<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode) — and clear it after the answer (`<hooks>session-state.sh set Gate "—"`).
+   - Nothing is committed without the answer; a target the user skipped at step 1 is not staged.
 
 Verdict: `COMPLETE (N targets written)` | `COMPLETE (check only: …)` | `BLOCKED (no product spec / no contract —
 run /product-spec | /api-contract first)`. Next step — one `AskUserQuestion`: `/story-done S-NNN` when the docs
