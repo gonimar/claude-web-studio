@@ -33,7 +33,12 @@ copy_tree() { # src dst [exclude]
   # No rsync: keep the excluded file byte for byte instead of warning that it may be gone.
   if [ -n "${3:-}" ] && [ -f "$2/$3" ]; then
     keep="$(mktemp)"; cp "$2/$3" "$keep"; cp -r "$1/." "$2/"; cp "$keep" "$2/$3"; rm -f "$keep"
-  else cp -r "$1/." "$2/"; fi
+  else
+    cp -r "$1/." "$2/"
+    # The excluded entry (a file or a directory) was not in the target, so it must not arrive with the copy either
+    # (a fresh install used to receive hooks.json this way — tests/installer.sh caught it).
+    if [ -n "${3:-}" ]; then rm -rf "${2:?}/${3:?}"; fi
+  fi
 }
 # "Configured" lives in hooks/prefs.sh — the same definition the session-start banner uses, so the
 # installer and the banner can never disagree about whether this project has chosen its stack.
