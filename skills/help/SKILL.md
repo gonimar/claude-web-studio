@@ -5,13 +5,15 @@ argument-hint: "[what you just finished] | commands | guide [topic]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, AskUserQuestion
 context: |
-  !echo "stage: $(cat production/stage.txt 2>/dev/null || echo 'not set') | review-mode: $(cat production/review-mode.txt 2>/dev/null || echo 'lean') | studio: $(cat .claude/.web-studio-version 2>/dev/null || echo '?') | stack-ref: $(sed -n 's/^updated: *//p' .claude/docs/stack-reference/index.md 2>/dev/null) | adoption-plan: $(ls docs/adoption-plan-*.md 2>/dev/null | tail -1 || echo 'none')"
+  !echo "stage: $(cat production/stage.txt 2>/dev/null || echo 'not set') | review-mode: $(cat production/review-mode.txt 2>/dev/null || echo 'lean') | studio: $(cat .claude/.web-studio-version 2>/dev/null || echo '?') | stack-ref: $( (sed -n 's/^updated: *//p' .claude/docs/stack-reference/index.md 2>/dev/null; ) | grep . || echo '?') | adoption-plan: $( (ls docs/adoption-plan-*.md 2>/dev/null | tail -1; ) | grep . || echo 'none')"
 model: haiku
 ---
 
 # Help — what next?
 
 Read-only. Not a full audit (that is `/adopt`), a quick orientation. Reply in the project conversation language.
+
+The `context:` line of the frontmatter is evaluated by the harness before the skill starts (the `!` prefix), not by the skill: `Bash` is not in `allowed-tools`, and help runs no command of its own — the stage, review mode, studio version, reference date and newest adoption plan arrive as text in the context. Each field falls back to `not set` / `lean` / `?` / `none` when the file is absent; the pipelines are wrapped in a subshell and `grep .` so that an empty result, not `tail`'s exit status, triggers the fallback.
 
 Names used below:
 - `<plugin root>` is the path on the "Plugin root:" line of the session-start context. That line is printed only in plugin mode; without it the project runs in copy mode.

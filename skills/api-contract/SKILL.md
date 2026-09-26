@@ -49,4 +49,12 @@ Removing without a deprecation period is `BREAKING (N)` and needs the owner's ex
 2. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker). Then write.
 3. Propose the codegen task (`graphql-codegen`/`gqlgen generate`/`openapi-typescript`) as part of the first story.
 
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7, `.claude/docs/git-workflow.md` § Documents): `docs: api contract <F-NNN or area>` (`docs: deprecate <element>` for `--deprecate`), staging exactly the written documents — the schema at `api_contract_path` (`api/schema.graphqls` counts as a document there: the hooks' documents lane lists it), `docs/architecture/api/api-contract.md`, and `.claude/docs/technical-preferences.md` when Phase 1 set `api_contract_path`.
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and ask one `AskUserQuestion`: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- The CI date rule of `--deprecate` (a workflow or inspector/spectral config), generated types and codegen output are toolchain work, not documents: they do not ride the `docs:` commit. Name them in the result and offer the chore lane for them (git-workflow.md § Chore / infra), or the first story when Phase 4 step 3 put codegen there.
+
+Nothing is committed without the answer.
+
 Verdict: `APPROVED` | `BREAKING (N)` | `NEEDS REVISION` | `BLOCKED (no feature spec)`. Next step — one `AskUserQuestion`: `/data-model` (Recommended) · `/create-stories` · revise the contract.

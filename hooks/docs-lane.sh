@@ -3,7 +3,10 @@
 # commit sit on the default branch?) and validate-push.sh (may this push go straight to it?).
 # Kept in one file so the two hooks can never disagree about what a document is.
 DOC_SUBJECT_RE='^docs(\([A-Za-z0-9/_.-]+\))?!?: '
-DOC_PATH_RE='^(docs/|production/|CLAUDE\.md$|\.claude/docs/|\.claude/rules/|\.claude/\.web-studio-version$|README|CHANGELOG\.md$)'
+# The API contract is a pipeline document wherever /setup-stack put it (`api_contract_path`): a Go
+# module keeps the SDL at api/schema.graphqls so gqlgen reads it in place, every other stack under
+# docs/architecture/api/ (already inside docs/, listed for clarity). Other files under api/ are code.
+DOC_PATH_RE='^(docs/|docs/architecture/api/|production/|CLAUDE\.md$|\.claude/docs/|\.claude/rules/|\.claude/\.web-studio-version$|README|CHANGELOG\.md$|api/schema\.graphqls$)'
 
 # docs_lane_paths: reads paths on stdin, returns 0 when every one of them is a pipeline document.
 docs_lane_paths() { ! grep -v '^$' | grep -qvE "$DOC_PATH_RE"; }

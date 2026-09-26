@@ -3,7 +3,7 @@ name: skill-test
 description: "Validates Web Studio skills and agents: static (structural linter), spec (behavioural spec evaluation), category (rubric metrics), agent (agent spec evaluation), audit (coverage report). Uses the testing framework (catalog.yaml, quality-rubric.md, specs) from the kit repository or a project copy."
 argument-hint: "static [name|all] | spec [name] | category [name|all] | agent [name|all] | audit"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Bash, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 model: sonnet
 ---
 
@@ -38,13 +38,14 @@ Tests the studio's own skills and agents (not the project).
 1. Frontmatter starts on line 1 with `---`; fields `name`, `description`, `argument-hint`, `user-invocable`, `allowed-tools` — FAIL if missing.
 2. ≥ 2 phases (`## Phase N` or ≥ 2 `##`) — FAIL.
 3. A verdict word (`PASS|FAIL|CONCERNS|APPROVED|ACCEPTED|PROPOSED|NEEDS REVISION|NEEDS CHANGES|BLOCKED|COMPLETE|READY|DONE|UPDATED|CLEAN|RELEASED|DEPLOYED|HARDENED|PLAYABLE|COMPLIANT|INITIALISED|RESOLVED|MITIGATED|WITHIN BUDGET|OVER BUDGET|ON TRACK|AT RISK|OFF TRACK|FIXED|IMPROVED|PLANNED`) — FAIL.
-4. Ask-before-write: `May I write` (or an explicit gate sentence) when `Write|Edit` is in `allowed-tools` — FAIL; otherwise WARN. A gate that is not an `AskUserQuestion` with alternatives (coordination-rules, rule 7) — WARN.
+4. Ask-before-write: `May I write` (or an explicit gate sentence) when `Write|Edit` is in `allowed-tools` — FAIL; otherwise WARN. A gate that is not an `AskUserQuestion` with alternatives (coordination-rules, rule 7) — WARN. The gate must be followed by `touch .claude/.write-consent` (the consent-guard hook reads that marker; a skill that writes without touching it warns on every write) — a write gate with no consent touch after it — WARN.
 5. A "Next step" at the end — WARN; one that is not offered as an `AskUserQuestion` with alternatives — WARN.
 6. A reference/template/rules link (`stack-reference/`, `templates/`, `rules/`) for authoring/analysis skills — WARN.
 7. `argument-hint` non-empty and consistent with the argument-parsing phase — WARN.
 8. Language: body in English, no project-specific or personal references (hostnames, names, private repo names) — WARN.
 9. A "Reply in the project conversation language" line (the skill honours CLAUDE.md → Language regardless of its own English text) — WARN.
 Output: a table of checks, `COMPLIANT | WARNINGS | NON-COMPLIANT`; for `all` — a summary table.
+**Catalog record** (only with a framework — `static` without one has no catalog and writes nothing): the catalog carries `last_static` / `last_static_result` per skill for exactly this run. After the table, "May I update `catalog.yaml` (`last_static` = today, `last_static_result` = the verdict, for N skill(s))?" as one `AskUserQuestion`: update the catalog (Recommended) · do not write. After the "update" answer: `touch .claude/.write-consent` (rule 7), then edit only those two fields of the tested rows; nothing else in the catalog changes. `audit` reads the fields back.
 
 ## Phase 2B: spec — behavioural evaluation
 1. Read SKILL.md and the spec at the catalog's `spec:` path (`skills/<category>/<name>.md` inside the framework).
@@ -54,7 +55,8 @@ Output: a table of checks, `COMPLIANT | WARNINGS | NON-COMPLIANT`; for `all` —
 5. After the "write" answer: `touch .claude/.write-consent` (rule 7), then write.
 
 ## Phase 2C: category — rubric
-The category section of `quality-rubric.md` → each metric PASS/WARN/FAIL with justification.
+The category section of `quality-rubric.md` → each metric PASS/WARN/FAIL with justification; the category's verdict is `COMPLIANT | WARNINGS | NON-COMPLIANT` from the worst metric.
+**Catalog record**, as in 2A: "May I update `catalog.yaml` (`last_category` = today, `last_category_result` = the verdict, for the N skill(s) of the category)?" — one `AskUserQuestion`: update the catalog (Recommended) · do not write. After the "update" answer: `touch .claude/.write-consent` (rule 7), then edit only those two fields.
 
 ## Phase 2D: agent
 Static: the agent file exists, `name/description/model/tools`, the collaboration protocol block, a stack-reference link, domain and "never"/escalation described. Then evaluate against the agent's spec at the catalog's `spec:` path (`agents/<tier>/<name>.md`, 5 cases) as in 2B, including its write gate. `all` runs every catalogued agent and ends with a summary table; an agent without a spec is listed as such, never skipped silently.

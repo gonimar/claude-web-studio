@@ -16,8 +16,10 @@ facts only from official sources, with a date and a link.
 
 ## Phase 1: Scope and current state
 `stack-reference/` below is `.claude/docs/stack-reference/` in a project and `docs/stack-reference/` in the plugin repository.
-1. **Scope** from the argument: `project`, `all`, or one technology.
+1. **Scope** from the argument: `project`, `all`, or one technology. **Without an argument the default depends on where the skill runs**, and the chosen scope is printed in one line before anything else:
    - **In a project** (a filled `technical-preferences.md` exists) the default is `project`: only the technologies the project uses (the stack section of `technical-preferences.md` and the lockfiles).
+   - **In the plugin repository** (`docs/stack-reference/index.md` at the root and no `.claude/docs/technical-preferences.md`) the default is `all`.
+   - **Anywhere else** — a project whose `technical-preferences.md` is still `[TO BE CONFIGURED]`, or no reference at all — there is no default: ask one `AskUserQuestion` (`all` (Recommended) · one technology · stop) instead of guessing the stack; no reference directory at all → `BLOCKED (no stack-reference found — run /init)`.
    - `all` refreshes every reference file and is meant for the plugin repository. In a project, say in one line that the copy will diverge from the plugin and be overwritten by the next `/update`.
    - One technology → only its reference file (and its `index.md` row).
 2. **Print the list of files in scope** before collecting.
@@ -52,9 +54,12 @@ For upgrades: path (e.g. `ng update`, three.js Migration Guide rNNN→rMMM, Go t
 2. **Write gate**: "May I write [files] and their `index.md` rows?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now.
 3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 4. Write the reference files, then update `index.md`: each row's "latest on date" and its `Verified` column (the file's new `updated:` date); the header `updated:` of the index is the date of this table edit.
-5. **Commit gate** of `git-workflow.md` § Documents: one `AskUserQuestion` offering `docs: refresh stack-reference (<scope>)`, staging exactly the written files. Never leave the files uncommitted in the hand-off.
+5. **Commit gate** (rule 7, `git-workflow.md` § Documents), right after the write: one `AskUserQuestion` offering `docs: refresh stack-reference (<scope>)`, staging exactly the written files (the reference files and `index.md`).
+   - On the default branch when no story work is in progress.
+   - When HEAD is a story branch, name it and ask: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+   - Nothing is committed without the answer, and the files are never left uncommitted silently: a "leave uncommitted" answer is repeated in the result.
 
 ## Phase 5: Project upgrade plan (optional)
 If upgrades exist — propose stories (`/create-stories`) or ADRs for majors; for each — how to verify (tests, build). Do not perform upgrades in this skill.
 
-Verdict: `UPDATED (N files)` | `UP TO DATE` | `CHECK ONLY` | `BLOCKED (sources unreachable: …)`. Next step — one `AskUserQuestion`: `/help` (Recommended) · upgrade stories for the outdated majors · stop here.
+Verdict: `UPDATED (N files)` | `UP TO DATE` | `CHECK ONLY` | `BLOCKED (sources unreachable: …)` | `BLOCKED (no stack-reference found — run /init)`. Next step — one `AskUserQuestion`: `/help` (Recommended) · upgrade stories for the outdated majors · stop here.

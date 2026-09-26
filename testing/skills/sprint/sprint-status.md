@@ -30,5 +30,13 @@ Sprint status from artefacts; read-only.
 **Fixture**: three open Dependabot PRs, one older than the sprint start, one with a failing check. **Expected**: the `Dependency PRs:` line with counts and the oldest date; the stale and the red PR under *Risk to the goal* with `/sprint-plan` named as the fix; nothing merged.
 - [ ] line present with counts · [ ] stale/red under risk · [ ] no mutation
 
+### 7. Burn
+**Fixture**: sprint of 10 days, day 6; five stories planned with `~Nh` on their roadmap lines (40 h); two Done, their `docs: close S-NNN` commits on day 2 and day 4 (16 h). **Expected**: `Burn: 16 h of 40 h closed (2 of 5 stories) · day 6 of 10 · on a straight line 24 h would be closed by now`, a cumulative per-day line (`day 1: 0 · day 2: 8 h · … · day 6: 16 h`), and a *Risk to the goal* line because 16 h is more than one day's share (4 h) behind 24 h; one story without an estimate → the line counts stories, never an invented number.
+- [ ] closed vs planned computed from artefacts · [ ] per day since the sprint start · [ ] risk line when behind
+
+### 8. Parent-write under risk
+**Fixture**: `agent-stats.sh` reports `3 code file(s) written by the session itself (parent-write)`. **Expected**: the count is printed in the Agents block and repeated under *Risk to the goal* as `parent-write: 3 file(s) — engineer rule bypassed`; zero → no risk line.
+- [ ] count printed · [ ] under risk when not zero · [ ] silent when zero
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

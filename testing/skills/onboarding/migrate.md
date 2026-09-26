@@ -23,8 +23,8 @@ Converts a project's documents to the current templates keeping content, IDs and
 **Fixture**: ADRs with Russian headings and only Context/Decision sections. **Expected**: headings are not translated; sections are compared by count and order; Options gets `[not recorded]` (or the reconstructed alternative when the text names one) and Verification `[to define]`; status kept.
 - [ ] language preserved · [ ] missing sections added, not invented · [ ] status unchanged
 ### 5. Gate / protocol — one type per gate, questions first
-**Fixture**: three story cards lack a feature link that cannot be inferred. **Expected**: one `AskUserQuestion` with the real alternatives before any render; then one write gate for the story type; `docs: migrate stories …` commit gate staging exactly those files; never a second type on the same answer.
-- [ ] questions before the render · [ ] one gate per type · [ ] commit gate with the exact file list
+**Fixture**: three story cards lack a feature link that cannot be inferred; HEAD is `feat/S-011-…`. **Expected**: one `AskUserQuestion` with the real alternatives before any render; then one write gate for the story type; `docs: migrate stories …` commit gate staging exactly those files, naming the branch with the three options (switch to the default branch Recommended · commit here · leave uncommitted); never a second type on the same answer; the `/help` checks after a roadmap migration run inside this skill, `/help` itself is the hand-off.
+- [ ] questions before the render · [ ] one gate per type · [ ] commit gate with the exact file list · [ ] branch named, three options
 
 ## Protocol
 - [ ] "May I write?" before writes · [ ] draft before approval · [ ] next step · [ ] never advances the stage itself

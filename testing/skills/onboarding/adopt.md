@@ -17,8 +17,8 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: not a git repository. **Expected**: stops.
 - [ ] stops or explicitly flags the limitation · [ ] names the command/reason · [ ] writes no files
 ### 3. Mode/argument variant
-**Fixture**: settings mode → only the settings diff. **Expected**: behaviour differs from case 1 according to the argument.
-- [ ] argument parsed · [ ] the difference matches the skill description
+**Fixture**: settings mode → only the settings diff. **Expected**: behaviour differs from case 1 according to the argument; the mode → phase table says which phases run — `settings` runs Phase 3 only (no plan file), `stack` runs Phase 1 + the plan, `docs` runs Phase 2 + the plan — and a skipped phase is named as skipped in the result.
+- [ ] argument parsed · [ ] the difference matches the skill description · [ ] skipped phases named
 ### 4. Edge case
 **Fixture**: CLAUDE.md exists without the studio block → insertion proposed, not overwrite. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
@@ -53,6 +53,10 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 ### 12. Format gaps hand off to /migrate
 **Fixture**: roadmap in a companion tool's table format (HIGH), story cards with prose criteria (HIGH). **Expected**: the plan items read `/migrate roadmap --dry-run` and `/migrate stories --dry-run`, never "rewrite by hand"; the roadmap itself is left untouched by adopt.
 - [ ] /migrate named per type · [ ] no manual rewrite
+
+### 13. Documents lane (commit after write)
+**Fixture**: `full` mode; `technical-preferences.md`, `production/findings.md`, `CLAUDE.md` and `docs/adoption-plan-<date>.md` written, `.gitignore` and `.claude/settings.json` merged, HEAD is `feat/S-004-…`. **Expected**: after the last write one commit gate offers `docs: adopt web studio (full)` staging exactly the four documents, names the branch and asks where it belongs (switch to the default branch Recommended · commit here · leave uncommitted); `.gitignore` and `settings.json` are named for the chore lane and never staged in the `docs:` commit; the proposed `.gitignore` lines include `.claude/agent-memory-local/`.
+- [ ] commit gate follows the last write · [ ] exact documents staged · [ ] settings/.gitignore kept out · [ ] agent-memory-local line proposed
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

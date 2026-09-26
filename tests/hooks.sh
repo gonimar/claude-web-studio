@@ -164,6 +164,16 @@ mkdir -p docs; printf 'x\n' > docs/x.md; git add docs/x.md; git commit -q -m "do
 out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'WARNING: pushing directly' && { failn=$((failn+1)); echo "FAIL push: docs-lane push to master warned"; } || pass=$((pass+1))
 printf 'package main\n' > app.go; git add app.go; git commit -q -m "feat: code"
 out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'WARNING: pushing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL push: a non-docs push to master is not warned"; }
+# The API contract of a Go module lives at api/schema.graphqls (api_contract_path): a docs: commit of it is the
+# documents lane on the default branch and in a direct push; other files under api/ are still code.
+git checkout -q master 2>/dev/null; git update-ref refs/remotes/origin/master HEAD
+mkdir -p api; printf 'type Query { ping: Boolean! }\n' > api/schema.graphqls; git add api/schema.graphqls
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: api contract F-002\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && { failn=$((failn+1)); echo "FAIL commit: api/schema.graphqls not recognised as the documents lane"; } || pass=$((pass+1))
+git commit -q -m "docs: api contract F-002"
+out=$(echo '{"tool_input":{"command":"git push origin master"}}' | bash "$H/validate-push.sh" 2>&1); echo "$out" | grep -q 'WARNING: pushing directly' && { failn=$((failn+1)); echo "FAIL push: docs-lane push of api/schema.graphqls to master warned"; } || pass=$((pass+1))
+printf 'package api\n' > api/handler.go; git add api/handler.go
+out=$(echo '{"tool_input":{"command":"git commit -m \"docs: api handler\""}}' | bash "$H/validate-commit.sh" 2>&1); echo "$out" | grep -q 'BRANCH: committing directly' && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL commit: code under api/ rode the documents lane"; }
+git rm -q --cached api/handler.go; rm -rf api
 # WS-089: a Stop with no agent type is built-in tooling, not a lost studio agent
 echo '{"hook_event_name":"SubagentStop"}' | bash "$H/log-agent.sh"
 grep -q 'SubagentStop | builtin' production/session-logs/agent-audit.log && pass=$((pass+1)) || { failn=$((failn+1)); echo "FAIL log-agent: a Stop without a type is not marked builtin"; }
