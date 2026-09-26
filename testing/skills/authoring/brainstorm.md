@@ -30,5 +30,9 @@ Idea exploration: audience, pain, comparables, framing, hypotheses; concept brie
 **Fixture**: a `/brainstorm` run that reaches Phase 3. **Expected**: `docs/specs/concept-brief.md` carries the template's eight sections in order, hypotheses as a table with a validation method per row, and a next step naming a command; an empty section is written as `n/a — reason` rather than omitted, so `/product-spec` Phase 1 finds what it reads.
 - [ ] template used · [ ] hypotheses table present · [ ] next step names a command · [ ] no section silently dropped
 
+### Commit gate on the documents lane
+**Fixture**: the concept brief is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: concept brief` staging exactly the written files (`docs/specs/concept-brief.md`, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -30,5 +30,13 @@ Feature spec: scenarios, rules, data, contract, states, edge cases, security, a1
 **Fixture**: a public article page on a localised content site. **Expected**: section 6 lists the product events (name · trigger · properties), the copy keys, and the SEO requirements (title/meta, structured data, canonical) that `seo-specialist` checks in `/dev-story`.
 - [ ] events listed · [ ] copy keys · [ ] SEO requirements
 
+### Sections 10 and 12 are drafted by name
+**Fixture**: a feature that calls an external payment provider and leaves one pricing rule undecided. **Expected**: section 10 lists the provider and the packages with how each one's health is checked; section 12 lists the undecided rule with who answers it and by when, named next to the criterion it blocks; neither section is left as a template stub.
+- [ ] §10 dependencies with health checks · [ ] §12 open questions with owner and date · [ ] "none" written explicitly when empty
+
+### Commit gate on the documents lane
+**Fixture**: F-012 (and the product spec feature index) is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: feature spec F-012` staging exactly the written files (the spec and the product spec's index, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

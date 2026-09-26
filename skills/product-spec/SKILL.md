@@ -3,7 +3,7 @@ name: product-spec
 description: "Authors the product specification (goals, users, scope, NFRs, risks, MVP acceptance) section by section with the user. Produces docs/specs/product-spec.md. Required before feature specs."
 argument-hint: "[product name] [--review full|lean|solo]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Task
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
 model: sonnet
 agent: product-director
 ---
@@ -38,12 +38,21 @@ For each section, in template order:
    - `solo`: no review.
 2. **CONCERNS/FAIL**: show the findings and propose edits. Never advance the stage automatically.
 3. **Re-review the edits.** The edits go back to the same verifier (same contract, a short answer to one question: "do the findings still stand?"). The document's verdict is the verdict of the **last** review, not the first one with a list of fixes claimed against it: a spec rewritten "according to all eight comments" has been checked by nobody. When the user chooses to skip the second review, say so plainly and record the verdict as `FAIL (edits unverified)`.
-4. **Open items reach `production/findings.md`.** For every BLOCKING and HIGH item of the verdict, one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `ARCH-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs now via `/create-stories` · keep it in the spec only. Write the row only after the "record" answer; that answer is the write consent, so `touch .claude/.write-consent` first (rule 7). A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line: `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, and nobody reads §8 of the spec for open decisions.
+4. **The skill verdict follows the last review's.** PASS → `APPROVED`. CONCERNS → `APPROVED` with the concerns listed in the verdict line, or `NEEDS REVISION` when a concern is on §1–3 (goals, users, scope — a concern there changes what every later section is about). FAIL, including `FAIL (edits unverified)`, → `NEEDS REVISION`, the qualifier carried over. No review ran (`solo`, or `lean` with nothing to review) → `APPROVED`, and the verdict line says "no review".
+5. **Open items reach `production/findings.md`.** For every BLOCKING and HIGH item of the verdict, one `AskUserQuestion`: record it in `production/findings.md` (template `findings.md`; id `ARCH-NNN`, severity, area/feature, the decision needed) (Recommended) · story stubs via `/create-stories` (a hand-off: this skill does not run it — the closing question names it) · keep it in the spec only. Write the row only after the "record" answer; that answer is the write consent, so `touch .claude/.write-consent` first (rule 7). A BLOCKING that is neither recorded nor turned into a story is named as such in the verdict line: `/create-stories`, `/sprint-plan` and `/help` read `production/findings.md`, and nobody reads §8 of the spec for open decisions.
 
 ## Phase 4: Write
 1. Render the draft (or the diff) in the chat.
 2. "May I write `docs/specs/product-spec.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now.
 3. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker), then write.
 4. **Stage.** Propose `production/stage.txt` = `specification` **only when the current stage is earlier than `specification` in the catalog**. On a project already in `build`/`operate` the stage is never proposed backwards.
+
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: product spec`, staging exactly the written files — `docs/specs/product-spec.md`, the `production/findings.md` rows recorded in Phase 3 and `production/stage.txt` when it changed; a spec written per section gets one gate, after the last section.
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- Code, configs, workflows and scripts never ride the `docs:` commit.
+
+Nothing is committed without the answer.
 
 Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/feature-spec` for the Must features (Recommended) · `/game-concept` (game) · revise the spec.

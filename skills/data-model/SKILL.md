@@ -16,6 +16,7 @@ Template `.claude/docs/templates/data-model.md`; reference `database.md`; rules 
 
 ## Phase 1: Context
 1. **Scope** from the argument: `F-NNN` → that feature spec's section 4. No such feature spec → verdict `BLOCKED (no feature spec — run /feature-spec first)`; write nothing. `full` → every feature spec and the whole schema.
+   **No argument** → nothing is assumed. Read `production/session-state/active.md`: when its `Task:` names a story (`S-NNN`) whose feature spec exists, propose that feature; then one `AskUserQuestion`: that `F-NNN` (Recommended when proposed) · another feature from `docs/specs/features/` (listed) · `full`. With no feature specs at all the answer can only be `full` or `BLOCKED` as above.
 2. **Read** the current schema (migrations, `schema.sql`, AR/entity classes), the API contract (which fields we expose), the threat model (PII).
 
 ## Phase 2: Entities and queries
@@ -35,5 +36,13 @@ Template `.claude/docs/templates/data-model.md`; reference `database.md`; rules 
 ## Phase 4: Write
 1. When valuable data is added, the draft includes the updated backup section (template §7).
 2. "May I write `docs/architecture/data-model.md` and the migration files?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
+
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: data model <F-NNN | full>`, staging exactly the written files — `docs/architecture/data-model.md`.
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- Code, configs, workflows and scripts never ride the `docs:` commit: the migration drafts are code and stay out of it — name them in the result; they land with the story that applies them (`/create-stories`).
+
+Nothing is committed without the answer.
 
 Verdict: `APPROVED` | `NEEDS REVISION` | `BLOCKED`. Next step — one `AskUserQuestion`: `/create-stories` (Recommended) · `/api-contract` (if the contract changes) · revise the model; on `BLOCKED`: `/feature-spec` (Recommended) · stop here.

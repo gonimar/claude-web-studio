@@ -3,7 +3,7 @@ name: ux-spec
 description: "Authors a UX specification for a flow or screen — user goal, flow, screens, all states, UI copy, accessibility, responsive behaviour, UX metrics. Produces docs/specs/ux/UX-NNN-name.md. Use before implementing user-facing features."
 argument-hint: "[flow or feature F-NNN]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Edit, AskUserQuestion, Task
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
 model: sonnet
 agent: design-lead
 ---
@@ -15,7 +15,8 @@ Reply in the project conversation language (CLAUDE.md → Language); code, ident
 Template `.claude/docs/templates/ux-spec.md`.
 
 ## Phase 1: Context
-Read the feature spec, `docs/specs/design-system.md` (missing → suggest `/design-system`, continue with the UI kit's base components from technical-preferences), the product spec (personas, platforms).
+1. **The feature spec** the argument names (`F-NNN`, or the feature the named flow belongs to — ask when unclear). Missing → verdict `BLOCKED (no feature spec — run /feature-spec F-NNN first)`; write nothing.
+2. **Read** `docs/specs/design-system.md` (missing → suggest `/design-system`, continue with the UI kit's base components from technical-preferences) and the product spec (personas, platforms).
 
 ## Phase 2: Flow and screens
 Questions: entry point, device, frequency. A flow sketch (mermaid `flowchart`), then screens with design-system components;
@@ -28,4 +29,12 @@ Copy table; focus order and aria; behaviour at 320–400 px; reduced motion.
 ## Phase 4: Write
 "May I write `docs/specs/ux/UX-NNN-<slug>.md`?" — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now. After the "write" answer: `touch .claude/.write-consent` (rule 7 — the consent-guard hook checks the marker).
 
-Verdict: `APPROVED` | `NEEDS REVISION`. Next step — one `AskUserQuestion`: `/create-stories F-NNN` (Recommended) · `/dev-story` · revise the spec.
+## Phase 5: Commit (documents lane)
+Right after the write, one commit gate (rule 7 (4), `.claude/docs/git-workflow.md` § Documents): one `AskUserQuestion` offering `docs: UX spec UX-NNN`, staging exactly the written files — `docs/specs/ux/UX-NNN-<slug>.md`.
+- On the default branch when no story work is in progress.
+- When HEAD is a story branch, name it and offer: switch to the default branch and commit there (Recommended — a pipeline-wide document) · commit here (the document belongs to this story) · leave uncommitted.
+- Code, configs, workflows and scripts never ride the `docs:` commit.
+
+Nothing is committed without the answer.
+
+Verdict: `APPROVED` | `NEEDS REVISION` | `BLOCKED`. Next step — one `AskUserQuestion`: `/create-stories F-NNN` (Recommended) · `/dev-story` · revise the spec; on `BLOCKED`: `/feature-spec F-NNN` (Recommended) · stop here.

@@ -30,5 +30,13 @@ Game concept: loop, MDA, mechanics, economy, feasibility, accessibility, prototy
 **Fixture**: `/game-concept gate` after the first playable slice; §11 criterion "3 of 4 testers replay". **Expected**: asks for the measured result, records `GO | NO-GO | PIVOT` with evidence in `production/releases/gate-prototype.md` and under §11 after "May I write?"; `NO-GO`/`PIVOT` → concept revision is the next step, not the next feature.
 - [ ] measurable criterion required · [ ] artefact written after consent · [ ] NO-GO changes the next step
 
+### 7. GO hands off
+**Fixture**: `/game-concept gate` records `GO`; no stories exist yet. **Expected**: after the write and its commit gate one `AskUserQuestion`: `/create-stories` for the vertical slice's feature (Recommended) · `/dev-story S-NNN` (Recommended instead when stories exist, the first Ready one named) · stop here; the turn ends on the question, no feature work starts inline.
+- [ ] hand-off after GO · [ ] Recommended option depends on whether stories exist · [ ] turn ends
+
+### Commit gate on the documents lane
+**Fixture**: the game concept is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: game concept` staging exactly the written files (`docs/specs/game-concept.md`; after `gate`: `docs: prototype gate GO` with `production/releases/gate-prototype.md` and the concept's §11, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

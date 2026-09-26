@@ -41,5 +41,13 @@ ADR with ≥2 options, consequences, verification; retrofit.
 **Fixture**: the discussion of a draft ADR ends with the conclusion that no decision is needed — a two-line change to the production `Dockerfile` settles it. **Expected**: the rejection is recorded in `production/decisions.md` (or the draft becomes `Rejected`) with the reason and date; the code change is handed to `/impact`, `/hotfix` or a story, never made from this session; the verdict names `REJECTED`.
 - [ ] rejection recorded, not dropped · [ ] no production file edited here · [ ] hand-off named in the closing question
 
+### Retrofit gets the review
+**Fixture**: `retrofit docs/architecture/adr-0002-x.md`, review mode `lean`, the ADR touches auth. **Expected**: after the missing sections are proposed the Phase 3 review runs (here `security-lead`) with the draft labelled `retrofit`; the verdict judges whether the added Options, Consequences and Verification match what is implemented, not which option should have won; then the Phase 4 gate for the same path; Status added as `Proposed`.
+- [ ] review runs on retrofit · [ ] brief says retrofit, conformance judged · [ ] gate for the existing path
+
+### Commit gate on the documents lane
+**Fixture**: ADR-0004 is written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write one commit gate offers `docs: ADR-0004 <slug>` staging exactly the written files (the ADR, the decision-log line in `technical-preferences.md`, the roadmap row when it applied, nothing else); the current branch is named and the question offers the three options — switch to the default branch and commit there (Recommended) · commit here · leave uncommitted; nothing is committed without the answer.
+- [ ] commit gate follows the write · [ ] only the written files staged · [ ] three options, default branch Recommended · [ ] nothing committed without the answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
