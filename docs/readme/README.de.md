@@ -134,8 +134,8 @@ Im Plugin-Modus erhält jeder das Präfix `web-studio:`.
 
 **Härtung**
 - `/security-audit` — prüft Code und Konfiguration gegen OWASP Top 10:2025 mit Werkzeugen, CVSS-bewerteten Befunden und Korrekturen; BLOCKING-Befunde landen in `production/findings.md`, das `/create-stories` und `/sprint-plan` lesen.
-- `/dependency-audit` — prüft die Lieferkette: Schwachstellen, verwaiste Pakete, veraltete Major-Versionen, Lizenzen, Pinning.
-- `/harden` — härtet Header, TLS, Proxy, Container und CI und verifiziert mit echten Anfragen.
+- `/dependency-audit` — prüft die Lieferkette: Schwachstellen, verwaiste Pakete, veraltete Major-Versionen, Lizenzen, Pinning. `--fix-safe` wendet die sicheren Updates an.
+- `/harden` — härtet Header, TLS, Proxy, Container und CI und verifiziert mit echten Anfragen. `--apply` schreibt die Korrekturen.
 - `/pentest` — führt autorisierte dynamische Tests gegen die eigene Anwendung des Projekts in einem festgehaltenen Umfang aus.
 - `/perf-audit` — misst Core Web Vitals, Bundles, API-Latenz, Abfragen oder Spiel-Frames gegen Budgets und priorisiert Verbesserungen.
 - `/a11y-audit` — prüft Barrierefreiheit nach WCAG 2.2 AA mit axe und einer manuellen Tastatur-Checkliste.

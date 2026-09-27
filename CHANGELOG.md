@@ -1,6 +1,48 @@
 # Changelog
 
-## Unreleased
+## 0.14.0 — 2026-09-26
+Nothing new to run: this release verifies and slims what 0.13 shipped, and adds the four technology groups the audit
+found missing. Audit of 2026-09-26 (plugin-validator, skill-reviewer on the eleven heaviest skills, the
+skill-development checklist on the other thirty-nine, claude-md-improver, automation-recommender): 7 blocking defects,
+10 false semantics, all closed here; the full report and the reviewers' notes stayed in the maintainer's `dev/`.
+- **Behavioural evals (`evals/`, `claude plugin eval`).** 21 cases for dev-story, code-review, story-done, init,
+  adopt, refactor, hotfix, update, help and impact, each derived from a spec case in `testing/skills/`, graded
+  deterministically (the skill's verdict or gate phrase in the final message, a tool that must or must not run, no file before the
+  gate); scaffold helpers build the `testing/e2e` fixtures in the run's workspace. CI gains an `evals` job
+  (`workflow_dispatch` with a case glob, nightly, cost ceiling, results as an artifact); `claude plugin validate
+  .claude-plugin/plugin.json` joins the marketplace validation in CI, `tests/run-all.sh` and the kit's CLAUDE.md —
+  `.` alone validated only `marketplace.json`. `testing/README.md` § Evals says how an eval differs from a spec;
+  `catalog.yaml` carries `last_eval` / `last_eval_result`. A deliberately broken grader was shown red (exit 1) before
+  it was removed. Local finding: the eval sandbox does not start Bash as root (seccomp), so the green run is CI's.
+- **`agent:` was never doing anything.** Twenty-nine skills declared `agent:`; a live probe with a sentinel in the
+  agent showed no subagent was started and the agent's prompt never applied — the field acts only with
+  `context: fork`, which no skill uses (and cannot: a forked skill has no `AskUserQuestion`, so no gate). The field is
+  gone; the linter rejects `agent` without `context: fork` and requires the `web-studio:` namespace on it. `model:`
+  does act — on the whole turn, the closing hand-off included — so 43 sonnet/haiku pins are gone too; `help` keeps
+  haiku, the six opus skills keep opus, and the linter refuses a model pin on a skill that edits files. `help`'s
+  undocumented `context: |` block is deleted. CONTRIBUTING § 3 states the field semantics as Claude Code applies them.
+- **The eleven heaviest skills read shorter and carry every rule.** Shared fragments (language, `<hooks>`,
+  namespaces, gates, the documents-lane commit gate, the `Skill` tool, CI wait, verdict and next step) are defined
+  once in coordination-rules § Skill conventions and named by one line; per-stack and per-mode detail moved verbatim
+  to `skills/<name>/references/` (checks-go/php, baseline-go/php, apply, routing, interviews, close edits, DoD
+  recipes, signals…), read on the step that needs it. On-invoke per `claude plugin details`: refactor 7.8k → 4.3k,
+  dev-story 6.9k → 5.0k, code-review 5.3k → 3.2k, adopt 5.1k → 4.0k, update 4.5k → 3.7k, hotfix 4.4k → 3.8k, help 4.4k →
+  3.2k, story-done 4.3k → 3.7k, impact 3.7k → 3.2k, init 3.6k → 2.9k, setup-stack 3.6k → 2.7k — 53.6k → 39.7k tokens
+  (−26 %); the same graders old-vs-new on every case: no case lost, three gained. `/skill-test static all`: 50 COMPLIANT.
+  Defects closed on the way: session state now records the namespaced `/web-studio:code-review` (a resumed plugin-mode
+  session ran Claude Code's built-in review); story-done's studio-review check recognised only leads and engineers
+  (a technical-director or accessibility-specialist review read as "no studio review"), a Done story with an open PR
+  re-ran the close, a pull_request-only CI with no PR deadlocked DONE; setup-stack cited a layout ADR nothing wrote and
+  could lower a brownfield stage; init had no `<root>` in copy mode and let an installed plugin turn a copy-mode
+  project into plugin mode; update's restart check came after the seed gate; hotfix's chore lane had no verdict;
+  impact's `solo`/`lean` modes had no defined outcome; adopt copied rule 7 verbatim.
+- **One collaboration protocol, not thirty copies.** The 380-word block every agent carried (55 % of the agents'
+  text) is the preloaded skill `collaboration-protocol` (`user-invocable: false`); each agent keeps a one-paragraph
+  pointer and `skills: [collaboration-protocol, …]`; a forked agent was shown to receive it. The agent-development
+  pass: directors drop the inert `Task`/`AskUserQuestion` pre-grants and return questions to the caller; the four
+  leads that "routed work" name the specialist the session dispatches and say they do not spawn; `## Never` for
+  seo-specialist, appsec-engineer, network-security-engineer; a `color` per tier; protocol item 10 says what agent
+  memory holds and that `MEMORY.md` is read first; the plugin-mode memory directory is named.
 - **`templates/CLAUDE.md.template` cut to what its imports do not already say** (audit of 2026-09-26: 80 lines, about 45 of
   them restating the `@`-imported coordination-rules). Principles keep their numbers and names and point to the rule or
   section that owns them; `directory-structure.md` and `security-baseline.md` are referenced by path, not imported (principle 4 keeps the
@@ -11,6 +53,51 @@
   because the goal "looked trivial", skipped the steps' gates and templates — that is why the first code goes through `/start`.
 - Kit `CLAUDE.md` names the commit gate (`tests/run-all.sh`), the kit ↔ project path mapping, `tests/` vs `testing/` vs
   `evals/`, the hook contract and the rule that the template's principle numbers are never renumbered.
+- **Observability and Kubernetes references** (`observability.md`, `kubernetes.md`): JSON logs, Prometheus `/metrics`,
+  OpenTelemetry over OTLP, `/healthz` + `/readyz`; the kubernetes deploy target gets its shape (one chart per service,
+  values per environment, Gateway API, probes on those endpoints, requests/limits, PDB, HPA, external-secrets, images
+  by digest, rollout and rollback). Wired through technical-preferences, setup-stack, stack-update, `rules/kubernetes.md`
+  and the Go/PHP/TS rules, devops-lead/devops-engineer and the backend engineers, `/adopt` detection, `/deploy`.
+- **Supply chain** (`supply-chain.md`): syft SBOM, cosign keyless signing verified by digest before deploy, GitHub
+  provenance attestations, Renovate with a release age, lockfile and registry hygiene, Actions pinned by SHA; templates
+  (`renovate.json`, `release-attest.yml`, `verify-image.sh`); `/harden` gets a supply-chain check group, `/release-checklist`
+  three items with commands, `/deploy` verifies the signature, `/dependency-audit` scans the SBOM, `/adopt` detects it.
+- **LLM in the product and MCP for the studio** (`llm-integration.md`): the Anthropic SDKs and Messages API
+  essentials, MCP as a product feature, evals, cost, and the security table mapped to the OWASP GenAI LLM Top 10;
+  `/threat-model` adds the prompt-injection surface (trust boundaries, tool side effects, RAG, MCP) when a project
+  declares or imports an LLM SDK; `rules/security-sensitive.md` and impact-guard cover `prompts/`, `llm/`, `mcp/`.
+  `.mcp.json` declares one optional server, Playwright (a11y-audit, perf-audit and pentest drive the live page through
+  it when present; the CLI path stays the default; the playbook says what it costs and how to switch it off). The
+  GitHub MCP server is not declared — a plugin server starts for every user and this one fails without Docker or a
+  token — the playbook says how to add it (remote OAuth or Docker, toolsets `pull_requests,actions`); story-done and
+  hotfix may use it instead of `gh` with the gates unchanged. Two hooks watch it whatever its toolsets: the new
+  `github-mcp-guard` blocks its file-writing tools (commits go through git and its hooks) and `secret-guard` blocks a
+  token or key in any of its inputs — a PR body or an issue as much as a file.
+- **Symfony and Laravel are full references** (107 and 118 lines, from the frameworks' documentation repositories):
+  versions and support, the studio's defaults, idioms per layer with the `FRAMEWORK_NAMESPACES` keys, testing,
+  performance, security, upgrade paths, review checklists; corrections to the stubs (Symfony 8.1 shipped 2026-05-29,
+  Laravel 13 on 2026-03-17). php-engineer reads the framework file first; code-review and refactor gain framework checks.
+- **Descriptions say what and when.** Twenty-eight rewritten from the audit (refactor 678 → 349 chars; fourteen gain
+  the "use when …" sentence with the phrases a user types; story-done names the PR open and merge, init is "the
+  studio's init, not Claude Code's", hotfix names `--chore`, code-review is "the studio's review, not the built-in").
+  The description optimizer (skill-creator, 20 queries × 3 runs × 4 iterations) on help, backlog and impact: precision
+  100 %, recall 11–33 % whatever the text — the model answers "what now" itself in a bare project; the descriptions that
+  scored best on the held-out set are the ones shipped. Seven descriptions shrink and twenty-two grow. What that
+  costs is not tokens: Claude Code caps the skill listing at about 1 % of the context window (≈ 8,000 characters at 200k;
+  `SLASH_COMMAND_TOOL_CHAR_BUDGET` raises it) and drops the least-used descriptions to name-only beyond it — the 50
+  descriptions total 18.8k characters (16.8k on 0.13), so with no usage history 18 of 50 keep theirs in the listing
+  (23 before), the rest until they are used. README § 1 documents the cap; on-invoke is where the budget went.
+- **Roadmap "Toward 1.0"**: condition 5 gains its CI half (the evals job runs the behavioural cases; the linter mirrors
+  the FAIL checks of `/skill-test static`); condition 1 is not ticked — `last_spec` is empty for every skill but story-done (2026-09-06, WARNINGS) and
+  `last_eval` reads `PENDING-CI` until the first CI run; the roadmap says so.
+- **Also in this release**: hook tests 162 → 181 cases (GitHub MCP payloads, the `notify.sh` smoke case, impact-guard
+  on LLM paths); `rules/dependencies.md` (manifests and lockfiles, npm/yarn/bun/pnpm/composer/go); the release-checklist
+  template and spec carry the supply-chain items; `hooks.json` and `templates/settings.json` register `github-mcp-guard`;
+  quality-rubric G4 requires the preloaded protocol; setup-stack's `BLOCKED` stops after Phase 2 and `--quick` still asks
+  the deploy target; frontend-lead lists performance-engineer; five agent descriptions drop the model tag (`Tier 1, Opus`
+  → `Tier 1`, `model:` unchanged); init and setup-stack hand-offs are namespaced; the template ships no `## Commands`
+  stub (technical-preferences holds the Build/Unit/Lint rows); `/dependency-audit --fix-safe` and `/harden --apply` are
+  named in the READMEs.
 
 ## 0.13.0 — 2026-09-26
 Two sources: the lab's traces of two real projects (the sprint cycle, comments, agent memory — WS-131, WS-136…139), and

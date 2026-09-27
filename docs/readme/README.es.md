@@ -134,8 +134,8 @@ En modo plugin cada uno lleva el prefijo `web-studio:`.
 
 **Endurecimiento**
 - `/security-audit` — audita código y configuración según OWASP Top 10:2025 con herramientas, hallazgos con CVSS y correcciones; los hallazgos BLOCKING van a `production/findings.md`, que leen `/create-stories` y `/sprint-plan`.
-- `/dependency-audit` — audita la cadena de suministro: vulnerabilidades, paquetes abandonados, versiones mayores obsoletas, licencias, fijación.
-- `/harden` — endurece cabeceras, TLS, proxy, contenedores y CI verificando con peticiones reales.
+- `/dependency-audit` — audita la cadena de suministro: vulnerabilidades, paquetes abandonados, versiones mayores obsoletas, licencias, fijación. `--fix-safe` aplica las actualizaciones seguras.
+- `/harden` — endurece cabeceras, TLS, proxy, contenedores y CI verificando con peticiones reales. `--apply` escribe las correcciones.
 - `/pentest` — ejecuta pruebas dinámicas autorizadas contra la propia aplicación del proyecto dentro de un alcance registrado.
 - `/perf-audit` — mide Core Web Vitals, bundles, latencia de API, consultas o frames del juego frente a presupuestos y prioriza mejoras.
 - `/a11y-audit` — audita la accesibilidad según WCAG 2.2 AA con axe y una lista manual de teclado.
