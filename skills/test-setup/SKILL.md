@@ -1,6 +1,6 @@
 ---
 name: test-setup
-description: "Sets up the test strategy and infrastructure for the chosen stack — Vitest/Playwright/PHPUnit/go test, testcontainers or a compose test profile, contract tests from GraphQL/OpenAPI, axe/Lighthouse/k6 hooks, CI stages, coverage thresholds. Produces docs/architecture/test-strategy.md and config files."
+description: "Sets up the test strategy and infrastructure for the chosen stack — unit/e2e runners, testcontainers or a compose test profile, contract tests from GraphQL/OpenAPI, axe/Lighthouse/k6 hooks, CI stages, coverage thresholds — into docs/architecture/test-strategy.md and, with `--apply`, config files. Run after /setup-stack before the first story, for 'set up testing', 'add e2e tests'."
 argument-hint: "[--apply]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task

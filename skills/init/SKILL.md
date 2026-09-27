@@ -1,6 +1,6 @@
 ---
 name: init
-description: "One-time studio scaffolding for a project: asks the conversation language and review mode, creates/updates CLAUDE.md sections, seeds .claude/docs (stack reference, templates, roster), .claude/rules, docs/ and production/ folders, and merges settings (permissions/statusline). Run first in plugin mode; copy mode runs it to set the language."
+description: "Scaffolds the Web Studio in a project (the studio's init, not Claude Code's): asks the conversation language and review mode, creates/updates CLAUDE.md sections, seeds .claude/docs, .claude/rules, docs/ and production/, merges settings; a re-run adds only what is missing and hands off to /update or /adopt. Run first in plugin mode (copy mode: to set the language), for 'set up the studio'."
 argument-hint: "[--language <name>] [--review full|lean|solo] [--plugin-root <path> | --kit <path>]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion

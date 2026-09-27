@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: "Plans and executes a deployment — verifies release readiness, build/tag, migration order, delegates the stack mutation to the declared deploy delegate (container platform / Kubernetes per stack-reference/kubernetes.md / cloud) or produces manual runbook steps, runs post-deploy smoke checks, documents rollback. Every production mutation needs confirmation."
+description: "Plans and executes a deployment — release readiness, build/tag, migration order, the stack mutation through the declared deploy delegate (container platform / Kubernetes per stack-reference/kubernetes.md / cloud) or manual runbook steps, post-deploy smoke checks, documented rollback; every production mutation needs confirmation. Run after /release-checklist, or for 'deploy to staging', 'ship vX.Y.Z', 'roll back the release'."
 argument-hint: "[version | rollback [tag]] [--env <name>] [--plan-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion

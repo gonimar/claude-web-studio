@@ -1,6 +1,6 @@
 ---
 name: architecture-review
-description: "Cross-checks ADRs, API contracts, data model, threat model and feature specs for consistency and feasibility before build; verifies stack facts against the stack reference; `code` mode checks the repository itself against the ADRs, contract and threat model (module boundaries, dependencies, entry points, surfaces) and records drift as findings. Read-only report with PASS / CONCERNS / FAIL. Run at the architecture→build gate, quarterly, and on an adopted project."
+description: "Cross-checks ADRs, API contracts, data model, threat model and feature specs for consistency and feasibility, with stack facts verified against the stack reference; `code` mode checks the repository itself against them and records drift. Read-only PASS / CONCERNS / FAIL. Run at the architecture→build gate, quarterly, after /adopt, or for 'does the code still match the ADRs'."
 argument-hint: "[full | adrs | contracts | code]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, AskUserQuestion

@@ -1,6 +1,6 @@
 ---
 name: docs
-description: "Documentation for people, through tech-writer — README from technical-preferences and the product spec, API reference generated from the contract (GraphQL SDL / OpenAPI), user guide from the feature specs, runbook from docs/ops/deploy.md and the incident history; every command in the docs is run before it is written; --check only reports what is missing or stale. Use when documentation is missing or stale, before a hand-over and before a release."
+description: "Writes documentation for people through tech-writer — README, API reference generated from the contract, user guide from the feature specs, runbook from the deploy doc and incident history; every command in the docs is run before it is written; `--check` only reports what is missing or stale. Use before a hand-over or release, for 'write the README', 'generate the API docs', 'docs are stale'."
 argument-hint: "[readme | api | guide | runbook | all] [--check]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, AskUserQuestion

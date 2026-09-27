@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Reviews code (files, directory, or current diff) for correctness, standards compliance, ADR adherence, security (OWASP), performance, testability; routes to the right lead and specialist by file type (Go/PHP/TS/Angular/Vue/GraphQL/three.js) and to appsec-engineer for sensitive paths. Read-only findings with BLOCKING/WARNING/INFO."
+description: "Reviews the branch's diff (`--diff`, the PR's changes) or given files for correctness, standards, ADR adherence, OWASP security, performance and testability, routing files to the studio's lead and specialist and to appsec-engineer for sensitive paths. Read-only BLOCKING/WARNING/INFO. The studio's review, not Claude Code's built-in: use for 'review my changes', 'review the diff', 'review this PR'."
 argument-hint: "[paths | --diff] [story-path] [--security]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Task, SendMessage, AskUserQuestion

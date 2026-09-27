@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: "Audits the application against OWASP Top 10:2025 / ASVS for the project's stack (Go/PHP/Node, Angular/Vue, GraphQL/REST, WebSocket, containers) — code review by appsec-engineer, tooling (govulncheck, composer/pnpm audit, gitleaks, semgrep), findings with CVSS and fixes; writes docs/security/security-audit-<date>.md. Required before release."
+description: "Audits the application against OWASP Top 10:2025 / ASVS for the project's stack — code review by appsec-engineer, tooling (vulnerability, secret and SAST scanners), CVSS-scored findings with fixes in docs/security/security-audit-<date>.md; modes full, quick, api, auth, infra, <path>. Required before release; use for 'security audit', 'is this secure', 'OWASP check', 'review the auth code'."
 argument-hint: "[full | quick | api | auth | infra | <path>]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion

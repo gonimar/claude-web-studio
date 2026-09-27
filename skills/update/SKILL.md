@@ -1,6 +1,6 @@
 ---
 name: update
-description: "Updates the Web Studio itself in this project — plugin mode: claude plugin update + re-seed changed docs/rules with a diff; copy mode: re-run install.sh from the kit repository. Shows CHANGELOG deltas, preserves local edits, never touches project data."
+description: "Updates the Web Studio itself in this project — plugin mode: claude plugin update and re-seed of changed docs/rules with a diff; copy mode: re-run install.sh from the kit repository; shows CHANGELOG deltas, preserves local edits, never touches project data. Use when a new studio version is out, or for 'update the studio', 'update web-studio', 'new plugin version'."
 argument-hint: "[--kit <path-to-repo>] [--dry-run]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Edit, AskUserQuestion

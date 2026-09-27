@@ -1,6 +1,6 @@
 ---
 name: setup-stack
-description: "Selects and pins the technology stack — project type, backend (Go/PHP-Yii3/Node), frontend (Angular/Vue/Nuxt), UI kit (Material/Taiga), API style (GraphQL default), game engine (three.js/Pixi/Phaser), database, tests, CI, deploy target (compose-ssh/kubernetes), observability, layout — and writes technical-preferences.md with exact versions from the stack reference. Run once at project start or when the stack changes."
+description: "Selects and pins the technology stack — project type, backend, frontend, UI kit, API style (GraphQL default), game engine, database, tests, CI, deploy target, observability, layout — and writes technical-preferences.md with exact versions from the stack reference. Run at project start after /init or when the stack changes, or for 'choose the stack', 'which framework should we use', 'pin the versions'."
 argument-hint: "[type: site|spa|api|fullstack|game|game+backend] [--quick]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion

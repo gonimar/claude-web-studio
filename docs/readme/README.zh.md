@@ -42,6 +42,8 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 
 ---
 
+> **技能列表预算。** Claude Code 为技能列表保留约 1 % 的上下文窗口（200k 时约 8 000 个字符）。工作室的 50 个命令再加上其他插件后，最少使用的描述只显示名称，直到被使用；在环境中设置 `SLASH_COMMAND_TOOL_CHAR_BUDGET=20000` 可让每条描述保持可见。
+
 ## 2. 第一次会话
 1. 在项目中打开 Claude Code，运行 **`/init`**（插件：`/web-studio:init`）。它会询问对话语言和评审模式
    （`lean` 适合单人，`full` 适合团队，`solo` 无关卡），然后创建项目文件：`CLAUDE.md` 各节、
@@ -107,7 +109,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/create-stories` — 把功能规格切分为垂直切片故事，并生成"标准 → 测试"矩阵。
 - `/dev-story` — 由合适的工程师端到端实现一个故事，含测试与标准核对。
 - `/code-review` — 评审文件或当前 diff：正确性、规范、ADR 符合度、安全、性能。
-- `/story-done` — 验证故事真正完成（测试已运行、检查通过、评审批准）并关闭。
+- `/story-done` — 验证故事真正完成（测试已运行、检查通过、评审批准），关闭它，若尚无 PR 则打开 PR，并在 CI 通过后合并。
 - `/sprint-plan` — 根据就绪故事、产能和依赖规划冲刺，并处理 Dependabot/Renovate 队列（绿色的 patch/minor PR 在冲刺开始时合并，major 变为故事）。
 - `/sprint-status` — 依据产物报告冲刺进度、阻塞、依赖更新队列和目标风险。
 - `/backlog` — 把对话中的想法记为 `production/backlog.md` 里的一行，不做任何实现；每周回顾；把想法推进到 `/brainstorm`、`/impact` 或 `/feature-spec`。
@@ -129,7 +131,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 - `/changelog` — 由 Conventional Commits 生成变更日志并建议版本号。
 - `/release-checklist` — 依据证据通过发布关卡，写出含回滚步骤的发布文件。
 - `/deploy` — 规划并执行部署：确认、冒烟检查、回滚；按部署目标契约（`docs/deploy-target-contract.md`）把栈变更交给已声明的部署委托，未声明时给出 runbook 步骤。
-- `/hotfix` — 快速处理紧急生产修复：从失败测试到部署再到回合并。
+- `/hotfix` — 快速处理紧急生产修复：从失败测试到部署再到回合并；`--chore` 在 chore 通道上修复损坏的工具链。
 - `/incident` — 协调事故响应并撰写不追责的事后复盘。
 
 **团队（编排）**

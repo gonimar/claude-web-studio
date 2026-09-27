@@ -1,6 +1,6 @@
 ---
 name: hotfix
-description: "Fast path for an urgent production fix — reproduce with a failing test, minimal fix on a hotfix branch from the release tag, mandatory security review for sensitive paths, expedited checklist, deploy and backport to main. Use for P1 production bugs."
+description: "Fast path for an urgent production fix — reproduce with a failing test, minimal fix on a hotfix branch from the release tag, security review for sensitive paths, expedited checklist, deploy, backport PR to main; `--chore <what>` fixes a broken toolchain (red runner, blocking linter) on the chore lane. Use for P1 bugs, 'production is broken', 'urgent fix', 'CI is red and blocking'."
 argument-hint: "[issue description or bug id] | --chore <what>"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, Skill, AskUserQuestion

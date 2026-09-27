@@ -1,6 +1,6 @@
 ---
 name: tech-debt
-description: "Inventories technical debt — outdated dependencies vs the stack reference, TODO/FIXME, skipped tests, lint suppressions, ADR drift, missing docs, security/perf shortcuts; scores by impact/effort and proposes stories. Read-only report in docs/ops/tech-debt-<date>.md on approval."
+description: "Inventories technical debt — outdated dependencies vs the stack reference, TODO/FIXME, skipped tests, lint suppressions, ADR drift, missing docs, security/perf shortcuts — scores it by impact/effort and proposes stories; report in docs/ops/tech-debt-<date>.md on approval. Use before sprint planning or on an adopted project, for 'how much debt', 'what should we clean up'."
 argument-hint: "[area or 'full']"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, AskUserQuestion

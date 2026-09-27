@@ -1,6 +1,6 @@
 ---
 name: story-done
-description: "Verifies a story is truly done: every acceptance criterion has a passing test (with output), lint/typecheck/security checks pass, review is APPROVED, docs updated; then closes it and updates roadmap/session state. Run after /code-review."
+description: "Verifies a story is truly done — every acceptance criterion has a passing test with output, lint/typecheck/security checks pass, review APPROVED, docs updated — then closes it, updates roadmap and session state, opens the PR if none exists and merges it on green CI, each behind its own gate. Run after /code-review, or for 'close the story', 'S-NNN is done', 'merge the PR'."
 argument-hint: "[story-path or S-NNN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Edit, AskUserQuestion
