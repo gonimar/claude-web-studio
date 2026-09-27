@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "git diff"
-target: trace
+target: last_message
 ---

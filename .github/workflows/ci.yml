@@ -29,7 +29,7 @@ jobs:
       - name: shellcheck
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q shellcheck
-          shellcheck -S warning hooks/*.sh templates/statusline.sh install.sh tests/*.sh
+          shellcheck -S warning hooks/*.sh templates/statusline.sh install.sh tests/*.sh evals/_lib/*.sh evals/*/*/scaffold.sh
   plugin-validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -51,7 +51,14 @@ jobs:
     # every push. Needs ANTHROPIC_API_KEY in the repository secrets; without it the job is skipped.
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120   # worst case ≈ Σ timeout_seconds × runs / concurrency + install
+    # Its own group: a 90-minute nightly must not hold a master push in the ci-master queue.
+    concurrency:
+      group: evals-${{ github.ref }}
+      cancel-in-progress: false
+    env:
+      # Job-level so the step `if:` below can read it (a step's own env is not visible to its if).
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
@@ -61,10 +68,14 @@ jobs:
         run: |
           npm install -g @anthropic-ai/claude-code
           sudo apt-get update -q && sudo apt-get install -y -q bubblewrap socat
+      - name: No key — say so instead of a green run that ran nothing
+        if: ${{ env.ANTHROPIC_API_KEY == '' }}
+        run: |
+          echo "::warning::ANTHROPIC_API_KEY is not set — the eval suite did not run"
+          echo "**evals: skipped — ANTHROPIC_API_KEY is not set**" >> "$GITHUB_STEP_SUMMARY"
       - name: Run the eval suite
         if: ${{ env.ANTHROPIC_API_KEY != '' }}
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CASE: ${{ github.event.inputs.case }}
         run: |
           claude plugin eval . \

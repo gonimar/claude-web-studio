@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "NOT DONE|DONE"
-target: trace
+target: last_message
 ---

@@ -1,5 +1,5 @@
 schema_version: "1.1"
-name: code-review-nothing-to-review
+name: nothing-to-review
 description: "Spec code-review case 2: clean tree on the default branch → reports the empty diff with the command that produced it; no reviewer is spawned."
 tags: [code-review,critical]
 context:

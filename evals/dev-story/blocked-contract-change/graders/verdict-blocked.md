@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "BLOCKED \\(contract change"
-target: trace
+target: last_message
 ---

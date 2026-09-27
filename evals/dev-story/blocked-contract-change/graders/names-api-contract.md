@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "api-contract"
-target: trace
+target: last_message
 ---

@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "APPROVED|NEEDS CHANGES|BLOCKING|WARNING|INFO"
-target: trace
+pattern: "APPROVED|NEEDS CHANGES"
+target: last_message
 ---

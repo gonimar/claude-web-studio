@@ -1,5 +1,5 @@
 ---
 type: tool_order
-before: Bash
+before: { tool: Bash, input_match: 'git diff' }
 after: { tool: Agent, input_match: 'go-engineer' }
 ---

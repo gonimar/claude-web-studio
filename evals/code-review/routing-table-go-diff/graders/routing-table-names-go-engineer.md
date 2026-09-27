@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "go-engineer"
-target: trace
+target: last_message
 ---

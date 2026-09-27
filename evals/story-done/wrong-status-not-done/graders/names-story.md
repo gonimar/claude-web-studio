@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "S-002"
-target: trace
+target: last_message
 ---

@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "English"
-target: trace
+target: last_message
 ---

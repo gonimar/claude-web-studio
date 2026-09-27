@@ -1,6 +1,5 @@
 ---
 type: regex
-pattern: "language"
-target: trace
-flags: i
+pattern: "[Ll]anguage"
+target: last_message
 ---

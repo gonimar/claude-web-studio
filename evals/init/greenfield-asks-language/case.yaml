@@ -1,5 +1,5 @@
 schema_version: "1.1"
-name: init-greenfield-asks-language
+name: greenfield-asks-language
 description: "Spec init cases 1/7: bare /init in an empty git repository asks the language (≥ 2 named options) and writes nothing before consent."
 tags: [init,gate,critical]
 context:

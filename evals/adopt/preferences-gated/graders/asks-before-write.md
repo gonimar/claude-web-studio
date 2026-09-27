@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "\\?"
-target: trace
+pattern: "[Ww]rite|[Ss]ave|[Cc]onfirm|[Aa]pprove|[Pp]roceed|[Gg]o ahead"
+target: last_message
 ---

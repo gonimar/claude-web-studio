@@ -1,6 +1,5 @@
 ---
 type: regex
-pattern: "May I write|write these|write them"
-target: trace
-flags: i
+pattern: "[Mm]ay I write|[Ss]hall I write|[Ww]rite (the plan|these|them|it)|OK to write"
+target: last_message
 ---
