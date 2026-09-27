@@ -33,7 +33,7 @@ each is ticked only with the artefact named next to it. The release that ticks t
 "nothing changed — everything verified".
 
 - [ ] **1. Verified, not "fixed".** Every defect closed since 0.5 has either a live confirmation in a session trace or a
-  behavioural spec case that fails without the fix and runs in CI. No entry left as "fixed — verify on the next run".
+  behavioural spec case that fails without the fix and runs in CI (the `evals` job of `ci.yml`). No entry left as "fixed — verify on the next run".
   *Evidence:* the defect register of the observing lab shows zero `fixed` rows without `verified`; `testing/catalog.yaml`
   carries a `last_spec_result: PASS` for every skill and agent.
 - [ ] **2. Three live runs without intervention.** Greenfield from `/init` to `/deploy`; brownfield from `/adopt` and
@@ -54,8 +54,8 @@ each is ticked only with the artefact named next to it. The release that ticks t
   0.9.0 lesson (SessionStart stdout reached nobody for three months) never repeats.
 - [ ] **5. The studio can repair itself.** `/skill-test spec` passes for all skills and agents; `/skill-improve` closes a
   deliberately broken case in a demo; a user who finds a defect has a documented path from symptom to an issue with
-  evidence (playbook §10.16); the plugin's CI runs the static specs, not only the linter and the hook tests.
-  *Evidence:* CI job "specs"; one issue filed by the documented path and fixed through `/skill-improve`.
+  evidence (playbook §10.16); the plugin's CI runs the behavioural cases, not only the linter and the hook tests.
+  *Evidence:* the `evals` job of `ci.yml` (nightly and on demand, `claude plugin eval`); one issue filed by the documented path and fixed through `/skill-improve`.
 
 Out of scope for 1.0: new skills, new technologies in the stack reference, further playbook translations — all of these
 can land after 1.0 without breaking a promise. Suggested cadence: 0.11 — conditions 3 and 4; 0.12 and 0.13 — the live runs

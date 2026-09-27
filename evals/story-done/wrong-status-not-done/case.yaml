@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: wrong-status-not-done
+description: "Spec story-done 'The story is resolved before anything is read': an argument naming a story still Ready → NOT DONE, status untouched, nothing written."
+tags: [story-done,gate,critical]
+context:
+  scaffold_script: scaffold.sh

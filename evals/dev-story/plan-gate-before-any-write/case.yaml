@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: plan-gate-before-any-write
+description: "Spec dev-story cases 1/5: on a Ready story the skill plans, names branch feat/S-002-…, and asks one question with a Recommended option before any write, branch or specialist."
+tags: [dev-story,gate,critical]
+context:
+  scaffold_script: scaffold.sh

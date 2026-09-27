@@ -3,6 +3,14 @@ on:
   push:
     branches: [master]
   pull_request:
+  workflow_dispatch:
+    inputs:
+      case:
+        description: "Eval case glob (empty = whole suite)"
+        required: false
+        default: ""
+  schedule:
+    - cron: "17 3 * * *"   # nightly evals; the other jobs are cheap and run too
 permissions:
   contents: read
 concurrency:
@@ -21,7 +29,7 @@ jobs:
       - name: shellcheck
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q shellcheck
-          shellcheck -S warning hooks/*.sh templates/statusline.sh install.sh tests/*.sh
+          shellcheck -S warning hooks/*.sh templates/statusline.sh install.sh tests/*.sh evals/_lib/*.sh evals/*/*/scaffold.sh
   plugin-validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -33,4 +41,56 @@ jobs:
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
       - name: claude plugin validate
-        run: claude plugin validate .
+        # `.` resolves to the marketplace manifest; the plugin's own components are validated
+        # only through its manifest path (both must pass).
+        run: |
+          claude plugin validate .
+          claude plugin validate .claude-plugin/plugin.json
+  evals:
+    # Behavioural evals (evals/): real model runs, so only on demand and nightly — never on
+    # every push. Needs ANTHROPIC_API_KEY in the repository secrets; without it the job is skipped.
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120   # worst case ≈ Σ timeout_seconds × runs / concurrency + install
+    # Its own group: a 90-minute nightly must not hold a master push in the ci-master queue.
+    concurrency:
+      group: evals-${{ github.ref }}
+      cancel-in-progress: false
+    env:
+      # Job-level so the step `if:` below can read it (a step's own env is not visible to its if).
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+      - name: Install Claude Code CLI and the shell sandbox
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          sudo apt-get update -q && sudo apt-get install -y -q bubblewrap socat
+      - name: No key — say so instead of a green run that ran nothing
+        if: ${{ env.ANTHROPIC_API_KEY == '' }}
+        run: |
+          echo "::warning::ANTHROPIC_API_KEY is not set — the eval suite did not run"
+          echo "**evals: skipped — ANTHROPIC_API_KEY is not set**" >> "$GITHUB_STEP_SUMMARY"
+      - name: Run the eval suite
+        if: ${{ env.ANTHROPIC_API_KEY != '' }}
+        env:
+          CASE: ${{ github.event.inputs.case }}
+        run: |
+          claude plugin eval . \
+            --trust-plugin --scaffold --allow-tools Bash Write Edit Agent \
+            --ablation none --runs 2 --concurrency 2 \
+            --model claude-sonnet-5 --judge-model claude-haiku-4-5 \
+            --threshold 1.0 --max-cost-usd 25 --no-publish \
+            --json evals-result.json --report evals-report.html \
+            ${CASE:+--case "$CASE"}
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evals-${{ github.run_id }}
+          path: |
+            evals-result.json
+            evals-report.html
+          if-no-files-found: ignore

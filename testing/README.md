@@ -63,6 +63,40 @@ edge case, gate/escalation) with verifiable assertions, add the path to `catalog
 A spec describes the **expected behaviour according to the skill/agent text** — `/skill-test spec`
 looks for instructions confirming each assertion and quotes the line.
 
+## Evals (`evals/`) — how they differ from specs
+A **spec** (`testing/skills/…`, `/skill-test spec`) is read against the skill *text*: the checker
+looks for the instruction that satisfies each assertion and quotes it. It costs one session and
+never runs the skill. An **eval** (`evals/<skill>/<case>/`, `claude plugin eval`) *runs* the skill
+in a fresh, isolated session on a scaffolded fixture and grades what happened: the final message
+(`regex`), the tools called or not called (`tool_used`, `tool_order`), the files created
+(`file_exists`). Evals prove behaviour; specs prove the text. A rule needs both: a spec line and,
+for the critical skills, a case that fails without it.
+
+- Cases come from the spec cases (`case.yaml: description` names the spec case); graders are
+  deterministic — a skill-specific verdict phrase, a tool that must or must not run, a file that
+  must not exist before the gate. `llm` graders only for prose quality, never for a gate.
+- Prompts are the slash form (`/web-studio:dev-story S-002`), so a case tests the skill's
+  behaviour, not its triggering; triggering cases (natural-language prompt + `tool_used: Skill`)
+  belong to the `trigger` tag and are measured separately.
+- Fixtures are scaffolded by `evals/_lib/*.sh` from `testing/e2e/fixtures/` (`--scaffold`
+  required). Runs are non-interactive and the eval runtime does not expose `AskUserQuestion` (its tool
+  list is `Task, Bash, Edit, Glob, Grep, NotebookEdit, Read, Skill, TaskStop, ToolSearch, Write`, verified
+  on 2.1.283 with the tool in `allowed_tools` and `--allow-tools`): a skill that reaches a gate prints
+  the question and its options as text and stops — the graders check that nothing was written before it.
+- Run locally: `claude plugin eval . --trust-plugin --scaffold --allow-tools Bash Write Edit Agent
+  --ablation none --runs 1` (Linux needs `bubblewrap` and `socat`; the shell sandbox does not
+  start as root). CI: `evals` job in `.github/workflows/ci.yml` — `workflow_dispatch` (optional
+  case glob) and nightly, `--max-cost-usd 25`, results as an artifact. Not part of `run-all.sh`.
+- Graders: a verdict is a `regex` on the final message (`last_message`; the `trace` target also holds every
+  tool input and result, so a phrase that appears in a command or a file read would match there); a gate is a
+  `regex` on the final message for the option text (`Recommended`, `git init`, `May I write`) plus
+  `file_exists: false` / `tool_used: Write` 0× for what must not be written. `AskUserQuestion` stays in every
+  case's `allowed_tools` so the gates switch to `tool_used: AskUserQuestion` once the runtime exposes it.
+- `--threshold 1.0` with `--runs 2`: the first CI run defines the baseline — a case that is red on both runs is a
+  grader or skill defect to fix, not a number to lower.
+- `catalog.yaml` records `last_eval` / `last_eval_result` per skill next to `last_spec`; they are maintained by
+  hand after a run (`/skill-test audit` does not read them yet).
+
 ## When to run
 - After editing any file in `skills/` or `agents/` (the hook reminds you).
 - After `/update` — `static all` + `audit`.

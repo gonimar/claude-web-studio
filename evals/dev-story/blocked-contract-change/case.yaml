@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: blocked-contract-change
+description: "Spec dev-story case 2: a story whose criteria change the API contract is BLOCKED (contract change — run /api-contract first); nothing planned or branched."
+tags: [dev-story,gate,critical]
+context:
+  scaffold_script: scaffold.sh

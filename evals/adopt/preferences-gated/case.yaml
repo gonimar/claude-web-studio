@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: preferences-gated
+description: "Spec adopt cases 1/8 (the Go variant of case 1, whose fixture is PHP/Yii3): full mode on a Go service with the studio seeded → the filled technical-preferences draft is shown and the write waits for the answer; technical-preferences.md and the plan are not written."
+tags: [adopt,gate,critical]
+context:
+  scaffold_script: scaffold.sh

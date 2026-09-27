@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: routing-table-go-diff
+description: "Spec code-review case 'The diff decides the reviewers': a Go diff on a story branch → the routing table (path → reviewer → spawned) is printed before the reviewers run, go-engineer is spawned, and the report ends with a severity verdict."
+tags: [code-review,routing,critical]
+context:
+  scaffold_script: scaffold.sh
