@@ -29,7 +29,7 @@ jobs:
       - name: shellcheck
         run: |
           sudo apt-get update -q && sudo apt-get install -y -q shellcheck
-          shellcheck -S warning hooks/*.sh templates/statusline.sh install.sh tests/*.sh evals/_lib/*.sh evals/*/*/scaffold.sh
+          shellcheck -S warning hooks/*.sh templates/statusline.sh install.sh tests/*.sh evals/_lib/*.sh evals/*/*/scaffold.sh docs/templates/supply-chain/*.sh
   plugin-validate:
     runs-on: ubuntu-latest
     timeout-minutes: 10

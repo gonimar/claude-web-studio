@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
 
 Reply in the project conversation language (CLAUDE.md → Language); code, identifiers, paths and commit messages stay in English.
 
-Template `release-checklist.md`. In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
+Template `release-checklist.md`; supply-chain commands from `stack-reference/supply-chain.md` (SC-06, SC-08…SC-10). In the commands below, `<hooks>` is `.claude/hooks/` in copy mode and `${CLAUDE_PLUGIN_ROOT}/hooks/` in plugin mode.
 
 ## Phase 1: Evidence
 A **first release** is one with no earlier release tag (`git tag --list 'v*'` is empty); two gates below apply only to it.
@@ -22,6 +22,11 @@ A **first release** is one with no earlier release tag (`git tag --list 'v*'` is
 6. **Backup and restore**: the backup and the date of the last tested restore. On the first release of a project with a database the restore drill is a gate: no date in `data-model.md` §7 or the runbook → ❌ with the story to run ("Backup & restore drill", `/create-stories` adds it). Later releases show the date and warn when it is older than 90 days.
 7. **Observability**: `/healthz` with dependency checks, structured logs, an alert on error rate. On the first release when technical-preferences has a Deploy target this is a gate: missing → ❌ with the story to run ("Observability", `/create-stories` adds it).
 8. **Security verdict**: `security-lead` via Task gives the final security verdict.
+9. **Supply-chain artefacts** of the release image (the digest from the release workflow summary or `docker buildx imagetools inspect <image>:vX.Y.Z`). Scope first: no release image (a static site, a library) → the three items read `n/a`; technical-preferences without a Supply chain block, or a field recorded as `none — <reason>` → one ⚠ line per artefact with the reason, never a gate; only an artefact the block promises can be ❌:
+   - **SBOM attached to the release** (SC-06): `gh release view vX.Y.Z --json assets -q '.assets[].name'` lists `sbom.cdx.json` (or the SPDX file); ❌ when `sbom_tool` is not `none` and the release has no SBOM asset.
+   - **Image signed and verified by digest** (SC-08, SC-09): `bash .claude/docs/templates/supply-chain/verify-image.sh <image>@sha256:<digest> <owner>/<repo>` (or the equivalent `cosign verify … --certificate-oidc-issuer https://token.actions.githubusercontent.com --certificate-identity-regexp <release workflow>`); the output is the evidence, ❌ on a failed verify or an image signed only by tag.
+   - **Provenance attestation present** (SC-10): `gh attestation verify oci://<image>:vX.Y.Z -R <owner>/<repo>`; ❌ when missing, unless technical-preferences (Supply chain) records `provenance: none — <reason>` (a plan without attestations), then ⚠ with the reason.
+   Nothing configured at all (no block, or every field `none`) → one ⚠ line "supply chain: not configured — `/harden supply-chain`", not a gate; configured but failing → ❌ (a broken promise is worse than none).
 
 ## Phase 2: Checklist
 Every item ✅/❌ with a link to evidence. Any ❌ in the gates → `NOT READY`. The verdict is written into the release file as its `Verdict:` line (template): `Verdict: READY` or `Verdict: NOT READY (<the ❌ items>)` — `/deploy` Phase 1 reads that line, so the file's presence alone never proves readiness (`/hotfix` writes `Verdict: READY (hotfix)` for a patch release).

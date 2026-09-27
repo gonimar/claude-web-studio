@@ -37,5 +37,9 @@ Release gate from evidence.
 ### Re-run after `NOT READY`
 **Fixture**: `production/releases/v1.2.0.md` exists from an earlier run with `Verdict: NOT READY (security-audit FAIL)` committed as `docs: release v1.2.0`; the audit is now clean. **Expected**: the file is updated in place, `Verdict: READY`; the commit gate offers the subject `docs: release v1.2.0 (re-check)` (the plain subject is already in the history); the tag follows that commit on `<default>`.
 - [ ] file updated in place with the new verdict · [ ] `(re-check)` subject · [ ] tag after the re-check commit
+
+### Supply-chain artefacts of the release image
+**Fixture A**: technical-preferences Supply chain has `signing: cosign keyless`, `provenance: actions/attest`; the release `v1.3.0` carries `sbom.cdx.json` as an asset, `verify-image.sh <image>@sha256:… <owner>/<repo>` passes, `gh attestation verify oci://<image>:v1.3.0 -R <owner>/<repo>` passes. **Expected**: three ✅ items ("SBOM attached to the release", "image signed and verified by digest", "provenance attestation present") each with the command output as evidence, in the release file (template items SC-06, SC-08/SC-09, SC-10). **Fixture B**: same preferences, but the release has no SBOM asset and `cosign verify` fails. **Expected**: `NOT READY (SBOM missing, image signature not verified)` — configured-but-failing is a gate. **Fixture C**: `signing: none`, `provenance: none — private repo without Enterprise Cloud`. **Expected**: one ⚠ line pointing at `/harden supply-chain` and the recorded reason; not a gate.
+- [ ] commands run, output quoted · [ ] configured-but-failing → ❌ gate · [ ] not configured → ⚠, never a silent skip · [ ] the three template items filled
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

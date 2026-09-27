@@ -8,7 +8,7 @@ Web Studio 把 Claude Code 变成一个完整的 Web 开发工作室：三层共
 
 技术栈：Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22（Material、Taiga UI）·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL 优先，REST 按需 · PostgreSQL 18 · three.js r185 / PixiJS 8 / Phaser ·
-Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · OWASP Top 10:2025 · WCAG 2.2 AA。
+Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · SBOM + 签名镜像（Sigstore） · OWASP Top 10:2025 · WCAG 2.2 AA。
 
 对话语言按项目选择（`/init` 会询问）；代码、标识符和提交信息保持英文。
 

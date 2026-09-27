@@ -21,13 +21,16 @@ lint → typecheck → unit → build → integration (services: postgres, redis
 - `actions/checkout@v7`, `actions/setup-node@v7` (pnpm cache), `actions/setup-go@v7`, `shivammathur/setup-php@v2`, `actions/cache@v6`; dependency caches; `concurrency` to cancel stale runs; minimal `permissions:`; secrets only via `secrets.*`, OIDC for clouds.
 - Matrices only where needed (PHP/Node versions); `timeout-minutes` on jobs.
 - **The pipeline runs on a budget.** GitHub-hosted minutes on a private repository are 2 000 per month on the free tier and billed per job, each job rounded up to the minute — so seven parallel jobs that take forty seconds each cost seven minutes, not one, and they pay for a checkout and an install apiece. Rules that keep a project inside the budget: one job per toolchain (lint, typecheck and unit tests share a checkout), `paths:` filters or separate workflows per area (`game/**`, `backend/**`), no CI at all for documentation-only changes, e2e and security suites on pull requests to the default branch and on pushes to it rather than on every branch push, `concurrency: cancel-in-progress` so a new push kills the previous run, and `runs-on: ${{ vars.CI_RUNNER || 'ubuntu-latest' }}` so moving to a self-hosted runner later is a repository variable, not an edit of every workflow. `playwright install --with-deps` only where the runner needs it (`runner.environment == 'github-hosted'`). A pipeline that exhausts the budget mid-month stops being a gate and becomes a thing people merge around.
-- Renovate/Dependabot: group minors, `minimumReleaseAge` 3–7 days, auto-merge patches after green CI.
+- Renovate/Dependabot: the policy is `supply-chain.md` § Dependency update automation (`minimumReleaseAge` 7 days, minors grouped, patches auto-merged after green CI).
 
 ## Deployment
 - Small servers: compose stacks from the repository (optionally through a container-platform deploy skill), an env file outside git, a migrate service before the app, health-check dependencies (`depends_on: condition: service_healthy`).
 - Strategy: a built image tagged `sha`/`vX.Y.Z`; rollback = redeploy the previous tag; backward-compatible migrations (expand/contract).
 - Zero-downtime when needed: two replicas behind the proxy or Caddy graceful reload.
 - Kubernetes (`Deploy target: kubernetes`): the deploy shape, versions and rollout/rollback commands are in `kubernetes.md`.
+
+## Supply chain
+SBOM per release image (syft, CycloneDX JSON), keyless cosign signature by digest, provenance attestation (`actions/attest`), Renovate policy (`minimumReleaseAge` 7 days, grouped minors, patch-only automerge), Actions pinned by SHA, frozen lockfile installs: all in [supply-chain.md](supply-chain.md) with the review checklist `SC-01…SC-12`; templates in `docs/templates/supply-chain/`.
 
 ## Observability
 Versions, the studio default set, idioms per language, security notes and the review checklist: **`observability.md`**. The summary:

@@ -46,7 +46,7 @@ See `security-baseline.md`. TLS 1.3 (1.2 minimum with modern ciphers), HSTS prel
 - Secrets: env/secret store, rotation, `.env` not in git, repository scanning (gitleaks) in CI.
 
 ## Supply chain (A03)
-Lockfile; `npm audit`/`pnpm audit`/`composer audit`/`govulncheck` in CI failing on high; Renovate with a 3–7 day delay on new versions; maintainer/abandonment checks; SRI for external `<script>`; image signatures (cosign) as maturity allows; SBOM (syft) for releases.
+Lockfile; `npm audit`/`pnpm audit`/`composer audit`/`govulncheck` in CI failing on high; Renovate with the release delay, image signatures and SBOM per `supply-chain.md` (every release image: SBOM, keyless cosign signature, provenance; `minimumReleaseAge` 7 days); maintainer/abandonment checks; SRI for external `<script>`; SBOM (syft) for releases.
 
 ## Dynamic testing of the project's own applications (`/pentest`)
 Only against the project's own systems or with written permission. Tools: OWASP ZAP (baseline/full scan, API scan from OpenAPI/GraphQL), Nuclei (templates), `sslyze`/`testssl.sh`, `nmap` against the project's own perimeter, Schemathesis (API fuzzing), Burp Community for manual checks. Report via the `pentest-report.md` template with CVSS 4.0 and a remediation plan.
