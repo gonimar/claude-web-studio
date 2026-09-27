@@ -4,14 +4,15 @@ Read at Phase 3. Each block is the exact command behind one checklist item; the 
 the verdict, the recipe produces the evidence the report quotes (artefacts over claims).
 
 ## Item 2 — the studio's review ran
-- A reviewer of record is a studio agent (coordination-rules § Subagents) — any name in the plugin's
-  `agents/`: `*-lead`, `*-engineer` (the `/code-review` routing table and `appsec-engineer`),
-  `*-director`, `*-specialist`, `*-designer`, `tech-writer`. The log records `web-studio:<name>` in plugin
-  mode and `<name>` in copy mode.
+- A reviewer of record is the agent the `/code-review` routing table (its Phase 2 step 1) requires for
+  the diff's files — the stack's `*-engineer` plus its `*-lead`, `appsec-engineer` on sensitive paths;
+  no other Stop counts (a `tech-writer` or engineer Stop from a fix round is a fixer, not a reviewer).
+  The log records `web-studio:<name>` in plugin mode and `<name>` in copy mode.
 - The branch's first commit: `FIRST=$(git log --reverse --format=%ci origin/<default>..HEAD | head -1)`
   (`YYYY-MM-DD HH:MM:SS ±HHMM`).
 - The stops:
-  `grep -E 'SubagentStop \| (web-studio:)?([a-z-]+-(lead|engineer|director|specialist|designer)|tech-writer)' production/session-logs/agent-audit.log`
+  `grep -E 'SubagentStop \| (web-studio:)?[a-z-]+-(lead|engineer)' production/session-logs/agent-audit.log`, then
+  keep the lines whose agent the routing row required
   — a log line starts with `date '+%F %T'` in the machine's local time; compare it with `$FIRST` read in
   the same zone. A Stop later than the first commit counts; earlier Stops belong to the implementation.
 - `security-sensitive` story (the paths of `rules/security-sensitive.md`: `auth`, `security`, `middleware`,

@@ -33,7 +33,7 @@ It produces no document (rule 9: an ADR, threat-model surface, contract or story
 ## Phase 3: Verification by the class owner
 1. **Review mode scopes the step** (review-workflow.md):
    - `full` — every triggered class.
-   - `lean` — architecture and security; a triggered product class stays classification only unless the pre-spawn `AskUserQuestion` — verify architecture and security (Recommended) · product too — adds it.
+   - `lean` — architecture and security; a triggered product class stays classification only unless the pre-spawn `AskUserQuestion`, asked only when product is triggered — verify architecture and security (Recommended) · product too — adds it.
    - `solo` — the classification is shown; before any spawn, one `AskUserQuestion`: verify (Recommended) · skip, which ends like `--classify-only`: `CLASSIFIED (<classes>)`, no note, no marker, the closing question.
 2. **Spawn** the triggered classes in scope in one parallel `Task` batch: architecture → `technical-director`, security → `security-lead`, product → `product-director`.
 3. **The brief per verifier**: the template in `references/verifier-brief.md` (the proposal, the class's evidence rows, the artifacts to read by path, the review mode, the contract quoted verbatim).
@@ -47,9 +47,8 @@ It produces no document (rule 9: an ADR, threat-model surface, contract or story
 3. **Records the verdict creates** — only when a verdict names a finding ID (`ARCH-004`, `SEC-002` → its row in `production/findings.md`, same turn, or the ID has no authority) or the proposal came from `production/backlog.md` (`I-NNN` in the argument or a matching entry → one line: date, verdict, next command, or the idea returns). Read `references/records.md`, then:
    1. Show the row/line; one `AskUserQuestion`: "May I write <the row in `production/findings.md` / the line in `production/backlog.md`>?" — write (Recommended) · show the draft/diff first · not now; after "write" `touch .claude/.write-consent`, then `Edit`.
    2. Record the commit gate: `<hooks>session-state.sh set Gate "/impact Phase 4: commit <ID>?"`.
-   3. Ask, one `AskUserQuestion`: `docs: impact <ID> — <verdict>` (a backlog line: `docs: backlog I-NNN — impact verdict`), staging exactly the written file(s).
-   4. Branch per § Documents-lane commit gate: `<default>` when no story work is in progress; a story-branch HEAD (usual: the triage interrupted `/dev-story`) is named, offering switch to `<default>` (Recommended: the document is pipeline-wide) · commit here · leave uncommitted.
-   5. On "switch": `git switch <default> && git pull --ff-only origin <default>`, the commit, `git switch <story branch>` back, so the interrupted story continues on its branch.
+   3. Ask, **one** `AskUserQuestion` that names the message and the branch (rule 7: one turn, one gate): `docs: impact <ID> — <verdict>` (a backlog line: `docs: backlog I-NNN — impact verdict`), staging exactly the written file(s); the branch per § Documents-lane commit gate — `<default>` when no story work is in progress; a story-branch HEAD (usual: the triage interrupted `/dev-story`) is named in the question, whose options are switch to `<default>` and commit there (Recommended: the document is pipeline-wide) · commit here · leave uncommitted.
+   4. On "switch": `git switch <default> && git pull --ff-only origin <default>`, the commit, `git switch <story branch>` back, so the interrupted story continues on its branch.
    6. Clear the gate: `<hooks>session-state.sh set Gate "—"`. Nothing is committed without the answer; code or configs never ride the `docs:` commit.
 4. **Session note**: `<hooks>session-state.sh note "impact: <proposal> → <verdicts>; next: <commands>"` (dated; the writer keeps ten, archives older ones to `production/session-state/archive/`, and refuses a file not in its format — then `<hooks>session-state.sh migrate` once, which archives the previous file, or add the line by hand).
 5. **Never write `Next:` yourself**: a triage is usually a detour, and a detour never overwrites the interrupted intent (rule 7); the required commands go into the note and the closing question.

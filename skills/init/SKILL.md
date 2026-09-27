@@ -1,7 +1,7 @@
 ---
 name: init
 description: "One-time studio scaffolding for a project: asks the conversation language and review mode, creates/updates CLAUDE.md sections, seeds .claude/docs (stack reference, templates, roster), .claude/rules, docs/ and production/ folders, and merges settings (permissions/statusline). Run first in plugin mode; copy mode runs it to set the language."
-argument-hint: "[--language <name>] [--review full|lean|solo] [--plugin-root <path>]"
+argument-hint: "[--language <name>] [--review full|lean|solo] [--plugin-root <path> | --kit <path>]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
 ---
@@ -17,8 +17,8 @@ Glossary: `<root>` — the seed root, **plugin mode only** (the install path fou
 ## Phase 1: Locate the studio files
 1. **Mode and seed root**, in this order; the first that holds decides:
    1. `--plugin-root` → plugin mode, `<root>` is that path;
-   2. the "Plugin root:" line printed by the session-start hook → plugin mode;
-   3. `.claude/.web-studio-version` present (install.sh's stamp) → **copy mode**, nothing to seed — before the plugin list: an installed plugin never turns a copy-mode project into plugin mode;
+   2. `.claude/.web-studio-version` present (install.sh's stamp) → **copy mode**, nothing to seed — before the "Plugin root:" line and the plugin list: a plugin installed at user scope prints that line into every project's session and never turns a copy-mode project into plugin mode;
+   3. the "Plugin root:" line printed by the session-start hook → plugin mode;
    4. `claude plugin list --json`: the `web-studio` row whose `projectPath` is this project's root (`git rev-parse --show-toplevel`), else its `user`-scope row → its install path; the list covers every project on this machine, never take the first match (`/update` Phase 1);
    5. `.claude/docs/stack-reference/index.md` already present — copy mode, nothing to seed.
    None found → ask the user for the path to the plugin/kit directory. Write nothing until a root is known; no path given → `NOT INITIALISED (no plugin root)` (Phase 6).
@@ -39,7 +39,7 @@ Glossary: `<root>` — the seed root, **plugin mode only** (the install path fou
 ## Phase 4: Write and verify
 1. Apply the plan; print the tree of created files.
 2. Smoke-check the statusline: `echo '{"cwd":"'"$PWD"'"}' | bash .claude/statusline.sh`.
-3. **Version stamp — copy mode only.** Keep install.sh's `.claude/.web-studio-version`; missing → record the version of `<kit>/.claude-plugin/plugin.json` only when `--plugin-root` names the kit, else name `install.sh` as the fix. Plugin mode writes none: `claude plugin list --json` holds the version, and a stamp would claim files the project does not hold (`/update` deletes it).
+3. **Version stamp — copy mode only.** Keep install.sh's `.claude/.web-studio-version`; missing → record the version of `<kit>/.claude-plugin/plugin.json` only when `--kit <path>` names the kit repository (the argument `/update` takes; `--plugin-root` means plugin mode), else name `install.sh` as the fix. Plugin mode writes none: `claude plugin list --json` holds the version, and a stamp would claim files the project does not hold (`/update` deletes it).
 
 ## Phase 5: Commit (documents lane)
 Right after the write, one commit gate (§ Documents-lane commit gate; `.claude/docs/git-workflow.md` § Documents).
@@ -54,7 +54,7 @@ Right after the write, one commit gate (§ Documents-lane commit gate; `.claude/
    - `INITIALISED` — neither the `## Studio (Web Studio)` block in `CLAUDE.md` nor a seeded `.claude/docs/` existed before this run (Phase 1 items 1.3 and 1.5 did not apply).
    - `ALREADY INITIALISED (N files differ)` — one of them did; N = seeded files whose content differs from the seed root (listed in Phase 3; recipe and ignore list in `references/rerun-handoff.md`); the run only added what was missing.
    - `NOT INITIALISED (declined)` — "not now" at the write gate; `NOT INITIALISED (no plugin root)` — no root found, no path given. Nothing was written.
-2. **Next step** — one `AskUserQuestion`, never a plain text line:
+2. **Next step** — one `AskUserQuestion`, never a plain text line, every command namespaced (§ Skill conventions → Paths and names):
    - After `INITIALISED`: `/adopt full` (Recommended for brownfield: audits stack, artefacts and settings, fills `technical-preferences.md` from the facts) · `/start` (Recommended for an empty project) · `/help` · stop here.
    - After `ALREADY INITIALISED`: read `references/rerun-handoff.md` — its ladder (`/update` · `/adopt full` · `/help`) marks **exactly one** option Recommended by the first fact that holds, offers the others, and never recommends "do nothing" on a project with code.
    - After `NOT INITIALISED`: `/init` again (`--plugin-root <path>` when no root was found; Recommended) · `/help` · stop here.

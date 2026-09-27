@@ -2,7 +2,8 @@
 
 Read after the close answer and once the PR number is known (Phase 4 steps 1–3). Four edits, each one
 `Edit` of the line or row it names — never a Bash heredoc, never a rewrite of the file. The values were
-shown in the draft before the close gate; the edits write exactly those values.
+shown in the draft before the close gate; the edits write exactly those values, with the PR number of
+step 3 in place of the `PR #N` placeholder.
 
 1. **Actual time**: `⏱ Nh` on the roadmap line and `Actual: Nh` in the card — wall-clock from the card's
    `Started:` line (written by `/dev-story` or `/refactor --apply` at branch time) to now, rounded to 0.5 h.
