@@ -1,5 +1,5 @@
 schema_version: "1.1"
-name: refactor-dry-run-plan-gate
+name: dry-run-plan-gate
 description: "Spec testing/skills/pipeline/refactor.md case 1: `layout` dry-run on a Go service with go_architecture unset → baseline table, Phase 3 questions, then stops at the plan's 'May I write' gate (or BLOCKED with its reason); no plan document, no story, no product code before the answer."
 tags: [refactor, gate, critical]
 context:

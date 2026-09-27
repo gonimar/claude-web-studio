@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "PLANNED \\(|BLOCKED \\("
-target: trace
+target: last_message
 ---

@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "May I write|BLOCKED \\("
-target: trace
+target: last_message
 ---

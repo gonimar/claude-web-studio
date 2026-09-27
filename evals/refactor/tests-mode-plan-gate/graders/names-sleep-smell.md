@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "time\\.Sleep"
-target: trace
+target: last_message
 ---
