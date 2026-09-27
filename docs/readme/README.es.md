@@ -10,7 +10,7 @@ marco para probar a los propios agentes. Sirve tanto para aplicaciones web como 
 
 Stack: Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL primero, REST donde encaje · PostgreSQL 18 · three.js r185 /
-PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA.
+PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · OWASP Top 10:2025 · WCAG 2.2 AA.
 
 El idioma de conversación se elige por proyecto (`/init` lo pregunta); el código, los
 identificadores y los mensajes de commit se mantienen en inglés.
@@ -226,7 +226,7 @@ Ejecuta `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent
 ```
 .claude-plugin/   plugin.json + marketplace.json (este repositorio es a la vez marketplace y plugin)
 agents/           30 agentes       skills/     50 comandos + 1 skill precargada        hooks/      hooks.json + 19 scripts
-rules/            16 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
+rules/            17 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          marco de pruebas de agentes y skills      install.sh  instalador de copia / proyecto nuevo
 ```

@@ -8,7 +8,7 @@ Web Studio 把 Claude Code 变成一个完整的 Web 开发工作室：三层共
 
 技术栈：Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22（Material、Taiga UI）·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL 优先，REST 按需 · PostgreSQL 18 · three.js r185 / PixiJS 8 / Phaser ·
-Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA。
+Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · OWASP Top 10:2025 · WCAG 2.2 AA。
 
 对话语言按项目选择（`/init` 会询问）；代码、标识符和提交信息保持英文。
 
@@ -206,7 +206,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ```
 .claude-plugin/   plugin.json + marketplace.json（本仓库同时是 marketplace 和插件）
 agents/           30 个代理        skills/     50 个命令 + 1 个预加载技能        hooks/      hooks.json + 19 个脚本
-rules/            16 条路径规则                   docs/       stack-reference/、templates/（findings、adoption-plan、deploy-runbook、deploy/）、deploy-target-contract、、名册、流水线目录、安全基线
+rules/            17 条路径规则                   docs/       stack-reference/、templates/（findings、adoption-plan、deploy-runbook、deploy/）、deploy-target-contract、、名册、流水线目录、安全基线
 templates/        CLAUDE.md、settings.json、settings.plugin-mode.json、statusline.sh
 testing/          代理与技能测试框架                install.sh  副本 / 新项目安装脚本
 ```

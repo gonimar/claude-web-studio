@@ -7,7 +7,7 @@
 **Does not own**: Application code, perimeter security policy (security-lead)
 **Escalates to**: technical-director
 **Delegates to**: devops-engineer, an installed deployment skill
-**Reference**: `stack-reference/tooling-devops.md`
+**Reference**: `stack-reference/kubernetes.md`, `observability.md`, `tooling-devops.md`
 **Verdict vocabulary**: DEPLOYED / ROLLED BACK / PLAN
 
 ## Static checks

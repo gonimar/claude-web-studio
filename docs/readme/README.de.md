@@ -10,7 +10,7 @@ der Agenten selbst. Es deckt Webanwendungen und Browserspiele gleichermaßen ab.
 
 Stack: Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL zuerst, REST wo es passt · PostgreSQL 18 · three.js r185 /
-PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA.
+PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · OWASP Top 10:2025 · WCAG 2.2 AA.
 
 Die Gesprächssprache wird pro Projekt gewählt (`/init` fragt danach); Code, Bezeichner und
 Commit-Nachrichten bleiben auf Englisch.
@@ -226,7 +226,7 @@ Projekt aus. Details: [testing/README.md](../../testing/README.md).
 ```
 .claude-plugin/   plugin.json + marketplace.json (dieses Repository ist Marketplace und Plugin zugleich)
 agents/           30 Agenten       skills/     50 Befehle + 1 vorgeladener Skill        hooks/      hooks.json + 19 Skripte
-rules/            16 pfadbezogene Regeln        docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, Agentenliste, Workflow-Katalog, Sicherheits-Baseline
+rules/            17 pfadbezogene Regeln        docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, Agentenliste, Workflow-Katalog, Sicherheits-Baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          Testframework für Agenten und Skills      install.sh  Installer für Kopie / neues Projekt
 ```

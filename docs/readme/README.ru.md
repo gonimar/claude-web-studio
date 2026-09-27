@@ -10,7 +10,7 @@ Web Studio превращает Claude Code в полноценную студи
 
 Стек: Go 1.27 · PHP 8.5 (справочник Yii3; Symfony/Laravel/Slim по выбору) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL в приоритете, REST где уместно · PostgreSQL 18 · three.js r185 /
-PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · OWASP Top 10:2025 · WCAG 2.2 AA.
+PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · OWASP Top 10:2025 · WCAG 2.2 AA.
 
 Язык общения выбирается для каждого проекта (`/init` спрашивает); код, идентификаторы и сообщения
 коммитов остаются на английском.
@@ -232,7 +232,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ```
 .claude-plugin/   plugin.json + marketplace.json (репозиторий — одновременно marketplace и плагин)
 agents/           30 агентов       skills/     50 команд + 1 предзагружаемый скил         hooks/      hooks.json + 19 скриптов
-rules/            16 правил по путям           docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, ростер, каталог конвейера, базовая линия безопасности
+rules/            17 правил по путям           docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, ростер, каталог конвейера, базовая линия безопасности
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          фреймворк тестирования агентов и скилов      install.sh  установщик копии / нового проекта
 ```

@@ -62,5 +62,9 @@ Attach the studio to an existing project: stack detection, artefact audit, setti
 **Fixture**: `docs` mode; `technical-preferences.md` still carries `[TO BE CONFIGURED]`. **Expected**: the facts table row reads "not run — `/adopt stack`", `/adopt stack` is the plan's first item, and the skipped stack phase is named as skipped in the result, never silently absent.
 - [ ] "not run" row · [ ] `/adopt stack` first in the plan · [ ] skipped phase named
 
+### 15. Kubernetes target and observability detected, never asked (0.14)
+**Fixture**: `deploy/k8s/charts/api/Chart.yaml` with `templates/`, `helm upgrade` in a workflow, `log/slog` `NewJSONHandler` and `client_golang` in `go.mod`, no OpenTelemetry dependency. **Expected**: `Deploy target: kubernetes` with the chart path and the routing/secrets kinds read from the chart, no question asked; the Observability block reads `log_format: json`, `metrics: prometheus`, `tracing: [TO BE CONFIGURED]` with the source fact per field and the headline `custom` (differences listed); a single health endpoint that queries the database is a MEDIUM finding.
+- [ ] target detected from files · [ ] per-field source facts · [ ] headline follows the fields · [ ] health finding when it applies
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
