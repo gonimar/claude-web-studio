@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "adopt"
-target: trace
+target: last_message
 ---

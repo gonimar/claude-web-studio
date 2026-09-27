@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "dev-story"
-target: trace
+target: last_message
 ---

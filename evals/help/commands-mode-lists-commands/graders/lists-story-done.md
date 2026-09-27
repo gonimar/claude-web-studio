@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "story-done"
-target: trace
+target: last_message
 ---

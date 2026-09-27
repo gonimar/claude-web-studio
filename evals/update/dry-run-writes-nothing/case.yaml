@@ -1,5 +1,5 @@
 schema_version: "1.1"
-name: update-dry-run-writes-nothing
+name: dry-run-writes-nothing
 description: "Spec update case 10 (--dry-run): the update command is shown, not run; the verdict is DRY RUN; no file is edited or written."
 tags: [update, gate]
 context:

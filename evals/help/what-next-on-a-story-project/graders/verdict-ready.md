@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "READY"
-target: trace
+target: last_message
 ---
