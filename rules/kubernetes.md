@@ -2,6 +2,7 @@
 paths: ["**/charts/**", "**/deploy/k8s/**", "**/Chart.yaml", "**/values*.yaml", "**/kustomization.yaml"]
 ---
 # Kubernetes rules
+(The `**/values*.yaml` glob also matches values files that are not Helm's, such as Grafana provisioning; the rules are harmless there.)
 - One Helm chart per service at `k8s_chart_path` (`Chart.yaml` `apiVersion: v2`, `appVersion` = the release tag); `values.yaml` holds safe defaults, `values-<env>.yaml` only the differences; keys camelCase, nested by concern.
 - Image pinned by digest (`@sha256:…`), never `:latest` or a floating tag; the release workflow writes the digest, a human never types it.
 - Probes: `startupProbe` and `livenessProbe` → `GET /healthz`, `readinessProbe` → `GET /readyz`, `httpGet` with timeouts — the endpoints of `observability.md`; `/healthz` never checks a dependency.

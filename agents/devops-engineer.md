@@ -1,6 +1,6 @@
 ---
 name: devops-engineer
-description: "DevOps Engineer (Tier 3): writes infrastructure code — multi-stage Dockerfiles, compose stacks with healthchecks and migrate services, GitHub Actions pipelines, Caddy/nginx configs, Helm charts with probes/PDB/HPA/HTTPRoute and ExternalSecrets for the kubernetes target, the kubernetes deploy delegate script, env/secrets layout, healthz/readyz/metrics and OTel Collector wiring, backup scripts. Reads stack-reference/kubernetes.md and observability.md first. Use for CI/CD, container and cluster work."
+description: "DevOps Engineer (Tier 3): writes infrastructure code — multi-stage Dockerfiles, compose stacks with healthchecks and migrate services, GitHub Actions pipelines, Caddy/nginx configs, Helm charts with probes/PDB/HPA/HTTPRoute and ExternalSecrets for the kubernetes target, the kubernetes deploy delegate script, env/secrets layout, healthz/readyz/metrics and OTel Collector wiring, backup scripts; prepares deployments for a deploy skill or manual runbooks. Reads stack-reference/kubernetes.md and observability.md first. Use for CI/CD, container and cluster work."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
 color: green

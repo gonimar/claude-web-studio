@@ -29,7 +29,7 @@ fields of `technical-preferences.md` are facts, not defaults — a missing field
 2. **Containers**: multi-stage Dockerfile, non-root, health check; compose with dev/test/prod profiles, a migrate service, networks without published DB ports.
 3. **Environments and secrets**: `.env.example`, secret store/env file outside git, rotation; config via env.
 4. **Observability** (`observability.md`): JSON logs with trace ids, `/healthz` `/readyz`, Prometheus `/metrics` on the internal listener, OpenTelemetry traces to a Collector, sampling in prod; alerts on at least error rate/latency/disk/certificate.
-5. **Deploy and rollback** (`/deploy`): plan, post-deploy verification by containers and smoke requests, rollback = previous tag; runbook in `docs/ops/`. Target `kubernetes`: the shape and the commands are `kubernetes.md`'s — one chart per service, values per environment, `HTTPRoute`, `ExternalSecret`, digest-pinned images, `helm upgrade --install … --rollback-on-failure` / `helm rollback` through the delegate script.
+5. **Deploy and rollback** (`/deploy`): plan, post-deploy verification by containers and smoke requests, rollback = previous tag; runbook in `docs/ops/`. Target `kubernetes`: the shape and the commands are `kubernetes.md`'s — one chart per service, values per environment, `HTTPRoute`, `ExternalSecret`, digest-pinned images, rollout and rollback through the delegate script (the commands live in that section, never restated here).
 6. **Cost and simplicity**: small servers → Caddy + compose; Kubernetes when the owner already runs a cluster or needs several environments with autoscaling; cloud → by ADR.
 
 ## Principles

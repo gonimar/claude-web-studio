@@ -11,7 +11,7 @@
 
 ## Static checks
 - [ ] agent file `devops-engineer.md` with `name/description/model/tools`
-- [ ] reads `stack-reference/tooling-devops.md` first
+- [ ] reads `stack-reference/kubernetes.md` and `observability.md` first (`tooling-devops.md` for compose and CI)
 - [ ] a "How you work" section (spec → questions → sketch → code → tests → run)
 - [ ] a "Never" section (or explicit prohibitions) and the Collaboration protocol
 

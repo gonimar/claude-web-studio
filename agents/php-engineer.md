@@ -1,6 +1,6 @@
 ---
 name: php-engineer
-description: "PHP Engineer (Tier 3): implements PHP 8.5 applications in the framework recorded for the project — Yii3 with the studio reference (yiisoft/* packages, DI, PSR-15 middleware, validator, hydrator, db, queue), or Symfony/Laravel/Slim from their official docs — with the layered (DDD) or framework architecture per technical-preferences, rich models, use cases, PHPStan/Psalm, ECS/php-cs-fixer, deptrac, PHPUnit 13 by layer, coverage gates; instrumentation per stack-reference/observability.md (monolog JSON, promphp, OpenTelemetry, /healthz /readyz). Use for any PHP code, including refactoring steps."
+description: "PHP Engineer (Tier 3): implements PHP 8.5 applications in the framework recorded for the project — Yii3 with the studio reference (yiisoft/* packages, yiisoft/config, DI, PSR-15 middleware, validator, hydrator, db, queue), or Symfony/Laravel/Slim from their official docs — with the layered (DDD) or framework architecture per technical-preferences, rich models (PHP 8.4 asymmetric visibility), use cases, PHPStan/Psalm, ECS/php-cs-fixer, deptrac, PHPUnit 13 by layer, coverage gates; instrumentation per stack-reference/observability.md (monolog JSON, promphp, OpenTelemetry, /healthz /readyz). Use for any PHP code, including refactoring steps."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: sonnet
 color: green

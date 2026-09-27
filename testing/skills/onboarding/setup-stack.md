@@ -38,5 +38,9 @@ Choose and pin the stack with versions from the reference; write technical-prefe
 **Fixture**: `compose-ssh` chosen; `technical-preferences.md`, `production/stage.txt`, `docs/deploy/compose-ssh.md` and `scripts/deploy/compose-ssh.sh` written, HEAD is `feat/S-002-…`. **Expected**: right after the write one commit gate offers `docs: stack decision` staging exactly the three documents, names the branch and asks where it belongs (switch to the default branch Recommended · commit here · leave uncommitted); the script is named for the chore lane, never staged in the `docs:` commit; nothing is committed without the answer.
 - [ ] commit gate follows the write · [ ] exact documents staged · [ ] script kept out of the docs commit
 
+### 9. Observability and the kubernetes target (0.14)
+**Fixture**: deploy target `kubernetes` chosen in step 7. **Expected**: `references/deploy-target.md` § Kubernetes asks `k8s_chart_path`, `k8s_environments`, `k8s_secrets`, `k8s_routing` one at a time with the Recommended option first (gateway-api, external-secrets); then `references/observability.md` asks the Observability headline (studio stack Recommended · minimal · custom) and records `log_format`, `metrics`, `tracing`, `health_endpoints` — `minimal` writes `metrics: none`, `tracing: none` with the reason; `--quick` takes the Recommended values without asking.
+- [ ] four k8s fields asked and written · [ ] Observability block written with every field · [ ] `minimal` records `none` with a reason
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)
