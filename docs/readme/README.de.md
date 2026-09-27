@@ -80,7 +80,7 @@ maßgebliche Plan ist `production/roadmap.md` (Checkbox-Liste); Sprints und Stor
   jeder sensible Pfad erhält ein Security-Review; das Release-Gate verlangt saubere Audits.
 - **Die Stack-Referenz ist die Wahrheitsquelle für Versionen**: Agenten lesen vor der Arbeit
   `.claude/docs/stack-reference/<technologie>.md` und warnen, wenn sie älter als 60 Tage ist.
-  `/stack-update` erneuert sie aus offiziellen Quellen.
+  `/stack-update` erneuert sie aus offiziellen Quellen; `llm-integration.md` deckt Claude-API-/MCP-Produktfunktionen und die Prompt-Injection-Angriffsfläche ab.
 
 ---
 
@@ -225,7 +225,7 @@ Projekt aus. Details: [testing/README.md](../../testing/README.md).
 ## 9. Aufbau des Repositorys
 ```
 .claude-plugin/   plugin.json + marketplace.json (dieses Repository ist Marketplace und Plugin zugleich)
-agents/           30 Agenten       skills/     50 Befehle + 1 vorgeladener Skill        hooks/      hooks.json + 19 Skripte
+agents/           30 Agenten       skills/     50 Befehle + 1 vorgeladener Skill        hooks/      hooks.json + 20 Skripte
 rules/            17 pfadbezogene Regeln        docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, Agentenliste, Workflow-Katalog, Sicherheits-Baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          Testframework für Agenten und Skills      install.sh  Installer für Kopie / neues Projekt

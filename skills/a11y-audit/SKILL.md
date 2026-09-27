@@ -19,6 +19,7 @@ Routes/pages (from UX specs or the argument); is the dev server running? (offer 
 
 ## Phase 2: Automation
 `@axe-core/playwright` over the routes in `<e2e dir>/a11y/axe.spec.ts` — created only after "May I write `<e2e dir>/a11y/axe.spec.ts`?" (one `AskUserQuestion`: write (Recommended) · show the draft first · skip automation; `touch .claude/.write-consent` after the "write" answer) — plus Lighthouse a11y; the output of both is in the report.
+**Playwright MCP (optional).** When the Playwright MCP tools are available (`mcp__plugin_web-studio_playwright__*`; copy mode with a user-added server: `mcp__playwright__*`), drive the live page through them for each route in scope — `browser_navigate`, `browser_snapshot` (the accessibility tree), `browser_console_messages` — and quote the tool output in the report next to the axe results; the accessibility tree is evidence for names, roles and focus order that axe does not report. Without the tools, the CLI path above is the audit; nothing depends on the MCP.
 
 ## Phase 3: Manual checklist
 Keyboard, focus (2.4.11/2.4.13), names, ARIA, contrast, target size (2.5.8), forms (3.3.7/3.3.8), motion; games — keyboard/gamepad menus, settings.

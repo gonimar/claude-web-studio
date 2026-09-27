@@ -89,7 +89,7 @@ yet is listed in [docs/roadmap.md](docs/roadmap.md).
   sensitive path gets an application-security review; the release gate requires clean audits.
 - **The stack reference is the source of truth for versions**: agents read
   `.claude/docs/stack-reference/<technology>.md` before working and warn when it is older than
-  60 days. `/stack-update` refreshes it from official sources.
+  60 days. `/stack-update` refreshes it from official sources; `llm-integration.md` covers Claude API / MCP product features and the prompt-injection surface.
 
 ---
 
@@ -233,7 +233,7 @@ in this repository or in a project installed with `--with-testing`. Details: [te
 ## 9. Repository layout
 ```
 .claude-plugin/   plugin.json + marketplace.json (this repository is both the marketplace and the plugin)
-agents/           30 agents        skills/     50 commands + 1 preload skill        hooks/      hooks.json + 19 scripts
+agents/           30 agents        skills/     50 commands + 1 preload skill        hooks/      hooks.json + 20 scripts
 rules/            17 path-scoped rules          docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, roster, workflow catalog, security baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          agent and skill testing framework      install.sh  copy-mode / new-project installer

@@ -36,6 +36,7 @@ not a claim about every row. Agents read the relevant file before working. "Late
 | OWASP Top 10 | 2025 (final 2026-01) | confirmed current, categories unchanged (2026-09-10, owasp.org/Top10/2025) | [security-standards.md](security-standards.md) | 2026-09-10 | none — owasp.org/Top10/2025 |
 | WCAG | 2.2 AA | no newer AA revision (2026-09-10) | [web-platform.md](web-platform.md) | 2026-09-10 | none — w3.org/TR/WCAG22 |
 | Supply chain (cosign / syft / grype / trivy / SLSA / Renovate) | cosign 3.1, syft 1.52, grype 0.119, trivy 0.74, SLSA v1.1, `actions/attest` v4 | cosign v3.1.3 (2026-08-06), syft v1.52.0 (2026-09-17), grype v0.119.0 (2026-09-17), trivy v0.74.0 (2026-08-14) (GitHub releases) | [supply-chain.md](supply-chain.md) | 2026-09-26 | none — github.com/sigstore, slsa.dev, docs.renovatebot.com |
+| LLM integration (Claude API, MCP) | `claude-opus-5-5` default; SDKs `@anthropic-ai/sdk`, `anthropic`, `anthropic-sdk-go`, `anthropic-ai/sdk`; MCP spec 2026-07-28; OWASP GenAI LLM Top 10 2026 | — | [llm-integration.md](llm-integration.md) | 2026-09-26 | none — platform.claude.com/docs, modelcontextprotocol.io |
 | Claude Code | docs | — | — | — | https://code.claude.com/docs/llms.txt |
 
 Rule: **project versions are pinned exactly** (lockfile in git); upgrades go through

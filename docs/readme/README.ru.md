@@ -87,7 +87,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
   чувствительный путь проходит ревью безопасности; гейт релиза требует чистых аудитов.
 - **Справочник стека — источник правды о версиях**: агенты читают
   `.claude/docs/stack-reference/<технология>.md` до работы и предупреждают, если ему больше
-  60 дней. `/stack-update` обновляет его из официальных источников.
+  60 дней. `/stack-update` обновляет его из официальных источников; `llm-integration.md` покрывает продуктовые функции на Claude API / MCP и поверхность prompt injection.
 
 ---
 
@@ -231,7 +231,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ## 9. Структура репозитория
 ```
 .claude-plugin/   plugin.json + marketplace.json (репозиторий — одновременно marketplace и плагин)
-agents/           30 агентов       skills/     50 команд + 1 предзагружаемый скил         hooks/      hooks.json + 19 скриптов
+agents/           30 агентов       skills/     50 команд + 1 предзагружаемый скил         hooks/      hooks.json + 20 скриптов
 rules/            17 правил по путям           docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, ростер, каталог конвейера, базовая линия безопасности
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          фреймворк тестирования агентов и скилов      install.sh  установщик копии / нового проекта

@@ -38,5 +38,9 @@ STRIDE per surface, DFD, mitigations, priorities.
 **Fixture**: the model written while HEAD is `feat/S-001-…` (a story branch). **Expected**: right after the write gate one commit gate offers `docs: threat model` staging exactly the written files (`docs/architecture/threat-model.md` and any feature spec that gained a "Security" section), names the current branch and asks where it belongs (switch to the default branch Recommended for a pipeline-wide document · commit here · leave uncommitted); nothing is committed without the answer.
 - [ ] commit gate follows the write · [ ] current branch named · [ ] default-branch option Recommended · [ ] nothing committed without the answer
 
+### 10. LLM / MCP surface
+**Fixture**: technical-preferences § LLM features = `yes`, `mcp_role: client`, the code imports `@anthropic-ai/sdk` and `@modelcontextprotocol/client`. **Expected**: `references/llm-surface.md` is read and the surfaces table gains rows for direct and indirect prompt injection (tool results, RAG, MCP responses), tool-call side effects / exfiltration, RAG ingestion, secrets in prompts and the connected MCP servers, each with STRIDE letters, likelihood/impact, a mitigation referencing `llm-integration.md` and a status; the DFD draws the third-party-content and model→tool boundaries; a `none` status on injection or side effects reaches the top 5. Fixture without either signal (LLM features `none`, no SDK import): no LLM rows.
+- [ ] rows present when a signal exists · [ ] STRIDE + likelihood/impact + status columns · [ ] absent without a signal · [ ] unmitigated injection in the top 5
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

@@ -18,7 +18,7 @@ def fm(path):
     return d, body
 
 # JSON files
-for j in ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', 'hooks/hooks.json', 'templates/settings.json', 'templates/settings.plugin-mode.json']:
+for j in ['.claude-plugin/plugin.json', '.claude-plugin/marketplace.json', '.mcp.json', 'hooks/hooks.json', 'templates/settings.json', 'templates/settings.plugin-mode.json']:
     try: json.load(open(j))
     except Exception as e: fail(f'{j}: invalid JSON ({e})')
 

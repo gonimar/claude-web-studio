@@ -80,7 +80,7 @@ de referencia es `production/roadmap.md` (lista de casillas); sprints e historia
   ruta sensible pasa una revisión de seguridad; la puerta de release exige auditorías limpias.
 - **La referencia del stack es la fuente de verdad sobre versiones**: los agentes leen
   `.claude/docs/stack-reference/<tecnología>.md` antes de trabajar y avisan si tiene más de 60 días.
-  `/stack-update` la refresca desde fuentes oficiales.
+  `/stack-update` la refresca desde fuentes oficiales; `llm-integration.md` cubre las funciones de producto con Claude API / MCP y la superficie de prompt injection.
 
 ---
 
@@ -225,7 +225,7 @@ Ejecuta `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent
 ## 9. Estructura del repositorio
 ```
 .claude-plugin/   plugin.json + marketplace.json (este repositorio es a la vez marketplace y plugin)
-agents/           30 agentes       skills/     50 comandos + 1 skill precargada        hooks/      hooks.json + 19 scripts
+agents/           30 agentes       skills/     50 comandos + 1 skill precargada        hooks/      hooks.json + 20 scripts
 rules/            17 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          marco de pruebas de agentes y skills      install.sh  instalador de copia / proyecto nuevo

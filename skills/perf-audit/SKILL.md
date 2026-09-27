@@ -18,6 +18,7 @@ Budgets — `technical-preferences.md` § Performance budgets; references `stack
 **Arguments.** The mode selects the groups below: `web` → Lighthouse and the bundle; `api` → the k6 scenario; `db` → `EXPLAIN`; `game` → frame time, draw calls and memory; `full` (default) → every group the stack has. `[url]` is the page or endpoint to measure — with no argument the smoke URL of `docs/ops/deploy.md`, else ask; without a running instance `web`/`api` are reported as not measured.
 Web: `lighthouse --preset=perf --form-factor=mobile` / Lighthouse CI; `ng build --stats-json` / `vite build` + visualizer; API: `k6 run` scenario (create with consent); DB: `EXPLAIN (ANALYZE, BUFFERS)` on top queries, `pg_stat_statements`; Go `pprof`, PHP Blackfire/Xdebug; game: `renderer.info`, a Performance trace, memory.
 A missing tool — say so, offer installation.
+**Playwright MCP (optional).** When the Playwright MCP tools are available (`mcp__plugin_web-studio_playwright__*`; copy mode with a user-added server: `mcp__playwright__*`), drive the live page through them — `browser_navigate`, `browser_network_requests` (request count, sizes, third-party hosts), `browser_console_messages` (errors and warnings), `browser_snapshot` — and quote the tool output in the measurement file next to the Lighthouse numbers. Without the tools, the CLI path above is the baseline; nothing depends on the MCP.
 
 ## Phase 2: Analysis
 Table "metric → value → budget → status"; findings with estimated gain and cost; the 3 cheapest.

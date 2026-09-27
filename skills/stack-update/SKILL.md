@@ -1,7 +1,7 @@
 ---
 name: stack-update
 description: "Refreshes the stack knowledge base — checks the latest versions of every technology in stack-reference (official llms.txt, release pages, endoflife.date, npm/packagist/pkg.go.dev), rewrites the reference files with dated facts and sources, compares with the project's lockfiles, and proposes an upgrade plan. Run when references are older than 60 days or before planning upgrades."
-argument-hint: "[project | all | <tech: go|php|yii3|symfony|laravel|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling|kubernetes|observability>] [--check-only]"
+argument-hint: "[project | all | <tech: go|php|yii3|symfony|laravel|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling|kubernetes|observability|llm>] [--check-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, WebSearch, AskUserQuestion, Task
 ---
@@ -41,6 +41,7 @@ facts only from official sources, with a date and a link.
 | Security | `owasp.org/Top10`, ASVS releases, Mozilla guidelines |
 | Supply chain | GitHub releases of `sigstore/cosign`, `anchore/syft`, `anchore/grype`, `aquasecurity/trivy`; `github.com/slsa-framework/slsa` (`releases/vX.Y` branches, `spec/levels.md`); `github.com/actions/attest` README; `docs.renovatebot.com` (`configuration-options`, `key-concepts/minimum-release-age`, `upgrade-best-practices`); GitHub docs `artifact-attestations`, `secure-use`, `dependabot-options-reference` (source: `github.com/github/docs`) |
 | Web platform | `web-features` Baseline, `web.dev` CWV, W3C WCAG |
+| LLM integration (`llm`) | `platform.claude.com/docs/en/about-claude/models/overview.md` (model ids, prices, retirement), `…/build-with-claude/prompt-caching.md`, `…/agents-and-tools/mcp-connector.md`, `…/strengthen-guardrails/mitigate-jailbreaks.md`; npm `@anthropic-ai/sdk`, `@modelcontextprotocol/server`; PyPI `anthropic`, `mcp`; `github.com/anthropics/anthropic-sdk-go`, `github.com/modelcontextprotocol/go-sdk`; packagist `anthropic-ai/sdk`, `mcp/sdk`; `github.com/modelcontextprotocol/modelcontextprotocol` (`docs/specification/` — the newest dated revision); `genai.owasp.org` (GenAI LLM Top 10); the bundled `claude-api` skill for API drift |
 For each: latest stable version and date, next expected, EOL, key changes (breaking!), new best practices.
 **Registry check, mandatory for packages**: `npm view <pkg> dist-tags` (and `version`), packagist `https://repo.packagist.org/p2/<vendor>/<pkg>.json` (highest stable), `go list -m -versions <module>` — the registry's `latest` on the date is recorded next to the recommended version; when the recommendation is a major behind `latest`, the reference states why (LTS, breaking changes, ecosystem support) — never an unexplained older version.
 `WebSearch` only to clarify, never as the primary source.
