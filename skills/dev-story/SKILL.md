@@ -10,7 +10,7 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, SendMessage, Skill, As
 
 Conventions: coordination-rules § Skill conventions (language, paths, gates, commit gate, Skill tool, subagents, CI wait, next step). Through the `Skill` tool this skill runs `/impact` (Phase 2 step 4, Phase 4 step 5) and `/backlog add` (Phase 6 step 5); every other command is a closing hand-off. The parent writes no product code (Phase 4).
 
-Writes and mutations (git, deploy) happen only after the "May I write `<path>`?" / "Proceed?" gate (§ Gates).
+Writes and mutations (git, deploy) happen only after the "May I write `<path>`?" / "Proceed?" gate (§ Gates). An open gate survives the next turn (rule 7): every commit gate below is recorded as `Gate "/dev-story Phase N: <question>"` before the question and cleared after the answer, so a session that resumes with the `Gate:` line continues at that question instead of reading a new task from `Next:`.
 
 ```
 /create-stories → /dev-story (this) → /code-review → /story-done
@@ -73,7 +73,7 @@ Report: decisions, surprises, numbers, what you noticed "Outside the brief" (rep
 
 ## Phase 6: Wrap-up, commit and CI
 1. **Status.** Story status `Review`; session state `Next "/web-studio:code-review --diff <story-path>"` (copy mode `Next "/code-review --diff <story-path>"`) through `<hooks>session-state.sh set`.
-2. **Commit gate**, one `AskUserQuestion`, recorded first as `Gate "/dev-story Phase 6: commit and push?"` and cleared after the answer (§ Gates): commit and push (Recommended) · commit only (step 4 without the push; no steps 6–7) · not now (no steps 3–4, 6–7) (`git-workflow.md`, step "Implement").
+2. **Commit gate**, one `AskUserQuestion`, recorded first as `Gate "/dev-story Phase 6: commit and push?"` and cleared after the answer (§ Gates): commit and push (Recommended) · commit only (step 4 without the push; no steps 6–7) · not now (no steps 3–4, 6–7; step 5 still records the items) (`git-workflow.md`, step "Implement").
 3. **Stage by name.**
    1. `git status --short` first; deal with every unplanned `??` entry: delete the spike (its `tools/spike-<slug>/` or scratchpad files), add a file deliberately if it belongs to the story, otherwise leave it alone and name it.
    2. Stage the story's files **by name**, and `.claude/agent-memory/` as one deliberate entry (`git add .claude/agent-memory`): the agents' notes change with every run and belong to the commit that produced them (git-workflow § Agent memory).

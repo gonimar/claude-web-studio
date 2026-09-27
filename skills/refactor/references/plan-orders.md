@@ -22,7 +22,7 @@ table verbatim. Every step is small enough for one `<engineer>` call and green o
 7. Transport calling use cases.
 
 ## PHP `framework`
-Requires `php_architecture: layered`, else `BLOCKED (layout first — run /refactor layout)`.
+Requires `php_architecture: layered`, else `PLANNED (layout first — run /refactor layout)`.
 1. Step 1 is always "ADR: `/architecture-decision` records the move to <target>". `--apply` refuses while that ADR is not `Accepted`.
 2. Step 2, the first non-ADR step, whenever the Phase 2 framework table shows a non-zero Domain or Application column: move every framework import out of `App\Domain` and `App\Application` (a port in the domain, an adapter in `App\Infrastructure`), one step per layer touched, until both columns read zero. The row names the classes from the table. Under `layered` these are also `deptrac` violations, so the step closes their `ARCH-NNN` rows. With both columns at zero the step is absent.
 3. Then one step per Infrastructure sub-namespace (`Transport\Http`, `Transport\GraphQL`, `Persistence`, `Mail`, …), plus the composition root and `public/index.php`, each replacing one framework's adapters with the target's.

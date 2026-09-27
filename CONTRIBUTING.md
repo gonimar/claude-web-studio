@@ -59,9 +59,9 @@ tokens or references to private projects.
    (what and when; the first sentence matters most), `argument-hint`, `user-invocable: true`,
    `allowed-tools`. Field semantics, as Claude Code applies them: `allowed-tools` pre-grants
    permission for the turn, it does not restrict — a "read-only" skill says so in its body;
-   `model` switches the model for the whole turn (the closing hand-off included) — set it only
-   for a deliberate exception (`help`: haiku; `team-*`, `threat-model`, `architecture-review`:
-   opus) and never on a skill that edits files; `context: fork` runs the skill in a subagent that
+   `model` switches the model for the whole turn (the closing hand-off included) — a non-opus
+   pin never on a skill that edits files; `opus` only on the listed exceptions (`team-*`,
+   `threat-model`, `architecture-review`), `haiku` only on `help` (the linter enforces both); `context: fork` runs the skill in a subagent that
    sees no conversation history and has no `AskUserQuestion`, so only a skill without gates may
    use it, and only then does `agent: web-studio:<name>` name the agent that runs it (the linter
    rejects `agent` without `context: fork`).

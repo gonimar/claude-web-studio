@@ -41,7 +41,7 @@ The Phase 2 table again, side by side: before · after · rule. Required for `CO
 - coverage per layer not lower, and at or above the thresholds where a gate exists;
 - `depguard`/`arch-check` (Go) or `deptrac` (PHP) clean;
 - layout numbers within the contract;
-- public API of `pkg/` unchanged: `go list ./pkg/... | xargs -n1 go doc -all` diffed against `$TMPDIR/refactor-<scope>-pkgapi.txt` (the Phase 2 baseline);
+- public API of `pkg/` unchanged: `go list ./pkg/... | xargs -n1 go doc -all` diffed against `${TMPDIR:-/tmp}/refactor-<scope>-pkgapi.txt` (the Phase 2 baseline);
 - no new dependency in `go.mod` / `composer.json` beyond the tooling the plan named.
 
 A metric that moved the wrong way is a `PARTIAL (…)` with the metric named.

@@ -11,7 +11,7 @@ Run every command and tabulate its output (metric · value · rule it is measure
 5. Layout numbers: `wc -l cmd/*/*.go`, `grep -ln 'flag\.\|Fprint' cmd/*/*.go`.
 6. Dependency direction: `go list -deps ./internal/domain/...` and `go list -deps ./internal/usecase/...`, filtered to the module's `internal/`.
 7. Package sizes: `find internal -name '*.go' ! -name '*_test.go' | xargs wc -l`, grouped by directory, and files per package.
-8. Public API of `pkg/`, when it exists: `go list ./pkg/... | xargs -n1 go doc -all > "$TMPDIR/refactor-<scope>-pkgapi.txt"` — saved outside the repository as the baseline Phase 6 diffs against.
+8. Public API of `pkg/`, when it exists: `go list ./pkg/... | xargs -n1 go doc -all > "${TMPDIR:-/tmp}/refactor-<scope>-pkgapi.txt"` — saved outside the repository as the baseline Phase 6 diffs against.
 9. Test smells: `grep -rn 'time\.Sleep(' --include='*_test.go'`, `grep -rnE '\.Error\(\) *[!=]=' --include='*_test.go'`, test functions without `t.Run`, non-English case names, a mock type in a domain test, `pgx`/`testcontainers`/`net/http` imports in a use-case test.
 
 ## Choices — the fields Phase 3 asks (current value first, "keep", Recommended)

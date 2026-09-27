@@ -11,7 +11,7 @@ model: haiku
 
 Read-only. Not a full audit (that is `/adopt`), a quick orientation. Reply in the project conversation language.
 
-The frontmatter `context:` line is a convenience, not a dependency. Its shell line falls back to `not set` / `lean` / `?` / `none` per field when a file is absent (the pipelines are wrapped in a subshell and `grep .` so that an empty result, not `tail`'s exit status, triggers the fallback), but the skill never relies on that text being there: Phase 1 step 3 reads the stack-reference date, the newest adoption plan, the roadmap's first open item, the stage and the review mode itself with `Read`/`Glob`. `Bash` is not in `allowed-tools`, and help runs no command of its own.
+`Bash` is not in `allowed-tools`, and help runs no command of its own: Phase 1 step 3 reads the stack-reference date, the newest adoption plan, the roadmap's first open item, the stage and the review mode with `Read`/`Glob`.
 
 Names used below:
 - `<plugin root>` is the path on the "Plugin root:" line of the session-start context. That line is printed only in plugin mode; without it the project runs in copy mode.

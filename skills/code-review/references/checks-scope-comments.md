@@ -1,6 +1,6 @@
 # /code-review — Scope and comment checks (Phase 3)
 
-Read when there is a story (Scope) and for every `--diff` review (Comments). The Scope rules are part of the
+Read when there is a story (Scope) and for the added lines of every diff, path arguments included (Comments). The Scope rules are part of the
 reviewers' brief (Phase 2 step 5); the Comments checks run in the parent. The finding strings are the contract
 (`severity | file:line | what | risk | fix`) and are used as written.
 
