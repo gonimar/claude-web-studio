@@ -45,7 +45,7 @@ not patched — look for a maintained alternative and document why.
 - Schema changes only as `yiisoft/db-migration` (or Cycle) migration files; a `CREATE TABLE` in a PHP class, a seed or a story is a finding (`rules/database.md`).
 
 ### For comparison (non-Yii projects)
-Symfony 7.4 LTS / 8.0 (2025-11), Laravel 13 (2026-02), Slim 4, Mezzio. Runtime: PHP-FPM + nginx classically; **FrankenPHP** (worker mode, HTTP/3) is the modern option for containers.
+Symfony 8.1 / 7.4 LTS (`symfony.md`), Laravel 13 (`laravel.md`), Slim 4, Mezzio. Runtime: PHP-FPM + nginx classically; **FrankenPHP** (worker mode, HTTP/3) is the modern option for containers.
 
 ## Security (Yii3-specific — the PHP list is in `php.md`)
 - `yiisoft/db` bound params; `yiisoft/html` for output; `yiisoft/csrf` middleware on every mutation; `yiisoft/security` for passwords (argon2id), random and crypt; `yiisoft/auth`/`yiisoft/user`/`yiisoft/rbac` instead of hand-rolled auth; `yiisoft/rate-limiter` on public endpoints.

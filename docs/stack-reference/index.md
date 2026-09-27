@@ -15,8 +15,8 @@ not a claim about every row. Agents read the relevant file before working. "Late
 | Go | 1.27 (2026-08-19) | — | [go.md](go.md) | 2026-09-17 | none — go.dev/doc/go1.27, pkg.go.dev |
 | PHP | 8.5 (2025-11-20); 8.6 due 2026-11; PHPUnit 13, PHPStan 2.2 / Psalm 6, deptrac 4, ECS 13 / php-cs-fixer 3, PER-CS 3.1 | 8.5.9 (2026-07-30, php.net); phpunit 13.3.4, pest 5.2.0, phpstan 2.2.14, psalm 6.17.2, deptrac 4.7.2, ecs 13.3.2, php-cs-fixer 3.95 (2026-09-17, packagist) | [php.md](php.md) | 2026-09-17 | none — php.watch, php.net, php-fig.org |
 | Yii3 | stable (2025-12-31), packages on SemVer | `yiisoft/queue`/`queue-redis` still `dev-master`, unabandoned (2026-09-10, packagist) | [yii3.md](yii3.md) | 2026-09-17 | none — yiiframework.com, github.com/yiisoft |
-| Symfony | 8.1 (2026-09); 7.4 LTS until 2028-11 — stub, no idioms yet | symfony/framework-bundle 8.1.7 (2026-09-14, packagist) | [symfony.md](symfony.md) | 2026-09-17 | none — symfony.com/releases |
-| Laravel | 13 (2026-02) — stub, no idioms yet | laravel/framework 13.32.0 (2026-09-15, packagist) | [laravel.md](laravel.md) | 2026-09-17 | none — laravel.com/docs/releases |
+| Symfony | 8.1 (2026-05-29, PHP ≥ 8.4.1); 7.4 LTS bug fixes until 2028-11; Doctrine ORM 3.7, API Platform 5 | symfony/framework-bundle 8.1.7 (2026-09-14, packagist) | [symfony.md](symfony.md) | 2026-09-26 | unverified — symfony.com unreachable on the date; docs source github.com/symfony/symfony-docs |
+| Laravel | 13 (2026-03-17, PHP 8.3–8.5; bug fixes until Q3 2027, security until 2028-03); 12 security-only until 2027-02 | laravel/framework 13.33.0 (2026-09-22, packagist) | [laravel.md](laravel.md) | 2026-09-26 | unverified — laravel.com unreachable on the date; docs source github.com/laravel/docs |
 | TypeScript | 7.0 (2026-07-08, native Go compiler) | — | [typescript.md](typescript.md) | 2026-09-05 | none — typescriptlang.org |
 | Node.js | 24 LTS; 26 → LTS 2026-10; one major per year from 27 | — | [tooling-devops.md](tooling-devops.md) | 2026-09-10 | none — nodejs.org |
 | Angular | 22 (2026-06-03) | — | [angular.md](angular.md) | 2026-09-05 | https://angular.dev/llms.txt, /llms-full.txt |

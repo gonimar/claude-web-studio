@@ -8,7 +8,7 @@ die Geheimnisse und Commit-Hygiene schützen, pfadbezogene Code-Regeln, Dokument
 **datierte Referenz aktueller Stack-Versionen und Best Practices** sowie ein Framework zum Testen
 der Agenten selbst. Es deckt Webanwendungen und Browserspiele gleichermaßen ab.¹
 
-Stack: Go 1.27 · PHP 8.5 (Yii3; Symfony/Laravel/Slim) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
+Stack: Go 1.27 · PHP 8.5 (Referenzen für Yii3, Symfony und Laravel; Slim nach Wahl) · TypeScript 7 / Node 24 · Angular 22 (Material, Taiga UI) ·
 Vue 3.5 / Nuxt 4 · Vite 8 · GraphQL zuerst, REST wo es passt · PostgreSQL 18 · three.js r185 /
 PixiJS 8 / Phaser · Vitest 4 / Playwright · Docker / GitHub Actions · Kubernetes 1.37 / Helm 4 · OpenTelemetry / Prometheus · SBOM + signierte Images (Sigstore) · OWASP Top 10:2025 · WCAG 2.2 AA.
 
