@@ -231,7 +231,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ## 9. Структура репозитория
 ```
 .claude-plugin/   plugin.json + marketplace.json (репозиторий — одновременно marketplace и плагин)
-agents/           30 агентов       skills/     49 скила         hooks/      hooks.json + 10 скриптов
+agents/           30 агентов       skills/     50 команд + 1 предзагружаемый скил     hooks/      hooks.json + 10 скриптов
 rules/            13 правил по путям           docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, ростер, каталог конвейера, базовая линия безопасности
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          фреймворк тестирования агентов и скилов      install.sh  установщик копии / нового проекта

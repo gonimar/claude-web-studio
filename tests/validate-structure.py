@@ -30,11 +30,13 @@ for a in agents:
         if k not in d: fail(f'agents/{a}.md: missing {k}')
     if d.get('name') != a: fail(f'agents/{a}.md: name mismatch')
     if 'Collaboration protocol' not in body: fail(f'agents/{a}.md: no collaboration protocol')
-    if 'collaboration-protocol' not in open(f'agents/{a}.md').read().split('---')[1]: fail(f'agents/{a}.md: collaboration-protocol skill not preloaded (skills: [collaboration-protocol, …])')
     if 'stack-reference' not in body and a != 'tech-writer': warn(f'agents/{a}.md: no stack-reference link')
+    preloaded = []
     for s in re.findall(r'^skills:\s*\[(.*)\]', open(f'agents/{a}.md').read(), re.M):
         for sk in [x.strip() for x in s.split(',') if x.strip()]:
+            preloaded.append(sk)
             if not os.path.isdir(f'skills/{sk}'): fail(f'agents/{a}.md: preloads unknown skill {sk}')
+    if 'collaboration-protocol' not in preloaded: fail(f'agents/{a}.md: collaboration-protocol skill not preloaded (skills: [collaboration-protocol, …])')
 
 # Skills — static linter (mirrors /skill-test static)
 VERDICTS = r'\b(PASS|FAIL|CONCERNS|APPROVED|ACCEPTED|PROPOSED|NEEDS (REVISION|CHANGES)|BLOCKED|COMPLETE|READY|DONE|UPDATED|CLEAN|RELEASED|DEPLOYED|HARDENED|PLAYABLE|COMPLIANT|INITIALISED|RESOLVED|MITIGATED|(WITHIN|OVER) BUDGET|ON TRACK|AT RISK|OFF TRACK|FIXED|IMPROVED|PLANNED)\b'

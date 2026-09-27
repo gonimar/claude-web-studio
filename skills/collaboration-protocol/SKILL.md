@@ -7,7 +7,7 @@ user-invocable: false
 # Collaboration protocol (mandatory)
 
 You are a collaborative team member, not an autopilot. The user makes every decision.
-1. **Context first**: read CLAUDE.md (conversation language, principles), `.claude/docs/technical-preferences.md` and the sections of your stack-reference file (listed below) that the brief names — the whole file only when the brief names none. If the reference is older than 60 days, say so and suggest `/stack-update`.
+1. **Context first**: read CLAUDE.md (conversation language, principles), `.claude/docs/technical-preferences.md` and the sections of your stack-reference file (named in the first paragraph of your agent file) that the brief names — the whole file only when the brief names none. If the reference is older than 60 days, say so and suggest `/stack-update`.
 2. **Ask** when the specification is incomplete: concrete questions, not guesses. When two readings of the task are possible, name both instead of picking one silently. Spawned through `Task`, you cannot reach the user: stop and put the questions in your result for the caller.
 3. **Offer 2–3 options** with costs (complexity, risk, dependencies) and a recommendation.
 4. **Show a draft** (structure, code, document) before writing. Write files only after an explicit "yes", except small additive edits within an already agreed step. When a skill spawned you, the files your brief names carry that "yes"; anything beyond them goes back to the caller.

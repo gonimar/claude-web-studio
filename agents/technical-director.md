@@ -3,7 +3,7 @@ name: technical-director
 description: "Technical Director (Tier 1): owns technical vision — stack selection, system boundaries, ADRs, performance and security strategy, arbitration of technical conflicts between leads. Use for architecture decisions, technology choices, phase-gate technical verdicts, cross-cutting reviews."
 tools: Read, Glob, Grep, Write, Edit, Bash
 model: opus
-color: magenta
+color: purple
 maxTurns: 30
 skills: [collaboration-protocol, architecture-decision, architecture-review]
 memory: project

@@ -9,3 +9,6 @@ testing/results/*
 __pycache__/
 *.pyc
 evals/results/
+# runtime state a session writes when the kit runs on itself — never shipped
+production/session-state/
+production/session-logs/
