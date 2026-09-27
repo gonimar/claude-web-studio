@@ -10,12 +10,12 @@ allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, Skill, AskUserQuestion
 
 Language, `<hooks>`, `<default>`, agent and command namespaces, gate mechanics (draft → "May I write?" → `Write`/`Edit` → `touch .claude/.write-consent`), subagent consent, the `Skill` tool and the CI wait: `docs/coordination-rules.md` § Skill conventions (engineers and reviewers: § Subagents).
 
-**The parent writes no code** — neither the fix nor the failing test: both through the relevant engineer via `Task` with a studio `subagent_type`; a cut-off engineer is resumed from its `Checkpoint:`, never replaced. Every mutation (write, commit, tag, push, deploy) has its own `AskUserQuestion`.
+**The parent writes no code** — neither the fix nor the failing test: both through the relevant engineer via `Task` with a studio `subagent_type`; a cut-off engineer is resumed from its `Checkpoint:`, never replaced. Every commit, tag, push and deploy has its own `AskUserQuestion`; the branch of step 1.1 and the engineer's edits on it leave the working tree only through the fix-commit gate of step 2.4.
 
 **Through the `Skill` tool** (namespaced): `/code-review --diff` (step 2.5, `--chore`), `/changelog` and `/deploy` (Phase 3) — each with all its own phases and gates, one after another once the running `Task` has returned, its verdict quoted. `/incident` is a hand-off in the closing question, never run here.
 
 Glossary:
-- `<tag>` — the release currently deployed (the newest `production/releases/vX.Y.Z.md` with a `DEPLOYED` line, else the newest `v*` tag after `git fetch origin --tags`; none → `BLOCKED (no release tag — nothing is deployed)`); `vX.Y.Z` — its patch number + 1.
+- `<tag>` — the release currently deployed (the newest `production/releases/vX.Y.Z.md` whose `Result:` line reads `DEPLOYED` (what `/deploy` Phase 4 writes), else the newest `v*` tag after `git fetch origin --tags`; none → `BLOCKED (no release tag — nothing is deployed)`); `vX.Y.Z` — its patch number + 1.
 - `<slug>` — the bug in a few words (`hotfix/<slug>`); `<scope>` — the scope of the fix commit `fix(<scope>): <bug>`, which `/code-review` uses where a story would give `S-NNN`.
 - **Gate recording** — before every commit, tag or push question (each step below names its `Gate "…"` string): `<hooks>session-state.sh set Task "/hotfix <slug>" Gate "/hotfix Phase N: <question>"`; after the answer `<hooks>session-state.sh set Gate "—"`. An open gate survives the turn: a resumed session continues at that question, never at `Next:` (rule 7).
 
@@ -24,7 +24,7 @@ Glossary:
 ## Phase 1: Reproduce
 1. **Branch** `hotfix/<slug>` from `<tag>`: `git fetch origin --tags`, then `git switch -c hotfix/<slug> <tag>`. The commit hook (`validate-commit.sh`) is silent on `hotfix/*`: no "already merged into origin/<default>" warning on the first commit.
 2. **A failing test** that reproduces the bug (mandatory), by the relevant engineer through `Task` — the brief names the bug, the test file and the command that must go red; the red run's output is quoted in the report. No reproduction → `BLOCKED (cannot reproduce — …)`: no fix without a failing test, nothing written.
-3. **Impact**: data or security involved → one `Task` to `security-lead` with the bug and the files; its answer goes into the engineer's brief (step 2.1) and says whether step 2.5 applies. It annotates, never blocks.
+3. **Impact**: data or security involved → one `Task` to `security-lead` with the bug and the files; its answer goes into the engineer's brief (step 2.1) and, with the `paths:` rule of step 2.5, decides whether the security review runs: a "review" from security-lead makes step 2.5 apply whatever the paths say.
 
 ## Phase 2: Minimal fix
 1. **Through the relevant engineer**: `Task` with the studio `subagent_type`; the brief holds the test of step 1.2 and the impact of step 1.3.
@@ -32,7 +32,7 @@ Glossary:
 3. **Checks**: test green; lint/typecheck.
 4. **Fix commit and push** — `Gate "/hotfix Phase 2: commit and push the fix?"`, one `AskUserQuestion`: commit and push (Recommended) · commit only · show the diff · not now. On "yes": `git commit -m "fix(<scope>): <bug>"` staging the fix and its test by name, on the hotfix branch, then `git push -u origin hotfix/<slug>` — the upstream exists before any review, so a review fix can be pushed. "Commit only" → the push happens at step 3.7 with its own consent; the report says the branch is local until then.
 5. **Sensitive paths** (the `paths:` of `rules/security-sensitive.md`: auth, security, middleware, proxy config, payments, uploads, webhooks):
-   1. Decide from the files of the fix commit; none sensitive → Phase 3.
+   1. Sensitive by the `paths:` rule on the files of the fix commit **or** flagged "review" by security-lead in step 1.3; neither → Phase 3.
    2. `/web-studio:code-review --diff --security` (copy mode `/code-review --diff --security`) through the `Skill` tool, after the commit of step 2.4, so the review sees the fix and its `appsec-engineer` run is in the audit log; its verdict is quoted.
    3. `NEEDS CHANGES` → the fixes go through the engineer inside `/code-review`'s own fix gate, which commits `fix(<scope>): apply /code-review findings` (no `S-NNN`) on the hotfix branch and pushes to the upstream of step 2.4 — after "commit only" it commits locally and says so.
    4. Phase 3 starts only when the reviewers answer `APPROVED`.
@@ -58,4 +58,4 @@ A short entry in `docs/ops/incidents/<file>`; the root-cause analysis is `/incid
 5. On "switch": `git switch <default> && git pull --ff-only origin <default>`, commit, then `git switch hotfix/<slug>` back while the backport PR is open.
 6. Clear the gate: `<hooks>session-state.sh set Gate "—"`.
 
-Verdict: `FIXED` | `BLOCKED` | `DONE (chore — PR open)`. Next step — one `AskUserQuestion`. Production: `/web-studio:incident` (copy mode `/incident`) for root-cause analysis (Recommended) · backport to `<default>` (when step 3.7 was skipped) · stop here. `--chore`: open the PR (Recommended) · stop here — no `/incident` after a chore.
+Verdict: `FIXED` | `BLOCKED` | `DONE (chore — PR open)` | `DONE (chore — PR not opened)`. Next step — one `AskUserQuestion`. Production: `/web-studio:incident` (copy mode `/incident`) for root-cause analysis (Recommended) · backport to `<default>` (when step 3.7 was skipped) · stop here. `--chore`: open the PR (Recommended) · stop here — no `/incident` after a chore.

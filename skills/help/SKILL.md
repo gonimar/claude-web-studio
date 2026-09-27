@@ -3,7 +3,7 @@ name: help
 description: "Shows where you are in the Web Studio pipeline and what to do next; `commands` lists every command with its description, `guide [topic]` opens the playbook (what to run in every situation). Use when the user asks 'what now', 'what should I do next', 'which commands exist', 'what do I do if…', or is stuck."
 argument-hint: "[what you just finished] | commands | guide [topic]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read, Glob, Grep, Bash(diff -rq:*), Bash(claude plugin list:*), AskUserQuestion
 model: haiku
 ---
 
@@ -11,7 +11,7 @@ model: haiku
 
 Language, command namespaces (`/web-studio:<name>` in plugin mode), the built-in `/code-review` collision and the closing question: `docs/coordination-rules.md` § Skill conventions.
 
-Read-only: no file writes; the only commands are `diff -rq` and `claude plugin list --json` (Phase 4 version drift). A quick orientation, not a full audit (that is `/adopt`).
+Read-only: no file writes; the only commands are `diff -rq` and `claude plugin list --json` (Phase 4 version drift) — the frontmatter pre-grants exactly those two. A quick orientation, not a full audit (that is `/adopt`).
 
 Names:
 - `<plugin root>` — the path on the "Plugin root:" line of the session-start context, printed only in plugin mode. A `/clear`ed session may lack the line: then `installPath` from `claude plugin list --json`; no web-studio entry there either → copy mode.
@@ -77,7 +77,7 @@ The `Docs:` line is always printed: it is how users discover the reference modes
 
 Add one line each, when it applies — read `references/signals.md` for the exact line and command:
 1. **Stack reference** older than 60 days → `/stack-update`.
-2. **Version drift** — evidence, never a stamp. Plugin mode: `diff -rq <plugin root>/docs .claude/docs` (and `rules`), `claude plugin list --json` (session vs installed). Copy mode: the `.claude/.web-studio-version` stamp against the kit's `plugin.json` when the session-start context names a kit path, else skipped → `/update`, also a closing option.
+2. **Version drift** — evidence, never a stamp. Plugin mode: `diff -rq <plugin root>/docs .claude/docs` (and `rules`), `claude plugin list --json` (session vs installed). Copy mode: not checked here — nothing in the session names the kit path; `/update --kit <path>` compares the `.claude/.web-studio-version` stamp with the kit's `plugin.json`. Plugin-mode drift → `/update`, also a closing option.
 3. **Session state**: `production/session-state/active.md` exists → its `Task:`/`Next:`.
 4. **Backlog**: open ideas in `production/backlog.md`, oldest past 30 days or `last-review` older than 7 days → `/backlog review`; never a closing option.
 5. **Findings**: open BLOCKING findings without a story → `/create-stories` (rank 1 made it NEXT).

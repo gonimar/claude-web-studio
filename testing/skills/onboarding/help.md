@@ -89,5 +89,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: latest `sprint-04.md` header `Status: active`, its roadmap heading's end date yesterday (or no `- [ ]` left under it). **Expected**: `Attention: sprint 04 is over and not closed — /web-studio:retrospective 04` as one line; it is not an option of the closing question and no sprint file is read beyond the header.
 - [ ] one Attention line · [ ] not in the question · [ ] no diagnosis
 
+### The argument beats a COMPLIANT plan's open items (0.14)
+**Fixture**: adoption plan `COMPLIANT` with open optional items; the user runs `/help "finished security-audit"`. **Expected**: NEXT is the next step of the hardening phase (rank 2, the user's explicit position), the plan's first open item is printed right after it (rank 3); case 13 still holds without an argument.
+- [ ] argument wins over plan items · [ ] plan item still printed · [ ] no argument → case 13
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

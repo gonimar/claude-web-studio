@@ -23,11 +23,11 @@ Update the studio in the project (plugin update or copy-mode reinstall); local e
 **Fixture**: a locally edited rule → copy in local-overrides. **Expected**: handled explicitly, never silently skipped.
 - [ ] the case is mentioned in the instructions · [ ] correct message/action
 ### 5. Gate / protocol
-**Fixture**: project data untouched — confirmed; seeding agreed, files copied. **Expected**: the user decides; stage/statuses never change automatically; the closing question's "commit the update" option is the commit gate (`docs: update Web Studio vX -> vY`, staging exactly the seeded files), `Gate: /update Phase 3: commit?` recorded in session-state before the question and cleared after the answer, nothing committed without it.
+**Fixture**: project data untouched — confirmed; seeding agreed, files copied. **Expected**: the user decides; stage/statuses never change automatically; the closing question's "commit the update" option is the commit gate (`docs: update Web Studio vX -> vY`, staging exactly the seeded files), `Gate: /update Phase 4: commit?` recorded in session-state before the question and cleared after the answer, nothing committed without it.
 - [ ] no self-advancing · [ ] verdict from the skill's vocabulary · [ ] commit gate recorded and cleared
 
 ### 6. Plugin updated while the gate was open
-**Fixture**: the session's skills come from v0.7.0; the "Update 0.4.3 → 0.7.0?" gate stays open; meanwhile `claude plugin list --json` reports v0.8.0. **Expected**: after "yes" the skill re-reads the installed version before copying, notices the mismatch, prints the one-line restart instruction and ends with `RESTART REQUIRED`; nothing is seeded from the session's cache and `.claude/.web-studio-version` is not written.
+**Fixture**: the session's skills come from v0.7.0; the seed gate ("May I write the seed files — v0.7.0 into the project (v0.4.3 files now)?") stays open; meanwhile `claude plugin list --json` reports v0.8.0. **Expected**: after "yes" the skill re-reads the installed version before copying, notices the mismatch, prints the one-line restart instruction and ends with `RESTART REQUIRED`; nothing is seeded from the session's cache and `.claude/.web-studio-version` is not written.
 - [ ] version re-read after the gate, not only in Phase 1 · [ ] mismatch named with both versions · [ ] no files written, verdict `RESTART REQUIRED`
 
 ### 7. Local edit in a seeded doc

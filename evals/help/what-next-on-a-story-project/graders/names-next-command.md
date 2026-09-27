@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "/web-studio:[a-z-]+|Run:"
+pattern: "Run: /(web-studio:)?dev-story"
 target: last_message
 ---

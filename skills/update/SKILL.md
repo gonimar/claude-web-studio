@@ -32,7 +32,7 @@ With `--dry-run`, the plugin update command is shown and not run, and the skill 
    1. Take the install scope (`user` | `project` | `local`) from this project's row.
    2. Update in that scope: `claude plugin update web-studio --scope <scope>` (`-y` as well when the session is non-interactive). The bare command assumes `user` and fails (`Plugin "web-studio" is not installed at scope user`) at any other scope (e.g. `--scope local`).
    3. If the scope cannot be read, print the candidates and let the owner choose. Never guess.
-   4. Running `/update` is the consent for this command — an explicit exception to rule 7: it changes only the plugin's own install, never a file of the project, whose files change only after the Phase 3 seed gate.
+   4. Running `/update` is the consent for this command: it changes only the plugin's own install, never a file of the project, whose files change only after the Phase 3 seed gate.
 2. **Diff.** The update brings agents/skills/hooks. Compare the plugin's `docs/` and `rules/` (`<cache>/<v[Y]>`) with `.claude/docs` and `.claude/rules` (`diff -rq`); list the files that differ and whether each is a local edit (present only in the project) or an upstream update.
    - Copy mode: `install.sh <project> --dry-run`, and the same diff for locally edited files.
 3. **Template drift.** For every file under `docs/templates/` this update changes or adds, and for the two studio-owned sections of `CLAUDE.md`: read `references/claude-md-drift.md` § Detect and show the table "document → template → drift" (`CLAUDE.md` gets its own row). Nothing is edited here — the documents are `/migrate`'s work, and a `CLAUDE.md` without the `## Studio (Web Studio)` heading is reported with `/adopt` as the command that inserts it.
@@ -58,7 +58,7 @@ With `--dry-run`, the plugin update command is shown and not run, and the skill 
 
 ## Phase 4: Commit
 The commit gate (§ Skill conventions, documents-lane commit gate; git-workflow.md § Documents): `docs: update Web Studio vX -> vY`, staging exactly the seeded files — `.claude/docs/`, `.claude/rules/`, the `CLAUDE.md` studio sections and, in copy mode, `.claude/.web-studio-version`. Nothing is committed without the answer.
-1. Record it: `<hooks>session-state.sh set Gate "/update Phase 3: commit?"`.
+1. Record it: `<hooks>session-state.sh set Gate "/update Phase 4: commit?"`.
 2. Ask the Next-step question below; its "commit the update" option is this gate.
 3. On "commit": `git add` the listed paths, then `git commit -m "docs: update Web Studio vX -> vY"`.
 4. After the answer: `<hooks>session-state.sh set Gate "—"`.

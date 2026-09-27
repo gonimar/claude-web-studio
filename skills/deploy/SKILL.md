@@ -48,6 +48,6 @@ With `rollback`, steps 1–2 apply to the target tag, which is already released.
 
 ## Phase 4: Record
 1. Render the changes, then "May I write `production/releases/vX.Y.Z.md`?" (and `docs/ops/deploy.md` when the procedure changed) — one `AskUserQuestion`: write (Recommended) · show the draft/diff first · not now.
-2. After the "write" answer: `touch .claude/.write-consent`, then update the release file (time, result, who) and, when the procedure changed, the runbook.
+2. After the "write" answer: `touch .claude/.write-consent`, then update the release file (time, `Result: DEPLOYED` | `Result: ROLLED BACK`, who) and, when the procedure changed, the runbook.
 
 Verdict: `DEPLOYED` | `ROLLED BACK` | `PLAN` | `BLOCKED (…)`. Next step — one `AskUserQuestion`: monitor the release (`/incident` on problems) (Recommended) · `/deploy rollback` · `/sprint-plan` for the next cycle.
