@@ -7,7 +7,7 @@ skill-development checklist on the other thirty-nine, claude-md-improver, automa
 10 false semantics, all closed here; the full report and the reviewers' notes stayed in the maintainer's `dev/`.
 - **Behavioural evals (`evals/`, `claude plugin eval`).** 22 cases for dev-story, code-review, story-done, init,
   adopt, refactor, hotfix, update, help and impact, each derived from a spec case in `testing/skills/`, graded
-  deterministically (the skill's verdict phrase in the trace, a tool that must or must not run, no file before the
+  deterministically (the skill's verdict or gate phrase in the final message, a tool that must or must not run, no file before the
   gate); scaffold helpers build the `testing/e2e` fixtures in the run's workspace. CI gains an `evals` job
   (`workflow_dispatch` with a case glob, nightly, cost ceiling, results as an artifact); `claude plugin validate
   .claude-plugin/plugin.json` joins the marketplace validation in CI, `tests/run-all.sh` and the kit's CLAUDE.md —
