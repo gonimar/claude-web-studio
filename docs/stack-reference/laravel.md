@@ -78,7 +78,7 @@ gets `app` instead of `src` (deptrac `paths`/collectors, analyser and standard-t
 `FRAMEWORK_NAMESPACES` = `Illuminate\\|Laravel\\` in `docs/templates/php/deptrac.yaml`; `paths` is `./app` for a Laravel
 root, and the framework's own directories (`app/Http`, `app/Providers`, `app/Console`, `app/Models` under `framework`)
 are uncovered on purpose — never `--fail-on-uncovered`. Global helpers (`app()`, `config()`, `now()`, `collect()`,
-`dispatch()`) are functions, invisible to deptrac's class collectors: `grep -rnE '\b(app|config|now|collect|dispatch|resolve|event|cache|request|auth)\(' app/Domain app/Application` is part of the arch check under `layered`.
+`dispatch()`) are functions, invisible to deptrac's class collectors: `grep -rnE '\b(app|config|now|collect|dispatch|resolve|event|cache|request|auth)\(' app/Domain app/Application` is part of the arch check under `layered` (the leading class excludes method calls such as `$this->request()` or `Cache::cache()`; `app()`, `event(new …)` and a `function config(` declaration still match).
 
 ## Configuration and secrets
 - `.env` is never committed, `.env.example` is; `APP_ENV`, `APP_KEY` (`key:generate`, rotated through a story), `APP_DEBUG=false` on every non-dev host — "you risk exposing sensitive configuration values to your application's end users" (configuration docs), and the 2026-09-10 advisory GHSA-jh5r-qr3c-85q8 (XSS in the debug page) is the same lesson.
