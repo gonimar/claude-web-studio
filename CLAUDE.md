@@ -10,7 +10,7 @@
   `.claude/docs/stack-reference/go.md` in a skill is `docs/stack-reference/go.md` here.
 - Three test trees: `tests/` — the kit's own bash/python tests (run-all); `testing/` — behavioural specs for
   skills and agents (`/skill-test`, `catalog.yaml`); `evals/` — behavioural evals (`claude plugin eval`).
-- Local dev loop: `claude --plugin-dir .` from a scratch project (`install.sh --new /tmp/x --with-testing` for
+- Local dev loop: `claude --plugin-dir <path-to-this-checkout>` run from a scratch project (`install.sh --new /tmp/x --with-testing` for
   copy mode; the marketplace route is in `CONTRIBUTING.md` § 1).
 - Hooks: no `jq` (the `jget` helper); a warning that must reach the model is JSON via `warn`, never
   `permissionDecision`; exit 2 blocks on PreToolUse only; every hook is registered in both `hooks/hooks.json`

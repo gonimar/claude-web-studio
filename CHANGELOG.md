@@ -3,8 +3,8 @@
 ## Unreleased
 - **`templates/CLAUDE.md.template` cut to what its imports do not already say** (audit of 2026-09-26: 80 lines, about 45 of
   them restating the `@`-imported coordination-rules). Principles keep their numbers and names and point to the rule or
-  section that owns them; `directory-structure.md` and `security-baseline.md` are referenced by path, not imported; new
-  `## Commands` stub, merge-policy line under principle 5, `/help commands` / `/help guide` pointer, "managed by `/update`"
+  section that owns them; `directory-structure.md` and `security-baseline.md` are referenced by path, not imported (principle 4 keeps the
+  four baseline items in one line); merge-policy line under principle 5, `/help commands` / `/help guide` pointer, "managed by `/update`"
   on the two studio sections. Principle 3's package-health checks move to `rules/dependencies.md` (manifests and lockfiles);
   principle 9's "neighbouring code stays as it is" reaches the TypeScript, Vue and Angular rules as it already did Go and PHP.
   Principle 7 loses its incident: catalog artifacts authored in the chat, and product code written right after `/init`

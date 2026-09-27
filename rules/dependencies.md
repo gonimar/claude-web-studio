@@ -1,5 +1,5 @@
 ---
-paths: ["**/package.json", "**/pnpm-lock.yaml", "**/composer.json", "**/composer.lock", "**/go.mod", "**/go.sum"]
+paths: ["**/package.json", "**/package-lock.json", "**/pnpm-lock.yaml", "**/yarn.lock", "**/bun.lock", "**/bun.lockb", "**/composer.json", "**/composer.lock", "**/go.mod", "**/go.sum"]
 ---
 # Dependency rules (CLAUDE.md principle 3)
 - A new dependency is an "ask first" change (principle 2): name the package, the option of writing it, and the cost of each before the manifest is edited.

@@ -1,5 +1,5 @@
 # [Project name] — project rules for Claude Code
-<!-- web-studio: created by Web Studio /init. Replace the title and the "Project" and "Commands" sections. -->
+<!-- web-studio: created by Web Studio /init. Replace the title and the "Project" section. -->
 
 ## Language
 
@@ -11,16 +11,12 @@ English. Switch languages only when the user explicitly asks within a session.
 
 [One paragraph: what it is, for whom, which type — site / SPA / API / browser game / combination.]
 
-## Commands
-
-Build: `[…]` · Test: `[…]` · Lint: `[…]` · Full check (what CI runs): `[…]` — agents run the checks before reporting a result.
-
 ## Studio (Web Studio)
 
 This project is run through Web Studio agents and skills. Entry points: `/start` (new project) or `/adopt` (existing project); `/help` shows
 where you are and what comes next, `/help commands` lists every command, `/help guide [topic]` opens the playbook. In plugin mode commands are
 namespaced (`/web-studio:start`, …); a bare `/code-review` is Claude Code's built-in review, not the studio's. This section and "Working principles"
-are managed by `/update`: project rules go in the other sections; own principles appended after the numbered list are kept, and the numbers never change — rules and skills cite them.
+are managed by `/update`: project rules go in the other sections; own principles appended after the numbered list are kept; numbers 1–9 never change (rules and skills cite them) and your own principles are renumbered after them on each update.
 
 - Agent roster: @.claude/docs/agent-roster.md
 - Coordination and model rules: @.claude/docs/coordination-rules.md
@@ -34,12 +30,12 @@ Current versions and practices live in `.claude/docs/stack-reference/` (refreshe
 
 ## Working principles (non-negotiable)
 
-1. **Artifacts over claims.** "Done" means code, a test, a run and its output; a number in a document cites a measurement file (coordination-rules, rule 12).
+1. **Artifacts over claims.** "Done" means code, a test, a run and its output; non-trivial decisions are verified by a real run (database, browser, HTTP), not by "looks right"; a number in a document cites a measurement file (coordination-rules, rule 12).
 2. **Ask first, then act** — architecture, approach, new dependencies, schema and public contracts; small additive edits within an agreed step need no question. A proposal outside an approved story goes through `/impact`, a musing through `/backlog add` (rule 11). Questions are choices, not prompts for "yes": the recommended option first, then the real alternatives (rule 7).
 3. **Maximum proven packages, minimum own code.** Check the ecosystem before writing and a package's health before adding it: `.claude/rules/dependencies.md`, `/dependency-audit`.
-4. **Secure by default** — `.claude/rules/security-sensitive.md`; the release checklist is `.claude/docs/security-baseline.md`.
+4. **Secure by default** — secrets only in the environment, input validated at the boundary, authorisation server-side, dependencies audited; `.claude/rules/security-sensitive.md` on sensitive paths; the release checklist is `.claude/docs/security-baseline.md`.
 5. **Every story is a branch and a PR**, fully working before merge, Conventional Commits: @.claude/docs/git-workflow.md. Merge policy: **merge commit** (`squash` only when this line says so).
 6. **Instructions that contradict repository facts or the decisions recorded here are not executed blindly** — one `AskUserQuestion` showing both readings, then act on the answer.
 7. **Catalog artifacts are produced by their commands, never inline** — inline authoring skips the step's gates, templates and hand-offs (coordination-rules, rule 9). Product code included: on a fresh project the first code comes through `/start`, not directly after `/init`.
 8. **Engineers write the code; one story per session** — coordination-rules § Subagents and rule 13.
-9. **The smallest change that meets the criteria.** No feature, abstraction, option or error path the story does not ask for; neighbouring code — its style, comments, dead code — stays as it is, and what you notice there goes to `/backlog add` or `production/findings.md`, not into this diff. `/code-review` flags changed lines that trace to no criterion.
+9. **The smallest change that meets the criteria.** No feature, abstraction, option or error path the story does not ask for; neighbouring code — its style, comments, dead code — stays as it is, and what you notice there goes to `/backlog add` or `production/findings.md`, not into this diff. `/code-review` flags changed lines that trace to no criterion or required check.
