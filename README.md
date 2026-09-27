@@ -233,7 +233,7 @@ in this repository or in a project installed with `--with-testing`. Details: [te
 ## 9. Repository layout
 ```
 .claude-plugin/   plugin.json + marketplace.json (this repository is both the marketplace and the plugin)
-agents/           30 agents        skills/     50 commands + 1 preload skill        hooks/      hooks.json + 19 scripts
+agents/           30 agents        skills/     50 commands + 1 preload skill        hooks/      hooks.json + 20 scripts
 rules/            17 path-scoped rules          docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, roster, workflow catalog, security baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          agent and skill testing framework      install.sh  copy-mode / new-project installer

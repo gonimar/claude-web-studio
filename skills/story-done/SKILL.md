@@ -15,7 +15,7 @@ Glossary:
 - `<card>` — `production/stories/S-NNN-*.md`; `<sprint>` — `production/sprints/sprint-NN.md` when a sprint's roadmap heading holds the story.
 - **Three places** — the roadmap line, the roadmap's `## Docs` → *production/stories/* row, the `<sprint>` `## Stories` row (two without a sprint).
 - **Re-run rule** — `/story-done S-NNN` on a story already `Done` with an open PR skips to Phase 5 and its merge question.
-- **GitHub MCP** — with the GitHub MCP available (`mcp__plugin_web-studio_github__*`), PR creation, merge and run watch may use its tools (`create_pull_request`, `merge_pull_request`, the actions tools) instead of `gh`; the gates and the order do not change, and the tool output is quoted where `gh` output would be.
+- **GitHub MCP** — with a GitHub MCP server the user added (`mcp__github__*`; the plugin declares none — playbook § MCP), PR creation, merge and run watch may use its tools (`create_pull_request`, `merge_pull_request`, the actions tools) instead of `gh`; the gates and the order do not change, and the tool output is quoted where `gh` output would be.
 
 ## Phase 1: Story and evidence
 1. **Pick the story** (as `/dev-story` Phase 1):

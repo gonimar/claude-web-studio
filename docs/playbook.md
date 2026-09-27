@@ -102,20 +102,20 @@ Variations:
 
 ### 2.3 MCP servers (optional)
 
-The plugin declares two stdio MCP servers in its `.mcp.json`; both are optional — every skill keeps
-its CLI path (`npx playwright`, `gh`) as the default, and nothing fails when a server is absent.
+The plugin declares one stdio MCP server in its `.mcp.json`, and none that needs a credential:
 
-| Server | What it adds | How to enable |
+| Server | What it adds | What it costs · how to switch it off |
 |---|---|---|
-| `playwright` (`npx @playwright/mcp@latest --headless --isolated`) | `/a11y-audit`, `/perf-audit` and `/pentest` drive the live page through `browser_navigate`, `browser_snapshot` (accessibility tree), `browser_console_messages`, `browser_network_requests` and quote the output as evidence | Node ≥ 18; the server starts with the plugin (`/mcp` lists `plugin:web-studio:playwright`) |
-| `github` (the official GitHub MCP server, `ghcr.io/github/github-mcp-server` via Docker) | `/story-done` and `/hotfix` may open, merge and watch PRs through its tools instead of `gh`; the gates and their order do not change | Docker running and `GITHUB_PERSONAL_ACCESS_TOKEN` exported in the shell that starts Claude Code (never written into a file); `GITHUB_TOOLSETS` defaults to `repos,pull_requests,actions` |
+| `playwright` (`npx -y @playwright/mcp@latest --headless --isolated`), declared by the plugin | `/a11y-audit`, `/perf-audit` and `/pentest` drive the live page through `browser_navigate`, `browser_snapshot` (accessibility tree), `browser_console_messages`, `browser_network_requests` and quote the output as evidence; every skill keeps its CLI path (`npx playwright`) as the default | A plugin server starts in every session of every user of the plugin: `npx -y` resolves the package on each start (network), and the first `browser_navigate` downloads Chromium. Off: the `/mcp` toggle, or `"disabledMcpServers": ["plugin:web-studio:playwright"]` in `.claude/settings.json` |
+| `github` (the official GitHub MCP server) — **not declared by the plugin**: it needs a token or an OAuth login, and a declared server would start for everyone and fail without them | `/story-done` and `/hotfix` may open, merge and watch PRs through its tools instead of `gh`; the gates and their order do not change | Add it yourself, once per project or user: remote with OAuth, no Docker and no token in the environment — `claude mcp add --transport http github https://api.githubcopilot.com/mcp/` — or local, `claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN=… -e GITHUB_TOOLSETS=pull_requests,actions -- docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN -e GITHUB_TOOLSETS ghcr.io/github/github-mcp-server`. Keep the toolsets to `pull_requests,actions` (`repos` exposes file writes) |
 
-Tools appear as `mcp__plugin_web-studio_playwright__*` and `mcp__plugin_web-studio_github__*`; the
-`secret-guard` hook also watches the GitHub server's file-writing tools. Without Docker or the token
-the `github` server simply reports as failed in `/mcp` and the skills use `gh`. Copy mode ships no
-`.mcp.json` (it would be project data): add the servers yourself with `claude mcp add playwright --
-npx -y @playwright/mcp@latest --headless` and the GitHub server per its README; their tools are then
-`mcp__playwright__*` / `mcp__github__*`. An LLM feature **in the product** (the app calling a model or
+Tools appear as `mcp__plugin_web-studio_playwright__*` and, for a server added as `github`, `mcp__github__*`.
+Two hooks watch the GitHub server whatever its toolsets: `github-mcp-guard` blocks its file-writing tools
+(`push_files`, `create_or_update_file`, `delete_file` — commits go through git and its hooks, never through
+the API), and `secret-guard` blocks a token or a key in any of its inputs — a PR body, an issue, a review
+comment — not only in a file. Without the server the skills use `gh`. Copy mode ships no `.mcp.json`
+(it would be project data): add Playwright the same way, `claude mcp add playwright -- npx -y
+@playwright/mcp@latest --headless --isolated`. An LLM feature **in the product** (the app calling a model or
 taking part in MCP) is a different matter: `technical-preferences.md` § LLM features and
 `stack-reference/llm-integration.md`.
 

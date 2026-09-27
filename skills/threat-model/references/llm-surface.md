@@ -2,7 +2,8 @@
 
 Read when technical-preferences § LLM features is not `none` or the code imports an LLM/MCP SDK
 (`@anthropic-ai/sdk`, `anthropic`, `github.com/anthropics/anthropic-sdk-go`, `anthropic-ai/sdk`,
-`@modelcontextprotocol/*`, `mcp`, `mcp/sdk`). Facts and mitigations: `stack-reference/llm-integration.md`
+`@modelcontextprotocol/*`, `github.com/modelcontextprotocol/go-sdk`, `mcp`, `mcp/sdk` — the bare Python names
+`mcp` and `anthropic` are grep-able only in `requirements.txt` / `pyproject.toml`). Facts and mitigations: `stack-reference/llm-integration.md`
 § Security (OWASP GenAI LLM Top 10 2026). Every row uses the model's own columns — STRIDE letters,
 likelihood/impact, mitigation referencing the baseline, status (exists/planned/none).
 

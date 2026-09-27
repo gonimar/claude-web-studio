@@ -129,7 +129,7 @@ is JSON-RPC (unverified — check https://modelcontextprotocol.io/specification/
 
 | SDK | Package | Facts (source) |
 |---|---|---|
-| TypeScript | `@modelcontextprotocol/server`, `@modelcontextprotocol/client` (v2, spec 2026-07-28; `McpServer`, `StdioServerTransport`, Streamable HTTP) | github.com/modelcontextprotocol/typescript-sdk; the v1 package `@modelcontextprotocol/sdk` — status unverified — check https://www.npmjs.com/package/@modelcontextprotocol/sdk |
+| TypeScript | `@modelcontextprotocol/server`, `@modelcontextprotocol/client` (v2, spec 2026-07-28; `McpServer`, `StdioServerTransport`, Streamable HTTP) | github.com/modelcontextprotocol/typescript-sdk; the v1 package `@modelcontextprotocol/sdk` is still published (1.30.1, 2026-09-23) for code on the v1 API; new code takes the v2 packages |
 | Python | `mcp` (`pip install "mcp[cli]"`; `MCPServer("name")`, `@mcp.tool()`; stdio, Streamable HTTP, SSE; `Client(url)`; Python ≥ 3.10) | github.com/modelcontextprotocol/python-sdk |
 | Go | `github.com/modelcontextprotocol/go-sdk` (official, with Google; v1.7+, spec 2026-07-28; `mcp.Server`, `mcp.Client`, `mcp.StdioTransport`, `mcp.CommandTransport`) | github.com/modelcontextprotocol/go-sdk |
 | PHP | `mcp/sdk` (official, PHP Foundation + Symfony; experimental until 1.0; stdio and HTTP; conformance against 2026-07-28 and 2025-11-25) | github.com/modelcontextprotocol/php-sdk |

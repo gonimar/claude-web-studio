@@ -205,7 +205,7 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 ## 9. 仓库结构
 ```
 .claude-plugin/   plugin.json + marketplace.json（本仓库同时是 marketplace 和插件）
-agents/           30 个代理        skills/     50 个命令 + 1 个预加载技能        hooks/      hooks.json + 19 个脚本
+agents/           30 个代理        skills/     50 个命令 + 1 个预加载技能        hooks/      hooks.json + 20 个脚本
 rules/            17 条路径规则                   docs/       stack-reference/、templates/（findings、adoption-plan、deploy-runbook、deploy/）、deploy-target-contract、、名册、流水线目录、安全基线
 templates/        CLAUDE.md、settings.json、settings.plugin-mode.json、statusline.sh
 testing/          代理与技能测试框架                install.sh  副本 / 新项目安装脚本

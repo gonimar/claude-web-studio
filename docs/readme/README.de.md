@@ -225,7 +225,7 @@ Projekt aus. Details: [testing/README.md](../../testing/README.md).
 ## 9. Aufbau des Repositorys
 ```
 .claude-plugin/   plugin.json + marketplace.json (dieses Repository ist Marketplace und Plugin zugleich)
-agents/           30 Agenten       skills/     50 Befehle + 1 vorgeladener Skill        hooks/      hooks.json + 19 Skripte
+agents/           30 Agenten       skills/     50 Befehle + 1 vorgeladener Skill        hooks/      hooks.json + 20 Skripte
 rules/            17 pfadbezogene Regeln        docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, Agentenliste, Workflow-Katalog, Sicherheits-Baseline
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          Testframework für Agenten und Skills      install.sh  Installer für Kopie / neues Projekt

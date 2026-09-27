@@ -15,19 +15,23 @@ print(d if isinstance(d,str) else ("" if d is None else json.dumps(d)))' "$1" 2>
   fi
   key="${1##*.}"; echo "$INPUT" | grep -oE "\"$key\"[[:space:]]*:[[:space:]]*\"([^\"\\\\]|\\\\.)*\"" | head -1 | sed -E "s/^\"$key\"[[:space:]]*:[[:space:]]*\"//;s/\"$//;s/\\\\\"/\"/g"
 }
-# The GitHub MCP server writes files into the repository without touching the working tree
-# (create_or_update_file, push_files, delete_file): the tool input is the content, so the whole
-# input is scanned and the path fields are checked like a Write. Read-only and PR tools pass.
+# The GitHub MCP server: every input leaves the machine — a file content (create_or_update_file,
+# push_files), but also an issue, a PR body, a review comment — so a token or a key anywhere in the
+# input is blocked (a public issue is a worse leak than a private file). The file-writing tools also
+# get their path fields checked like a Write (github-mcp-guard blocks them outright when it is on).
 TOOL=$(jget .tool_name)
 case "$TOOL" in
-  mcp__*github__create_or_update_file|mcp__*github__push_files|mcp__*github__delete_file)
-    MCP_PATHS=$(echo "$INPUT" | grep -oE '"path"[[:space:]]*:[[:space:]]*"[^"]*"' | sed -E 's/^"path"[[:space:]]*:[[:space:]]*"//;s/"$//' | grep -vE '\.env\.(example|dist|template|sample)$')
-    if printf '%s\n' "$MCP_PATHS" | grep -qE '(^|/)\.env(\.[^/]+)?$|\.pem$|\.key$'; then
-      echo "BLOCKED: writing a secrets file through $TOOL is not allowed — the user edits it directly." >&2; exit 2
-    fi
+  mcp__*github__*)
     if echo "$INPUT" | grep -qE 'AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----'; then
-      echo "BLOCKED: content for $TOOL looks like a real key/token. Use environment variables." >&2; exit 2
+      echo "BLOCKED: the input of $TOOL looks like it carries a real key/token — it would be published on GitHub. Use environment variables and reference the secret by name." >&2; exit 2
     fi
+    case "$TOOL" in
+      mcp__*github__create_or_update_file|mcp__*github__push_files|mcp__*github__delete_file)
+        MCP_PATHS=$(echo "$INPUT" | grep -oE '"path"[[:space:]]*:[[:space:]]*"[^"]*"' | sed -E 's/^"path"[[:space:]]*:[[:space:]]*"//;s/"$//' | grep -vE '\.env\.(example|dist|template|sample)$')
+        if printf '%s\n' "$MCP_PATHS" | grep -qE '(^|/)\.env(\.[^/]+)?$|\.pem$|\.key$'; then
+          echo "BLOCKED: writing a secrets file through $TOOL is not allowed — the user edits it directly." >&2; exit 2
+        fi;;
+    esac
     exit 0;;
   mcp__*) exit 0;;
 esac
