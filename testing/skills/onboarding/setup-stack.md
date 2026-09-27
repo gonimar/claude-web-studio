@@ -42,5 +42,9 @@ Choose and pin the stack with versions from the reference; write technical-prefe
 **Fixture**: deploy target `kubernetes` chosen in step 7. **Expected**: `references/deploy-target.md` § Kubernetes asks `k8s_chart_path`, `k8s_environments`, `k8s_secrets`, `k8s_routing` one at a time with the Recommended option first (gateway-api, external-secrets); then `references/observability.md` asks the Observability headline (studio stack Recommended · minimal · custom) and records `log_format`, `metrics`, `tracing`, `health_endpoints` — `minimal` writes `metrics: none`, `tracing: none` with the reason; `--quick` takes the Recommended values without asking.
 - [ ] four k8s fields asked and written · [ ] Observability block written with every field · [ ] `minimal` records `none` with a reason
 
+### 10. Supply chain block (0.14)
+**Fixture**: deploy target `compose-ssh`, a release image is built in CI. **Expected**: after the observability question one `AskUserQuestion` from `references/supply-chain.md` — studio default (Recommended) · no release image · custom; the draft carries `sbom_tool`, `signing`, `provenance`, `update_bot`, `release_age` as values, never the bracketed template line; "no release image" records `none — no image` on the three artefact fields and still asks the update bot; `--quick` takes the studio default.
+- [ ] five fields written as values · [ ] `none` always with a reason · [ ] `--quick` needs no answer
+
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

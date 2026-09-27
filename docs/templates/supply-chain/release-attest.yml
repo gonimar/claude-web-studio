@@ -17,7 +17,7 @@ jobs:
       packages: write        # push to ghcr.io
       id-token: write        # keyless signing and attestations with the GitHub OIDC token
       attestations: write    # actions/attest
-      artifact-metadata: write
+      artifact-metadata: write   # artifact storage records — the container-image example of the actions/attest README
     env:
       IMAGE: ghcr.io/<owner>/<image>
     steps:
@@ -55,6 +55,9 @@ jobs:
         run: cosign sign --yes "${IMAGE}@${{ steps.push.outputs.digest }}"
 
       # Provenance attestation (SLSA Build L2 by itself) and SBOM attestation (SC-10).
+      # actions/attest v4 with no predicate input "by default generates a SLSA build provenance attestation";
+      # with `sbom-path` it attests the SBOM (actions/attest-build-provenance v4 is a wrapper on it,
+      # actions/attest-sbom is deprecated in favour of it). No `predicate-type` is needed for either step.
       - uses: actions/attest@<sha> # v4
         with:
           subject-name: ${{ env.IMAGE }}
@@ -71,7 +74,10 @@ jobs:
       - name: Attach SBOM to the release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "${{ github.ref_name }}" sbom.cdx.json sbom.spdx.json --clobber
+        # /release-checklist tags; the GitHub Release that carries the SBOM is created here when it does not exist yet.
+        run: |
+          gh release view "${{ github.ref_name }}" >/dev/null 2>&1 || gh release create "${{ github.ref_name }}" --verify-tag --generate-notes
+          gh release upload "${{ github.ref_name }}" sbom.cdx.json sbom.spdx.json --clobber
 
       - name: Record the digest for /deploy
         run: echo "${IMAGE}@${{ steps.push.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"

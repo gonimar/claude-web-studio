@@ -13,8 +13,8 @@ Verdict: READY | NOT READY (the ❌ gates, in one line) | READY (hotfix)
 - [ ] Production secrets/env in place, new variables documented
 - [ ] DB backup taken before deploy; restore last tested: [date] (first release: the restore drill on staging is a gate — story "Backup & restore drill")
 - [ ] Observability in place: `/healthz` with dependency checks, structured logs, an alert on error rate (first release gate when a Deploy target is set)
-- [ ] SBOM attached to the release (`gh release view vX.Y.Z --json assets`) — SC-06
-- [ ] Image signed and verified by digest (`verify-image.sh <image>@sha256:<digest> <owner>/<repo>` output: ) — SC-08/SC-09
+- [ ] SBOM attached to the release (`gh release view vX.Y.Z --json assets`) — SC-06 (the three supply-chain items are gates only for what the Supply chain block of technical-preferences promises; `none — <reason>` → ⚠, no release image → n/a)
+- [ ] Image signed and verified by digest (`.claude/docs/templates/supply-chain/verify-image.sh <image>@sha256:<digest> <owner>/<repo>` output: ) — SC-08/SC-09
 - [ ] Provenance attestation present (`gh attestation verify oci://<image>:vX.Y.Z -R <owner>/<repo>`) or the reason recorded — SC-10
 
 ## Deploy

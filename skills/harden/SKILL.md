@@ -25,7 +25,7 @@ Per item: status and a verification command.
 - **TLS**: the TLS profile.
 - **Proxy**: `server_tokens` / `limit_req` / `client_max_body_size` / timeouts; WebSocket Origin checks and limits.
 - **Docker**: networks, non-root, `cap_drop`, `read_only`, pins (base image digests → SC-11), health checks.
-- **CI**: workflow `permissions`.
+- **CI**: workflow `permissions` — this group owns SC-04 (`contents: read` at the top, raised only per job); the supply-chain group reports it by id but does not re-check it.
 - **Supply chain**: read `references/supply-chain.md` and run its five checks — update bot config (`renovate.json` / `.github/dependabot.yml`), Actions pinned by SHA, lockfile policy in CI, SBOM job, signing job; every finding carries its `SC-NN` id from `stack-reference/supply-chain.md`. A missing job is a finding with the template to add (`docs/templates/supply-chain/`), proposed in Phase 3 like any other config diff.
 - **Secrets hygiene**: `.env` ignored, gitleaks.
 

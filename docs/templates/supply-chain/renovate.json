@@ -1,41 +1,73 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "description": "Studio supply-chain policy — see .claude/docs/stack-reference/supply-chain.md (SC-01, SC-02, SC-03, SC-11)",
-  "extends": ["config:best-practices"],
+  "extends": [
+    "config:best-practices"
+  ],
   "minimumReleaseAge": "7 days",
   "internalChecksFilter": "strict",
   "osvVulnerabilityAlerts": true,
   "dependencyDashboard": true,
   "prConcurrentLimit": 5,
   "timezone": "Etc/UTC",
-  "schedule": ["before 6am on monday"],
+  "schedule": [
+    "before 6am on monday"
+  ],
   "packageRules": [
     {
-      "description": "Minors and patches per ecosystem in one PR; majors stay single PRs and become stories",
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "{{manager}} minor and patch updates"
+      "description": "Minors per ecosystem in one PR, never automerged; majors stay single PRs and become stories",
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "matchDepTypes": [
+        "dependencies",
+        "require",
+        "peerDependencies"
+      ],
+      "groupName": "{{manager}} minor updates"
     },
     {
-      "description": "Automerge patches once the required checks pass; the PR stays in the history",
-      "matchUpdateTypes": ["patch"],
+      "description": "Patches per ecosystem in one PR, automerged once the required checks pass (a group automerges only when every member may)",
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "matchDepTypes": [
+        "dependencies",
+        "require",
+        "peerDependencies"
+      ],
+      "groupName": "{{manager}} patch updates",
       "automerge": true,
       "automergeType": "pr"
     },
     {
-      "description": "Automerge minor and patch updates of dev dependencies (linters, test tools) after green checks",
-      "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "description": "Dev dependencies (linters, test tools): minors and patches in their own PR, automerged after green checks",
+      "matchDepTypes": [
+        "devDependencies",
+        "require-dev"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "{{manager}} dev dependencies",
       "automerge": true,
       "automergeType": "pr"
     },
     {
       "description": "Never automerge majors, base images or Actions",
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false
     },
     {
       "description": "GHCR/ECR/Quay digests carry no release timestamp; raise them without the age check",
-      "matchManagers": ["dockerfile", "docker-compose", "github-actions"],
+      "matchManagers": [
+        "dockerfile",
+        "docker-compose",
+        "github-actions"
+      ],
       "minimumReleaseAgeBehaviour": "timestamp-optional"
     }
   ]

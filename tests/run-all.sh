@@ -2,8 +2,8 @@
 # Runs every local test. Usage: tests/run-all.sh
 cd "$(dirname "$0")/.." || exit 1
 rc=0
-echo "== syntax"; for f in hooks/*.sh templates/statusline.sh docs/templates/deploy/*.sh docs/templates/go/*.sh install.sh tests/*.sh testing/e2e/*.sh testing/e2e/fixtures/*.sh evals/_lib/*.sh evals/*/*/scaffold.sh; do bash -n "$f" || { echo "syntax error: $f"; rc=1; }; done
-if command -v shellcheck >/dev/null 2>&1; then echo "== shellcheck"; shellcheck -S warning hooks/*.sh templates/statusline.sh docs/templates/deploy/*.sh docs/templates/go/*.sh install.sh tests/*.sh testing/e2e/*.sh testing/e2e/fixtures/*.sh || rc=1; else echo "== shellcheck not found, skipping (CI runs it)"; fi
+echo "== syntax"; for f in hooks/*.sh templates/statusline.sh docs/templates/deploy/*.sh docs/templates/go/*.sh docs/templates/supply-chain/*.sh install.sh tests/*.sh testing/e2e/*.sh testing/e2e/fixtures/*.sh evals/_lib/*.sh evals/*/*/scaffold.sh; do bash -n "$f" || { echo "syntax error: $f"; rc=1; }; done
+if command -v shellcheck >/dev/null 2>&1; then echo "== shellcheck"; shellcheck -S warning hooks/*.sh templates/statusline.sh docs/templates/deploy/*.sh docs/templates/go/*.sh docs/templates/supply-chain/*.sh install.sh tests/*.sh testing/e2e/*.sh testing/e2e/fixtures/*.sh || rc=1; else echo "== shellcheck not found, skipping (CI runs it)"; fi
 echo "== structure"; python3 tests/validate-structure.py || rc=1
 echo "== hooks"; bash tests/hooks.sh || rc=1
 echo "== installer"; bash tests/installer.sh || rc=1
