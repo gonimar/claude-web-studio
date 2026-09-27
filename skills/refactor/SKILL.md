@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: "Refactors Go or PHP code without changing behaviour: dry-run plan by numbers (build, tests, coverage, dependency graph), stories via /create-stories, `--apply S-NNN` execution with characterisation tests first and one green step per commit; modes <package|file>, layout, tests, framework (PHP). Use for 'refactor this package', 'migrate the layout'."
+description: "Refactors Go or PHP code without changing behaviour: dry-run plan by numbers (build, tests, coverage, dependency graph), stories via /create-stories, `--apply S-NNN` execution with characterisation tests first and one green step per commit; modes <package|namespace|file>, layout, tests, framework (PHP), or every applicable mode without an argument. Use for 'refactor this package', 'migrate the layout'."
 argument-hint: "[<package|namespace|file> | layout | tests | framework] [--dry-run (default) | --apply S-NNN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, Skill, AskUserQuestion

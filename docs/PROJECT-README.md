@@ -4,7 +4,7 @@ This project is run with the Web Studio plugin for Claude Code: agents, skills, 
 path-scoped rules and a dated stack reference (`.claude/docs/stack-reference/`).
 
 ## Quick start
-- `/init` — one-time scaffolding: conversation language, review mode, studio files.
+- `/init` — studio scaffolding: conversation language, review mode, studio files; a re-run adds only what is missing and hands off to `/update` or `/adopt`.
 - `/start` — new project: interview → stack → product spec.
 - `/adopt` — existing project: detect the stack, audit artefacts, migration plan.
 - `/help` — where you are in the pipeline and what comes next; `/help commands` — every command; `/help guide [topic]` — the playbook (what to run in every situation, `.claude/docs/playbook.md`).

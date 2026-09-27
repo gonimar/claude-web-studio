@@ -45,6 +45,8 @@ Options A and B coexist: a plugin gives central updates, a copy is fully editabl
 
 ---
 
+> **Skill listing budget.** Claude Code reserves about 1 % of the context window for the skill listing (≈ 8 000 characters at 200k). With the studio's 50 commands plus other plugins the least-used descriptions are shown name-only until you use them; `SLASH_COMMAND_TOOL_CHAR_BUDGET=20000` in the environment keeps every description visible.
+
 ## 2. First session
 1. Open Claude Code in the project and run **`/init`** (plugin: `/web-studio:init`). It asks the
    conversation language and the review mode (`lean` for solo work, `full` for teams, `solo` for

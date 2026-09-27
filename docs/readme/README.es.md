@@ -45,6 +45,8 @@ Las opciones A y B conviven: el plugin ofrece actualizaciones centralizadas; la 
 
 ---
 
+> **Presupuesto de la lista de skills.** Claude Code reserva cerca del 1 % de la ventana de contexto para la lista de skills (≈ 8 000 caracteres con 200k). Con los 50 comandos del estudio más otros plugins, las descripciones menos usadas se muestran solo por nombre hasta que se usan; `SLASH_COMMAND_TOOL_CHAR_BUDGET=20000` en el entorno mantiene visible cada descripción.
+
 ## 2. Primera sesión
 1. Abre Claude Code en el proyecto y ejecuta **`/init`** (plugin: `/web-studio:init`). Pregunta el
    idioma de conversación y el modo de revisión (`lean` para trabajo en solitario, `full` para

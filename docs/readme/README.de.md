@@ -45,6 +45,8 @@ Option A und B ergänzen sich: das Plugin liefert zentrale Updates, die Kopie is
 
 ---
 
+> **Budget der Skill-Liste.** Claude Code reserviert etwa 1 % des Kontextfensters für die Skill-Liste (≈ 8 000 Zeichen bei 200k). Mit den 50 Befehlen des Studios plus weiteren Plugins werden die am wenigsten genutzten Beschreibungen nur mit Namen gezeigt, bis man sie benutzt; `SLASH_COMMAND_TOOL_CHAR_BUDGET=20000` in der Umgebung hält jede Beschreibung sichtbar.
+
 ## 2. Erste Sitzung
 1. Claude Code im Projekt öffnen und **`/init`** ausführen (Plugin: `/web-studio:init`). Es fragt die
    Gesprächssprache und den Review-Modus (`lean` für Soloarbeit, `full` für Teams, `solo` ohne

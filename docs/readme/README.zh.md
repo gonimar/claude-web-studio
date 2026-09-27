@@ -42,6 +42,8 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 
 ---
 
+> **技能列表预算。** Claude Code 为技能列表保留约 1 % 的上下文窗口（200k 时约 8 000 个字符）。工作室的 50 个命令再加上其他插件后，最少使用的描述只显示名称，直到被使用；在环境中设置 `SLASH_COMMAND_TOOL_CHAR_BUDGET=20000` 可让每条描述保持可见。
+
 ## 2. 第一次会话
 1. 在项目中打开 Claude Code，运行 **`/init`**（插件：`/web-studio:init`）。它会询问对话语言和评审模式
    （`lean` 适合单人，`full` 适合团队，`solo` 无关卡），然后创建项目文件：`CLAUDE.md` 各节、
