@@ -73,9 +73,9 @@ Where we are in the pipeline and one next step; read-only.
 **Fixture**: session-start printed "branch already merged into origin/master" and a `[One paragraph: …]` placeholder in CLAUDE.md; the project has one story in progress. **Expected**: both signals appear as their own lines in the answer; the next step names only commands that exist in the catalog or in a skill's `argument-hint` — closing a story is `/story-done`, never `/dev-story complete S-NNN`.
 - [ ] session-start warnings repeated · [ ] no invented sub-command · [ ] every named command resolves to a skill
 
-### The context line is a convenience, not a dependency
-**Fixture**: no `docs/adoption-plan-*.md`, no `.claude/docs/stack-reference/index.md`; `Bash` absent from `allowed-tools`. **Expected**: the frontmatter `context:` line falls back to `adoption-plan: none` and `stack-ref: ?` (an empty pipeline falls back — `tail`'s exit status is never what decides); the body makes no claim about when or whether the harness evaluates that line — it says the skill does not depend on it, and Phase 1 step 3 reads the stack-reference date, the newest adoption plan, the roadmap's first open line, the stage and the review mode itself with `Read`/`Glob`; the skill runs no command of its own and `Bash` stays out of `allowed-tools`.
-- [ ] `none` as the fallback · [ ] no mechanism claim in the body · [ ] Phase 1 reads the files itself · [ ] no Bash
+### No frontmatter context, two read-only commands (0.14)
+**Fixture**: no `docs/adoption-plan-*.md`, no `.claude/docs/stack-reference/index.md`. **Expected**: the frontmatter carries no `context:` block (the only documented value is `fork`, which a gated skill cannot use); Phase 1 reads the files itself and prints `adoption-plan: none` / `stack-ref: ?` when they are absent; the body names the only two commands the skill runs — `diff -rq` for the drift signal and `claude plugin list --json` for the installed version — and says it writes no file; `Bash` is pre-granted for those two commands only.
+- [ ] no `context:` in the frontmatter · [ ] `none` / `?` as the fallback · [ ] Phase 1 reads the files itself · [ ] the two commands named, "no file writes" stated
 
 ### Roadmap first open item
 **Fixture**: `production/roadmap.md` in v3.1 whose first open line is `- [ ] [S-012](stories/S-012.md) · Repository layer ~8h`; no adoption plan; stage `build` with every required step met. **Expected**: the report carries `Roadmap: N open — first: S-012 · Repository layer`; NEXT is `/dev-story S-012`, Recommended in the closing question; with an open adoption-plan item or an unmet required step, those come first and the roadmap line is still printed.
@@ -88,6 +88,10 @@ Where we are in the pipeline and one next step; read-only.
 ### An overdue sprint is an Attention line (0.13)
 **Fixture**: latest `sprint-04.md` header `Status: active`, its roadmap heading's end date yesterday (or no `- [ ]` left under it). **Expected**: `Attention: sprint 04 is over and not closed — /web-studio:retrospective 04` as one line; it is not an option of the closing question and no sprint file is read beyond the header.
 - [ ] one Attention line · [ ] not in the question · [ ] no diagnosis
+
+### The argument beats a COMPLIANT plan's open items (0.14)
+**Fixture**: adoption plan `COMPLIANT` with open optional items; the user runs `/help "finished security-audit"`. **Expected**: NEXT is the next step of the hardening phase (rank 2, the user's explicit position), the plan's first open item is printed right after it (rank 3); case 13 still holds without an argument.
+- [ ] argument wins over plan items · [ ] plan item still printed · [ ] no argument → case 13
 
 ## Protocol
 - [ ] "May I write?" · [ ] draft before approval · [ ] next step · [ ] artefacts over claims (command output)

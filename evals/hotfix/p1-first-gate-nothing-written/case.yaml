@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: p1-first-gate-nothing-written
+description: "Spec testing/skills/ops/hotfix.md case 2 (Refusal / BLOCKED) and 'An open gate survives the turn': a P1 bug on a project with no deployed release tag stops at its first user question or with BLOCKED (no release tag — …) / BLOCKED (cannot reproduce — …); nothing written, no hotfix/* branch."
+tags: [hotfix, gate, critical]
+context:
+  scaffold_script: scaffold.sh

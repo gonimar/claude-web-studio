@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: chore-lane-no-release-steps
+description: "Spec testing/skills/ops/hotfix.md case 'Toolchain work is not a production incident': `--chore` follows references/chore-lane.md — a chore/<slug> branch, the first commit gate, and none of the release steps (no hotfix/* branch, no git tag, no production/releases/ file, no push before the gate)."
+tags: [hotfix, gate, critical]
+context:
+  scaffold_script: scaffold.sh
