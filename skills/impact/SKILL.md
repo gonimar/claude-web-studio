@@ -4,7 +4,6 @@ description: "Classifies a change proposal before any code — architecture (ADR
 argument-hint: "<the proposal in the user's words> [--classify-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Edit, Task, AskUserQuestion
-model: sonnet
 ---
 
 # Impact

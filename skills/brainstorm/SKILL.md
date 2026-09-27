@@ -4,8 +4,6 @@ description: "Explores a product or web-game idea before specification — audie
 argument-hint: "[topic or idea]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Bash, WebSearch, AskUserQuestion
-model: sonnet
-agent: product-director
 ---
 
 # Brainstorm

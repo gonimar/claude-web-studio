@@ -57,7 +57,14 @@ tokens or references to private projects.
 
 1. Create `skills/<name>/SKILL.md`. Frontmatter: `name` (equals the directory), `description`
    (what and when; the first sentence matters most), `argument-hint`, `user-invocable: true`,
-   `allowed-tools`, `model`, optional `agent` (which agent runs it) and `context: fork`.
+   `allowed-tools`. Field semantics, as Claude Code applies them: `allowed-tools` pre-grants
+   permission for the turn, it does not restrict — a "read-only" skill says so in its body;
+   `model` switches the model for the whole turn (the closing hand-off included) — a non-opus
+   pin never on a skill that edits files; `opus` only on the listed exceptions (`team-*`,
+   `threat-model`, `architecture-review`), `haiku` only on `help` (the linter enforces both); `context: fork` runs the skill in a subagent that
+   sees no conversation history and has no `AskUserQuestion`, so only a skill without gates may
+   use it, and only then does `agent: web-studio:<name>` name the agent that runs it (the linter
+   rejects `agent` without `context: fork`).
 2. Body conventions the linter checks: at least two `## Phase N` sections; a verdict line with a
    word from the vocabulary (`PASS`, `FAIL`, `CONCERNS`, `APPROVED`, `BLOCKED`, `COMPLETE`, `READY`,
    `DONE`, …); an explicit "May I write …?" gate whenever `Write` or `Edit` is allowed; a closing
@@ -78,7 +85,15 @@ tokens or references to private projects.
      not a bare pull that needs an upstream).
    - Repeated fragments (plugin vs copy mode paths, agent namespaces) are defined once near the
      top and referred to by name.
-   Restructuring never drops a rule: the skill's spec in `testing/` must still hold line by line.
+   - Shared fragments (language, `<hooks>`, namespaces, gates, the documents-lane commit gate,
+     the `Skill` tool, CI wait) are defined once in `docs/coordination-rules.md` § Skill
+     conventions, which every project loads; a skill names the section, it does not restate it.
+   - Detail read only on one branch of the skill (a per-stack check list, a rare mode, a table
+     the executor consults once) goes to `skills/<name>/references/<topic>.md`; the step that
+     needs it says "read `references/<topic>.md`" and what to take from it. The `Skill` tool
+     loads SKILL.md only, so the pointer is what makes the reference reachable.
+   Restructuring never drops a rule: the skill's spec in `testing/` must still hold line by line
+   (a line satisfied by a section of coordination-rules the skill names still holds).
 3. Register it: `docs/workflow-catalog.yaml` if it belongs to a phase; the one-sentence command
    lists in `README.md` and every `docs/readme/README.*.md`; `docs/PROJECT-README.md` if it is an
    entry point; the `skills:` preload list of an agent if it should be loaded with that agent.

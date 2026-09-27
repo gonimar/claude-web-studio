@@ -4,8 +4,6 @@ description: "Designs or extends the data model — entities/relations, PostgreS
 argument-hint: "[feature F-NNN or 'full']"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: sonnet
-agent: database-engineer
 ---
 
 # Data Model

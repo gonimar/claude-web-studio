@@ -4,8 +4,6 @@ description: "Authors the product specification (goals, users, scope, NFRs, risk
 argument-hint: "[product name] [--review full|lean|solo]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
-agent: product-director
 ---
 
 # Product Spec

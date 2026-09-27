@@ -51,7 +51,12 @@ for s in skills:
     if 'Next step' not in body: warn(f'{p}: no next step')
     if not d.get('argument-hint', '').strip('"'): warn(f'{p}: empty argument-hint')
     ag = d.get('agent')
-    if ag and not os.path.isfile(f'agents/{ag}.md'): fail(f'{p}: unknown agent {ag}')
+    ctx = d.get('context')
+    if ctx and ctx != 'fork': fail(f'{p}: context must be "fork" (got {ctx!r})')
+    if ag and ctx != 'fork': fail(f'{p}: agent without context: fork is inert — drop it or fork')
+    if ag and not os.path.isfile(f"agents/{ag.replace('web-studio:', '')}.md"): fail(f'{p}: unknown agent {ag}')
+    if ag and not ag.startswith('web-studio:'): fail(f'{p}: forked agent must be namespaced web-studio:<name>')
+    if d.get('model') and re.search(r'Write|Edit', d.get('allowed-tools', '')) and d.get('model') != 'opus': fail(f'{p}: model pin on a skill that edits files (CONTRIBUTING § 3)')
     if re.search(r'[\u0400-\u04ff]', body): fail(f'{p}: non-English text')
 
 # Catalog ↔ files

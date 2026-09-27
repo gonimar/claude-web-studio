@@ -4,7 +4,6 @@ description: "Refreshes the stack knowledge base — checks the latest versions 
 argument-hint: "[project | all | <tech: go|php|yii3|symfony|laravel|typescript|angular|vue|graphql|threejs|database|testing|security|web-platform|tooling>] [--check-only]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, WebSearch, AskUserQuestion, Task
-model: sonnet
 ---
 
 # Stack Update

@@ -4,7 +4,6 @@ description: "Read-only sprint status from artifacts — story states, tests/CI 
 argument-hint: "[sprint number]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
-model: haiku
 ---
 
 # Sprint Status

@@ -4,8 +4,6 @@ description: "Audits accessibility against WCAG 2.2 AA — axe-core via Playwrig
 argument-hint: "[url or route list | all]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, AskUserQuestion
-model: haiku
-agent: accessibility-specialist
 ---
 
 # A11y Audit

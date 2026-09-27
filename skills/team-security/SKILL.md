@@ -5,7 +5,6 @@ argument-hint: "[full | pre-release] [--pentest]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Task, Skill, AskUserQuestion
 model: opus
-agent: security-lead
 ---
 
 # Team: Security

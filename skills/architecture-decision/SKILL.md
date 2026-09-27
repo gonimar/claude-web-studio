@@ -4,8 +4,6 @@ description: "Creates an Architecture Decision Record (context, ≥2 options wit
 argument-hint: "[title] | retrofit [path] [--review full|lean|solo]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, WebFetch, AskUserQuestion, Task
-model: sonnet
-agent: technical-director
 ---
 
 # Architecture Decision Record

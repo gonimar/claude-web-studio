@@ -4,7 +4,6 @@ description: "Selects and pins the technology stack — project type, backend (G
 argument-hint: "[type: site|spa|api|fullstack|game|game+backend] [--quick]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
 ---
 
 # Setup Stack

@@ -4,7 +4,6 @@ description: "Validates Web Studio skills and agents: static (structural linter)
 argument-hint: "static [name|all] | spec [name] | category [name|all] | agent [name|all] | audit"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: sonnet
 ---
 
 # Skill Test
@@ -44,7 +43,7 @@ Tests the studio's own skills and agents (not the project).
 6. A reference/template/rules link (`stack-reference/`, `templates/`, `rules/`) for authoring/analysis skills — WARN.
 7. `argument-hint` non-empty and consistent with the argument-parsing phase — WARN.
 8. Language: body in English, no project-specific or personal references (hostnames, names, private repo names) — WARN.
-9. A "Reply in the project conversation language" line (the skill honours CLAUDE.md → Language regardless of its own English text) — WARN.
+9. A "Reply in the project conversation language" line, or a pointer to `coordination-rules.md` § Skill conventions (which defines it once) — the skill honours CLAUDE.md → Language regardless of its own English text — WARN.
 Output: a table of checks, `COMPLIANT | WARNINGS | NON-COMPLIANT`; for `all` — a summary table.
 **Catalog record** (only with a framework — `static` without one has no catalog and writes nothing): the catalog carries `last_static` / `last_static_result` per skill for exactly this run. After the table, record the gate (`<hooks>session-state.sh set Gate "/skill-test Phase 2A: update catalog?"`), then "May I update `catalog.yaml` (`last_static` = today, `last_static_result` = the verdict, for N skill(s))?" as one `AskUserQuestion`: update the catalog (Recommended) · do not write; clear the gate after the answer. After the "update" answer: `touch .claude/.write-consent` (rule 7), then edit only those two fields of the tested rows; nothing else in the catalog changes. `audit` reads the fields back.
 

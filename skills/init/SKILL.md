@@ -4,7 +4,6 @@ description: "One-time studio scaffolding for a project: asks the conversation l
 argument-hint: "[--language <name>] [--review full|lean|solo] [--plugin-root <path>]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: sonnet
 ---
 
 # Init — scaffold the studio in this project

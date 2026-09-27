@@ -4,8 +4,6 @@ description: "Plans a sprint — goal, capacity, story selection by priority and
 argument-hint: "[sprint number] [--days N]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, AskUserQuestion
-model: sonnet
-agent: product-director
 ---
 
 # Sprint Plan

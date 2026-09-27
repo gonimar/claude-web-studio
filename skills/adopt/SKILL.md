@@ -4,7 +4,6 @@ description: "Brownfield onboarding — detects the real stack of an existing pr
 argument-hint: "[full | stack | docs | settings]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
 ---
 
 # Adopt — attach the studio to an existing project

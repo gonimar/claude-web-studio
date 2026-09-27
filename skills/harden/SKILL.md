@@ -4,8 +4,6 @@ description: "Hardens the runtime and perimeter — security headers/CSP, TLS/HS
 argument-hint: "[full | headers | tls | proxy | docker | ci | secrets] [--apply]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, AskUserQuestion
-model: sonnet
-agent: network-security-engineer
 ---
 
 # Harden

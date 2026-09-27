@@ -5,7 +5,6 @@ argument-hint: "[full | adrs | contracts | code]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Bash, Write, Edit, Task, AskUserQuestion
 model: opus
-agent: technical-director
 ---
 
 # Architecture Review

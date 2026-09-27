@@ -4,8 +4,6 @@ description: "Defines the project design system — principles, --ds-* tokens (c
 argument-hint: "[--base material|taiga|primevue|vuetify|custom]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion, Task
-model: sonnet
-agent: design-lead
 ---
 
 # Design System

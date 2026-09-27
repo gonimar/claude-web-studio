@@ -4,7 +4,6 @@ description: "Idea capture and review — records a musing from the conversation
 argument-hint: "add \"<idea>\" | review | promote I-NNN | park I-NNN | close I-NNN [reason]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: haiku
 ---
 
 # Backlog — ideas are recorded, not executed

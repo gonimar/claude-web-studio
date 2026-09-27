@@ -4,7 +4,6 @@ description: "Improves a skill or agent with a test → fix → retest loop: run
 argument-hint: "[skill-name | agent:<name>] [--max-iterations N]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: sonnet
 ---
 
 # Skill Improve

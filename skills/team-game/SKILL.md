@@ -5,7 +5,6 @@ argument-hint: "[prototype | feature F-NNN]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, Task, Skill, AskUserQuestion
 model: opus
-agent: game-lead
 ---
 
 # Team: Game

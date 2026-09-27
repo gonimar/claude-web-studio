@@ -4,7 +4,6 @@ description: "Migrates a project's documents to the studio's current templates w
 argument-hint: "[roadmap | stories | adrs | specs | sprints | all] [--dry-run]"
 user-invocable: true
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash, AskUserQuestion
-model: sonnet
 ---
 
 # Migrate — documents to the current templates
