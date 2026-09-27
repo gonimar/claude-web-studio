@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "APPROVED WITH CONDITIONS|APPROVED|NEEDS ADR|BLOCKED|CLASSIFIED \\("
-target: trace
+target: last_message
 ---

@@ -1,5 +1,5 @@
 ---
 type: regex
 pattern: "CLASSIFIED \\("
-target: trace
+target: last_message
 ---
