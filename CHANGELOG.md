@@ -5,7 +5,7 @@ Nothing new to run: this release verifies and slims what 0.13 shipped, and adds 
 found missing. Audit of 2026-09-26 (plugin-validator, skill-reviewer on the eleven heaviest skills, the
 skill-development checklist on the other thirty-nine, claude-md-improver, automation-recommender): 7 blocking defects,
 10 false semantics, all closed here; the full report and the reviewers' notes stayed in the maintainer's `dev/`.
-- **Behavioural evals (`evals/`, `claude plugin eval`).** 22 cases for dev-story, code-review, story-done, init,
+- **Behavioural evals (`evals/`, `claude plugin eval`).** 21 cases for dev-story, code-review, story-done, init,
   adopt, refactor, hotfix, update, help and impact, each derived from a spec case in `testing/skills/`, graded
   deterministically (the skill's verdict or gate phrase in the final message, a tool that must or must not run, no file before the
   gate); scaffold helpers build the `testing/e2e` fixtures in the run's workspace. CI gains an `evals` job
@@ -66,9 +66,13 @@ skill-development checklist on the other thirty-nine, claude-md-improver, automa
   essentials, MCP as a product feature, evals, cost, and the security table mapped to the OWASP GenAI LLM Top 10;
   `/threat-model` adds the prompt-injection surface (trust boundaries, tool side effects, RAG, MCP) when a project
   declares or imports an LLM SDK; `rules/security-sensitive.md` and impact-guard cover `prompts/`, `llm/`, `mcp/`.
-  `.mcp.json` declares two optional servers — Playwright (a11y-audit, perf-audit and pentest drive the live page through
-  it when present; the CLI path stays the default) and the GitHub MCP server (story-done and hotfix may use it instead
-  of `gh`; gates unchanged); secret-guard scans the GitHub write tools.
+  `.mcp.json` declares one optional server, Playwright (a11y-audit, perf-audit and pentest drive the live page through
+  it when present; the CLI path stays the default; the playbook says what it costs and how to switch it off). The
+  GitHub MCP server is not declared — a plugin server starts for every user and this one fails without Docker or a
+  token — the playbook says how to add it (remote OAuth or Docker, toolsets `pull_requests,actions`); story-done and
+  hotfix may use it instead of `gh` with the gates unchanged. Two hooks watch it whatever its toolsets: the new
+  `github-mcp-guard` blocks its file-writing tools (commits go through git and its hooks) and `secret-guard` blocks a
+  token or key in any of its inputs — a PR body or an issue as much as a file.
 - **Symfony and Laravel are full references** (107 and 118 lines, from the frameworks' documentation repositories):
   versions and support, the studio's defaults, idioms per layer with the `FRAMEWORK_NAMESPACES` keys, testing,
   performance, security, upgrade paths, review checklists; corrections to the stubs (Symfony 8.1 shipped 2026-05-29,
@@ -78,12 +82,22 @@ skill-development checklist on the other thirty-nine, claude-md-improver, automa
   studio's init, not Claude Code's", hotfix names `--chore`, code-review is "the studio's review, not the built-in").
   The description optimizer (skill-creator, 20 queries × 3 runs × 4 iterations) on help, backlog and impact: precision
   100 %, recall 11–33 % whatever the text — the model answers "what now" itself in a bare project; the descriptions that
-  scored best on the held-out set are the ones shipped. Always-on 10,133 → 11,432 tokens: the trigger sentences, the
-  preload skill's description and the agents' reference names cost more than the trims saved; on-invoke is where the
-  budget went.
+  scored best on the held-out set are the ones shipped. Seven descriptions shrink and twenty-two grow. What that
+  costs is not tokens: Claude Code caps the skill listing at about 1 % of the context window (≈ 8,000 characters at 200k;
+  `SLASH_COMMAND_TOOL_CHAR_BUDGET` raises it) and drops the least-used descriptions to name-only beyond it — the 50
+  descriptions total 18.8k characters (16.8k on 0.13), so with no usage history 18 of 50 keep theirs in the listing
+  (23 before), the rest until they are used. README § 1 documents the cap; on-invoke is where the budget went.
 - **Roadmap "Toward 1.0"**: condition 5 gains its CI half (the evals job runs the behavioural cases; the linter mirrors
-  `/skill-test static`); condition 1 is not ticked — `last_spec` is still empty for every skill and `last_eval` reads
-  `PENDING-CI` until the first CI run; the roadmap says so.
+  the FAIL checks of `/skill-test static`); condition 1 is not ticked — `last_spec` is empty for every skill but story-done (2026-09-06, WARNINGS) and
+  `last_eval` reads `PENDING-CI` until the first CI run; the roadmap says so.
+- **Also in this release**: hook tests 162 → 181 cases (GitHub MCP payloads, the `notify.sh` smoke case, impact-guard
+  on LLM paths); `rules/dependencies.md` (manifests and lockfiles, npm/yarn/bun/pnpm/composer/go); the release-checklist
+  template and spec carry the supply-chain items; `hooks.json` and `templates/settings.json` register `github-mcp-guard`;
+  quality-rubric G4 requires the preloaded protocol; setup-stack's `BLOCKED` stops after Phase 2 and `--quick` still asks
+  the deploy target; frontend-lead lists performance-engineer; five agent descriptions drop the model tag (`Tier 1, Opus`
+  → `Tier 1`, `model:` unchanged); init and setup-stack hand-offs are namespaced; the template ships no `## Commands`
+  stub (technical-preferences holds the Build/Unit/Lint rows); `/dependency-audit --fix-safe` and `/harden --apply` are
+  named in the READMEs.
 
 ## 0.13.0 — 2026-09-26
 Two sources: the lab's traces of two real projects (the sprint cycle, comments, agent memory — WS-131, WS-136…139), and

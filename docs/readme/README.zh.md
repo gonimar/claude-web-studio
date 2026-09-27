@@ -121,8 +121,8 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
 
 **加固**
 - `/security-audit` — 依据 OWASP Top 10:2025 用工具审计代码与配置，给出 CVSS 评分的发现与修复。；BLOCKING 发现写入 `production/findings.md`，供 `/create-stories` 与 `/sprint-plan` 读取。
-- `/dependency-audit` — 审计供应链：漏洞、废弃包、过时主版本、许可证、版本锁定。
-- `/harden` — 加固响应头、TLS、代理、容器和 CI，并用真实请求验证。
+- `/dependency-audit` — 审计供应链：漏洞、废弃包、过时主版本、许可证、版本锁定。 `--fix-safe` 应用安全的更新。
+- `/harden` — 加固响应头、TLS、代理、容器和 CI，并用真实请求验证。 `--apply` 写入修复。
 - `/pentest` — 在记录的范围内对项目自身应用做授权的动态测试。
 - `/perf-audit` — 对照预算测量 Core Web Vitals、包体、API 延迟、查询或游戏帧，并排序修复项。
 - `/a11y-audit` — 用 axe 和手动键盘清单按 WCAG 2.2 AA 审计无障碍。

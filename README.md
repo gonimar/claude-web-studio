@@ -143,8 +143,8 @@ Plugin mode prefixes each with `web-studio:`.
 
 **Hardening**
 - `/security-audit` — audits code and configuration against OWASP Top 10:2025 with tools, CVSS-scored findings and fixes; BLOCKING findings go to `production/findings.md`, which `/create-stories` and `/sprint-plan` read.
-- `/dependency-audit` — audits the supply chain: vulnerabilities, abandoned packages, outdated majors, licences, pinning.
-- `/harden` — hardens headers, TLS, proxy, containers and CI, verifying with live requests.
+- `/dependency-audit` — audits the supply chain: vulnerabilities, abandoned packages, outdated majors, licences, pinning. `--fix-safe` applies the safe updates.
+- `/harden` — hardens headers, TLS, proxy, containers and CI, verifying with live requests. `--apply` writes the fixes.
 - `/pentest` — runs authorised dynamic testing against the project's own application within a recorded scope.
 - `/perf-audit` — measures Core Web Vitals, bundles, API latency, queries or game frames against budgets and ranks fixes.
 - `/a11y-audit` — audits accessibility against WCAG 2.2 AA with axe and a manual keyboard checklist.
