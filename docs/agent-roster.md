@@ -5,7 +5,7 @@ session that runs the skill: it plans, briefs and dispatches specialists (Tier 3
 results. Directors (Tier 1) give verdicts at gates; leads (Tier 2) review, design and name the
 specialist a step belongs to — they do not spawn agents themselves (measured on real projects: leads
 ran only as reviewers, every dispatch came from the session).
-The stack-reference file an agent reads first is listed in its description
+The stack-reference file an agent reads first is named in the first paragraph of its body
 (`.claude/docs/stack-reference/…`). All agents reply in the project's conversation language
 (CLAUDE.md → Language) and keep code, identifiers and commits in English.
 

@@ -225,7 +225,7 @@ Ejecuta `/skill-test static all`, `/skill-test spec <skill>`, `/skill-test agent
 ## 9. Estructura del repositorio
 ```
 .claude-plugin/   plugin.json + marketplace.json (este repositorio es a la vez marketplace y plugin)
-agents/           30 agentes       skills/     49 skills        hooks/      hooks.json + 10 scripts
+agents/           30 agentes       skills/     50 comandos + 1 skill precargada     hooks/      hooks.json + 10 scripts
 rules/            13 reglas por ruta            docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, plantilla de agentes, catálogo de flujo, línea base de seguridad
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          marco de pruebas de agentes y skills      install.sh  instalador de copia / proyecto nuevo
