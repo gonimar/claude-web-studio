@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: classify-only-no-verifier
+description: "Spec impact case 3 (--classify-only): the classification table and CLASSIFIED (<classes>) verdict, no verifier spawned, nothing written."
+tags: [impact,gate]
+context:
+  scaffold_script: scaffold.sh

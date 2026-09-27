@@ -1,5 +1,5 @@
 ---
 type: regex
-pattern: "DRY RUN|--kit"
+pattern: "CLASSIFIED \\("
 target: last_message
 ---
