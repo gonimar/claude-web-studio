@@ -9,4 +9,5 @@ paths: ["**/src/app/**", "**/*.component.ts", "**/*.component.html", "**/angular
 - Material 3 via `mat.theme()` / Taiga via tokens; a11y — Angular ARIA/CDK, focus and keyboard mandatory.
 - `bypassSecurityTrust*` and `innerHTML` only with a security review.
 - Vitest + Testing Library tests; budgets in angular.json.
+- Neighbouring code — its style, comments, dead code — stays as it is; a pre-existing `ng lint`/type finding is reported under *Outside the brief* (CLAUDE.md principle 9), never fixed in passing.
 - Reference: `.claude/docs/stack-reference/angular.md`.

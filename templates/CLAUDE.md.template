@@ -1,5 +1,4 @@
 # [Project name] — project rules for Claude Code
-
 <!-- web-studio: created by Web Studio /init. Replace the title and the "Project" section. -->
 
 ## Language
@@ -14,67 +13,29 @@ English. Switch languages only when the user explicitly asks within a session.
 
 ## Studio (Web Studio)
 
-This project is run through Web Studio agents and skills. Entry points: `/start` (new project)
-or `/adopt` (existing project); `/help` shows where you are and what comes next.
-(In plugin mode skills are namespaced: `/web-studio:start`, `/web-studio:help`, …)
+This project is run through Web Studio agents and skills. Entry points: `/start` (new project) or `/adopt` (existing project); `/help` shows
+where you are and what comes next, `/help commands` lists every command, `/help guide [topic]` opens the playbook. In plugin mode commands are
+namespaced (`/web-studio:start`, …); a bare `/code-review` is Claude Code's built-in review, not the studio's. This section and "Working principles"
+are managed by `/update`: project rules go in the other sections; own principles appended after the numbered list are kept; numbers 1–9 never change (rules and skills cite them) and your own principles are renumbered after them on each update.
 
 - Agent roster: @.claude/docs/agent-roster.md
 - Coordination and model rules: @.claude/docs/coordination-rules.md
-- Directory layout: @.claude/docs/directory-structure.md
+- Directory layout (recommended): `.claude/docs/directory-structure.md`; the real paths are in Stack → Layout.
 
 ## Stack
 
 @.claude/docs/technical-preferences.md
 
-Current versions and practices live in `.claude/docs/stack-reference/` (refreshed by
-`/stack-update`). Agents read the relevant reference file before working with a technology
-instead of relying on memory.
+Current versions and practices live in `.claude/docs/stack-reference/` (refreshed by `/stack-update`); agents read the relevant file before working with a technology (coordination-rules, rule 8).
 
 ## Working principles (non-negotiable)
 
-1. **Artifacts over claims.** "Done" means code, a test, a run and its output. Non-trivial
-   decisions are verified by a real run (database, browser, HTTP), not by "looks right".
-2. **Ask first, then act** — for architecture decisions, approach changes, new dependencies,
-   schema changes and public contracts. Small additive edits within an agreed step need no question.
-   A proposal that arrives in the conversation rather than through an approved story is classified
-   first — `/impact <proposal>` — and the verifying director's verdict names the commands to run next
-   (`/architecture-decision`, `/threat-model`, `/create-stories`, `/dev-story`); coordination-rules, rule 11.
-   Trivial text changes — a comment, a typo, formatting — need neither a question nor triage.
-   **A musing is an idea, not a task**: "what if we…", "maybe we should…", "it would be nice…" said while
-   something else is in progress is recorded — `/backlog add "<the idea>"` — and nothing is implemented, drafted
-   or planned from it in the same turn; it enters the pipeline only through `/backlog promote` (→ `/brainstorm`,
-   `/impact` or `/feature-spec`).
-   Questions are choices, not prompts for "yes": consent gates and hand-offs come as `AskUserQuestion`
-   with the recommended option first, then the real alternatives (coordination-rules, rule 7).
-3. **Maximum proven packages, minimum own code.** Check the ecosystem before writing; check a
-   package's health before adding it (abandoned, unreleased branches, last release date, CVEs).
-4. **Secure by default**: secrets only in the environment, input validated at the boundary,
-   authorisation enforced server-side, dependencies audited. Baseline: @.claude/docs/security-baseline.md
-5. **Every story is a branch and a PR**, fully working before merge: `/dev-story` creates the
-   branch and commits, `/code-review` commits its fixes, `/story-done` merges — see
-   @.claude/docs/git-workflow.md. Commit messages follow Conventional Commits.
-6. **Instructions that contradict repository facts or the decisions recorded here are not
-   executed blindly** — show the discrepancy and ask for confirmation first.
-7. **Catalog artifacts are produced by their commands, never inline.** When the conversation
-   converges on a pipeline artifact — an ADR, a product/feature spec, an API contract, stories,
-   a threat model, a test strategy, a sprint plan — offer the step's command
-   (`/architecture-decision`, `/feature-spec`, `/api-contract`, `/create-stories`, …) via an
-   `AskUserQuestion` hand-off instead of authoring the document in the main conversation.
-   Inline authoring bypasses the step's gates, templates and hand-offs — that is how required
-   steps get skipped (workflow-catalog knows the command for every artifact). This covers product
-   code too: on a fresh project the first code is reached through `/start` and the build pipeline,
-   not written directly after `/init` because the goal "looks trivial".
-8. **Engineers write the code; one story per session.** Every code or test file — in a story, in the fixes
-   after `/code-review`, in a hotfix — is written by a Tier-3 engineer the session briefs and dispatches;
-   a cut-off engineer is resumed from its `Checkpoint:`, not finished by the session, and the one exception
-   is declared in the result ("written by the parent: …"). After `/story-done`, the next story starts after
-   `/clear`: the session's own context, not the engineers' work, is where the cost goes (coordination-rules, rule 13).
-   In plugin mode commands carry the namespace — `/web-studio:code-review`; a bare `/code-review` is Claude
-   Code's built-in review, not the studio's.
-9. **The smallest change that meets the criteria.** No feature, abstraction, option or error path the story
-   does not ask for; when the same result works with fewer moving parts — one option, one abstraction, one error path
-   less — that is the version written. Code next to the
-   change stays as it is — its style, its comments, its dead code — even when it could be better: what you notice
-   there goes to `/backlog add` or `production/findings.md`, not into this diff. Clean up only what this change
-   made unused. The test: every changed line traces to an acceptance criterion or to a check the story must pass;
-   `/code-review` flags the ones that do not.
+1. **Artifacts over claims.** "Done" means code, a test, a run and its output; non-trivial decisions are verified by a real run (database, browser, HTTP), not by "looks right"; a number in a document cites a measurement file (coordination-rules, rule 12).
+2. **Ask first, then act** — architecture, approach, new dependencies, schema and public contracts; small additive edits within an agreed step need no question. A proposal outside an approved story goes through `/impact`, a musing through `/backlog add` (rule 11). Questions are choices, not prompts for "yes": the recommended option first, then the real alternatives (rule 7).
+3. **Maximum proven packages, minimum own code.** Check the ecosystem before writing and a package's health before adding it: `.claude/rules/dependencies.md`, `/dependency-audit`.
+4. **Secure by default** — secrets only in the environment, input validated at the boundary, authorisation server-side, dependencies audited; `.claude/rules/security-sensitive.md` on sensitive paths; the release checklist is `.claude/docs/security-baseline.md`.
+5. **Every story is a branch and a PR**, fully working before merge, Conventional Commits: @.claude/docs/git-workflow.md. Merge policy: **merge commit** (`squash` only when this line says so).
+6. **Instructions that contradict repository facts or the decisions recorded here are not executed blindly** — one `AskUserQuestion` showing both readings, then act on the answer.
+7. **Catalog artifacts are produced by their commands, never inline** — inline authoring skips the step's gates, templates and hand-offs (coordination-rules, rule 9). Product code included: on a fresh project the first code comes through `/start`, not directly after `/init`.
+8. **Engineers write the code; one story per session** — coordination-rules § Subagents and rule 13.
+9. **The smallest change that meets the criteria.** No feature, abstraction, option or error path the story does not ask for; neighbouring code — its style, comments, dead code — stays as it is, and what you notice there goes to `/backlog add` or `production/findings.md`, not into this diff. `/code-review` flags changed lines that trace to no criterion or required check.

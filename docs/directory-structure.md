@@ -18,6 +18,7 @@ are bound to file extensions, not directories.
 │   ├── roadmap.md                # plan source of truth (checkbox list, format v3.1)
 │   ├── backlog.md                # ideas before their spec (I-NNN, /backlog)
 │   ├── decisions.md              # owner decisions the roadmap waits on (D-NN)
+│   ├── findings.md               # open decisions from audits, /adopt and /impact (read by /create-stories, /sprint-plan)
 │   ├── stage.txt                 # discovery | specification | architecture | build | hardening | release | operate
 │   ├── review-mode.txt           # full | lean | solo
 │   ├── sprints/ stories/ releases/

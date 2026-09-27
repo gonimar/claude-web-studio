@@ -9,4 +9,5 @@ paths: ["**/*.vue", "**/nuxt.config.ts", "**/app/**/*.ts", "**/server/**/*.ts"]
 - Nuxt server routes: validate with `readValidatedBody` (zod), errors via `createError` → problem+json.
 - `v-html` only with DOMPurify and a review; a11y in components.
 - Vitest + Vue Test Utils/Testing Library; Playwright e2e.
+- Neighbouring code — its style, comments, dead code — stays as it is; a pre-existing `vue-tsc`/ESLint finding is reported under *Outside the brief* (CLAUDE.md principle 9), never fixed in passing.
 - Reference: `.claude/docs/stack-reference/vue.md`.

@@ -224,15 +224,15 @@ git clone https://github.com/gonimar/claude-web-studio ~/tools/claude-web-studio
   пользователи плагина получают обновление только при смене версии.
 
 ## 8. Тестирование самой студии
-В `testing/` — каталог, рубрика качества и 74 поведенческие спеки. Запускайте `/skill-test static all`,
+В `testing/` — каталог, рубрика качества и 80 поведенческих спек. Запускайте `/skill-test static all`,
 `/skill-test spec <skill>`, `/skill-test agent <agent>`, `/skill-test audit` или `/skill-improve <name>`
 в этом репозитории или в проекте, установленном с `--with-testing`. Подробнее: [testing/README.md](../../testing/README.md).
 
 ## 9. Структура репозитория
 ```
 .claude-plugin/   plugin.json + marketplace.json (репозиторий — одновременно marketplace и плагин)
-agents/           30 агентов       skills/     50 команд + 1 предзагружаемый скил     hooks/      hooks.json + 10 скриптов
-rules/            13 правил по путям           docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, ростер, каталог конвейера, базовая линия безопасности
+agents/           30 агентов       skills/     50 команд + 1 предзагружаемый скил         hooks/      hooks.json + 19 скриптов
+rules/            16 правил по путям           docs/       stack-reference/, templates/ (findings, adoption-plan, deploy-runbook, deploy/), deploy-target-contract,, ростер, каталог конвейера, базовая линия безопасности
 templates/        CLAUDE.md, settings.json, settings.plugin-mode.json, statusline.sh
 testing/          фреймворк тестирования агентов и скилов      install.sh  установщик копии / нового проекта
 ```
